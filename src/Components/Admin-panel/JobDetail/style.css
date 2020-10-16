@@ -1,0 +1,19 @@
+.content-info{
+    display: flex;
+}
+.overview-content-info{
+    display: flex;
+}
+.content-info-detail{
+    padding-left: 45px;
+    padding-right: 8px;
+}
+.conent-info-negotiate{
+    padding-right: 8px;
+}
+.card-body p {
+    font-weight: 500;
+}
+.card-body img{
+    width: 100%;
+}
