@@ -1,0 +1,16 @@
+.cus-bg-primary {
+    background-color: #425D8A !important;
+}
+.button-card-kitin {
+    border: none;
+}
+.button-card-kitin:focus{
+    outline: none;
+}
+.cardetail-comment {
+    margin-top: 8px;
+}
+.button-comment{
+    margin-top: 8px;
+    padding: 5px 5px;
+}
