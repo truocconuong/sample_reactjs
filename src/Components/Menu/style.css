@@ -1,0 +1,254 @@
+/* left-menu */
+.row_icon {
+  font-size: 25px;
+  display: flex;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+.row_icon:hover {
+  color: #e47863;
+}
+.row_icon:hover .hover_icon {
+  color: #e47863;
+}
+.row_icon.selected .hover_icon {
+  color: #1bc5bd;
+}
+.row_icon.selected {
+  color: #1bc5bd;
+}
+.row_icon.selected .wrap_icon_menu {
+  background-color: #f3f6f9;
+  border-color: transparent;
+  border-radius: 5px;
+}
+a.row_icon {
+  color: #3f4254;
+}
+.content_menu {
+  font-size: 14px;
+  margin-left: 27.5px;
+  display: flex;
+  align-items: center;
+}
+.stick_toggle_button {
+  position: fixed;
+  height: 100%;
+  z-index: 9;
+}
+.wrap_icon_menu {
+  min-width: 45px;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.wrap_menu_left {
+  width: 100px;
+  border-right: 1px solid #ebedf3;
+  background-color: #ffffff;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 50px;
+  padding-left: 27.5px;
+
+  transition: width 0.35s cubic-bezier(0.57, 0.06, 0.58, 0.96);
+  overflow: hidden;
+}
+.menu_extend {
+  width: 232px;
+}
+.toggle_button i {
+  color: #ffffff;
+}
+.toggle_button {
+  cursor: pointer;
+  background-color: #1bc5bd;
+  border-color: #1bc5bd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  bottom: 40px;
+  height: 36px;
+  width: 36px;
+  margin-right: -18px;
+  z-index: 99;
+  box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+}
+
+.svg_icon {
+  width: 16.25px;
+  height: 16px;
+  fill: #b5b5c3;
+}
+.row_icon:hover .svg_icon {
+  fill: #e47863;
+}
+.row_icon.selected .svg_icon {
+  fill: #1bc5bd;
+}
+.ava_img {
+  width: 45px;
+  border-radius: 50%;
+}
+.wrap_avatar_user {
+  margin-bottom: 50px;
+  cursor: pointer;
+}
+.noti_count {
+  top: -6px;
+  right: -6px;
+}
+/* drawer */
+.drawer_wrap {
+  width: 375px;
+  padding: 32.5px;
+}
+.symbol-label.symbol-label-cs-profile {
+  border-radius: 50%;
+}
+.symbol.symbol-100 .symbol-badge {
+  width: 15px;
+  height: 15px;
+  top: 80px;
+  right: 10px;
+}
+.avatar-edit--profile {
+  position: absolute;
+  right: 3px;
+  z-index: 9;
+  top: -3px;
+  width: 25px;
+  height: 25px;
+  margin-bottom: 0;
+  border-radius: 100%;
+  background: #fff;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12);
+}
+.label_cs_up_ava {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.avatar-edit--profile input {
+  display: none;
+}
+.navi_cs {
+  width: 294.594px;
+  height: calc(100vh - 313px);
+  overflow-y: auto;
+  padding-right: 5px;
+}
+.mess_noti_cs {
+  height: 40px;
+  width: 187px;
+  display: -webkit-box;
+  height: 43px;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.content_title_noti {
+  height: 20px;
+  width: 205px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.navi_cs .navi-item {
+  padding: 1rem;
+  cursor: pointer;
+  border: 1px solid #dbdbdcb8;
+  margin-bottom: 8px;
+  /* width: 98%; */
+  margin-left: auto;
+  margin-right: auto;
+}
+.navi_cs .navi-item:hover {
+  border: 1px solid #ffa800;
+}
+.navi_cs.navi-spacer-x-0 .navi-item .navi-link {
+  padding: 0;
+  align-items: flex-start;
+}
+.navi_cs .navi-item:last-child {
+  border: 1px solid #dbdbdcb8 !important;
+}
+.navi_cs .navi-item:last-child:hover {
+  border: 1px solid #ffa800 !important;
+}
+.time_noti {
+  font-size: 10px;
+  color: #060606e0 !important;
+  font-family: "Nunito", sans-serif;
+  text-align: right;
+  width: 187px;
+}
+.Toastify__toast.Toastify__toast--default.custom_toast {
+  -webkit-box-shadow: 0px 0px 6px 1px rgba(27, 197, 189, 0.78);
+  -moz-box-shadow: 0px 0px 6px 1px rgba(27, 197, 189, 0.78);
+  box-shadow: 0px 0px 6px 1px rgba(27, 197, 189, 0.78);
+}
+.symbol .symbol-label.symbol_label_cs {
+  background-color: transparent;
+}
+/* end left menu */
+.drawer_div {
+  display: none;
+}
+.header_cs_modal {
+  font-family: "Poppins", sans-serif;
+}
+.install_app{
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  padding: 10px;
+}
+.modal_body_pwa{
+  padding: 10px 20px;
+  padding-bottom: 0;
+  text-align: center;
+}
+.modal_pwa .modal-content{
+  width: 80%;
+  margin: auto;
+}
+.close_pwa_install{
+  font-size: 14px;
+  text-align: center;
+  color: #1BC5BD;
+  font-weight: 500;
+  padding-bottom: 10px;
+}
+
+@media screen and (max-width: 766px) {
+  .drawer_div {
+    display: block;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    -webkit-tap-highlight-color: transparent;
+    z-index: 10;
+    margin-left: 0;
+    transition: margin 0.3s ease-out;
+  }
+  .drawer_hide{
+    margin-left: -100vw;
+    /* transition: margin 0.3s ease-out; */
+
+  }
+}

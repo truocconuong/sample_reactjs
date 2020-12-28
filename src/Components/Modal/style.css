@@ -1,0 +1,105 @@
+.candidate_bold {
+  font-weight: 500;
+}
+
+.header_modal_cs {
+  padding: 24px 24px 22px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ebedf3;
+}
+
+.header_modal_cs_task {
+  justify-content: center;
+}
+
+.ifram_close {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.45s cubic-bezier(0.49, 0.12, 0.35, 0.94);
+}
+
+.ifram_open {
+  max-height: 750px;
+  transition: max-height 0.45s cubic-bezier(0.49, 0.12, 0.35, 0.94);
+}
+
+.wrap_input_modal {
+  display: flex;
+  align-items: center;
+  width: 46%;
+}
+
+.form-group-cs-modal {
+  justify-content: space-between;
+}
+
+.label_cs_modal {
+  margin-bottom: 0;
+}
+
+.card-footer-cus {
+  border-top: none;
+}
+
+.textarea_cs {
+  overflow: auto;
+}
+
+.card-body-cs-detail-task {
+  padding: 10px;
+  padding-top: 2.25rem;
+  padding-bottom: 0;
+}
+
+.custom-date-picker-interview {
+  top: 0px;
+  bottom: 100%;
+}
+
+.custom-date-picker-interview__wrap {
+  display: flex;
+}
+
+.custom-date-picker-interview .datetime-picker {
+  top: -321px !important;
+  bottom: 100% !important;
+}
+
+.custom-date-picker-interview .datetime-picker-popup::before {
+  display: none;
+}
+
+.css-mnd6b5:focus {
+  outline: none !important;
+}
+
+.kitin-check-select .css-1pahdxg-control {
+  border-color: #E4E6EF !important;
+}
+
+.height-ao {
+  height: 700px;
+}
+
+/* previewpdf */
+
+.card-body-preview .columns {
+  display: flex;
+  justify-content: space-evenly;
+  padding-bottom: 15px;
+  padding-top: 15px;
+}
+
+.card-body-preview .has-background-black {
+  background-color: #0a0a0a!important;
+}
+.card-body-preview .button.is-black {
+  background-color: #0a0a0a;
+    border-color: transparent;
+    color: #fff;
+}
+
+.background-pdf{
+  background: #fafafa;
+}

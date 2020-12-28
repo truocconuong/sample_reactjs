@@ -1,0 +1,11 @@
+.col_in_slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+}
+.slick-next,
+.slick-prev {
+  width: auto;
+  height: auto;
+}

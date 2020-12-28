@@ -1,0 +1,48 @@
+.style-title-job {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.style-info-job {
+    padding-top: 20px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+.style-job-detail {
+    padding: 0px 40px;
+}
+.location-job-detail {
+    color: #F64E60;
+}
+.location-job-detail i{
+    color: #F64E60;
+    padding-right: 2px;
+} 
+.dorlar-job-detail {
+    color: #FFA800;
+}
+.dorlar-job-detail i{
+    padding-right: 2px;
+    color: #FFA800;
+}
+.calendar-job-detail {
+    color: #3699FF;
+}
+.calendar-job-detail i{
+    padding-right: 2px;
+    color: #3699FF;
+}
+.btn-style-kitin {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.95rem;
+}
+.style-no-result {
+    width: 100%;
+    margin: auto;
+    align-items: center;
+}
+.style-no-result img{
+    width: 80%;
+}
