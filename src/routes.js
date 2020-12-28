@@ -1,39 +1,47 @@
 import React from 'react';
-import PostJob from "./Components/PostJob/PostJob";
-import EditJob from "./Components/EditJob/EditJob";
-import Job from "./Components/Admin-panel/Job";
-import Candidate from "./Components/Admin-panel/Candidate";
-import JobDetail from './Components/Admin-panel/JobDetail/JobDetail'
-import CandidateDetail from './Components/Admin-panel/CandidateDetail/CandidateDetail'
-import Trello from './Components/Trello/Trello';
-import Data from './Components/DataCandidate/Data';
+import EditJob from "./Components/Edit/EditJob";
+import Job from "./Components/Table/Job.js";
+import AddJob from "./Components/Edit/AddJob";
+import Candidate from "./Components/Table/Candidate.js";
+import JobDetail from './Components/PageDetail/JobDetail';
+import Trello from './Components/Dnd/Broad.js';
+import Client from './Components/Table/Client';
+import UpdateClient from './Components/UpdateClient/UpdateClient';
+import UserTeam from './Components/Table/UserTeam';
+import Dashboard from './Components/Table/Dashboard';
+import Profile from './Components/Table/ProfileDetail/Profile.js';
+import Interview from './Components/Table/Interview/Interview';
+import UpdateInterview from './Components/Table/Interview/UpdateInterview';
+import Setting from './Components/Table/Setting.js';
+import SearchCandidate from './Components/Table/SearchCandidate';
+import PreviewCandidate from './Components/Table/PreviewCandidate';
+import RefinedPdf from './Components/Table/RefinedPdf';
 
-// import Login from "./Components/Login/LoginAdmin";
 const routes = [
   {
     path: "/",
     exact: true,
-    main: () => <Job/>
+    main: (props) => <Dashboard {...props}/>
   },
   {
     path: "/job",
     exact: true,
-    main: () => <Job/>
+    main: (props) => <Job {...props} />
   },
   {
     path: "/candidate",
     exact: true,
-    main: () => <Candidate/>
+    main: () => <Candidate />
   },
   {
-    path: "/post-job",
+    path: "/add-job",
     exact: true,
-    main: () => <PostJob/>
+    main: (props) => <AddJob {...props} />
   },
   {
     path: "/edit-job/:id",
     exact: true,
-    main: (props) => < EditJob {...props}/>
+    main: (props) => < EditJob {...props} />
   },
   {
     path: "/job-detail/:id",
@@ -41,20 +49,69 @@ const routes = [
     main: JobDetail
   },
   {
-    path: "/candidate-detail/:id",
+    path: "/board",
     exact: true,
-    main: CandidateDetail
+    main: () => <Trello />
   },
   {
-    path: "/trello",
+
+    path: "/users",
     exact: true,
-    main: () => <Trello/>
+    main: (props) => <UserTeam {...props} />
+  }, {
+
+    path: "/client",
+    exact: true,
+    main: () => <Client />
   },
   {
-    path: "/data",
+    path: "/edit-client/:id",
     exact: true,
-    main: () => <Data/>
+    main: (props) => < UpdateClient {...props} />
   },
+  {
+    path: "/dashboard",
+    exact: true,
+    main: () => <Dashboard />
+  },
+  {
+    path: "/interview",
+    exact: true,
+    main: () => <Interview />
+  },
+
+  {
+    path: "/profile/:id",
+    exact: true,
+    main: (props) => <Profile {...props} />
+  },
+  {
+    path: "/interview/:id",
+    exact: true,
+    main: (props) => <UpdateInterview {...props} />
+  },
+  {
+    path: "/setting",
+    exact: true,
+    main: (props) => <Setting {...props}/>
+  },
+  {
+    path: "/search",
+    exact: true,
+    main: () => <SearchCandidate />
+  },
+  {
+    path: "/preview/candidate/:candidateId/job/:jobId",
+    exact: true,
+    main: (props) => < PreviewCandidate {...props} />
+  },
+
+  {
+    path: "/refine/candidate/:candidateId/job/:jobId",
+    exact: true,
+    main: (props) => < RefinedPdf {...props} />
+  },
+
 ];
 
 export default routes;

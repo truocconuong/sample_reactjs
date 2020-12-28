@@ -1,45 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/img/favoicon-8.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Talent Acquisition Portal" />
+    <!-- css -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
 
-<head>
-  <meta charset="utf-8" />
-  <link rel="icon" href="%PUBLIC_URL%/img/favoicon-8.png" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#000000" />
-  <meta name="description" content="Fetch-admin" />
-  <!-- css -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
-  <!-- Icons -->
-  <link rel="stylesheet" href="/assets/vendor/nucleo/css/nucleo.css" type="text/css">
-  <link rel="stylesheet" href="/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
-  <!-- Argon CSS -->
-  <link rel="stylesheet" href="/assets/css/argon.css?v=1.2.0" type="text/css">
-  
-  <!-- end css -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/newlogo.png">
+    <!--begin::Fonts-->
+    <!-- <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700"
+    /> -->
+    <!--end::Fonts-->
+    <!--begin::Global Theme Styles(used by all pages)-->
+   
+    <link href="/css/plugins.bundle1ff3.css" rel="stylesheet" type="text/css" />
+    <link href="/css/wizard.css" rel="stylesheet" type="text/css" />
+    <link
+      href="/css/prismjs.bundle1ff3.css?v=7.1.2"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="/css/style.bundle1ff3.css?v=7.1.2"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <!-- slick css -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      charset="UTF-8"
+      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
+    />
+    <!-- end slick css -->
+    <!-- date picker -->
+    <link href="/css/picker.min.css" rel="stylesheet" type="text/css" /> 
+    <link href="/css/style.css" rel="stylesheet" type="text/css" />
+    <!--end::Global Theme Styles-->
+    <!-- end css -->
 
-  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-  <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-  <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+    <!-- <script src="https://use.fontawesome.com/bca6940579.js"></script> -->
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-  <title>Fetch Tech Admin</title>
-</head>
+    <title>Talent Acquisition Portal</title>
+  </head>
 
-<body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root"></div>
+  <body>
+    <div id="root"></div>
 
-  <!-- <script src="/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script> -->
-</body>
-
+    <!-- <script src="/js/plugins.bundle1ff3.js?v=7.1.2"></script>
+		<script src="/js/prismjs.bundle1ff3.js?v=7.1.2"></script>
+    <script src="/js/scripts.bundle1ff3.js?v=7.1.2"></script> -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('worker.js').then(function(registration) {
+            console.log('Worker registration successful', registration.scope);
+          }, function(err) {
+            console.log('Worker registration failed', err);
+          }).catch(function(err) {
+            console.log(err);
+          });
+        });
+      } else {
+        console.log('Service Worker is not supported by browser.');
+      }
+    </script>
+  </body>
 </html>

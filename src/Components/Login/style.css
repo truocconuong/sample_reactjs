@@ -1,0 +1,68 @@
+.login.login-4 .login-signin,
+.login.login-4 .login-signup,
+.login.login-4 .login-forgot {
+  display: none;
+}
+
+.login.login-4.login-signin-on .login-signup {
+  display: none;
+}
+
+.login.login-4.login-signin-on .login-signin {
+  display: block;
+}
+
+.login.login-4.login-signin-on .login-forgot {
+  display: none;
+}
+
+.login.login-4.login-signup-on .login-signup {
+  display: block;
+}
+
+.login.login-4.login-signup-on .login-signin {
+  display: none;
+}
+
+.login.login-4.login-signup-on .login-forgot {
+  display: none;
+}
+
+.login.login-4.login-forgot-on .login-signup {
+  display: none;
+}
+
+.login.login-4.login-forgot-on .login-signin {
+  display: none;
+}
+
+.login.login-4.login-forgot-on .login-forgot {
+  display: block;
+}
+
+.login.login-4 .login-form {
+  width: 100%;
+  max-width: 450px;
+}
+.toast_login{
+  padding: 0;
+  border-radius: 0.42rem;
+  overflow: hidden;
+}
+.toast_login .alert{
+  margin-bottom: 0 !important;
+}
+.toast_login .Toastify__toast-body{
+  margin: 0;
+  border-radius: 0.42rem;
+  overflow: hidden;
+}
+.toast_login .alert.alert-custom.alert-light-primary{
+  height: 100%;
+}
+@media (max-width: 575.98px) {
+  .login.login-4 .login-form {
+    width: 100%;
+    max-width: 100%;
+  }
+}

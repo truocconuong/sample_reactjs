@@ -1,35 +1,76 @@
-import React, {Component} from 'react'
-import AuthService from './AuthService.js'
-import Login from "../Components/Login/LoginAdmin";
+import React, { Component } from "react";
+import AuthService from "./AuthService.js";
+import Login from "../Components/Login/LoginAdmin.js";
+import Loading from "../Components/libs/PageLoader/fbloader.js";
+import { setRole } from "../redux/actions";
+import { connect } from "react-redux";
+import Network from "./Network";
 export default function withAuth(AuthComponent) {
-    const Auth = new AuthService()
-    return class Authenticated extends Component {
-      constructor(props) {
-        super(props)
-        this.state = {
-          isLogin: false
-        };
-      }
-                
-      componentDidMount () {
-      	// console.log("ISLOGIN", Auth.loggedIn())
-        if (Auth.loggedIn()) {
-          this.setState({ isLogin: true })
-        }else{
-          this.setState({ isLogin: false })
+  const Auth = new AuthService();
+  const api = new Network();
+  class Authenticated extends Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        isLogin: false,
+        isLoading: false,
+        classHide: "hideInAuth",
+      };
+      this.checkLogin = this.checkLogin.bind(this);
+    }
+    async checkLogin() {
+      // console.log("ISLOGIN", Auth.loggedIn());
+      try {
+        this.setState({
+          isLoading: true,
+        });
+        let role = await Auth.loggedIn();
+        if (role) {
+          // console.log("auth: ", role)
+          await this.props.setRole(role);
+          this.setState({ isLogin: true });
+        } else {
+          this.setState({ isLogin: false });
         }
-      }
-
-      render() {
-        return (
-          <div>
-          {!this.state.isLogin ? (
-               <Login {...this.props}  auth={Auth} />
-            ) : (
-              <AuthComponent {...this.props}  auth={Auth} />
-            )}
-          </div>
-        )
+        setTimeout(() => {
+          this.setState({
+            isLoading: false,
+            classHide: "",
+          });
+        }, 100);
+      } catch (error) {
+        console.log("err in with auth: ", error);
       }
     }
+
+    componentDidMount() {
+      
+      this.checkLogin();
+    }
+
+    render() {
+      return (
+        <div>
+          {this.state.isLoading ? <Loading /> : null}
+          <div className={`with_auth_div ${this.state.classHide}`}>
+            {/* <Login {...this.props} auth={Auth} /> */}
+            {!this.state.isLogin ? (
+              <Login {...this.props} auth={Auth} />
+            ) : (
+              <AuthComponent {...this.props} auth={Auth} />
+            )}
+          </div>
+        </div>
+      );
+    }
+  }
+  const mapDispatchToProps = (dispatch) => {
+    return {
+      setRole: (role) => dispatch(setRole(role)),
+    };
+  };
+  const mapStateToProps = (state, ownProps) => {
+    return {};
+  };
+  return connect(mapStateToProps, mapDispatchToProps)(Authenticated);
 }
