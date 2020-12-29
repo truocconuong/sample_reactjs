@@ -14,14 +14,14 @@ export default class PreviewPdf extends Component {
     render() {
         return (
             <Modal size="xl" show={this.props.show} onHide={this.props.onHide} centered>
-                <Modal.Header closeButton>
+                <Modal.Header >
                     <Modal.Title>Preview Pdf</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="background-pdf">
                     <ToastContainer closeOnClick autoClose={1000} rtl={false} />
                     <div className="card-body card-body-update card-body-preview background-pdf">
                         {
-                           this.props.show && this.props.base64 ? (<PDFViewer
+                            this.props.show && this.props.base64 ? (<PDFViewer
                                 document={{
                                     base64: this.props.base64,
                                 }}
