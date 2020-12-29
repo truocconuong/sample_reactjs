@@ -432,7 +432,11 @@ class DetailCard extends Component {
                 <Button variant="btn btn-success btn-interview" onClick={() => this.props.toggleDetailCardAndInterview()}>Create Interview</Button>
 
             }
-            <Button variant="primary btn-interview" onClick={this.updateCard}>Save</Button>
+           {
+             this.props.role !== roleName.DIRECTOR ? (
+              <Button variant="primary btn-interview" onClick={this.updateCard}>Save</Button>
+             ) : ''
+           }
             <Button variant="light" onClick={this.props.onHide}>Close</Button>
           </div>
         </Modal.Footer>
