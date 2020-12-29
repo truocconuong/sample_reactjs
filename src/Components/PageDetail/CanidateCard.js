@@ -8,6 +8,7 @@ import CustomToast from "../common/CustomToast.js";
 import { DatetimePickerTrigger } from "../libs/rc-datetime-picker";
 import Select from "react-select";
 import { Link } from "react-router-dom";
+import { convertDriveToBase64 } from "../../utils/common/convertDriveToBase64";
 
 const api = new Network();
 
@@ -57,6 +58,13 @@ export default class CandidateCard extends Component {
       cv: this.props.data.cv,
       arrayLane: this.props.lane,
       idLane: this.props.lane.length > 0 ? this.props.lane[0].id : "",
+    }, async () => {
+      if (this.state.cv) {
+        const base64 = await convertDriveToBase64(this.state.cv);
+        this.setState({
+          base64Drive: base64
+        })
+      }
     });
   }
 
@@ -308,6 +316,7 @@ export default class CandidateCard extends Component {
                     onChange={this.handleChangeData}
                     placeholder="Enter link or import cv"
                   />
+                  <a href={`data:application/pdf;base64,${this.state.base64Drive}`} download={`${this.state.base64Drive ? this.state.name : ''}.pdf`} className="input-group-append"><span className="input-group-text"><i className="fas fa-cloud-download-alt"></i></span></a>
                 </div>
               </div>
               <div className="form-group">
@@ -356,7 +365,7 @@ export default class CandidateCard extends Component {
                       : "btn btn-primary font-weight-bolder style-btn-kitin mr-3"
                   }
                 >
-                  Submit
+                  Save
                 </button>
               ) : null}
 
@@ -364,7 +373,7 @@ export default class CandidateCard extends Component {
                 type="reset"
                 className="btn btn-secondary"
                 onClick={this.props.onHide}
-                // style={{ marginLeft: "10px" }}
+              // style={{ marginLeft: "10px" }}
               >
                 Cancel
               </button>
