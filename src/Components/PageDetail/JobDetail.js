@@ -459,14 +459,14 @@ class JobDetail extends Component {
 
   async previewPdf(candidateJobId) {
     try {
-      this.setState({
-        isLoading: true
-      })
+      // this.setState({
+      //   isLoading: true
+      // })
       const response = await api.get(`/api/v1/admin/preview/pdf/candidateJob/${candidateJobId}`)
       if (response) {
         this.setState({
           base64: response.data.base64,
-          isLoading: false
+          // isLoading: false
         })
       }
     } catch (error) {
