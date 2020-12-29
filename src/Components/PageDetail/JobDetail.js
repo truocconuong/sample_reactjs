@@ -1457,6 +1457,7 @@ class JobDetail extends Component {
                                   defaultValue={data.note || ""}
                                   className="form-control-solid"
                                   readOnly
+                                  style={{ overflowY: 'scroll' }}
                                 />
                               </div>
                             </div>
@@ -1492,6 +1493,7 @@ class JobDetail extends Component {
                                   rows="4"
                                   className="form-control-solid"
                                   readOnly
+                                  style={{ overflowY: 'scroll' }}
                                 />
                               </div>
                             </div>
@@ -1508,6 +1510,7 @@ class JobDetail extends Component {
                                   defaultValue={data.interviewProcess || ""}
                                   className="form-control-solid"
                                   readOnly
+                                  style={{ overflowY: 'scroll' }}
                                 />
                               </div>
                             </div>
@@ -1525,6 +1528,7 @@ class JobDetail extends Component {
                                   defaultValue={data.extraBenefit || ""}
                                   className="form-control-solid"
                                   readOnly
+                                  style={{ overflowY: 'scroll' }}
                                 />
                               </div>
                             </div>
