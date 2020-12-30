@@ -8,6 +8,7 @@ import CustomToast from "../common/CustomToast.js";
 import { DatetimePickerTrigger } from "../libs/rc-datetime-picker";
 import Select from "react-select";
 import { Link } from "react-router-dom";
+import { convertDriveToBase64 } from "../../utils/common/convertDriveToBase64";
 
 const api = new Network();
 
@@ -69,6 +70,13 @@ export default class CardTrello extends Component {
       noteApproach: this.props.data.noteApproach,
       arrayLane: this.props.lane,
       laneSelect: dataLane,
+    }, async () => {
+      if (this.state.cv) {
+        const base64 = await convertDriveToBase64(this.state.cv);
+        this.setState({
+          base64Drive: base64
+        })
+      }
     });
   }
 
@@ -312,6 +320,7 @@ export default class CardTrello extends Component {
                     onChange={this.handleChangeData}
                     placeholder="Enter link or import cv"
                   />
+                  <a href={`data:application/pdf;base64,${this.state.base64Drive}`} download={`${this.state.base64Drive ? this.state.name : ''}.pdf`} className="input-group-append"><span className="input-group-text"><i className="fas fa-cloud-download-alt"></i></span></a>
                 </div>
               </div>
               <div className="form-group">

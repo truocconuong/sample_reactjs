@@ -290,7 +290,7 @@ class Card extends Component {
 
                           )
                         })}
-                        <div id={`Popover${this.props.card.id}`} className={this.props.role === roleName.LEADER ? 'btn btn-md btn-icon btn-light-facebook btn-pill mx-2' : 'btn btn-md btn-icon btn-light-facebook btn-pill mx-2 off-button-add-user'} data-toggle="tooltip" title="" data-original-title="More users">
+                        <div id={`Popover${this.props.card.id}`} className={this.props.role !== roleName.DIRECTOR ? 'btn btn-md btn-icon btn-light-facebook btn-pill mx-2' : 'btn btn-md btn-icon btn-light-facebook btn-pill mx-2 off-button-add-user'} data-toggle="tooltip" title="" data-original-title="More users">
 
 
                           <i className="fas fa-plus"></i>
