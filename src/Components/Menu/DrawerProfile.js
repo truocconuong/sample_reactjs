@@ -25,9 +25,10 @@ class DrawerProfile extends Component {
     this.onChangeUploadHandler = this.onChangeUploadHandler.bind(this);
     this.redirectProfile = this.redirectProfile.bind(this);
     this.forwardNoti = this.forwardNoti.bind(this);
-    this.getNoti = this.getNoti.bind(this);
+    // this.getNoti = this.getNoti.bind(this);
     this.renderNotiRow = this.renderNotiRow.bind(this);
     this.scrollCol = null;
+    this.scrollRef = React.createRef();
   }
   // Render an item or a loading indicator.
   renderNotiIcon(noti) {
@@ -81,58 +82,7 @@ class DrawerProfile extends Component {
       </div>
     );
   };
-  markAllNotiRead() {
-    const newNotification = this.state.notification.map((noti, index) => {
-      return { ...noti, status: true };
-    });
-    this.setState({
-      notification: newNotification,
-    });
-  }
-  receiveNewNoti(newNoti) {
-    this.setState((state) => {
-      return {
-        notification: [newNoti, ...state.notification],
-      };
-    });
-  }
-  getNoti = () => {
-    this.setState({ isNextPageLoading: true }, async () => {
-      const response = await api.get(
-        `/api/admin/notification?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber}`
-      );
-      if (response) {
-        this.setState((state) => ({
-          total: response.data.total,
-          hasNextPage:
-            [...state.notification, ...response.data.list].length <
-            response.data.total,
-          isNextPageLoading: false,
-          notification: [...state.notification, ...response.data.list],
-          pageNumber: state.pageNumber + 1,
-        }));
-      }
-    });
-  };
-  async getDataNoti() {
-    try {
-      const response = await api.get(
-        `/api/admin/notification?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber}`
-      );
-      if (response) {
-        this.setState((state) => ({
-          total: response.data.total,
-          hasNextPage:
-            [...state.notification, ...response.data.list].length <
-            response.data.total,
-          notification: [...state.notification, ...response.data.list],
-          pageNumber: state.pageNumber + 1,
-        }));
-      }
-    } catch (err) {
-      console.log("err while get noti", err);
-    }
-  }
+
   forwardNoti(type, id) {
     if (type == "assignJob") {
       this.props.onHide();
@@ -216,30 +166,36 @@ class DrawerProfile extends Component {
     this.props.history.push(`/profile/${id}`);
   }
   componentDidMount() {
-    this.getDataNoti();
-    this.scrollCol = document.getElementById("loadmore_noti");
+    this.props.getDataNoti();
+    // this.scrollCol = document.getElementById("loadmore_noti");
+    // console.log(this.scrollCol);
+    // console.log(this.scrollRef.current)
   }
   componentDidUpdate() {
+    this.scrollCol = document.getElementById("loadmore_noti");
+    // console.log(this.scrollCol);
+  }
+  componentWillReceiveProps() {
     this.scrollCol = document.getElementById("loadmore_noti");
   }
   onScroll = (e) => {
     // offsetHeight chieu cao cua div TaskList
     // scrollHeight chieu cao thuc cua scroll div
-    // console.log(e.target.scrollTop + this.scrollCol.offsetHeight);
-    // console.log(this.scrollCol.scrollHeight);
+    console.log(e.target.scrollTop + this.scrollCol.offsetHeight);
+    console.log(this.scrollCol.scrollHeight);
     if (
-      e.target.scrollTop + this.scrollCol.offsetHeight ==
+      Math.floor(e.target.scrollTop + this.scrollCol.offsetHeight) ==
       this.scrollCol.scrollHeight
     ) {
       console.log("load");
-      this.getDataNoti();
+      this.props.getDataNoti();
     }
   };
   render() {
     const data = this.props.data;
-    const notification = this.state.notification;
+    const notification = this.props.notification;
     const { hasNextPage, isNextPageLoading } = this.state;
-    console.log(this.state.hasNextPage);
+    console.log(notification);
     return (
       <Drawer
         anchor={"left"}
@@ -345,23 +301,16 @@ class DrawerProfile extends Component {
             </div>
             <div className="separator separator-dashed mt-8 mb-5" />
             <h5 className="mb-5">Notifications</h5>
+            {/* <div id="loadmore_noti" ref={this.scrollRef} style={{height: "500px"}}>huhuh</div> */}
             <div
               onScroll={this.onScroll}
               className="navi navi-spacer-x-0 navi_cs"
               id="loadmore_noti"
             >
-              {/* <Wrapper
-                hasNextPage={hasNextPage}
-                isNextPageLoading={isNextPageLoading}
-                items={this.state.notification}
-                loadNextPage={this.getNoti}
-                renderNotiRow={this.renderNotiRow}
-                forwardNoti={this.forwardNoti}
-              /> */}
-              {this.state.notification.map((noti, index) => {
+              {notification.map((noti, index) => {
                 return this.renderNotiRow(index, noti, this.forwardNoti);
               })}
-              {this.state.hasNextPage ? (
+              {this.props.hasNextPage ? (
                 <div
                   style={{
                     display: "flex",
