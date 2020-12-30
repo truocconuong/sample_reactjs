@@ -72,12 +72,6 @@ const rulesAddUserNotDirector = [
     message: "Name is required.",
   },
   {
-    field: "teamId",
-    method: "isEmpty",
-    validWhen: false,
-    message: "Team is required.",
-  },
-  {
     field: "roleId",
     method: "isEmpty",
     validWhen: false,
@@ -163,12 +157,7 @@ const rulesEditUserNotDirector = [
     validWhen: false,
     message: "Role is required.",
   },
-  {
-    field: "teamIdEdit",
-    method: "isEmpty",
-    validWhen: false,
-    message: "Team is required.",
-  },
+ 
 ];
 
 const rulesAddAndUpdateClient = [

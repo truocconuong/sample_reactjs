@@ -1299,7 +1299,7 @@ class Users extends Component {
                           </div>
 
                           {!this.state.isDirector ? (
-                            <div className="form-group row">
+                            <div className="form-group row" style={{display: 'none'}}>
                               <label className="col-form-label  col-lg-3 ">
                                 Team
                                 {this.state.isDirector ? null : (
@@ -1449,7 +1449,7 @@ class Users extends Component {
                           </div>
 
                           {!state.isDirector ? (
-                            <div className="form-group row">
+                            <div className="form-group row" style={{display: 'none'}}>
                               <label className="col-form-label  col-lg-3 ">
                                 Team
                                 {this.state.isDirector ? null : (
