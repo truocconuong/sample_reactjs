@@ -237,9 +237,7 @@ class Dashboard extends Component {
               this.state.pageNumberJob
             }&status=${
               this.state.statusJob
-            }&startDate=${this.state.startDateJob.format(
-              "YYYY-MM-DD"
-            )}&endDate=${this.state.endDateJob.format("YYYY-MM-DD")}`
+            }`
           ),
           api.post(`/api/dashboard/cv`, {
             startDate: this.state.startDate.format("YYYY-MM-DD"),
@@ -298,7 +296,7 @@ class Dashboard extends Component {
           responseListWeeklyTask,
         ] = await Promise.all([
           api.get(
-            `/api/dashboard/jobs?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumberJob}&status=${this.state.statusJob}&startDate=${this.state.startDateJob}&endDate=${this.state.endDateJob}`
+            `/api/dashboard/jobs?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumberJob}&status=${this.state.statusJob}`
           ),
           api.post(`/api/dashboard/cv`, {
             startDate: this.state.startDate.format("YYYY-MM-DD"),
@@ -354,7 +352,7 @@ class Dashboard extends Component {
         // role Member
         const [responseJob, responseListWeeklyTask] = await Promise.all([
           api.get(
-            `/api/dashboard/jobs?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumberJob}&status=${this.state.statusJob}&startDate=${this.state.startDateJob}&endDate=${this.state.endDateJob}`
+            `/api/dashboard/jobs?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumberJob}&status=${this.state.statusJob}`
           ),
           api.post(
             `/api/task/team?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumberTask}`,
@@ -473,7 +471,7 @@ class Dashboard extends Component {
       });
       let start = this.state.pageSize * (this.state.pageNumberJob - 1) + 1;
       const response = await api.get(
-        `/api/dashboard/jobs?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumberJob}&status=${this.state.statusJob}&startDate=${this.state.startDateJob}&endDate=${this.state.endDateJob}`
+        `/api/dashboard/jobs?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumberJob}&status=${this.state.statusJob}`
       );
       if (response) {
         this.setState({
