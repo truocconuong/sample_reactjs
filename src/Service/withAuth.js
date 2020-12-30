@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import AuthService from "./AuthService.js";
 import Login from "../Components/Login/LoginAdmin.js";
 import Loading from "../Components/libs/PageLoader/fbloader.js";
-import { setRole } from "../redux/actions";
+import { setRole, setUserId} from "../redux/actions";
 import { connect } from "react-redux";
 import Network from "./Network";
 export default function withAuth(AuthComponent) {
@@ -24,10 +24,11 @@ export default function withAuth(AuthComponent) {
         this.setState({
           isLoading: true,
         });
-        let role = await Auth.loggedIn();
-        if (role) {
+        let auth = await Auth.loggedIn();
+        if (auth && auth.role) {
           // console.log("auth: ", role)
-          await this.props.setRole(role);
+          await this.props.setRole(auth.role);
+          await this.props.setUserId(auth.userId);
           this.setState({ isLogin: true });
         } else {
           this.setState({ isLogin: false });
@@ -67,6 +68,7 @@ export default function withAuth(AuthComponent) {
   const mapDispatchToProps = (dispatch) => {
     return {
       setRole: (role) => dispatch(setRole(role)),
+      setUserId: (userId) => dispatch(setUserId(userId)),
     };
   };
   const mapStateToProps = (state, ownProps) => {
