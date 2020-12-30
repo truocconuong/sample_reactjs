@@ -22,7 +22,7 @@ class Main extends Component {
     return result;
   };
   componentDidMount(){
-    console.log(window.innerWidth)
+    // console.log(window.innerWidth)
   }
   render() {
     return (

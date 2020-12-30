@@ -3,7 +3,6 @@ import Drawer from "@material-ui/core/Drawer";
 import MenuLeft1 from "./MenuLeft.js";
 import { Link } from "react-router-dom";
 
-
 class MenuResponsive extends Component {
   constructor(props) {
     super(props);
@@ -27,12 +26,20 @@ class MenuResponsive extends Component {
         >
           <MenuLeft1 isMobile={true} hideMenuResponsive={this.toggleDrawer.bind(this, false)}/>
         </Drawer> */}
-        <div className={this.state.show? "drawer_div" : "drawer_div drawer_hide"} onClick={this.toggleDrawer.bind(this,false)}>
-          <MenuLeft1
-            isMobile={true}
-            hideMenuResponsive={this.toggleDrawer.bind(this, false)}
-          />
-        </div>
+        {window.innerWidth < 768 ? (
+          <div
+            className={
+              this.state.show ? "drawer_div" : "drawer_div drawer_hide"
+            }
+            onClick={this.toggleDrawer.bind(this, false)}
+          >
+            <MenuLeft1
+              isMobile={true}
+              hideMenuResponsive={this.toggleDrawer.bind(this, false)}
+            />
+          </div>
+        ) : null}
+
         <Link to="/">
           <img
             alt="Logo"

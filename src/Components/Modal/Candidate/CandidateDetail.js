@@ -62,7 +62,7 @@ export default class CandidateDetail extends Component {
     let self = this;
     const data = this.props.data;
     const candidate = this.props.data.Candidate;
-    console.log(data);
+    // console.log(data);
     return (
       <ModalTransition>
         {this.props.show && (
