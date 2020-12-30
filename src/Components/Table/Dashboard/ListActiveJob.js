@@ -87,9 +87,9 @@ class ListActiveJob extends Component {
             </div>
           </div>
           <div className="card-body pt-2 pb-0 body_card_dashboard">
-            <div className="mb-4">
+            <div className="mb-4" style={{display: 'none'}}>
               {this.props.role == "Member" ? null : (
-                <div className="row align-items-flex-end cs_filter_time d-flex">
+                <div className="row align-items-flex-end cs_filter_time d-flex" >
                   <DatetimePickerTrigger
                     moment={this.props.startDate}
                     onChange={(_moment) =>

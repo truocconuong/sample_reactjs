@@ -101,7 +101,7 @@ export default class DetailCandidateTable extends Component {
   render() {
     let self = this;
     const data = this.props.data;
-    console.log(data)
+    // console.log(data)
     return (
       <ModalTransition>
         {this.props.show && (
