@@ -235,12 +235,12 @@ class DetailCard extends Component {
               <h4>Update card</h4>
             </div>
             <div className="detail_header__sticky">
-              {this.props.role === roleName.LEADER ? <div className="dropdown dropdown-inline" data-toggle="tooltip" title="Quick actions" data-placement="left">   <a id={`Proveti${this.props.data.id}`} className="btn btn-clean btn-hover-light-primary btn-sm btn-icon" >
+              {this.props.role !== roleName.DIRECTOR ? <div className="dropdown dropdown-inline" data-toggle="tooltip" title="Quick actions" data-placement="left">   <a id={`Proveti${this.props.data.id}`} className="btn btn-clean btn-hover-light-primary btn-sm btn-icon" >
                 <i className="ki ki-bold-more-hor" />
               </a>
                 <PopoverPop popperClassName="popover-modal-card" trigger="legacy" placement="right" isOpen={this.state.showAddMember} target={`Proveti${this.props.data.id}`} toggle={this.toggleAddMember}>
                   <PopoverBody>
-                    <ul className="navi navi-hover">
+                    <ul className="navi navi-hover navi-selected-ul">
                       <li className="navi-header font-weight-bold py-4">
                         <span className="font-size-lg">Toggle member to card:</span>
                         <i className="flaticon2-information icon-md text-muted" data-toggle="tooltip" data-placement="right" title="Click to learn more..." />
@@ -276,7 +276,7 @@ class DetailCard extends Component {
                 <div className="form-group">
                   <label>Name </label>
                   <span style={{ color: "red" }}>*</span>
-                  <input type="text" value={data_detail.name} onChange={this.handleInputChange.bind(this)} name="name" className="form-control"
+                  <input disabled type="text" value={data_detail.name} onChange={this.handleInputChange.bind(this)} name="name" className="form-control"
                     placeholder="Enter name" />
                 </div>
 
@@ -306,7 +306,7 @@ class DetailCard extends Component {
                   <div className="col-lg-12">
                     <label>Email </label>
                     <span style={{ color: "red" }}>*</span>
-                    <input value={data_detail.email} type="email" onChange={this.handleInputChange.bind(this)} name="email" className="form-control"
+                    <input disabled value={data_detail.email} type="email" onChange={this.handleInputChange.bind(this)} name="email" className="form-control"
                       placeholder="Enter email" />
                   </div>
                 </div>
@@ -315,7 +315,7 @@ class DetailCard extends Component {
                   <div className="col-lg-6">
                     <label>Phone </label>
                     <span style={{ color: "red" }}>*</span>
-                    <input value={data_detail.phone} type="text" onChange={this.handleInputChange.bind(this)} name="phone" className="form-control" placeholder="Enter phone" />
+                    <input disabled value={data_detail.phone} type="text" onChange={this.handleInputChange.bind(this)} name="phone" className="form-control" placeholder="Enter phone" />
                   </div>
                   <div className="col-lg-6">
                     <label>Approach Date </label>
@@ -396,9 +396,10 @@ class DetailCard extends Component {
                           <ul className="pop-over-list">
                             {
                               this.props.role === roleName.LEADER ?
-                                <li>
+                                (this.props.userId !== user.id ? <li>
                                   <a onClick={() => this.removeUserCard(this.props.data.id, user.id, index)} className="js-remove-member">Remove from Card</a>
-                                </li> : ''
+                                </li> : '')
+                                : ''
                             }
                           </ul>
                         </Popover.Content>
@@ -432,11 +433,11 @@ class DetailCard extends Component {
                 <Button variant="btn btn-success btn-interview" onClick={() => this.props.toggleDetailCardAndInterview()}>Create Interview</Button>
 
             }
-           {
-             this.props.role !== roleName.DIRECTOR ? (
-              <Button variant="primary btn-interview" onClick={this.updateCard}>Save</Button>
-             ) : ''
-           }
+            {
+              this.props.role !== roleName.DIRECTOR ? (
+                <Button variant="primary btn-interview" onClick={this.updateCard}>Save</Button>
+              ) : ''
+            }
             <Button variant="light" onClick={this.props.onHide}>Close</Button>
           </div>
         </Modal.Footer>
@@ -451,6 +452,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state, ownProps) => {
   return {
     role: state.auth.role,
+    userId: state.auth.userId,
     update: (e) => ownProps.update(e),
     addMemberToCard: (data) => ownProps.addMemberToCard(data),
   };

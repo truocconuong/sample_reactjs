@@ -511,3 +511,10 @@ textarea {
     text-align: center;
     padding-bottom: 10px;
 }
+
+.navi-selected-ul{
+    list-style: none;
+    height: 300px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
