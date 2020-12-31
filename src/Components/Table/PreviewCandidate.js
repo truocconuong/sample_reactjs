@@ -153,6 +153,9 @@ class PreviewCandidate extends Component {
   }
 
   async getCandidateJob() {
+    this.setState({
+      isLoading: true
+    })
     try {
       const response = await api.get(
         `/preview/candidate/${this.props.candidateId}/job/${this.props.jobId}`
@@ -172,7 +175,13 @@ class PreviewCandidate extends Component {
           await this.previewPdf(data.id);
         }
       }
+      this.setState({
+        isLoading: false
+      })
     } catch (error) {
+      this.setState({
+        isLoading: false
+      })
       toast(<CustomToast title={"Does not have permission to read the file !"} type="error" />, {
         position: toast.POSITION.BOTTOM_RIGHT,
         autoClose: 3000,

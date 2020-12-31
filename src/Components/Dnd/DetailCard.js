@@ -115,7 +115,7 @@ class DetailCard extends Component {
     return isSelected
   }
   colorRandomSelected = () => {
-    const colors = ['label label-xl label-inline label-light-dark', 'label label-xl label-inline label-light-dark', 'label label-xl label-inline label-light-success', 'label label-xl label-inline label-light-danger', 'label label-xl label-inline label-light-success'];
+    const colors = ['label-custom-name label label-xl label-inline label-light-dark', 'label-custom-name label label-xl label-inline label-light-dark', 'label-custom-name label label-xl label-inline label-light-success', 'label-custom-name label label-xl label-inline label-light-danger', 'label-custom-name label label-xl label-inline label-light-success'];
     const random = Math.floor(Math.random() * colors.length);
     return colors[random]
   }
@@ -333,13 +333,13 @@ class DetailCard extends Component {
                 <div className="form-group">
                   <label>Link cv </label>
                   <div className="input-group">
-                    <input type="text" value={data_detail.linkCv} onChange={this.handleInputChange.bind(this)} name="linkCv" className={
+                    <input disabled type="text" value={data_detail.linkCv} onChange={this.handleInputChange.bind(this)} name="linkCv" className={
                       errors.linkCv
                         ? "form-control is-invalid"
                         : "form-control"
-                    } placeholder="Enter link or import cv" />
+                    } placeholder="Import CV" />
                     <label htmlFor="uploadCV" className="custom-label-upload">
-                      <div className="input-group-append custom-div-upload"><span className="input-group-text"><i className="fas fa-cloud-upload-alt"></i><input onChange={this.onChangeUploadHandler} id="uploadCV" type="file" className="form-control mb-2 mr-sm-2" style={{ display: 'none' }} placeholder="Jane Doe" /></span></div>
+                      <div className="input-group-append custom-div-upload"><span className="input-group-text"><i className="fas fa-upload"></i><input onChange={this.onChangeUploadHandler} id="uploadCV" type="file" className="form-control mb-2 mr-sm-2" style={{ display: 'none' }} placeholder="Jane Doe" /></span></div>
                     </label>
                   </div>
                 </div>
