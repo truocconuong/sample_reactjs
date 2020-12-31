@@ -122,7 +122,7 @@ class Card extends Component {
   }
 
   colorRandomSelected = () => {
-    const colors = ['label label-xl label-inline label-light-dark', 'label label-xl label-inline label-light-dark', 'label label-xl label-inline label-light-success', 'label label-xl label-inline label-light-danger', 'label label-xl label-inline label-light-success'];
+    const colors = ['label-custom-name label label-xl label-inline label-light-dark', 'label-custom-name label label-xl label-inline label-light-dark', 'label-custom-name label label-xl label-inline label-light-success', 'label-custom-name label label-xl label-inline label-light-danger', 'label-custom-name label label-xl label-inline label-light-success'];
     const random = Math.floor(Math.random() * colors.length);
     return colors[random]
   }

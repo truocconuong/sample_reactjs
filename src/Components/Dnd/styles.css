@@ -514,7 +514,11 @@ textarea {
 
 .navi-selected-ul{
     list-style: none;
-    height: 300px;
+    height: 207px;
     overflow-x: hidden;
     overflow-y: scroll;
+}
+
+.label-custom-name{
+    height: 39px !important; 
 }
