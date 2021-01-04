@@ -17,6 +17,7 @@ import {
 import FormEditorPdf from "./FormEditorPdf";
 import { ToastContainer, toast } from "react-toastify";
 import CustomToast from "../common/CustomToast";
+import { convertDriveToBase64 } from "../../utils/common/convertDriveToBase64";
 const api = new Network();
 
 class RefinedPdf extends Component {
@@ -88,35 +89,56 @@ class RefinedPdf extends Component {
   }
 
   async getCandidateJob() {
-    const response = await api.get(
-      `/preview/candidate/${this.props.candidateId}/job/${this.props.jobId}`
-    );
-    if (response) {
-      const data = response.data.candidateJob;
-      const dataUpdateState = {
-        candidateJob: data,
-      };
 
-      if (data.dataParserPdf) {
-        const dataState = { ...this.state.data, ...data.dataParserPdf };
-        dataUpdateState.data = dataState;
-      }
-      this.setState(dataUpdateState, () => {
-        const data = this.state.data;
+    this.setState({
+      isLoading: true
+    })
+    try {
+      const response = await api.get(
+        `/preview/candidate/${this.props.candidateId}/job/${this.props.jobId}`
+      );
+      if (response) {
+        const data = response.data.candidateJob;
+        const dataUpdateState = {
+          candidateJob: data,
+        };
 
-        for (const key in data) {
-          const blocksFromHTML = convertFromHTML(data[key]);
-          const contentState = ContentState.createFromBlockArray(
-            blocksFromHTML.contentBlocks,
-            blocksFromHTML.entityMap
-          );
-          this.setState({
-            [`${this.generateNameEditor(key)}`]: EditorState.createWithContent(
-              contentState
-            ),
-          });
+        if (data.dataParserPdf) {
+          const dataState = { ...this.state.data, ...data.dataParserPdf };
+          dataUpdateState.data = dataState;
         }
-      });
+
+        if (data.isRefinePdf) {
+          const base64 = await convertDriveToBase64(data.parserPdf);
+          this.setState({
+            base64Drive: base64
+          })
+        }
+
+        this.setState(dataUpdateState, () => {
+          const data = this.state.data;
+
+          for (const key in data) {
+            const blocksFromHTML = convertFromHTML(data[key]);
+            const contentState = ContentState.createFromBlockArray(
+              blocksFromHTML.contentBlocks,
+              blocksFromHTML.entityMap
+            );
+            this.setState({
+              [`${this.generateNameEditor(key)}`]: EditorState.createWithContent(
+                contentState
+              ),
+            });
+          }
+        });
+      }
+      this.setState({
+        isLoading: false
+      })
+    } catch (error) {
+      this.setState({
+        isLoading: false
+      })
     }
   }
 
@@ -175,9 +197,9 @@ class RefinedPdf extends Component {
           draggable: true,
           pauseOnHover: true
         });
-        this.props.history.push(`/preview/candidate/${this.props.candidateId}/job/${this.props.jobId}`)
+        // this.props.history.push(`/preview/candidate/${this.props.candidateId}/job/${this.props.jobId}`)
         // this.defaultState();
-        // this.getCandidateJob();
+        this.getCandidateJob();
       }
       this.setState({
         isLoading: false,
@@ -255,19 +277,21 @@ class RefinedPdf extends Component {
                   <div className="card-toolbar">
                     <span
                       onClick={() => this.props.history.push(`/preview/candidate/${this.props.candidateId}/job/${this.props.jobId}`)}
-                      className="btn btn-light-primary font-weight-bolder mr-2"
+                      className="btn btn-light-primary font-weight-bolder mr-3"
                     >
                       Back
                     </span>
+
+                    {
+                      this.state.base64Drive ? (
+                        <a href={`data:application/pdf;base64,${this.state.base64Drive}`} download={`${this.state.base64Drive ? data.name : ''}.pdf`} className="btn btn-primary font-weight-bolder style-btn-kitin mr-3">Download As PDF</a>
+                      ) : ''
+                    }
                     <div className="btn-group">
                       <button
                         onClick={this.makePdf}
                         type="submit"
-                        className={
-                          this.state.isLoading
-                            ? "btn btn-primary font-weight-bolder style-btn-kitin spinner spinner-white spinner-right"
-                            : "btn btn-primary font-weight-bolder style-btn-kitin "
-                        }
+                        className="btn btn-primary font-weight-bolder style-btn-kitin"
                       >
                         Save
                       </button>
@@ -315,77 +339,77 @@ class RefinedPdf extends Component {
                     nameEditor={this.state.objectiveEditor}
                     onEditorStateChange={this.onEditorStateChange}
                     setNameEditorWrite={this.setNameEditorWrite}
-                    editorWrite = {this.state.editorWrite}
+                    editorWrite={this.state.editorWrite}
                   />
                   <FormEditorPdf
                     title="summary"
                     nameEditor={this.state.summaryEditor}
                     onEditorStateChange={this.onEditorStateChange}
                     setNameEditorWrite={this.setNameEditorWrite}
-                    editorWrite = {this.state.editorWrite}
+                    editorWrite={this.state.editorWrite}
                   />
                   <FormEditorPdf
                     title="technology"
                     nameEditor={this.state.technologyEditor}
                     onEditorStateChange={this.onEditorStateChange}
                     setNameEditorWrite={this.setNameEditorWrite}
-                    editorWrite = {this.state.editorWrite}
+                    editorWrite={this.state.editorWrite}
                   />
                   <FormEditorPdf
                     title="experience"
                     nameEditor={this.state.experienceEditor}
                     onEditorStateChange={this.onEditorStateChange}
                     setNameEditorWrite={this.setNameEditorWrite}
-                    editorWrite = {this.state.editorWrite}
+                    editorWrite={this.state.editorWrite}
                   />
                   <FormEditorPdf
                     title="education"
                     nameEditor={this.state.educationEditor}
                     onEditorStateChange={this.onEditorStateChange}
                     setNameEditorWrite={this.setNameEditorWrite}
-                    editorWrite = {this.state.editorWrite}
+                    editorWrite={this.state.editorWrite}
                   />
                   <FormEditorPdf
                     title="skills"
                     nameEditor={this.state.skillsEditor}
                     onEditorStateChange={this.onEditorStateChange}
                     setNameEditorWrite={this.setNameEditorWrite}
-                    editorWrite = {this.state.editorWrite}
+                    editorWrite={this.state.editorWrite}
                   />
                   <FormEditorPdf
                     title="language"
                     nameEditor={this.state.languageEditor}
                     onEditorStateChange={this.onEditorStateChange}
                     setNameEditorWrite={this.setNameEditorWrite}
-                    editorWrite = {this.state.editorWrite}
+                    editorWrite={this.state.editorWrite}
                   />
                   <FormEditorPdf
                     title="courses"
                     nameEditor={this.state.coursesEditor}
                     onEditorStateChange={this.onEditorStateChange}
                     setNameEditorWrite={this.setNameEditorWrite}
-                    editorWrite = {this.state.editorWrite}
+                    editorWrite={this.state.editorWrite}
                   />
                   <FormEditorPdf
                     title="projects"
                     nameEditor={this.state.projectsEditor}
                     onEditorStateChange={this.onEditorStateChange}
                     setNameEditorWrite={this.setNameEditorWrite}
-                    editorWrite = {this.state.editorWrite}
+                    editorWrite={this.state.editorWrite}
                   />
                   <FormEditorPdf
                     title="contacts"
                     nameEditor={this.state.contactsEditor}
                     onEditorStateChange={this.onEditorStateChange}
                     setNameEditorWrite={this.setNameEditorWrite}
-                    editorWrite = {this.state.editorWrite}
+                    editorWrite={this.state.editorWrite}
                   />
                   <FormEditorPdf
                     title="positions"
                     nameEditor={this.state.positionsEditor}
                     onEditorStateChange={this.onEditorStateChange}
                     setNameEditorWrite={this.setNameEditorWrite}
-                    editorWrite = {this.state.editorWrite}
+                    editorWrite={this.state.editorWrite}
                   />
                 </div>
               </div>

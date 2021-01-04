@@ -11,7 +11,7 @@ import Pusher from "pusher-js";
 import DrawerProfile from "./DrawerProfile.js";
 import { ToastContainer, toast, Flip, Zoom } from "react-toastify";
 import moment from "moment";
-import PwaInstall from './PwaInstall.js';
+import PwaInstall from "./PwaInstall.js";
 const socket = require("socket.io-client")(domainServer);
 
 const auth = new AuthService();
@@ -25,8 +25,12 @@ class MenuLeft extends Component {
       class_arr: "fa fa-chevron-right",
       isOpenDrawer: false,
       profile: {},
-      notification: [],
       countUnreadNoti: 0,
+      //noti
+      notification: [],
+      pageSize: 12,
+      pageNumber: 1,
+      total: 0,
     };
     this.toggleMenu = this.toggleMenu.bind(this);
     this.toggleDrawer = this.toggleDrawer.bind(this);
@@ -38,7 +42,43 @@ class MenuLeft extends Component {
     this.renderNotiToast = this.renderNotiToast.bind(this);
     this.forwardNoti = this.forwardNoti.bind(this);
     this.drawerProfile = React.createRef();
+    this.initSocketIO = this.initSocketIO.bind(this);
+
+    //noti
+    this.getDataNoti = this.getDataNoti.bind(this);
+    this.receiveNewNoti = this.receiveNewNoti.bind(this);
   }
+
+  //notice
+  async getDataNoti() {
+    try {
+      const response = await api.get(
+        `/api/admin/notification?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber}`
+      );
+      if (response) {
+        this.setState((state) => ({
+          total: response.data.total,
+          hasNextPage:
+            [...state.notification, ...response.data.list].length <
+            response.data.total,
+          notification: [...state.notification, ...response.data.list],
+          pageNumber: state.pageNumber + 1,
+        }));
+      }
+    } catch (err) {
+      console.log("err while get noti", err);
+    }
+  }
+
+  receiveNewNoti(newNoti) {
+    this.setState((state) => {
+      return {
+        notification: [newNoti, ...state.notification],
+      };
+    });
+  }
+
+  //end notice
 
   forwardNoti(type, id) {
     if (type == "assignJob") {
@@ -98,7 +138,7 @@ class MenuLeft extends Component {
     socket.emit("join", userId);
     socket.on("notification", function (noti) {
       console.log(noti);
-      self.drawerProfile.current.receiveNewNoti(noti.content);
+      self.receiveNewNoti(noti.content);
       self.setState((prevState) => {
         return {
           countUnreadNoti: prevState.countUnreadNoti + 1,
@@ -180,8 +220,11 @@ class MenuLeft extends Component {
     try {
       const response = await api.patch(`/api/read/all/notification`);
       if (response) {
-        this.drawerProfile.current.markAllNotiRead();
+        const newNotification = this.state.notification.map((noti, index) => {
+          return { ...noti, status: true };
+        });
         this.setState({
+          notification: newNotification,
           countUnreadNoti: 0,
         });
       }
@@ -190,10 +233,11 @@ class MenuLeft extends Component {
     }
   }
   async toggleDrawer(open) {
-    
     // mark all noti as read => call api read noti
     if (this.state.countUnreadNoti != 0 && !open) {
       await this.markAllNotiRead();
+    }else{
+     
     }
     this.setState({ isOpenDrawer: open });
   }
@@ -221,6 +265,7 @@ class MenuLeft extends Component {
     auth.logout();
   }
   componentDidMount() {
+    // this.getDataNoti();
     this.getProfile();
   }
   render() {
@@ -239,6 +284,8 @@ class MenuLeft extends Component {
             hideMenuResponsive={this.props.hideMenuResponsive}
             notification={notification}
             ref={this.drawerProfile}
+            getDataNoti={this.getDataNoti}
+            hasNextPage={this.state.hasNextPage}
           />
         ) : null}
 
@@ -450,7 +497,7 @@ class MenuLeft extends Component {
                 <div className="content_menu">Setting</div>
               </NavLink>
             ) : null}
-           <PwaInstall />
+            <PwaInstall />
           </div>
           <div></div>
         </div>

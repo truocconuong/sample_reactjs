@@ -13,6 +13,7 @@ import { domainServer } from "../../utils/config";
 import PreviewPdf from "../Modal/PreviewPdf/PreviewPdf";
 import { ToastContainer, toast } from "react-toastify";
 import CustomToast from "../common/CustomToast.js";
+import { convertDriveToBase64 } from "../../utils/common/convertDriveToBase64";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 const api = new Network();
 
@@ -152,6 +153,9 @@ class PreviewCandidate extends Component {
   }
 
   async getCandidateJob() {
+    this.setState({
+      isLoading: true
+    })
     try {
       const response = await api.get(
         `/preview/candidate/${this.props.candidateId}/job/${this.props.jobId}`
@@ -171,7 +175,13 @@ class PreviewCandidate extends Component {
           await this.previewPdf(data.id);
         }
       }
+      this.setState({
+        isLoading: false
+      })
     } catch (error) {
+      this.setState({
+        isLoading: false
+      })
       toast(<CustomToast title={"Does not have permission to read the file !"} type="error" />, {
         position: toast.POSITION.BOTTOM_RIGHT,
         autoClose: 3000,
@@ -248,15 +258,18 @@ class PreviewCandidate extends Component {
                   </div>
                   <div className="card-toolbar">
                     <div className="dropdown dropdown-inline mr-2"></div>
-
-                    {!this.state.candidateJob.isRefinePdf ? (
-                      <Link
-                        to={`/refine/candidate/${this.props.candidateId}/job/${this.props.jobId}`}
-                        className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
-                      >
-                        Edit Pdf
+                    <span
+                      onClick={() => this.props.history.push(`/job-detail/${this.props.jobId}`)}
+                      className="btn btn-light-primary font-weight-bolder mr-2"
+                    >
+                      Back
+                    </span>
+                    <Link
+                      to={`/refine/candidate/${this.props.candidateId}/job/${this.props.jobId}`}
+                      className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
+                    >
+                      Edit Pdf
                       </Link>
-                    ) : ''}
                   </div>
                 </div>
                 <div className="card-body">

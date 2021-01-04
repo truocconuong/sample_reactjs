@@ -162,7 +162,7 @@ class Team extends Component {
     const response = await api.post(`/api/admin/user/list`);
     if (response) {
       const users = _.map(response.data.user, user => {
-        return { label: user.email, value: user.id }
+        return { label: user.email, value: user.id , role : user.Role.name}
       })
       users[0].selected = true;
       console.log(users)
@@ -373,6 +373,8 @@ class Team extends Component {
 
     const data = this.state.data;
     const errors = this.state.errors;
+    const leaders = _.filter(this.state.users,user => user.role ==='Leader'); 
+    const members = _.filter(this.state.users,user => user.role ==='Member'); 
     const elmFormCreateTeam = (<div className="col-md-5 col-sm-12">
       <div className="card card-custom">
         <div className="card-header flex-wrap border-0 pt-6 pb-0">
@@ -412,7 +414,7 @@ class Team extends Component {
                 <div className="col-lg-9 col-md-9 col-sm-12">
                   <Select
                     name="option"
-                    options={this.state.users}
+                    options={leaders}
                     value={this.state.emailSelected}
                     className={errors.idLeader ? 'invalid-selected' : ''}
                     onChange={this.handleOnchange}
@@ -617,7 +619,7 @@ class Team extends Component {
                     <Select
                       defaultValue={{ label: "Select Dept", value: 0 }}
                       name="option"
-                      options={this.state.users}
+                      options={members}
                       value={this.state.member}
                       onChange={this.handleOnchangeMember}
                     />
@@ -692,7 +694,7 @@ class Team extends Component {
                   <Select
                     defaultValue={{ label: "Select Dept", value: 0 }}
                     name="option"
-                    options={this.state.users}
+                    options={leaders}
                     value={this.state.emailSelected}
                     onChange={this.handleOnchange}
                   />

@@ -74,10 +74,10 @@ class Column extends Component {
   onScroll = (e) => {
     // offsetHeight chieu cao cua div TaskList
     // scrollHeight chieu cao thuc cua scroll div
-    // console.log(e.target.scrollTop + this.scrollCol.offsetHeight);
-    // console.log(this.scrollCol.scrollHeight);
+    console.log(e.target.scrollTop + this.scrollCol.offsetHeight);
+    console.log(this.scrollCol.scrollHeight);
     if (
-      e.target.scrollTop + this.scrollCol.offsetHeight ==
+      Math.floor(e.target.scrollTop + this.scrollCol.offsetHeight) ==
       this.scrollCol.scrollHeight 
     ) {
       console.log("load")

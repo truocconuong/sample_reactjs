@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Modal, { ModalTransition, ScrollBehavior } from "@atlaskit/modal-dialog";
 import { DatetimePickerTrigger } from "../../libs/rc-datetime-picker";
 import moment from "moment";
+import { convertDriveToBase64 } from "../../../utils/common/convertDriveToBase64";
 
 import "../style.css";
 
@@ -49,12 +50,19 @@ export default class CandidateDetail extends Component {
       });
     }
   }
-  
+  async componentWillReceiveProps() {
+    if (this.props.data.cv) {
+      const base64 = await convertDriveToBase64(this.props.data.cv);
+      this.setState({
+        base64Drive: base64,
+      });
+    }
+  }
   render() {
     let self = this;
     const data = this.props.data;
     const candidate = this.props.data.Candidate;
-    console.log(data)
+    // console.log(data);
     return (
       <ModalTransition>
         {this.props.show && (
@@ -71,8 +79,7 @@ export default class CandidateDetail extends Component {
             width={860}
           >
             <div className="wrap_candidate_detail">
-
-            <div className="form-group mt-3">
+              <div className="form-group mt-3">
                 <label>
                   Name <span style={{ color: "red" }}>*</span>
                 </label>
@@ -160,38 +167,49 @@ export default class CandidateDetail extends Component {
                     Approach Date <span style={{ color: "red" }}>*</span>
                   </label>
                   <DatetimePickerTrigger
-                      moment={moment(this.state.approachDate)}
-                      showTimePicker={false}
-                    >
-                      <div className="input-group input-group-sm">
-                        <input
-                          type="text"
-                          className="form-control custom_date_pickeer-kitin"
-                          value={data.approachDate? moment(data.approachDate).format('DD/MM/YYYY'): moment(data.createdAt).format('DD/MM/YYYY')}
-                          readOnly
-                        />
-                        <div className="input-group-append">
-                          <span className="input-group-text">
-                            <i className="la la-calendar icon-lg"></i>
-                          </span>
-                        </div>
+                    moment={moment(this.state.approachDate)}
+                    showTimePicker={false}
+                  >
+                    <div className="input-group input-group-sm">
+                      <input
+                        type="text"
+                        className="form-control custom_date_pickeer-kitin"
+                        value={
+                          data.approachDate
+                            ? moment(data.approachDate).format("DD/MM/YYYY")
+                            : moment(data.createdAt).format("DD/MM/YYYY")
+                        }
+                        readOnly
+                      />
+                      <div className="input-group-append">
+                        <span className="input-group-text">
+                          <i className="la la-calendar icon-lg"></i>
+                        </span>
                       </div>
-                    </DatetimePickerTrigger>
+                    </div>
+                  </DatetimePickerTrigger>
                 </div>
               </div>
               <div className="form-group">
-                <label>
-                  Link cv
-                </label>
+                <label>Link cv</label>
                 <div className="input-group">
                   <input
                     type="text"
-                    value={data.cv ? data.cv : ''}
+                    value={data.cv ? data.cv : ""}
                     name="linkCv"
                     className="form-control"
                     readOnly
                     placeholder="Enter link or import cv"
                   />
+                  <a
+                    href={`data:application/pdf;base64,${this.state.base64Drive}`}
+                    download={`${this.state.base64Drive ? candidate.name : ""}.pdf`}
+                    className="input-group-append"
+                  >
+                    <span className="input-group-text">
+                      <i className="fas fa-cloud-download-alt"></i>
+                    </span>
+                  </a>
                 </div>
               </div>
               <div className="form-group">
@@ -199,7 +217,7 @@ export default class CandidateDetail extends Component {
                 <input
                   type="text"
                   name="position"
-                  value={data.position? data.position:""}
+                  value={data.position ? data.position : ""}
                   readOnly
                   className="form-control"
                   placeholder="Enter position"
@@ -209,7 +227,7 @@ export default class CandidateDetail extends Component {
                 <label htmlFor="exampleTextarea">Note Approach</label>
                 <textarea
                   name="noteApproach"
-                  value={data.noteApproach?data.noteApproach:""}
+                  value={data.noteApproach ? data.noteApproach : ""}
                   readOnly
                   className="form-control form-control-solid"
                   rows={3}

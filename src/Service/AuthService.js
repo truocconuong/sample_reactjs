@@ -65,7 +65,7 @@ export default class AuthService {
           })
           .then(function (response) {
             setProfile(response.data.data.tokenAuth);
-            resolved(response.data.data.role);
+            resolved({role : response.data.data.role,userId : response.data.data.userId});
           })
           .catch(function (error) {
             self.handleError(error, rejected);

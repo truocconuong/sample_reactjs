@@ -177,7 +177,7 @@ class Users extends Component {
       this.setState({
         idUserEdit: user.id,
         isEditUser: true,
-        isDirector: user.Role.name === 'Director' ? true : false,
+        isDirector: user.Role.name === "Director" ? true : false,
         nameEdit: user.name,
         emailUserEdit: user.email,
         teamIdEdit: {
@@ -203,6 +203,18 @@ class Users extends Component {
       this.slide.slickGoTo(0, false);
       this.setState({
         isEditUser: false,
+        isDirector: true,
+        email: "",
+        name: "",
+        password: "",
+        roleId: {
+          label: "",
+          value: "",
+        },
+        teamId: {
+          label: "",
+          value: "",
+        },
         errors: {},
       });
     }
@@ -254,7 +266,7 @@ class Users extends Component {
           name: state.nameEdit,
           // password: state.passwordEdit,
           roleId: state.roleIdEdit.value,
-          teamId: state.teamIdEdit.value === "" ? null : state.teamIdEdit.value, // teamId khong bat buoc voi role = admin
+          teamId: state.teamIdEdit.value === "" ? null : state.isDirector? null: state.teamIdEdit.value, // teamId khong bat buoc voi role = admin
         };
         // console.log(userEdit);
         const response = await api.patch(
@@ -341,6 +353,7 @@ class Users extends Component {
           roleId: state.roleId.value,
           teamId: state.teamId.value === "" ? null : state.teamId.value, // teamId khong bat buoc voi role = admin
         };
+        console.log(newUser)
         const response = await api.post(`/api/register`, newUser);
         if (response) {
           toast(<CustomToast title={"Success!"} />, {
@@ -622,7 +635,6 @@ class Users extends Component {
         <div className="container d-flex container_user_cs dr_col">
           <div className="col-xl-8 pl-0 plm_0 prm_0 mb-3">
             <div className="card card-custom">
-             
               <div className="card-header flex-wrap border-0 pt-6 pb-0">
                 <div className="card-title">
                   <h3 className="card-label">
@@ -633,9 +645,8 @@ class Users extends Component {
                   </h3>
                 </div>
                 <div className="card-toolbar">
-                 
                   <div className="dropdown dropdown-inline mr-2"></div>
-                 
+
                   {state.isEditUser ? (
                     <div
                       className="btn btn-primary font-weight-bolder"
@@ -672,7 +683,6 @@ class Users extends Component {
                 </div>
               </div>
               <div className="card-body">
-              
                 <div
                   className="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
                   id="kt_datatable"
@@ -740,15 +750,14 @@ class Users extends Component {
                               >
                                 <span style={{ width: "314px" }}>
                                   <div className="d-flex align-items-center">
-                                   
                                     <div className="symbol symbol-50 symbol-light mr-2">
                                       <span className="symbol-label symbol-label-cs">
                                         <img
                                           src={
                                             user.linkAvatar
                                               ? domainServer +
-                                              "/" +
-                                              user.linkAvatar
+                                                "/" +
+                                                user.linkAvatar
                                               : defaultAva
                                           }
                                           className="h-100 align-self-center"
@@ -784,7 +793,6 @@ class Users extends Component {
                                   <div className="font-weight-bolder font-size-lg mb-0">
                                     {user.Team ? user.Team.name : null}
                                   </div>
-                                  
                                 </span>
                               </td>
 
@@ -955,12 +963,19 @@ class Users extends Component {
                               <tr
                                 className={`datatable-row-detail hide_desktop ${this.state.classToggleDetail[index]}`}
                               >
-                                <td style={{ padding: "0", width: "100%" }} className="datatable-detail" colSpan="9">
+                                <td
+                                  style={{ padding: "0", width: "100%" }}
+                                  className="datatable-detail"
+                                  colSpan="9"
+                                >
                                   <table style={{ width: "100%" }}>
                                     <tbody>
                                       <tr className="datatable-row">
                                         <td className="datatable-cell">
-                                          <span> {user.Team ? user.Team.name : null}</span>
+                                          <span>
+                                            {" "}
+                                            {user.Team ? user.Team.name : null}
+                                          </span>
                                         </td>
                                         <td
                                           data-field="OrderID"
@@ -969,11 +984,10 @@ class Users extends Component {
                                           style={{}}
                                         >
                                           <span style={{ width: 110 }}>
-                                          {this.displayRole(user.Role)}
+                                            {this.displayRole(user.Role)}
                                           </span>
                                         </td>
                                       </tr>
-                                     
 
                                       <tr className="datatable-row">
                                         <td className="datatable-cell">
@@ -1170,9 +1184,7 @@ class Users extends Component {
                     </div>
                   </div>
                 </div>
-               
               </div>
-            
             </div>
           </div>
           <div className="col-xl-4 p=0 plm_0 prm_0 ">
@@ -1209,7 +1221,6 @@ class Users extends Component {
                             value={state.name}
                             required
                           />
-                        
                         </div>
                       </div>
 
@@ -1237,7 +1248,6 @@ class Users extends Component {
                             value={state.emailUser}
                             required
                           />
-                         
                         </div>
                       </div>
 
@@ -1260,7 +1270,6 @@ class Users extends Component {
                             value={state.password}
                             required
                           />
-                         
                         </div>
                       </div>
                       {this.props.role === "Director" ? (
@@ -1286,41 +1295,38 @@ class Users extends Component {
                                 onChange={(e) => this.handleSelect(e, "roleId")}
                                 styles={customStyles}
                               />
-                             
                             </div>
                           </div>
 
-                          {
-                            !this.state.isDirector ?
-                              (
-                                <div className="form-group row">
-                                  <label className="col-form-label  col-lg-3 ">
-                                    Team
-                                    {this.state.isDirector ? null : (
-                                      <span className="text-danger">*</span>
-                                    )}
-                                  </label>
-                                  <div className="col-lg-9 col-md-9 col-sm-12">
-                                    <Select
-                                      name="teamId"
-                                      className={
-                                        errors.teamId ? "invalid-selected" : ""
-                                      }
-                                      options={state.listTeam.map((team, index) => {
-                                        return {
-                                          value: team.id,
-                                          label: team.name,
-                                        };
-                                      })}
-                                      value={state.teamId}
-                                      onChange={(e) => this.handleSelect(e, "teamId")}
-                                      styles={customStyles}
-                                    />
-                                   
-                                  </div>
-                                </div>
-                              ) : null
-                          }
+                          {!this.state.isDirector ? (
+                            <div className="form-group row" style={{display: 'none'}}>
+                              <label className="col-form-label  col-lg-3 ">
+                                Team
+                                {this.state.isDirector ? null : (
+                                  <span className="text-danger">*</span>
+                                )}
+                              </label>
+                              <div className="col-lg-9 col-md-9 col-sm-12">
+                                <Select
+                                  name="teamId"
+                                  className={
+                                    errors.teamId ? "invalid-selected" : ""
+                                  }
+                                  options={state.listTeam.map((team, index) => {
+                                    return {
+                                      value: team.id,
+                                      label: team.name,
+                                    };
+                                  })}
+                                  value={state.teamId}
+                                  onChange={(e) =>
+                                    this.handleSelect(e, "teamId")
+                                  }
+                                  styles={customStyles}
+                                />
+                              </div>
+                            </div>
+                          ) : null}
                         </div>
                       ) : null}
                     </div>
@@ -1384,7 +1390,6 @@ class Users extends Component {
                             value={state.nameEdit}
                             required
                           />
-                          
                         </div>
                       </div>
 
@@ -1412,11 +1417,9 @@ class Users extends Component {
                             value={state.emailUserEdit}
                             required
                           />
-                         
                         </div>
                       </div>
 
-                     
                       {this.props.role === "Director" ? (
                         <div>
                           <div className="form-group row">
@@ -1442,42 +1445,38 @@ class Users extends Component {
                                 }
                                 styles={customStyles}
                               />
-                            
                             </div>
                           </div>
 
-                          {
-                            !state.isDirector ? (
-                              <div className="form-group row">
-                                <label className="col-form-label  col-lg-3 ">
-                                  Team
+                          {!state.isDirector ? (
+                            <div className="form-group row" style={{display: 'none'}}>
+                              <label className="col-form-label  col-lg-3 ">
+                                Team
                                 {this.state.isDirector ? null : (
-                                    <span className="text-danger">*</span>
-                                  )}
-                                </label>
-                                <div className="col-lg-9 col-md-9 col-sm-12">
-                                  <Select
-                                    name="teamIdEdit"
-                                    className={
-                                      errors.teamIdEdit ? "invalid-selected" : ""
-                                    }
-                                    options={state.listTeam.map((team, index) => {
-                                      return {
-                                        value: team.id,
-                                        label: team.name,
-                                      };
-                                    })}
-                                    value={state.teamIdEdit}
-                                    onChange={(e) =>
-                                      this.handleSelect(e, "teamIdEdit")
-                                    }
-                                    styles={customStyles}
-                                  />
-                                  
-                                </div>
+                                  <span className="text-danger">*</span>
+                                )}
+                              </label>
+                              <div className="col-lg-9 col-md-9 col-sm-12">
+                                <Select
+                                  name="teamIdEdit"
+                                  className={
+                                    errors.teamIdEdit ? "invalid-selected" : ""
+                                  }
+                                  options={state.listTeam.map((team, index) => {
+                                    return {
+                                      value: team.id,
+                                      label: team.name,
+                                    };
+                                  })}
+                                  value={state.teamIdEdit}
+                                  onChange={(e) =>
+                                    this.handleSelect(e, "teamIdEdit")
+                                  }
+                                  styles={customStyles}
+                                />
                               </div>
-                            ) : null
-                          }
+                            </div>
+                          ) : null}
                         </div>
                       ) : null}
                     </div>
@@ -1496,7 +1495,6 @@ class Users extends Component {
                               ? "Please wait"
                               : "Save change"}
                           </button>
-                        
                         </div>
                       </div>
                     </div>
