@@ -89,6 +89,7 @@ class Team extends Component {
       isLoading: false,
       isSelected: false,
       formAddTeam: true,
+      isOpenDeleteUserPop: new Array(10).fill(false),
     })
   }
   toggleForm(team) {
