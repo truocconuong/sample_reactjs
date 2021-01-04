@@ -188,17 +188,15 @@ class SearchCandidate extends Component {
         isLoading: true,
       });
       let start = this.state.pageSize * (this.state.pageNumber - 1) + 1;
-      const response = await api.get(
-        `/api/admin/search/candidate?pageSize=${
-          this.state.pageSize
-        }&pageNumber=${this.state.pageNumber}${
-          this.state.email ? `&email=${this.state.email}` : ""
-        }${this.state.phone ? `&phone=${this.state.phone}` : ""}${
-          this.state.skill ? `&skills=${this.state.skill}` : ""
-        }${this.state.text ? `&text=${this.state.text}` : ""}
-        ${this.state.name ? `&name=${this.state.name}` : ""}
-        ${this.state.jobId ? `&jobId=${this.state.jobId}`: ""}`
-      );
+      let url =  `/api/admin/search/candidate?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber}`
+
+      if(this.state.email) url += `&email=${this.state.email}`
+      if(this.state.phone) url += `&phone=${this.state.phone}`
+      if(this.state.skill) url += `&skill=${this.state.skill}`
+      if(this.state.text) url += `&text=${this.state.text}`
+      if(this.state.name) url += `&name=${this.state.name}`
+      if(this.state.jobId) url += `&jobId=${this.state.jobId}`
+      const response = await api.get(url);
 
       if (response) {
         console.log(response.data.list);
