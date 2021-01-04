@@ -230,6 +230,12 @@ const rulesCreateNewCard = [
     message: "email is required.",
   },
   {
+    field: "email",
+    method: "isEmail",
+    validWhen: true,
+    message: "email is required.",
+  },
+  {
     field: "approachDate",
     method: "isEmpty",
     validWhen: false,
