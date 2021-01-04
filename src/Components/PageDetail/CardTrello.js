@@ -313,12 +313,13 @@ export default class CardTrello extends Component {
                 <label>Cv</label>
                 <div className="input-group">
                   <input
+                    disabled
                     type="text"
                     value={this.state.cv ? this.state.cv : ""}
                     name="cv"
                     className="form-control"
                     onChange={this.handleChangeData}
-                    placeholder="Enter link or import cv"
+                    placeholder="Import CV"
                   />
                   <a href={`data:application/pdf;base64,${this.state.base64Drive}`} download={`${this.state.base64Drive ? this.state.name : ''}.pdf`} className="input-group-append"><span className="input-group-text"><i className="fas fa-cloud-download-alt"></i></span></a>
                 </div>

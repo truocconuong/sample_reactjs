@@ -122,7 +122,7 @@ class Card extends Component {
   }
 
   colorRandomSelected = () => {
-    const colors = ['label label-xl label-inline label-light-dark', 'label label-xl label-inline label-light-dark', 'label label-xl label-inline label-light-success', 'label label-xl label-inline label-light-danger', 'label label-xl label-inline label-light-success'];
+    const colors = ['label-custom-name label label-xl label-inline label-light-dark', 'label-custom-name label label-xl label-inline label-light-dark', 'label-custom-name label label-xl label-inline label-light-success', 'label-custom-name label label-xl label-inline label-light-danger', 'label-custom-name label label-xl label-inline label-light-success'];
     const random = Math.floor(Math.random() * colors.length);
     return colors[random]
   }
@@ -158,7 +158,7 @@ class Card extends Component {
 
               <PopoverPop popperClassName="popover-modal-card" trigger="legacy" placement="bottom" isOpen={this.state.showAddMember} target={`Popover${this.props.card.id}`} toggle={this.toggleAddMember}>
                 <PopoverBody>
-                  <ul className="navi navi-hover">
+                  <ul className="navi navi-hover navi-selected-ul">
                     <li className="navi-header font-weight-bold py-4">
                       <span className="font-size-lg">Toggle member to card:</span>
                       <i className="flaticon2-information icon-md text-muted" data-toggle="tooltip" data-placement="right" title="Click to learn more..." />
@@ -166,7 +166,7 @@ class Card extends Component {
                     <li className="navi-separator mb-3 opacity-70" />
                     {usersTeam.map((user, index) => {
                       return (
-                        <li key={index} className="navi-item" onClick={() => this.toggleMember(this.checkUserIsSelected(users, user.value), index, this.props.card.id, user)}>
+                        <li key={index} className="navi-item navi-item-select-user" onClick={() => this.toggleMember(this.checkUserIsSelected(users, user.value), index, this.props.card.id, user)}>
                           <a className="navi-link navi-link-cus">
                             <span className="navi-text">
                               <span className={this.colorRandomSelected()}>{user.name}</span>
@@ -194,20 +194,20 @@ class Card extends Component {
                     </div> : ''}
                     <div style={setPaddingBottomMembers(users.length)} className="card-body card-body-trello pt-4" onClick={this.props.open_detail_card}>
                       <div >
-                        
+
                         <div className="d-flex align-items-center mb-4">
                           <div className="d-flex flex-column card-header-detail">
                             <div className="card-header__title">
                               <a className="text-dark font-weight-bold text-hover-primary font-size-h4 mb-0">{card.name} {card.nameJob}</a>
-                             
+
                             </div>
                             <span className="text-muted font-weight-bold">{moment(card.approachDate).format('DD/MM/YYYY')}</span>
                           </div>
-                          
+
                         </div>
-                        
+
                         <p className="mb-4">{card.nameJob}</p>
-                       
+
                         <div className="mb-7 card-content-info">
                           <div className="d-flex justify-content-between align-items-center">
                             <span className="text-dark-75 font-weight-bolder mr-2 set-with-info">Email:</span>
@@ -225,7 +225,7 @@ class Card extends Component {
                           </div>
                         </div>
                       </div>
-                
+
                     </div>
                     <div className="footer-card-detail">
                       <div className="mt-9 mb-6">
@@ -261,11 +261,10 @@ class Card extends Component {
                                         </div>
                                       </div>
                                       <ul className="pop-over-list">
-
                                         {this.props.role === roleName.LEADER
-                                          ? <li>
+                                          ? (this.props.userId !== user.id ? <li>
                                             <a onClick={() => this.removeMemberToCard(index, this.props.card.id, user.id)} className="js-remove-member">Remove from Card</a>
-                                          </li>
+                                          </li> : '')
                                           : null}
                                       </ul>
                                     </Popover.Content>
@@ -316,6 +315,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state, ownProps) => {
   return {
     role: state.auth.role,
+    userId: state.auth.userId,
   };
 };
 

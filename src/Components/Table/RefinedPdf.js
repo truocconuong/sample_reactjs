@@ -197,9 +197,9 @@ class RefinedPdf extends Component {
           draggable: true,
           pauseOnHover: true
         });
-        this.props.history.push(`/preview/candidate/${this.props.candidateId}/job/${this.props.jobId}`)
+        // this.props.history.push(`/preview/candidate/${this.props.candidateId}/job/${this.props.jobId}`)
         // this.defaultState();
-        // this.getCandidateJob();
+        this.getCandidateJob();
       }
       this.setState({
         isLoading: false,
