@@ -513,7 +513,21 @@ class Broad extends Component {
         this.initData();
       }
     } catch (error) {
-      console.log(error);
+      this.close_add_card_form();
+      toast(<CustomToast title={"Card already exists !"} type={'error'} />, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        className: "toast_login",
+        closeButton: false,
+        hideProgressBar: true,
+        newestOnTop: true,
+        closeOnClick: true,
+        rtl: false,
+        pauseOnFocusLoss: true,
+        draggable: true,
+        pauseOnHover: true,
+        transition: Zoom,
+      });
     }
   };
   addMemberToCard = async (dataUser) => {

@@ -141,10 +141,15 @@ export default class AddCard extends Component {
       approachDate: moment().format("YYYY-MM-DD"),
       linkCv: '',
       nameJob: '',
+      idJob: '',
       noteApproach: '',
       laneId: '',
+      candidates: [],
+      candidatesPhone: [],
       jobSelected: {},
+      emailSelected: {},
       laneSelected: {},
+      phoneSelected: {},
       errors: {}
     })
   }
@@ -320,7 +325,11 @@ export default class AddCard extends Component {
     const { errors } = this.state;
     const { isAddCardNoColumn, lanes } = this.props;
     return (
-      <Modal size="lg" show={this.props.show} onHide={this.props.onHide} centered>
+      <Modal size="lg" show={this.props.show} onHide={()=>{
+        console.log('chay zo day e oi')
+        this.defaultState();
+        this.props.onHide();
+      }} centered>
         <Modal.Header closeButton>
           <Modal.Title>Add card</Modal.Title>
         </Modal.Header>
