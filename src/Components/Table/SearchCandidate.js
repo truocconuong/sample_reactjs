@@ -49,6 +49,7 @@ class SearchCandidate extends Component {
     this.showDetail = this.showDetail.bind(this);
     this.searchForm = this.searchForm.bind(this);
     this.initJobAndSkill = this.initJobAndSkill.bind(this);
+    this.handleChangeJob = this.handleChangeJob.bind(this);
   }
 
   defaultState = () => {
@@ -69,6 +70,7 @@ class SearchCandidate extends Component {
       name : "",
       classToggleDetail: new Array(10).fill("hide_mb"),
       classArr: new Array(10).fill("fa fa-caret-right"),
+      jobId: "",
     });
   };
 
@@ -112,6 +114,14 @@ class SearchCandidate extends Component {
       skillsSelected,
     });
     this.convertSkill();
+  };
+
+  handleChangeJob = (e) => {
+    const {label, value} = e;
+    console.log(label, value);
+    this.setState({
+      jobId: value,
+    });
   };
 
   async searchForm() {
@@ -186,8 +196,8 @@ class SearchCandidate extends Component {
         }${this.state.phone ? `&phone=${this.state.phone}` : ""}${
           this.state.skill ? `&skills=${this.state.skill}` : ""
         }${this.state.text ? `&text=${this.state.text}` : ""}
-        ${this.state.name ? `&name=${this.state.name}` : ""}`
-        
+        ${this.state.name ? `&name=${this.state.name}` : ""}
+        ${this.state.jobId ? `&jobId=${this.state.jobId}`: ""}`
       );
 
       if (response) {
@@ -229,7 +239,7 @@ class SearchCandidate extends Component {
 
   async initJobAndSkill() {
     const [jobs, skill] = await Promise.all([
-      api.get(`/api/jobs`),
+      api.get(`/api/admin/search/jobs`),
       api.get(`/api/all/skill`),
     ]);
 
@@ -247,15 +257,16 @@ class SearchCandidate extends Component {
       // console.log('is skill',skill.list.skills)
       // const skillSelect = _.map(skill.list.skills)
 
-      const arrayJob = _.map(jobs.data.list, (job) => {
+      const arrayJob = _.map(jobs.data.listJob, (job) => {
         return {
-          value: job.title,
+          value: job.id,
           label: job.title,
         };
       });
       this.setState({
         jobs: arrayJob,
       });
+ 
     }
   }
 
@@ -310,7 +321,7 @@ class SearchCandidate extends Component {
   }
 
   render() {
-    const { data, skills, skillsSelected } = this.state;
+    const { data, skills, skillsSelected, jobs } = this.state;
     const skillNotSelected = _.filter(skills, (skill) => !skill.selected);
     return (
       <div
@@ -385,19 +396,19 @@ class SearchCandidate extends Component {
                             name="email"
                             onChange={this.handleChange}
                             type="email"
-                            class="form-control"
+                            className="form-control"
                             placeholder="Enter email"
                           />
                         </div>
                       </div>
                       <div className="col-md-6">
-                        <div class="form-group">
+                        <div className="form-group">
                           <label>Phone</label>
                           <input
                             name="phone"
                             onChange={this.handleChange}
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             placeholder="Enter phone"
                           />
                         </div>
@@ -405,25 +416,25 @@ class SearchCandidate extends Component {
                     </div>
                     <div className="row">
                     <div className="col-md-6">
-                        <div class="form-group">
+                        <div className="form-group">
                           <label>Name</label>
                           <input
                             onChange={this.handleChange}
                             name="name"
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             placeholder="Enter name"
                           />
                         </div>
                       </div>
                       <div className="col-md-6">
-                        <div class="form-group">
+                        <div className="form-group">
                           <label>Text</label>
                           <input
                             onChange={this.handleChange}
                             name="text"
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             placeholder="Enter text"
                           />
                         </div>
@@ -431,7 +442,20 @@ class SearchCandidate extends Component {
                     </div>
                     <div className="row">
                       <div className="col-md-12">
-                        <div class="form-group">
+                        <div className="form-group">
+                          <label>Job</label>
+                         
+                          <Select
+                            name="option"
+                            options={jobs}
+                            onChange={this.handleChangeJob}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-md-12">
+                        <div className="form-group">
                           <label>Skill</label>
                           <div className="kynang kynang-search">
                             {_.map(skillsSelected, (skill, index) => {
@@ -461,11 +485,12 @@ class SearchCandidate extends Component {
                         </div>
                       </div>
                     </div>
+
                     <div className="search-candidate">
                       <button
                         onClick={this.searchForm}
                         type="submit"
-                        class="btn btn-primary mr-2"
+                        className="btn btn-primary mr-2"
                       >
                         Search
                       </button>
