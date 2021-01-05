@@ -15,6 +15,7 @@ import Network from "../../Service/Network";
 import * as moment from 'moment'
 import Validator from "../../utils/validator";
 import { rulesCreateNewCard } from "../../utils/rule";
+import { Link } from "react-router-dom";
 
 const api = new Network();
 class DetailCard extends Component {
@@ -433,6 +434,20 @@ class DetailCard extends Component {
                 <Button variant="btn btn-success btn-interview" onClick={() => this.props.toggleDetailCardAndInterview()}>Create Interview</Button>
 
             }
+
+             {/* {
+                data_detail.linkCv ? (<Link to={`/preview/candidate/${this.props.data.candidateId}/job/${this.props.data.jobId}`} className="btn btn-primary font-weight-bolder style-btn-kitin mr-3">
+                  Refined CV
+                </Link>) : ''
+              } */}
+              {
+                data_detail.linkCv ? (<Link to={`/preview/candidate/${data_detail.candidateId}/job/${data_detail.idJob}`} className="btn btn-primary style-btn-kitin mr-3">
+                  Refined CV
+                </Link>) : ''
+              }
+              {data_detail.linkCv ? (
+                 <Button variant="primary btn-interview" onClick={this.props.openPreviewPdfAndCloseCardTrello}>Raw CV</Button>
+             ) : ''}
             {
               this.props.role !== roleName.DIRECTOR ? (
                 <Button variant="primary btn-interview" onClick={this.updateCard}>Save</Button>
