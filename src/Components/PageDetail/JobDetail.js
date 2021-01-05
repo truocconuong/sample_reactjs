@@ -470,21 +470,8 @@ class JobDetail extends Component {
         })
       }
     } catch (error) {
-      // toast(<CustomToast title={"Link cv not preview please check again !"} type="error" />, {
-      //   position: toast.POSITION.BOTTOM_RIGHT,
-      //   autoClose: 3000,
-      //   className: "toast_login",
-      //   closeButton: false,
-      //   hideProgressBar: true,
-      //   newestOnTop: true,
-      //   closeOnClick: true,
-      //   rtl: false,
-      //   pauseOnFocusLoss: true,
-      //   draggable: true,
-      //   pauseOnHover: true,
-      //   transition: Zoom,
-      // });
       this.setState({
+        base64 : '',
         isLoading: false,
         isOpenPreviewPdf: false
       })
@@ -493,17 +480,51 @@ class JobDetail extends Component {
 
 
   openPreviewPdfAndCloseCardTrello = () => {
-    this.setState({
-      isOpenCardTrello: false,
-      isOpenPreviewPdf: !this.state.isOpenPreviewPdf
-    })
+    if(this.state.base64 !== ''){
+      this.setState({
+        isOpenCardTrello: false,
+        isOpenPreviewPdf: !this.state.isOpenPreviewPdf
+      })
+    }else {
+      toast(<CustomToast title={"Cannot read file pdf please check again!"} type="error" />, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        autoClose: 3000,
+        className: "toast_login",
+        closeButton: false,
+        hideProgressBar: true,
+        newestOnTop: true,
+        closeOnClick: true,
+        rtl: false,
+        pauseOnFocusLoss: true,
+        draggable: true,
+        pauseOnHover: true,
+        transition: Zoom,
+      });
+    }
   }
 
   openPreviewPdfAndCloseCandidateCard = () => {
-    this.setState({
-      isOpenCandidateCard: false,
-      isOpenPreviewPdf: !this.state.isOpenPreviewPdf
-    })
+    if(this.state.base64 !== ''){
+      this.setState({
+        isOpenCandidateCard: false,
+        isOpenPreviewPdf: !this.state.isOpenPreviewPdf
+      })
+    }else {
+      toast(<CustomToast title={"Cannot read file pdf please check again!"} type="error" />, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        autoClose: 3000,
+        className: "toast_login",
+        closeButton: false,
+        hideProgressBar: true,
+        newestOnTop: true,
+        closeOnClick: true,
+        rtl: false,
+        pauseOnFocusLoss: true,
+        draggable: true,
+        pauseOnHover: true,
+        transition: Zoom,
+      });
+    }
   }
 
   componentDidMount() {
