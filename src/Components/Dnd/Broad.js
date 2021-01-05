@@ -397,7 +397,7 @@ class Broad extends Component {
             content: {
               candidateId : card.Candidate.id,
               name: card.Candidate.name,
-              position: card.position,
+              position: card.position || '',
               clientName: !_.isNil(card.Job.Client) ? card.Job.Client.name : "",
               phone: card.Candidate.phone,
               email: card.Candidate.email,
@@ -405,7 +405,7 @@ class Broad extends Component {
               approachDate: card.approachDate,
               linkCv: card.cv,
               nameJob: card.Job.title,
-              noteApproach: card.noteApproach,
+              noteApproach: card.noteApproach || '',
               interview: card.Interview,
               idJob: card.jobId,
               jobSelected: {
@@ -604,7 +604,7 @@ class Broad extends Component {
         content: {
           candidateId : card.Candidate.id,
           name: card.Candidate.name,
-          position: card.position,
+          position: card.position || '',
           clientName: !_.isNil(card.Job.Client) ? card.Job.Client.name : "",
           phone: card.Candidate.phone,
           email: card.Candidate.email,
@@ -612,7 +612,7 @@ class Broad extends Component {
           approachDate: card.approachDate,
           linkCv: card.cv,
           nameJob: card.Job.title,
-          noteApproach: card.noteApproach,
+          noteApproach: card.noteApproach || '',
           interview: card.Interview,
           idJob: card.jobId,
           jobSelected: {
