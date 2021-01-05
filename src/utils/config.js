@@ -1,2 +1,2 @@
 export const defaultAva = "/img/avatarDefault.png";
-export const domainServer = "http://localhost:3000";
+export const domainServer = "https://api.fetch.tech";
