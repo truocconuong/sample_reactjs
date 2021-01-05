@@ -210,7 +210,24 @@ class Broad extends Component {
         this.close_detail_card();
       }
     } catch (error) {
-      console.log(error);
+      if (error.error.data) {
+        if (error.error.data.error === 'Cannot update candidate') {
+          toast(<CustomToast title={"Email or phone already exists!"} type={'error'} />, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 3000,
+            className: "toast_login",
+            closeButton: false,
+            hideProgressBar: true,
+            newestOnTop: true,
+            closeOnClick: true,
+            rtl: false,
+            pauseOnFocusLoss: true,
+            draggable: true,
+            pauseOnHover: true,
+            transition: Zoom,
+          });
+        }
+      }
     }
   };
 
@@ -442,7 +459,7 @@ class Broad extends Component {
         });
         this.setState({ jobs: jobs });
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   initUserTeam = async () => {
@@ -462,7 +479,7 @@ class Broad extends Component {
           users: users,
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   createCardToLane = async (item) => {
@@ -496,7 +513,21 @@ class Broad extends Component {
         this.initData();
       }
     } catch (error) {
-      console.log(error);
+      this.close_add_card_form();
+      toast(<CustomToast title={"Card already exists !"} type={'error'} />, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        className: "toast_login",
+        closeButton: false,
+        hideProgressBar: true,
+        newestOnTop: true,
+        closeOnClick: true,
+        rtl: false,
+        pauseOnFocusLoss: true,
+        draggable: true,
+        pauseOnHover: true,
+        transition: Zoom,
+      });
     }
   };
   addMemberToCard = async (dataUser) => {
@@ -698,8 +729,8 @@ class Broad extends Component {
                 </Container>
               </DragDropContext>
             ) : (
-              ""
-            )}
+                ""
+              )}
           </div>
         </div>
 
@@ -712,8 +743,8 @@ class Broad extends Component {
             <span className="card-vip__plus">+</span>
           </button>
         ) : (
-          ""
-        )}
+            ""
+          )}
       </div>
     );
   }

@@ -306,7 +306,7 @@ class DetailCard extends Component {
                   <div className="col-lg-12">
                     <label>Email </label>
                     <span style={{ color: "red" }}>*</span>
-                    <input disabled value={data_detail.email} type="email" onChange={this.handleInputChange.bind(this)} name="email" className="form-control"
+                    <input value={data_detail.email} type="email" onChange={this.handleInputChange.bind(this)} name="email" className="form-control"
                       placeholder="Enter email" />
                   </div>
                 </div>
@@ -315,7 +315,7 @@ class DetailCard extends Component {
                   <div className="col-lg-6">
                     <label>Phone </label>
                     <span style={{ color: "red" }}>*</span>
-                    <input disabled value={data_detail.phone} type="text" onChange={this.handleInputChange.bind(this)} name="phone" className="form-control" placeholder="Enter phone" />
+                    <input value={data_detail.phone} type="text" onChange={this.handleInputChange.bind(this)} name="phone" className="form-control" placeholder="Enter phone" />
                   </div>
                   <div className="col-lg-6">
                     <label>Approach Date </label>
