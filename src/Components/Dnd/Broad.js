@@ -602,6 +602,7 @@ class Broad extends Component {
       data.cards[cardId] = {
         id: cardId,
         content: {
+          candidateId : card.Candidate.id,
           name: card.Candidate.name,
           position: card.position,
           clientName: !_.isNil(card.Job.Client) ? card.Job.Client.name : "",
