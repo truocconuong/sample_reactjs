@@ -522,3 +522,27 @@ textarea {
 .label-custom-name{
     height: 39px !important; 
 }
+.Wrap_history_card{
+    height: 300px;
+    padding: 20px 22px 22px;
+}
+.custom_icon_history{
+    color: #717179;
+    font-size: 19px;
+}
+.act_history{
+    font-weight: 400;
+    color: #3F4254;
+    font-size: 14px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+.wrap_icon_history{
+    display: flex;
+    justify-content: space-between;
+}
+.wrap_left_icon_act{
+    display: flex;
+    justify-content: flex-end;
+}
