@@ -16,6 +16,7 @@ import roleName from "../../utils/const";
 import DetailInterviewCard from "./DetailInterviewCard.js";
 import { ToastContainer, toast, Zoom } from "react-toastify";
 import CustomToast from "../common/CustomToast";
+import PreviewPdf from "../Modal/PreviewPdf/PreviewPdf.js";
 
 const api = new Network();
 
@@ -66,7 +67,7 @@ class Broad extends Component {
           laneSelected: {},
         },
       },
-
+      isOpenPreviewPdf: false,
       data: {},
       data_real: {},
       jobs: [],
@@ -394,6 +395,7 @@ class Broad extends Component {
           data.cards[cardId] = {
             id: cardId,
             content: {
+              candidateId : card.Candidate.id,
               name: card.Candidate.name,
               position: card.position,
               clientName: !_.isNil(card.Job.Client) ? card.Job.Client.name : "",
@@ -632,6 +634,41 @@ class Broad extends Component {
     });
   };
 
+
+  openPreviewPdfAndCloseCardTrello = () => {
+   
+    this.setState({
+      base64 : '',
+      show_detail_card: false,
+      isOpenPreviewPdf: !this.state.isOpenPreviewPdf
+    }, async () => {
+      if (this.state.isOpenPreviewPdf) {
+        const cardId = this.state.card_data_detail.id;
+        this.previewPdf(cardId)
+      }
+    })
+  }
+
+  async previewPdf(candidateJobId) {
+    this.setState({
+      isLoading: true
+    })
+    try {
+      const response = await api.get(`/api/v1/admin/preview/pdf/candidateJob/${candidateJobId}`)
+      if (response) {
+        this.setState({
+          base64: response.data.base64,
+          isLoading: false
+        })
+      }
+    } catch (error) {
+      this.setState({
+        base64: '',
+        isLoading: false,
+        isOpenPreviewPdf: false
+      })
+    }
+  }
   render() {
     return (
       <div
@@ -663,6 +700,7 @@ class Broad extends Component {
           addMemberToCard={this.addMemberToCard}
           toggleDetailCardAndInterview={this.toggleDetailCardAndInterview}
           toggleDetailInterview={this.toggleDetailInterview}
+          openPreviewPdfAndCloseCardTrello={this.openPreviewPdfAndCloseCardTrello}
         />
 
         <CreateInterviewCard
@@ -676,6 +714,15 @@ class Broad extends Component {
           data={this.state.card_selected}
           onHide={this.toggleDetailInterview}
         />
+        {
+          this.state.base64 && this.state.isOpenPreviewPdf ? (
+            <PreviewPdf
+              show={this.state.isOpenPreviewPdf}
+              base64={this.state.base64}
+              onHide={this.openPreviewPdfAndCloseCardTrello.bind(this)}
+            />
+          ) : ''
+        }
         <div
           className="subheader py-3 py-lg-8 subheader-transparent"
           id="kt_subheader"
