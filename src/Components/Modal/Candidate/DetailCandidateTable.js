@@ -83,20 +83,39 @@ export default class DetailCandidateTable extends Component {
 
   async componentWillReceiveProps() {
     this.setState({
+      idCard: this.props.data.id, // id CandidateJob
       nameJob: this.props.data.jobs ? this.props.data.jobs[0].label : "",
       clientName: this.props.data.jobs ? this.props.data.jobs[0].value : "",
       cv: this.props.data.jobs ? this.props.data.jobs[0].cv : "",
       location: this.props.data.jobs ? this.props.data.jobs[0].location : "",
       arrayJob: this.props.data.jobs ? this.props.data.jobs : [],
-    }, async () => {
-      if (this.state.cv) {
-        const base64 = await convertDriveToBase64(this.state.cv);
-        this.setState({
-          base64Drive: base64
-        })
-      }
+
     });
   }
+
+  componentWillUpdate() {
+    if (this.state.idCard) {
+      if (this.state.idCard !== this.state.storageIdCard) {
+        this.setState({
+          storageIdCard: this.state.idCard,
+          base64Drive : ''
+        })
+        if (this.state.cv) {
+          new Promise(async (resolve, reject) => {
+            const base64 = await convertDriveToBase64(this.state.cv);
+            resolve(base64)
+          }).then((base64) => {
+            this.setState({
+              base64Drive: base64
+            })
+          })
+        }
+      }
+    }
+  }
+
+
+
 
   render() {
     let self = this;
@@ -231,7 +250,9 @@ export default class DetailCandidateTable extends Component {
                     readOnly
                     placeholder="Enter link or import cv"
                   />
-                  <a href={`data:application/pdf;base64,${this.state.base64Drive}`} download={`${this.state.base64Drive ? data.name : ''}.pdf`} className="input-group-append"><span className="input-group-text"><i className="fas fa-cloud-download-alt"></i></span></a>
+                  {
+                    this.state.base64Drive && (<a href={`data:application/pdf;base64,${this.state.base64Drive}`} download={`${this.state.base64Drive ? data.name : ''}.pdf`} className="input-group-append"><span className="input-group-text"><i className="fas fa-cloud-download-alt"></i></span></a>)
+                  }
                 </div>
               </div>
               <div className="form-group">

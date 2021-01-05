@@ -129,18 +129,29 @@ class Candidate extends Component {
     this.getDataCandidate();
   }
   togglePreviewPdf() {
-    this.setState(
-      {
-        isOpenPreviewPdf: !this.state.isOpenPreviewPdf,
-        isOpenCandidateDetail : false,
-      },
-      () => {
-        if (!this.state.isOpenPreviewPdf)
-          this.setState({
-            base64: "",
-          });
-      }
-    );
+    if(this.state.base64 !== ''){
+      this.setState(
+        {
+          isOpenPreviewPdf: !this.state.isOpenPreviewPdf,
+          isOpenCandidateDetail : false,
+        },
+      );
+    }else {
+      toast(<CustomToast title={"Cannot read file pdf please check again!"} type="error" />, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        autoClose: 3000,
+        className: "toast_login",
+        closeButton: false,
+        hideProgressBar: true,
+        newestOnTop: true,
+        closeOnClick: true,
+        rtl: false,
+        pauseOnFocusLoss: true,
+        draggable: true,
+        pauseOnHover: true,
+        transition: Zoom,
+      });
+    }
   }
 
   async previewPdf(candidateJobId) {
@@ -179,6 +190,7 @@ class Candidate extends Component {
       //   }
       // );
       this.setState({
+        base64:'',
         isLoading: false,
         isOpenPreviewPdf: false,
       });

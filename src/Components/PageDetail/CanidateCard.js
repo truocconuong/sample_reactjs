@@ -58,13 +58,6 @@ export default class CandidateCard extends Component {
       cv: this.props.data.cv,
       arrayLane: this.props.lane,
       idLane: this.props.lane.length > 0 ? this.props.lane[0].id : "",
-    }, async () => {
-      if (this.state.cv) {
-        const base64 = await convertDriveToBase64(this.state.cv);
-        this.setState({
-          base64Drive: base64
-        })
-      }
     });
   }
 
@@ -158,6 +151,29 @@ export default class CandidateCard extends Component {
       idLane: event.value,
     });
   };
+
+  componentWillUpdate() {
+    console.log(this.state)
+    if (this.state.id) {
+
+      if (this.state.id !== this.state.storageIdCard) {
+        this.setState({
+          storageIdCard: this.state.id,
+          base64Drive : ''
+        })
+        if (this.state.cv) {
+          new Promise(async (resolve, reject) => {
+            const base64 = await convertDriveToBase64(this.state.cv);
+            resolve(base64)
+          }).then((base64) => {
+            this.setState({
+              base64Drive: base64
+            })
+          })
+        }
+      }
+    }
+  }
 
   render() {
     const { validated, arrayLane } = this.state;
@@ -317,7 +333,9 @@ export default class CandidateCard extends Component {
                     onChange={this.handleChangeData}
                     placeholder="Import CV"
                   />
-                  <a href={`data:application/pdf;base64,${this.state.base64Drive}`} download={`${this.state.base64Drive ? this.state.name : ''}.pdf`} className="input-group-append"><span className="input-group-text"><i className="fas fa-cloud-download-alt"></i></span></a>
+                  {
+                    this.state.base64Drive && (<a href={`data:application/pdf;base64,${this.state.base64Drive}`} download={`${this.state.base64Drive ? this.state.name : ''}.pdf`} className="input-group-append"><span className="input-group-text"><i className="fas fa-cloud-download-alt"></i></span></a>)
+                  }
                 </div>
               </div>
               <div className="form-group">

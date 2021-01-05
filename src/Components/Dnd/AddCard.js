@@ -326,7 +326,6 @@ export default class AddCard extends Component {
     const { isAddCardNoColumn, lanes } = this.props;
     return (
       <Modal size="lg" show={this.props.show} onHide={()=>{
-        console.log('chay zo day e oi')
         this.defaultState();
         this.props.onHide();
       }} centered>
