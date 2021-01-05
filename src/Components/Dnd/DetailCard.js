@@ -396,14 +396,13 @@ class DetailCard extends Component {
                   <div className="col-lg-12">
                     <label>Email </label>
                     <span style={{ color: "red" }}>*</span>
-                    <input
-                      value={data_detail.email}
-                      type="email"
-                      onChange={this.handleInputChange.bind(this)}
-                      name="email"
-                      className="form-control"
-                      placeholder="Enter email"
-                    />
+                    <input value={data_detail.email} type="email" onChange={this.handleInputChange.bind(this)} name="email"
+                      className={
+                        errors.email
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
+                      placeholder="Enter email" />
                   </div>
                 </div>
 
@@ -411,14 +410,13 @@ class DetailCard extends Component {
                   <div className="col-lg-6">
                     <label>Phone </label>
                     <span style={{ color: "red" }}>*</span>
-                    <input
-                      value={data_detail.phone}
-                      type="text"
-                      onChange={this.handleInputChange.bind(this)}
-                      name="phone"
-                      className="form-control"
-                      placeholder="Enter phone"
-                    />
+                    <input value={data_detail.phone} type="text" onChange={this.handleInputChange.bind(this)} name="phone"
+                      className={
+                        errors.phone
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
+                      placeholder="Enter phone" />
                   </div>
                   <div className="col-lg-6">
                     <label>Approach Date </label>
@@ -604,59 +602,33 @@ class DetailCard extends Component {
           </div>
 
           <div className="modal-cus__right">
-            {data_detail.interview ? (
-              <Button
-                onClick={this.props.toggleDetailInterview}
-                variant="btn btn-success btn-interview"
-              >
-                {moment(data_detail.interview.timeInterview).format(
-                  "dddd DD/MM/YYYY HH:mm"
-                )}
-              </Button>
-            ) : (
-              <Button
-                variant="btn btn-success btn-interview"
-                onClick={() => this.props.toggleDetailCardAndInterview()}
-              >
-                Create Interview
-              </Button>
-            )}
+            {
+              data_detail.interview ?
+                <Button onClick={this.props.toggleDetailInterview} variant="btn btn-success btn-interview">{moment(data_detail.interview.timeInterview).format('dddd DD/MM/YYYY HH:mm')}</Button>
+                :
+                <Button variant="btn btn-success btn-interview" onClick={() => this.props.toggleDetailCardAndInterview()}>Create Interview</Button>
+
+            }
 
             {/* {
                 data_detail.linkCv ? (<Link to={`/preview/candidate/${this.props.data.candidateId}/job/${this.props.data.jobId}`} className="btn btn-primary font-weight-bolder style-btn-kitin mr-3">
                   Refined CV
                 </Link>) : ''
               } */}
-            {data_detail.linkCv ? (
-              <Link
-                to={`/preview/candidate/${data_detail.candidateId}/job/${data_detail.idJob}`}
-                className="btn btn-primary style-btn-kitin mr-3"
-              >
+            {
+              data_detail.linkCv ? (<Link to={`/preview/candidate/${data_detail.candidateId}/job/${data_detail.idJob}`} className="btn btn-primary style-btn-kitin mr-3">
                 Refined CV
-              </Link>
-            ) : (
-              ""
-            )}
+              </Link>) : ''
+            }
             {data_detail.linkCv ? (
-              <Button
-                variant="primary btn-interview"
-                onClick={this.props.openPreviewPdfAndCloseCardTrello}
-              >
-                Raw CV
-              </Button>
-            ) : (
-              ""
-            )}
-            {this.props.role !== roleName.DIRECTOR ? (
-              <Button variant="primary btn-interview" onClick={this.updateCard}>
-                Save
-              </Button>
-            ) : (
-              ""
-            )}
-            <Button variant="light" onClick={this.props.onHide}>
-              Close
-            </Button>
+              <Button variant="primary btn-interview" onClick={this.props.openPreviewPdfAndCloseCardTrello}>Raw CV</Button>
+            ) : ''}
+            {
+              this.props.role !== roleName.DIRECTOR ? (
+                <Button variant="primary btn-interview" onClick={this.updateCard}>Save</Button>
+              ) : ''
+            }
+            <Button variant="light" onClick={this.props.onHide}>Close</Button>
           </div>
         </Modal.Footer>
         <div className="Wrap_history_card">

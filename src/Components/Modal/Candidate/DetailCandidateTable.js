@@ -251,7 +251,7 @@ export default class DetailCandidateTable extends Component {
                     placeholder="Enter link or import cv"
                   />
                   {
-                    this.state.base64Drive && (<a href={`data:application/pdf;base64,${this.state.base64Drive}`} download={`${this.state.base64Drive ? data.name : ''}.pdf`} className="input-group-append"><span className="input-group-text"><i className="fas fa-cloud-download-alt"></i></span></a>)
+                    this.state.base64Drive ? (<a href={`data:application/pdf;base64,${this.state.base64Drive}`} download={`${this.state.base64Drive ? data.name : ''}.pdf`} className="input-group-append"><span className="input-group-text"><i className="fas fa-cloud-download-alt"></i></span></a>): (<a href="#" className="input-group-append"><span className="input-group-text"><i className="fas fa-cloud-download-alt"></i></span></a>)
                   }
                 </div>
               </div>
