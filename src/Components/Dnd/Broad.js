@@ -663,6 +663,20 @@ class Broad extends Component {
         })
       }
     } catch (error) {
+      toast(<CustomToast title={"The link cannot be read!"} type={'error'} />, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        className: "toast_login",
+        closeButton: false,
+        hideProgressBar: true,
+        newestOnTop: true,
+        closeOnClick: true,
+        rtl: false,
+        pauseOnFocusLoss: true,
+        draggable: true,
+        pauseOnHover: true,
+        transition: Zoom,
+      });
       this.setState({
         base64: '',
         isLoading: false,

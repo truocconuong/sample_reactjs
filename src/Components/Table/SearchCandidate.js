@@ -10,7 +10,7 @@ import CandidateDetail from "../Modal/Candidate/DetailCandidateTable.js";
 import Select from "react-select";
 import _ from "lodash";
 import PreviewPdf from "../Modal/PreviewPdf/PreviewPdf";
-import { ToastContainer, toast ,Zoom } from "react-toastify";
+import { ToastContainer, toast, Zoom } from "react-toastify";
 import CustomToast from "../common/CustomToast.js";
 const api = new Network();
 
@@ -34,10 +34,10 @@ class SearchCandidate extends Component {
       email: "",
       phone: "",
       skill: "",
-      name : "",
+      name: "",
       text: "",
-      base64:"",
-      isOpenPreviewPdf : false,
+      base64: "",
+      isOpenPreviewPdf: false,
       classToggleDetail: new Array(10).fill("hide_mb"),
       classArr: new Array(10).fill("fa fa-caret-right"),
     };
@@ -67,7 +67,7 @@ class SearchCandidate extends Component {
       phone: "",
       skill: "",
       text: "",
-      name : "",
+      name: "",
       classToggleDetail: new Array(10).fill("hide_mb"),
       classArr: new Array(10).fill("fa fa-caret-right"),
       jobId: "",
@@ -117,7 +117,7 @@ class SearchCandidate extends Component {
   };
 
   handleChangeJob = (e) => {
-    const {label, value} = e;
+    const { label, value } = e;
     console.log(label, value);
     this.setState({
       jobId: value,
@@ -166,7 +166,7 @@ class SearchCandidate extends Component {
       let self = this;
       const response = await api.get(`/api/admin/candidate/detail/${id}`);
       if (response) {
-        this.previewPdf(response.data.data.jobs[0].candidateJobId)
+        this.previewPdf(response.data.data.jobs[0].candidateJobId);
         this.setState(
           {
             candidateInfor: response.data.data,
@@ -188,14 +188,14 @@ class SearchCandidate extends Component {
         isLoading: true,
       });
       let start = this.state.pageSize * (this.state.pageNumber - 1) + 1;
-      let url =  `/api/admin/search/candidate?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber}`
+      let url = `/api/admin/search/candidate?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber}`;
 
-      if(this.state.email) url += `&email=${this.state.email}`
-      if(this.state.phone) url += `&phone=${this.state.phone}`
-      if(this.state.skill) url += `&skill=${this.state.skill}`
-      if(this.state.text) url += `&text=${this.state.text}`
-      if(this.state.name) url += `&name=${this.state.name}`
-      if(this.state.jobId) url += `&jobId=${this.state.jobId}`
+      if (this.state.email) url += `&email=${this.state.email}`;
+      if (this.state.phone) url += `&phone=${this.state.phone}`;
+      if (this.state.skill) url += `&skill=${this.state.skill}`;
+      if (this.state.text) url += `&text=${this.state.text}`;
+      if (this.state.name) url += `&name=${this.state.name}`;
+      if (this.state.jobId) url += `&jobId=${this.state.jobId}`;
       const response = await api.get(url);
 
       if (response) {
@@ -264,48 +264,57 @@ class SearchCandidate extends Component {
       this.setState({
         jobs: arrayJob,
       });
- 
     }
   }
 
   togglePreviewPdf() {
-    if(this.state.base64 !== ''){
+    if (this.state.base64 !== "") {
       this.setState(
         {
-          isOpenCandidateDetail : false, 
+          isOpenCandidateDetail: false,
           isOpenPreviewPdf: !this.state.isOpenPreviewPdf,
+        },
+        () => {
+          if (!this.state.isOpenPreviewPdf) {
+            this.setState({
+              base64: "",
+            });
+          }
         }
       );
-    }else {
-      toast(<CustomToast title={"Cannot read file pdf please check again!"} type="error" />, {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        autoClose: 3000,
-        className: "toast_login",
-        closeButton: false,
-        hideProgressBar: true,
-        newestOnTop: true,
-        closeOnClick: true,
-        rtl: false,
-        pauseOnFocusLoss: true,
-        draggable: true,
-        pauseOnHover: true,
-        transition: Zoom,
-      });
+    } else {
+      toast(
+        <CustomToast
+          title={"Cannot read file pdf please check again!"}
+          type="error"
+        />,
+        {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          autoClose: 3000,
+          className: "toast_login",
+          closeButton: false,
+          hideProgressBar: true,
+          newestOnTop: true,
+          closeOnClick: true,
+          rtl: false,
+          pauseOnFocusLoss: true,
+          draggable: true,
+          pauseOnHover: true,
+          transition: Zoom,
+        }
+      );
     }
   }
 
   async previewPdf(candidateJobId) {
     try {
-      this.setState({
-        isLoading: true,
-      });
+     
       const response = await api.get(
         `/api/v1/admin/preview/pdf/candidateJob/${candidateJobId}`
       );
       if (response) {
         this.setState({
           base64: response.data.base64,
-          isLoading: false,
         });
       }
     } catch (error) {
@@ -324,9 +333,8 @@ class SearchCandidate extends Component {
       //   transition: Zoom,
       // });
       this.setState({
-        base64 : '',
-        isLoading: false,
-        isOpenPreviewPdf :false
+        base64: "",
+        isOpenPreviewPdf: false,
       });
     }
   }
@@ -343,13 +351,14 @@ class SearchCandidate extends Component {
       <div
         className={`d-flex flex-column flex-row-fluid wrapper ${this.props.className_wrap_broad}`}
       >
-         <ToastContainer />
+        <ToastContainer />
         <CandidateDetail
           data={this.state.candidateInfor}
           show={this.state.isOpenCandidateDetail}
           onHide={this.toggleCandidateDetail.bind(this, false)}
           togglePreviewPdf={this.togglePreviewPdf.bind(this)}
           // previewPdf={this.previewPdf.bind(this)}
+          base64={this.state.base64}
         />
         <PreviewPdf
           show={this.state.isOpenPreviewPdf}
@@ -364,11 +373,8 @@ class SearchCandidate extends Component {
             id="kt_subheader"
           >
             <div className="container d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
-             
               <div className="d-flex align-items-center mr-1">
-                
                 <div className="d-flex align-items-baseline flex-wrap mr-5">
-                
                   <ul className="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold my-2 p-0">
                     <li className="breadcrumb-item">
                       <Link to="/" className="text-dark">
@@ -378,32 +384,23 @@ class SearchCandidate extends Component {
                     <li className="breadcrumb-item">
                       <div className="text-dark">List candidate</div>
                     </li>
-
-                    
                   </ul>
-                 
                 </div>
-               
               </div>
-             
+
               <div className="d-flex align-items-center flex-wrap"></div>
-              
             </div>
           </div>
           <div className="form-search">
             <div className="d-flex flex-column-fluid">
               <div className="container">
-               
                 <div className="card card-custom">
                   <div className="card-header flex-wrap border-0 pt-6 pb-0">
                     <div className="card-title">
-                      <h3 className="card-label">
-                        Search
-                      </h3>
+                      <h3 className="card-label">Search</h3>
                     </div>
                   </div>
                   <div className="card-body card-body-search">
-                    
                     <div className="row">
                       <div className="col-md-6">
                         <div className="form-group">
@@ -431,7 +428,7 @@ class SearchCandidate extends Component {
                       </div>
                     </div>
                     <div className="row">
-                    <div className="col-md-6">
+                      <div className="col-md-6">
                         <div className="form-group">
                           <label>Name</label>
                           <input
@@ -460,7 +457,7 @@ class SearchCandidate extends Component {
                       <div className="col-md-12">
                         <div className="form-group">
                           <label>Job</label>
-                         
+
                           <Select
                             name="option"
                             options={jobs}
@@ -523,10 +520,7 @@ class SearchCandidate extends Component {
             <div className="card card-custom">
               <div className="card-header flex-wrap border-0 pt-6 pb-0">
                 <div className="card-title">
-                  <h3 className="card-label">
-                    List candidate
-                   
-                  </h3>
+                  <h3 className="card-label">List candidate</h3>
                 </div>
               </div>
               <div className="card-body">
@@ -580,7 +574,7 @@ class SearchCandidate extends Component {
                       </tr>
                     </thead>
                     <tbody className="datatable-body">
-                      { data.map((can, index) => {
+                      {data.map((can, index) => {
                         return (
                           <React.Fragment key={index}>
                             <tr
@@ -785,7 +779,7 @@ class SearchCandidate extends Component {
 
                     <div className="datatable-pager-info my-2 mb-sm-0">
                       <span className="datatable-pager-detail">
-                        Showing {this.state.start} - {" "}
+                        Showing {this.state.start} -{" "}
                         {this.state.start + this.state.realSize - 1} of{" "}
                         {this.state.totalRow}
                       </span>
