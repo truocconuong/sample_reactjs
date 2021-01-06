@@ -50,6 +50,7 @@ class Broad extends Component {
         },
       },
       card_data_detail: {
+        id: "",
         content: {
           name: "",
           position: "",
@@ -177,12 +178,6 @@ class Broad extends Component {
   updateCard = async () => {
     const { card_data_detail } = this.state;
     const content = card_data_detail.content;
-
-
-    console.log(content)
-
-
-
     const data = {
       name: content.name,
       position: content.position,
@@ -341,6 +336,8 @@ class Broad extends Component {
           [newFinish.id]: newFinish,
         },
       };
+      // add laneIdNew for card Update
+      data.cards[draggableId].content.laneId = destination.droppableId
       this.setState({
         data: data,
       });
@@ -402,7 +399,7 @@ class Broad extends Component {
           data.cards[cardId] = {
             id: cardId,
             content: {
-              laneId : card.laneId,
+              laneId: card.laneId,
               candidateId: card.Candidate.id,
               name: card.Candidate.name,
               position: card.position || '',
@@ -703,6 +700,48 @@ class Broad extends Component {
       })
     }
   }
+
+
+  actionUpdateColumn = (cardNew, laneId) => {
+    const data = this.state.data;
+    const cardId = cardNew.id;
+    const columnOldId = cardNew.content.laneId;
+    cardNew.content.laneId = laneId;
+    data.cards[cardId] = cardNew;
+    data.columns[columnOldId].cardIds = _.filter(data.columns[columnOldId].cardIds, card => card !== cardId);
+    data.columns[laneId].cardIds.push(cardId);
+    this.setState({
+      data
+    })
+    this.actionUpdateLane(cardId, laneId)
+  }
+
+
+  actionUpdateLane = async (cardId, laneId) => {
+    const data = {
+      laneId
+    }
+    const response = await api.patch(`/api/cards/${cardId}`, data);
+    if (response) {
+      toast(<CustomToast title={"Update card successed !"} />, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        autoClose: 3000,
+        className: "toast_login",
+        closeButton: false,
+        hideProgressBar: true,
+        newestOnTop: true,
+        closeOnClick: true,
+        rtl: false,
+        pauseOnFocusLoss: true,
+        draggable: true,
+        pauseOnHover: true,
+        transition: Zoom,
+      });
+    }
+  }
+
+
+
   render() {
     return (
       <div
@@ -735,8 +774,6 @@ class Broad extends Component {
           toggleDetailCardAndInterview={this.toggleDetailCardAndInterview}
           toggleDetailInterview={this.toggleDetailInterview}
           openPreviewPdfAndCloseCardTrello={this.openPreviewPdfAndCloseCardTrello}
-          lanes={this.state.lanes}
-          handleOnChangeLaneSelected={this.handleOnChangeLaneSelected}
         />
 
         <CreateInterviewCard
@@ -806,6 +843,8 @@ class Broad extends Component {
                         addMemberToCard={this.addMemberToCard}
                         removeMemberToCard={this.removeMemberToCard}
                         updateColumn={this.updateColumn}
+                        lanes={this.state.lanes}
+                        actionUpdateColumn={this.actionUpdateColumn}
                       />
                     );
                   })}

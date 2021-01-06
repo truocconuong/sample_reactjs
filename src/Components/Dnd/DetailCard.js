@@ -35,12 +35,42 @@ class DetailCard extends Component {
       updated: true,
       showAddMember: false,
       errors: {},
+      history: [],
+      isShowHistory: false,
     };
     this.addMember = [];
     this.handleInputChange = this.handleInputChange.bind(this);
     this.toggleDeleteUserPop = this.toggleDeleteUserPop.bind(this);
     this.onChangeUploadHandler = this.onChangeUploadHandler.bind(this);
     this.validator = new Validator(rulesCreateNewCard);
+    this.showHistoryCard = this.showHistoryCard.bind(this);
+    this.hideModal = this.hideModal.bind(this);
+  }
+
+  async showHistoryCard() {
+    try {
+      if(this.state.isShowHistory){
+        this.setState({
+          isShowHistory: false
+        })
+      }else{
+        let self = this;
+        const data = {
+          cardId: self.props.data_detail.id,
+        };
+        const response = await api.post(`/api/history/card`, data);
+        if (response) {
+          this.setState({
+            history: response.data.historyCard,
+            isShowHistory: true
+          });
+          
+          console.log(response.data.historyCard);
+        }
+      }
+    } catch (error) {
+      console.log("err while fetch data history card: ", error);
+    }
   }
 
   toggleShowPopupAddMember = () => {
@@ -82,9 +112,9 @@ class DetailCard extends Component {
     this.setTarget(event.target);
   };
 
-  handleInputChange(e){
+  handleInputChange(e) {
     this.props.update(e);
-  };
+  }
 
   removeUserCard = (card_id, user_id, index) => {
     this.props.removeMemberToCard(card_id, user_id);
@@ -220,13 +250,21 @@ class DetailCard extends Component {
     delete errors["laneId"];
     this.setState({
       errors: errors,
+      isShowHistory: false,
+      history: []
     });
 
     if (this.isEmpty(errors)) {
       this.props.updateCard();
     }
   };
- 
+  hideModal(){
+    this.props.onHide();
+    this.setState({
+      isShowHistory: false,
+      history: []
+    })
+  }
   render() {
     const errors = this.state.errors;
     const users = [];
@@ -246,7 +284,7 @@ class DetailCard extends Component {
       <Modal
         size="lg"
         show={this.props.show}
-        onHide={this.props.onHide}
+        onHide={this.hideModal}
         centered
       >
         <Modal.Header closeButton>
@@ -357,19 +395,6 @@ class DetailCard extends Component {
                 </div>
 
                 <div className="form-group">
-                    <label>Name column </label>
-                    <span style={{ color: "red" }}>*</span>
-                    <Select
-                      name="option"
-                      options={this.props.lanes}
-                      value={data_detail.laneSelected}
-                      onChange={(e)=>{
-                        this.props.handleOnChangeLaneSelected(e)
-                      }}
-                    />
-                  </div>
-
-                <div className="form-group">
                   <label>Name job </label>
                   <span style={{ color: "red" }}>*</span>
                   <Select
@@ -409,13 +434,18 @@ class DetailCard extends Component {
                   <div className="col-lg-12">
                     <label>Email </label>
                     <span style={{ color: "red" }}>*</span>
-                    <input value={data_detail.email} type="email" onChange={this.handleInputChange.bind(this)} name="email"
+                    <input
+                      value={data_detail.email}
+                      type="email"
+                      onChange={this.handleInputChange.bind(this)}
+                      name="email"
                       className={
                         errors.email
                           ? "form-control is-invalid"
                           : "form-control"
                       }
-                      placeholder="Enter email" />
+                      placeholder="Enter email"
+                    />
                   </div>
                 </div>
 
@@ -423,13 +453,18 @@ class DetailCard extends Component {
                   <div className="col-lg-6">
                     <label>Phone </label>
                     <span style={{ color: "red" }}>*</span>
-                    <input value={data_detail.phone} type="text" onChange={this.handleInputChange.bind(this)} name="phone"
+                    <input
+                      value={data_detail.phone}
+                      type="text"
+                      onChange={this.handleInputChange.bind(this)}
+                      name="phone"
                       className={
                         errors.phone
                           ? "form-control is-invalid"
                           : "form-control"
                       }
-                      placeholder="Enter phone" />
+                      placeholder="Enter phone"
+                    />
                   </div>
                   <div className="col-lg-6">
                     <label>Approach Date </label>
@@ -615,33 +650,59 @@ class DetailCard extends Component {
           </div>
 
           <div className="modal-cus__right">
-            {
-              data_detail.interview ?
-                <Button onClick={this.props.toggleDetailInterview} variant="btn btn-success btn-interview">{moment(data_detail.interview.timeInterview).format('dddd DD/MM/YYYY HH:mm')}</Button>
-                :
-                <Button variant="btn btn-success btn-interview" onClick={() => this.props.toggleDetailCardAndInterview()}>Create Interview</Button>
-
-            }
+            {data_detail.interview ? (
+              <Button
+                onClick={this.props.toggleDetailInterview}
+                variant="btn btn-success btn-interview"
+              >
+                {moment(data_detail.interview.timeInterview).format(
+                  "dddd DD/MM/YYYY HH:mm"
+                )}
+              </Button>
+            ) : (
+              <Button
+                variant="btn btn-success btn-interview"
+                onClick={() => this.props.toggleDetailCardAndInterview()}
+              >
+                Create Interview
+              </Button>
+            )}
 
             {/* {
                 data_detail.linkCv ? (<Link to={`/preview/candidate/${this.props.data.candidateId}/job/${this.props.data.jobId}`} className="btn btn-primary font-weight-bolder style-btn-kitin mr-3">
                   Refined CV
                 </Link>) : ''
               } */}
-            {
-              data_detail.linkCv ? (<Link to={`/preview/candidate/${data_detail.candidateId}/job/${data_detail.idJob}`} className="btn btn-primary style-btn-kitin mr-3">
-                Refined CV
-              </Link>) : ''
-            }
             {data_detail.linkCv ? (
-              <Button variant="primary btn-interview" onClick={this.props.openPreviewPdfAndCloseCardTrello}>Raw CV</Button>
-            ) : ''}
-            {
-              this.props.role !== roleName.DIRECTOR ? (
-                <Button variant="primary btn-interview" onClick={this.updateCard}>Save</Button>
-              ) : ''
-            }
-            <Button variant="light" onClick={this.props.onHide}>Close</Button>
+              <Link
+                to={`/preview/candidate/${data_detail.candidateId}/job/${data_detail.idJob}`}
+                className="btn btn-primary style-btn-kitin mr-3"
+              >
+                Refined CV
+              </Link>
+            ) : (
+              ""
+            )}
+            {data_detail.linkCv ? (
+              <Button
+                variant="primary btn-interview"
+                onClick={this.props.openPreviewPdfAndCloseCardTrello}
+              >
+                Raw CV
+              </Button>
+            ) : (
+              ""
+            )}
+            {this.props.role !== roleName.DIRECTOR ? (
+              <Button variant="primary btn-interview" onClick={this.updateCard}>
+                Save
+              </Button>
+            ) : (
+              ""
+            )}
+            <Button variant="light" onClick={this.hideModal}>
+              Close
+            </Button>
           </div>
         </Modal.Footer>
         <div className="Wrap_history_card">
@@ -650,7 +711,48 @@ class DetailCard extends Component {
               <i className="flaticon2-calendar-1 custom_icon_history"></i>
               <div className="act_history">Activity</div>
             </div>
-            <button className="btn btn-secondary btn-sm">Detail</button>
+            <button
+              className="btn btn-secondary btn-sm"
+              onClick={this.showHistoryCard.bind(this)}
+            >
+              {`${this.state.isShowHistory? "Hide": "Detail"}`}
+            </button>
+          </div>
+          <div
+            className={`wrap_row_history ${this.state.isShowHistory ? "active_history" : ""}`}
+          >
+            {this.state.history.map((e, index) => {
+              return (
+                <div className="row_history" key={index}>
+                  <div className="symbol symbol-50 symbol-light ">
+                    <span className="symbol-label symbol-label-cs cs_ava_history">
+                      <img
+                        src={
+                          e.User.linkAvatar
+                            ? domainServer + "/" + e.User.linkAvatar
+                            : defaultAva
+                        }
+                        className="h-100 align-self-end"
+                        alt=""
+                      />
+                    </span>
+                  </div>
+                  <div className="wrap_left_content_history">
+                    <div className="conten_history">
+                      <span className="name_history"> {e.User.name} </span>
+                      {`has ${
+                        e.type == "move_card"
+                          ? "move this card"
+                          : "update this card"
+                      }`}
+                    </div>
+                    <div className="time_history">
+                      {moment(e.createdAt).format("hh:mma DD/MM/YYYY")}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </Modal>
