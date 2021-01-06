@@ -50,6 +50,7 @@ class Broad extends Component {
         },
       },
       card_data_detail: {
+        id: "",
         content: {
           name: "",
           position: "",
