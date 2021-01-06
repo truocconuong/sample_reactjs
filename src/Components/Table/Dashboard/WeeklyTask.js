@@ -50,10 +50,16 @@ class WeeklyTask extends Component {
     this.removeContentTask = this.removeContentTask.bind(this);
     this.handleChangePercentTask = this.handleChangePercentTask.bind(this);
     this.handleChangeContentTask = this.handleChangeContentTask.bind(this);
+    this.handleChangeTargetTask = this.handleChangeTargetTask.bind(this);
   }
   handleChangePercentTask(i, event) {
     let contentTask = this.state.contentTask;
     contentTask[i].percent = event.target.value;
+    this.setState({ contentTask });
+  }
+  handleChangeTargetTask(i, event) {
+    let contentTask = this.state.contentTask;
+    contentTask[i].target = event.target.value;
     this.setState({ contentTask });
   }
   handleChangeContentTask(i, event) {
@@ -72,7 +78,10 @@ class WeeklyTask extends Component {
   }
   addContentTask() {
     this.setState((prevState) => ({
-      contentTask: [...prevState.contentTask, { content: "", percent: "" }],
+      contentTask: [
+        ...prevState.contentTask,
+        { content: "", percent: "", target: "" },
+      ],
     }));
   }
   handleChangeSelect(e, type) {
@@ -99,16 +108,16 @@ class WeeklyTask extends Component {
   async submitTask() {
     const errors = this.validator.validate(this.state);
     const contentTask = await this.state.contentTask.map((task, index) => {
-      if (task.content == "" || task.percent == "") {
+      if (task.content == "" || task.percent == "" || task.target == "" ) {
         return {
           content: task.content == "" ? "content not null" : null,
           percent: task.percent == "" ? "percent not null" : null,
+          target: task.target == "" ? "target not null" : null,
         };
       } else {
         return {};
       }
     });
-    console.log(contentTask);
     if (contentTask.find((e) => !this.isEmpty(e))) {
       errors["contentTask"] = contentTask;
     }
@@ -186,7 +195,7 @@ class WeeklyTask extends Component {
           this.setState({
             isShowEditTask: isShow,
           });
-          console.log(this.state.userId);
+          // console.log(this.state.userId);
         }
       );
     } else {
@@ -202,6 +211,13 @@ class WeeklyTask extends Component {
   }
   openDetailTask(isShow, task) {
     if (isShow) {
+      const newTaskContent = task.content.map((e, i) => {
+        return {
+          ...e,
+          target: e.target ? e.target : "",
+        };
+      });
+      task.content = newTaskContent;
       this.setState({
         isShowDetailTask: isShow,
         currentTask: task,
@@ -260,7 +276,7 @@ class WeeklyTask extends Component {
     // console.log(role);
     if (role === "Member") {
       return (
-        <tr key={index} className="row_weektask" style={{border: 'none'}}>
+        <tr key={index} className="row_weektask" style={{ border: "none" }}>
           <td className="text-left pl-0" style={{ maxWidth: "446px" }}>
             <div>
               {task.content.map((e, index) => {
@@ -358,6 +374,7 @@ class WeeklyTask extends Component {
             removeContentTask={this.props.removeContentTask}
             handleChangePercentTask={this.props.handleChangePercentTask}
             handleChangeContentTask={this.props.handleChangeContentTask}
+            handleChangeTargetTask={this.props.handleChangeTargetTask}
           />
         ) : null}
         <EditTask
@@ -378,6 +395,7 @@ class WeeklyTask extends Component {
           removeContentTask={this.removeContentTask}
           handleChangePercentTask={this.handleChangePercentTask}
           handleChangeContentTask={this.handleChangeContentTask}
+          handleChangeTargetTask={this.handleChangeTargetTask}
         />
         <DetailTask
           show={this.state.isShowDetailTask}
