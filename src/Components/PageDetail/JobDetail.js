@@ -261,7 +261,7 @@ class JobDetail extends Component {
       pageNumber: page,
     });
   }
-  async getUserAssign() {
+  async getUserAssign() { // dung để lấy danh sách các user để assign
     try {
       let response = await api.get(`/api/assign/list/user`);
       if (response.data.success) {
@@ -273,7 +273,7 @@ class JobDetail extends Component {
       console.log(err);
     }
   }
-  async getDataUserAssignJob() {
+  async getDataUserAssignJob() { // dung để lấy thông tin user được assign vào job
     try {
       const idJob = this.props.match.params.id;
       let response = await api.get(`/api/assignment/job/${idJob}`);
@@ -471,7 +471,7 @@ class JobDetail extends Component {
     });
   };
 
-  async getUserBitlink() {
+  async getUserBitlink() { // thông tin link bitly của member
     try {
       const idJob = this.props.match.params.id;
       let response = await api.get(`/api/member/assign/${idJob}`);
@@ -799,7 +799,7 @@ class JobDetail extends Component {
                         <div className="card-header flex-wrap border-0 pt-5 pb-0">
                           <div className="assign-user-css">
                             {dataUserAssignJob.map((user, index) => {
-                              if (user.urlShort) {
+                              if (!user.isFirst) {
                                 return (
                                   <div key={index}>
                                     <Overlay
