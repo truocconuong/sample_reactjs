@@ -129,69 +129,57 @@ class Candidate extends Component {
     this.getDataCandidate();
   }
   togglePreviewPdf() {
-    if(this.state.base64 !== ''){
+    if (this.state.base64 !== "") {
       this.setState(
         {
           isOpenPreviewPdf: !this.state.isOpenPreviewPdf,
-          isOpenCandidateDetail : false,
+          isOpenCandidateDetail: false,
         },
+        () => {
+          if (!this.state.isOpenPreviewPdf) {
+            this.setState({
+              base64: "",
+            });
+          }
+        }
       );
-    }else {
-      toast(<CustomToast title={"Cannot read file pdf please check again!"} type="error" />, {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        autoClose: 3000,
-        className: "toast_login",
-        closeButton: false,
-        hideProgressBar: true,
-        newestOnTop: true,
-        closeOnClick: true,
-        rtl: false,
-        pauseOnFocusLoss: true,
-        draggable: true,
-        pauseOnHover: true,
-        transition: Zoom,
-      });
+    } else {
+      toast(
+        <CustomToast
+          title={"Cannot read file pdf please check again!"}
+          type="error"
+        />,
+        {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          autoClose: 3000,
+          className: "toast_login",
+          closeButton: false,
+          hideProgressBar: true,
+          newestOnTop: true,
+          closeOnClick: true,
+          rtl: false,
+          pauseOnFocusLoss: true,
+          draggable: true,
+          pauseOnHover: true,
+          transition: Zoom,
+        }
+      );
     }
   }
 
   async previewPdf(candidateJobId) {
     try {
-      this.setState({
-        isLoading: true,
-      });
       const response = await api.get(
         `/api/v1/admin/preview/pdf/candidateJob/${candidateJobId}`
       );
       if (response) {
         this.setState({
           base64: response.data.base64,
-          isLoading: false,
         });
       }
     } catch (error) {
-      // toast(
-      //   <CustomToast
-      //     title={"You do not have permission to access files ! "}
-      //     type="error"
-      //   />,
-      //   {
-      //     position: toast.POSITION.BOTTOM_RIGHT,
-      //     autoClose: 3000,
-      //     className: "toast_login",
-      //     closeButton: false,
-      //     hideProgressBar: true,
-      //     newestOnTop: true,
-      //     closeOnClick: true,
-      //     rtl: false,
-      //     pauseOnFocusLoss: true,
-      //     draggable: true,
-      //     pauseOnHover: true,
-      //     transition: Zoom,
-      //   }
-      // );
       this.setState({
-        base64:'',
-        isLoading: false,
+        base64: "",
         isOpenPreviewPdf: false,
       });
     }
@@ -213,6 +201,7 @@ class Candidate extends Component {
           onHide={this.toggleCandidateDetail.bind(this, false)}
           togglePreviewPdf={this.togglePreviewPdf.bind(this)}
           // previewPdf={this.previewPdf.bind(this)}
+          base64={this.state.base64}
         />
         <PreviewPdf
           show={this.state.isOpenPreviewPdf}

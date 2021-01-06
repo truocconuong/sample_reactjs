@@ -153,23 +153,21 @@ export default class CandidateCard extends Component {
   };
 
   componentWillUpdate() {
-    console.log(this.state)
     if (this.state.id) {
-
       if (this.state.id !== this.state.storageIdCard) {
         this.setState({
           storageIdCard: this.state.id,
-          base64Drive : ''
-        })
+          base64Drive: "",
+        });
         if (this.state.cv) {
           new Promise(async (resolve, reject) => {
             const base64 = await convertDriveToBase64(this.state.cv);
-            resolve(base64)
+            resolve(base64);
           }).then((base64) => {
             this.setState({
-              base64Drive: base64
-            })
-          })
+              base64Drive: base64,
+            });
+          });
         }
       }
     }
@@ -188,7 +186,7 @@ export default class CandidateCard extends Component {
         centered
       >
         <ToastContainer />
-        <Modal.Header >
+        <Modal.Header>
           <Modal.Title>{`${this.props.data.name} - ${this.props.data.nameJob}`}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -333,9 +331,25 @@ export default class CandidateCard extends Component {
                     onChange={this.handleChangeData}
                     placeholder="Import CV"
                   />
-                  {
-                    this.state.base64Drive ? (<a href={`data:application/pdf;base64,${this.state.base64Drive}`} download={`${this.state.base64Drive ? this.state.name : ''}.pdf`} className="input-group-append"><span className="input-group-text"><i className="fas fa-cloud-download-alt"></i></span></a>): (<a href="#" className="input-group-append"><span className="input-group-text"><i className="fas fa-cloud-download-alt"></i></span></a>)
-                  }
+                  {this.state.base64Drive ? (
+                    <a
+                      href={`data:application/pdf;base64,${this.state.base64Drive}`}
+                      download={`${
+                        this.state.base64Drive ? this.state.name : ""
+                      }.pdf`}
+                      className="input-group-append"
+                    >
+                      <span className="input-group-text">
+                        <i className="fas fa-cloud-download-alt"></i>
+                      </span>
+                    </a>
+                  ) : (
+                    <a href="#" className="input-group-append">
+                      <span className="input-group-text">
+                        <i className="fas fa-cloud-download-alt"></i>
+                      </span>
+                    </a>
+                  )}
                 </div>
               </div>
               <div className="form-group">
@@ -361,38 +375,42 @@ export default class CandidateCard extends Component {
               </div>
             </div>
             <div className="card-footer add-card">
-              {
-                this.props.data.cv ? (<Link to={`/preview/candidate/${this.props.data.candidateId}/job/${this.props.data.jobId}`} className="btn btn-primary font-weight-bolder style-btn-kitin mr-3">
-                  Refined CV
-                </Link>) : ''
-              }
-              {this.props.data.cv ? (<a
-                onClick={() => {
-                  // this.props.previewPdf(this.props.data.idCandidateJob)
-                  this.props.openPreviewPdfAndCloseCandidateCard();
-                }}
-                className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
-              >
-                Raw CV
-              </a>) : ''}
-              {this.props.role !== "Director" ? (
-                <button
-                  type="submit"
-                  className={
-                    this.state.isLoading
-                      ? "btn btn-primary font-weight-bolder style-btn-kitin spinner spinner-white spinner-right mr-3"
-                      : "btn btn-primary font-weight-bolder style-btn-kitin mr-3"
-                  }
+              {this.props.data.cv ? (
+                <Link
+                  to={`/preview/candidate/${this.props.data.candidateId}/job/${this.props.data.jobId}`}
+                  className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
                 >
-                  Save
-                </button>
-              ) : null}
+                  Refined CV
+                </Link>
+              ) : (
+                ""
+              )}
+
+              {this.props.data.cv &&
+                (this.props.base64 ? (
+                  <a
+                    onClick={() => {
+                      // this.props.previewPdf(this.props.data.id)
+                      this.props.openPreviewPdfAndCloseCandidateCard();
+                    }}
+                    className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
+                  >
+                    Raw CV
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    class="btn btn-primary spinner font-weight-bolder spinner-white spinner-right mr-3"
+                  >
+                    Raw CV
+                  </button>
+                ))}
 
               <button
                 type="reset"
                 className="btn btn-secondary"
                 onClick={this.props.onHide}
-              // style={{ marginLeft: "10px" }}
+                // style={{ marginLeft: "10px" }}
               >
                 Cancel
               </button>

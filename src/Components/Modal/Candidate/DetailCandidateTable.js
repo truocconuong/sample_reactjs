@@ -29,19 +29,25 @@ export default class DetailCandidateTable extends Component {
     return (
       <div className="wrap_footer">
         <div className="modal-cus__right text-right">
-          {this.props.data.jobs[0].cv ? (
-            <a
-              onClick={() => {
-                // this.props.previewPdf(this.props.data.jobs[0].candidateJobId);
-                this.props.togglePreviewPdf();
-              }}
-              className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
-            >
-              Raw CV
-            </a>
-          ) : (
-              ""
-            )}
+          {this.props.data.jobs[0].cv&&
+            (this.props.base64 ? (
+              <a
+                onClick={() => {
+                  // this.props.previewPdf(this.props.data.id)
+                  this.props.togglePreviewPdf();
+                }}
+                className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
+              >
+                Raw CV
+              </a>
+            ) : (
+              <button
+                type="button"
+                class="btn btn-primary spinner font-weight-bolder spinner-white spinner-right mr-3"
+              >
+                Raw CV
+              </button>
+            ))}
           <button className="btn btn-secondary" onClick={self.props.onHide}>
             Cancel
           </button>
@@ -89,7 +95,6 @@ export default class DetailCandidateTable extends Component {
       cv: this.props.data.jobs ? this.props.data.jobs[0].cv : "",
       location: this.props.data.jobs ? this.props.data.jobs[0].location : "",
       arrayJob: this.props.data.jobs ? this.props.data.jobs : [],
-
     });
   }
 
@@ -98,24 +103,21 @@ export default class DetailCandidateTable extends Component {
       if (this.state.idCard !== this.state.storageIdCard) {
         this.setState({
           storageIdCard: this.state.idCard,
-          base64Drive : ''
-        })
+          base64Drive: "",
+        });
         if (this.state.cv) {
           new Promise(async (resolve, reject) => {
             const base64 = await convertDriveToBase64(this.state.cv);
-            resolve(base64)
+            resolve(base64);
           }).then((base64) => {
             this.setState({
-              base64Drive: base64
-            })
-          })
+              base64Drive: base64,
+            });
+          });
         }
       }
     }
   }
-
-
-
 
   render() {
     let self = this;
@@ -250,9 +252,25 @@ export default class DetailCandidateTable extends Component {
                     readOnly
                     placeholder="Enter link or import cv"
                   />
-                  {
-                    this.state.base64Drive ? (<a href={`data:application/pdf;base64,${this.state.base64Drive}`} download={`${this.state.base64Drive ? data.name : ''}.pdf`} className="input-group-append"><span className="input-group-text"><i className="fas fa-cloud-download-alt"></i></span></a>): (<a href="#" className="input-group-append"><span className="input-group-text"><i className="fas fa-cloud-download-alt"></i></span></a>)
-                  }
+                  {this.state.base64Drive ? (
+                    <a
+                      href={`data:application/pdf;base64,${this.state.base64Drive}`}
+                      download={`${
+                        this.state.base64Drive ? data.name : ""
+                      }.pdf`}
+                      className="input-group-append"
+                    >
+                      <span className="input-group-text">
+                        <i className="fas fa-cloud-download-alt"></i>
+                      </span>
+                    </a>
+                  ) : (
+                    <a href="#" className="input-group-append">
+                      <span className="input-group-text">
+                        <i className="fas fa-cloud-download-alt"></i>
+                      </span>
+                    </a>
+                  )}
                 </div>
               </div>
               <div className="form-group">
