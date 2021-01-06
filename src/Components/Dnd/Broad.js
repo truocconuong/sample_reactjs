@@ -16,6 +16,7 @@ import roleName from "../../utils/const";
 import DetailInterviewCard from "./DetailInterviewCard.js";
 import { ToastContainer, toast, Zoom } from "react-toastify";
 import CustomToast from "../common/CustomToast";
+import PreviewPdf from "../Modal/PreviewPdf/PreviewPdf.js";
 
 const api = new Network();
 
@@ -66,7 +67,7 @@ class Broad extends Component {
           laneSelected: {},
         },
       },
-
+      isOpenPreviewPdf: false,
       data: {},
       data_real: {},
       jobs: [],
@@ -210,7 +211,24 @@ class Broad extends Component {
         this.close_detail_card();
       }
     } catch (error) {
-      console.log(error);
+      if (error.error.data) {
+        if (error.error.data.error === 'Cannot update candidate') {
+          toast(<CustomToast title={"Email or phone already exists!"} type={'error'} />, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 3000,
+            className: "toast_login",
+            closeButton: false,
+            hideProgressBar: true,
+            newestOnTop: true,
+            closeOnClick: true,
+            rtl: false,
+            pauseOnFocusLoss: true,
+            draggable: true,
+            pauseOnHover: true,
+            transition: Zoom,
+          });
+        }
+      }
     }
   };
 
@@ -377,8 +395,9 @@ class Broad extends Component {
           data.cards[cardId] = {
             id: cardId,
             content: {
+              candidateId : card.Candidate.id,
               name: card.Candidate.name,
-              position: card.position,
+              position: card.position || '',
               clientName: !_.isNil(card.Job.Client) ? card.Job.Client.name : "",
               phone: card.Candidate.phone,
               email: card.Candidate.email,
@@ -386,7 +405,7 @@ class Broad extends Component {
               approachDate: card.approachDate,
               linkCv: card.cv,
               nameJob: card.Job.title,
-              noteApproach: card.noteApproach,
+              noteApproach: card.noteApproach || '',
               interview: card.Interview,
               idJob: card.jobId,
               jobSelected: {
@@ -442,7 +461,7 @@ class Broad extends Component {
         });
         this.setState({ jobs: jobs });
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   initUserTeam = async () => {
@@ -462,7 +481,7 @@ class Broad extends Component {
           users: users,
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   createCardToLane = async (item) => {
@@ -496,7 +515,21 @@ class Broad extends Component {
         this.initData();
       }
     } catch (error) {
-      console.log(error);
+      this.close_add_card_form();
+      toast(<CustomToast title={"Card already exists !"} type={'error'} />, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        className: "toast_login",
+        closeButton: false,
+        hideProgressBar: true,
+        newestOnTop: true,
+        closeOnClick: true,
+        rtl: false,
+        pauseOnFocusLoss: true,
+        draggable: true,
+        pauseOnHover: true,
+        transition: Zoom,
+      });
     }
   };
   addMemberToCard = async (dataUser) => {
@@ -569,8 +602,9 @@ class Broad extends Component {
       data.cards[cardId] = {
         id: cardId,
         content: {
+          candidateId : card.Candidate.id,
           name: card.Candidate.name,
-          position: card.position,
+          position: card.position || '',
           clientName: !_.isNil(card.Job.Client) ? card.Job.Client.name : "",
           phone: card.Candidate.phone,
           email: card.Candidate.email,
@@ -578,7 +612,7 @@ class Broad extends Component {
           approachDate: card.approachDate,
           linkCv: card.cv,
           nameJob: card.Job.title,
-          noteApproach: card.noteApproach,
+          noteApproach: card.noteApproach || '',
           interview: card.Interview,
           idJob: card.jobId,
           jobSelected: {
@@ -601,6 +635,55 @@ class Broad extends Component {
     });
   };
 
+
+  openPreviewPdfAndCloseCardTrello = () => {
+   
+    this.setState({
+      base64 : '',
+      show_detail_card: false,
+      isOpenPreviewPdf: !this.state.isOpenPreviewPdf
+    }, async () => {
+      if (this.state.isOpenPreviewPdf) {
+        const cardId = this.state.card_data_detail.id;
+        this.previewPdf(cardId)
+      }
+    })
+  }
+
+  async previewPdf(candidateJobId) {
+    this.setState({
+      isLoading: true
+    })
+    try {
+      const response = await api.get(`/api/v1/admin/preview/pdf/candidateJob/${candidateJobId}`)
+      if (response) {
+        this.setState({
+          base64: response.data.base64,
+          isLoading: false
+        })
+      }
+    } catch (error) {
+      toast(<CustomToast title={"The link cannot be read!"} type={'error'} />, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        className: "toast_login",
+        closeButton: false,
+        hideProgressBar: true,
+        newestOnTop: true,
+        closeOnClick: true,
+        rtl: false,
+        pauseOnFocusLoss: true,
+        draggable: true,
+        pauseOnHover: true,
+        transition: Zoom,
+      });
+      this.setState({
+        base64: '',
+        isLoading: false,
+        isOpenPreviewPdf: false
+      })
+    }
+  }
   render() {
     return (
       <div
@@ -632,6 +715,7 @@ class Broad extends Component {
           addMemberToCard={this.addMemberToCard}
           toggleDetailCardAndInterview={this.toggleDetailCardAndInterview}
           toggleDetailInterview={this.toggleDetailInterview}
+          openPreviewPdfAndCloseCardTrello={this.openPreviewPdfAndCloseCardTrello}
         />
 
         <CreateInterviewCard
@@ -645,6 +729,15 @@ class Broad extends Component {
           data={this.state.card_selected}
           onHide={this.toggleDetailInterview}
         />
+        {
+          this.state.base64 && this.state.isOpenPreviewPdf ? (
+            <PreviewPdf
+              show={this.state.isOpenPreviewPdf}
+              base64={this.state.base64}
+              onHide={this.openPreviewPdfAndCloseCardTrello.bind(this)}
+            />
+          ) : ''
+        }
         <div
           className="subheader py-3 py-lg-8 subheader-transparent"
           id="kt_subheader"
@@ -698,8 +791,8 @@ class Broad extends Component {
                 </Container>
               </DragDropContext>
             ) : (
-              ""
-            )}
+                ""
+              )}
           </div>
         </div>
 
@@ -712,8 +805,8 @@ class Broad extends Component {
             <span className="card-vip__plus">+</span>
           </button>
         ) : (
-          ""
-        )}
+            ""
+          )}
       </div>
     );
   }

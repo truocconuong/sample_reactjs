@@ -24,7 +24,6 @@ import { Popover as PopoverPop, PopoverHeader, PopoverBody } from "reactstrap";
 import CustomToast from "../common/CustomToast";
 import PreviewPdf from "../Modal/PreviewPdf/PreviewPdf";
 
-
 const api = new Network();
 const ref = React.createRef();
 
@@ -72,7 +71,7 @@ class JobDetail extends Component {
 
       // mang lane
       arrayLane: [],
-      base64: ''
+      base64: "",
     };
     this.showInfoMember = [];
     this.handlePagination = this.handlePagination.bind(this);
@@ -84,7 +83,6 @@ class JobDetail extends Component {
     this.toggleCandidateAddCard = this.toggleCandidateAddCard.bind(this);
     this.toggleCardTrelo = this.toggleCardTrelo.bind(this);
   }
-
 
   closeModelDelete = () => {
     this.setState({
@@ -122,7 +120,34 @@ class JobDetail extends Component {
         jobId: idJob,
       });
       if (!result.data.success) {
-        toast(<CustomToast title={"Something went wrong please try again later!"} type="error" />, {
+        toast(
+          <CustomToast
+            title={"Something went wrong please try again later!"}
+            type="error"
+          />,
+          {
+            position: toast.POSITION.BOTTOM_RIGHT,
+            autoClose: 3000,
+            className: "toast_login",
+            closeButton: false,
+            hideProgressBar: true,
+            newestOnTop: true,
+            closeOnClick: true,
+            rtl: false,
+            pauseOnFocusLoss: true,
+            draggable: true,
+            pauseOnHover: true,
+            transition: Zoom,
+          }
+        );
+      }
+    } catch (err) {
+      toast(
+        <CustomToast
+          title={"Something went wrong please try again later!"}
+          type="error"
+        />,
+        {
           position: toast.POSITION.BOTTOM_RIGHT,
           autoClose: 3000,
           className: "toast_login",
@@ -135,23 +160,8 @@ class JobDetail extends Component {
           draggable: true,
           pauseOnHover: true,
           transition: Zoom,
-        });
-      }
-    } catch (err) {
-      toast(<CustomToast title={"Something went wrong please try again later!"} type="error" />, {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        autoClose: 3000,
-        className: "toast_login",
-        closeButton: false,
-        hideProgressBar: true,
-        newestOnTop: true,
-        closeOnClick: true,
-        rtl: false,
-        pauseOnFocusLoss: true,
-        draggable: true,
-        pauseOnHover: true,
-        transition: Zoom,
-      });
+        }
+      );
     }
   };
 
@@ -210,7 +220,7 @@ class JobDetail extends Component {
             dataCandidate: response.data.list,
             viewCandidate: response.data.list.slice(
               (pageNumber - 1) * numberInPage,
-              (pageNumber - 1) * numberInPage + numberInPage,
+              (pageNumber - 1) * numberInPage + numberInPage
             ),
             totalRow: response.data.list.length,
             isDisplay: response.data.list.length === 0,
@@ -297,27 +307,33 @@ class JobDetail extends Component {
             this.getDataUserAssignJob();
             this.setState({
               isLoadingAssign: false,
-            })
+            });
           }
         }
       } catch (err) {
         this.setState({
           isLoadingAssign: false,
         });
-        toast(<CustomToast title={"Something went wrong please try again later!"} type="error" />, {
-          position: toast.POSITION.BOTTOM_RIGHT,
-          autoClose: 3000,
-          className: "toast_login",
-          closeButton: false,
-          hideProgressBar: true,
-          newestOnTop: true,
-          closeOnClick: true,
-          rtl: false,
-          pauseOnFocusLoss: true,
-          draggable: true,
-          pauseOnHover: true,
-          transition: Zoom,
-        });
+        toast(
+          <CustomToast
+            title={"Something went wrong please try again later!"}
+            type="error"
+          />,
+          {
+            position: toast.POSITION.BOTTOM_RIGHT,
+            autoClose: 3000,
+            className: "toast_login",
+            closeButton: false,
+            hideProgressBar: true,
+            newestOnTop: true,
+            closeOnClick: true,
+            rtl: false,
+            pauseOnFocusLoss: true,
+            draggable: true,
+            pauseOnHover: true,
+            transition: Zoom,
+          }
+        );
         console.log(err);
       }
     }
@@ -373,9 +389,8 @@ class JobDetail extends Component {
             self.toggleCardTrelo(true);
           }
         );
-
       }
-      this.previewPdf(id)
+      this.previewPdf(id);
     } catch (error) {
       console.log("err while get card detail: ", error);
     }
@@ -398,7 +413,7 @@ class JobDetail extends Component {
           }
         );
       }
-      this.previewPdf(idCandidateJob)
+      this.previewPdf(idCandidateJob);
     } catch (error) {
       console.log("err while get candidate detail: ", error);
     }
@@ -462,49 +477,101 @@ class JobDetail extends Component {
       // this.setState({
       //   isLoading: true
       // })
-      const response = await api.get(`/api/v1/admin/preview/pdf/candidateJob/${candidateJobId}`)
+      const response = await api.get(
+        `/api/v1/admin/preview/pdf/candidateJob/${candidateJobId}`
+      );
       if (response) {
         this.setState({
           base64: response.data.base64,
           // isLoading: false
-        })
+        });
       }
     } catch (error) {
-      // toast(<CustomToast title={"Link cv not preview please check again !"} type="error" />, {
-      //   position: toast.POSITION.BOTTOM_RIGHT,
-      //   autoClose: 3000,
-      //   className: "toast_login",
-      //   closeButton: false,
-      //   hideProgressBar: true,
-      //   newestOnTop: true,
-      //   closeOnClick: true,
-      //   rtl: false,
-      //   pauseOnFocusLoss: true,
-      //   draggable: true,
-      //   pauseOnHover: true,
-      //   transition: Zoom,
-      // });
       this.setState({
+        base64: "",
         isLoading: false,
-        isOpenPreviewPdf: false
-      })
+        isOpenPreviewPdf: false,
+      });
     }
   }
 
-
   openPreviewPdfAndCloseCardTrello = () => {
-    this.setState({
-      isOpenCardTrello: false,
-      isOpenPreviewPdf: !this.state.isOpenPreviewPdf
-    })
-  }
+    if (this.state.base64 !== "") {
+      this.setState(
+        {
+          isOpenCardTrello: false,
+          isOpenPreviewPdf: !this.state.isOpenPreviewPdf,
+        },
+        () => {
+          if (!this.state.isOpenPreviewPdf) {
+            this.setState({
+              base64: "",
+            });
+          }
+        }
+      );
+    } else {
+      toast(
+        <CustomToast
+          title={"Cannot read file pdf please check again!"}
+          type="error"
+        />,
+        {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          autoClose: 3000,
+          className: "toast_login",
+          closeButton: false,
+          hideProgressBar: true,
+          newestOnTop: true,
+          closeOnClick: true,
+          rtl: false,
+          pauseOnFocusLoss: true,
+          draggable: true,
+          pauseOnHover: true,
+          transition: Zoom,
+        }
+      );
+    }
+  };
 
   openPreviewPdfAndCloseCandidateCard = () => {
-    this.setState({
-      isOpenCandidateCard: false,
-      isOpenPreviewPdf: !this.state.isOpenPreviewPdf
-    })
-  }
+    if (this.state.base64 !== "") {
+      this.setState(
+        {
+          isOpenCandidateCard: false,
+          isOpenPreviewPdf: !this.state.isOpenPreviewPdf,
+        },
+        () => {
+          if (!this.state.isOpenPreviewPdf) {
+            this.setState({
+              base64: "",
+            });
+          }
+        }
+      );
+    } else {
+      toast(
+        <CustomToast
+          title={"Cannot read file pdf please check again!"}
+          type="error"
+        />,
+        {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          autoClose: 3000,
+          className: "toast_login",
+          closeButton: false,
+          hideProgressBar: true,
+          newestOnTop: true,
+          closeOnClick: true,
+          rtl: false,
+          pauseOnFocusLoss: true,
+          draggable: true,
+          pauseOnHover: true,
+          transition: Zoom,
+        }
+      );
+    }
+  };
 
   componentDidMount() {
     this.getData();
@@ -574,7 +641,10 @@ class JobDetail extends Component {
           onHide={this.toggleCandidateAddCard.bind(this, false)}
           role={this.props.role}
           resetCandidateAddCard={this.getDataCandidate.bind(this)}
-          openPreviewPdfAndCloseCandidateCard={this.openPreviewPdfAndCloseCandidateCard.bind(this)}
+          openPreviewPdfAndCloseCandidateCard={this.openPreviewPdfAndCloseCandidateCard.bind(
+            this
+          )}
+          base64={this.state.base64}
           // previewPdf={this.previewPdf.bind(this)}
         />
 
@@ -582,9 +652,12 @@ class JobDetail extends Component {
           data={this.state.cardTrello}
           show={this.state.isOpenCardTrello}
           lane={arrayLane}
+          base64={this.state.base64}
           onHide={this.toggleCardTrelo.bind(this, false)}
           resetCandidateAddCard={this.getDataCandidate.bind(this)}
-          openPreviewPdfAndCloseCardTrello={this.openPreviewPdfAndCloseCardTrello.bind(this)}
+          openPreviewPdfAndCloseCardTrello={this.openPreviewPdfAndCloseCardTrello.bind(
+            this
+          )}
           // previewPdf={this.previewPdf.bind(this)}
         />
 
@@ -593,15 +666,15 @@ class JobDetail extends Component {
           show={this.state.isOpenCandidateDetail}
           onHide={this.toggleCandidateDetail.bind(this, false)}
         />
-        {
-          this.state.base64 && this.state.isOpenPreviewPdf ? (
-            <PreviewPdf
-              show={this.state.isOpenPreviewPdf}
-              base64={this.state.base64}
-              onHide={this.openPreviewPdfAndCloseCardTrello.bind(this)}
-            />
-          ) : ''
-        }
+        {this.state.base64 && this.state.isOpenPreviewPdf ? (
+          <PreviewPdf
+            show={this.state.isOpenPreviewPdf}
+            base64={this.state.base64}
+            onHide={this.openPreviewPdfAndCloseCardTrello.bind(this)}
+          />
+        ) : (
+          ""
+        )}
 
         <div className="content d-flex flex-column flex-column-fluid p-0">
           {this.state.isLoading ? <Fbloader /> : null}
@@ -641,7 +714,6 @@ class JobDetail extends Component {
 
           <div className="d-flex flex-column-fluid">
             <div className="container">
-
               <div className="d-flex mt-4">
                 <div className="container p-0 d-flex dr_col">
                   {!this.state.isLoading ? (
@@ -655,20 +727,23 @@ class JobDetail extends Component {
                               </div>
                               <div className="wrap_edit_job">
                                 <div className="mr-2">
-                                  {
-                                    this.props.role !== "Member" ? (
-                                      <NavLink
-                                        to={`/edit-job/${data.id}`}
-                                        className="btn btn-primary font-weight-bolder"
-                                        style={{ padding: "0.6rem 0.9rem" }}
-                                      >
-                                        Edit
-                                      </NavLink>
-                                    ) : null
-                                  }
+                                  {this.props.role !== "Member" ? (
+                                    <NavLink
+                                      to={`/edit-job/${data.id}`}
+                                      className="btn btn-primary font-weight-bolder"
+                                      style={{ padding: "0.6rem 0.9rem" }}
+                                    >
+                                      Edit
+                                    </NavLink>
+                                  ) : null}
                                 </div>
                                 <div>
-                                  <a href={`${domainServer}/api/download/job/${this.props.match.params.id}`} className="btn btn-light-primary font-weight-bold">Download As PDF</a>
+                                  <a
+                                    href={`${domainServer}/api/download/job/${this.props.match.params.id}`}
+                                    className="btn btn-light-primary font-weight-bold"
+                                  >
+                                    Download As PDF
+                                  </a>
                                 </div>
                               </div>
                             </div>
@@ -823,12 +898,12 @@ class JobDetail extends Component {
                                       alt=""
                                     />
                                   ) : (
-                                      <img
-                                        src={defaultAva}
-                                        className="h-100 align-self-end"
-                                        alt=""
-                                      />
-                                    )}
+                                    <img
+                                      src={defaultAva}
+                                      className="h-100 align-self-end"
+                                      alt=""
+                                    />
+                                  )}
                                 </div>
                               );
                             })}
@@ -858,11 +933,11 @@ class JobDetail extends Component {
                                     isDisabled
                                   />
                                 ) : (
-                                    <Select
-                                      options={optUser}
-                                      onChange={this.handleOnchange}
-                                    />
-                                  )}
+                                  <Select
+                                    options={optUser}
+                                    onChange={this.handleOnchange}
+                                  />
+                                )}
                               </PopoverBody>
                             </PopoverPop>
 
@@ -884,60 +959,59 @@ class JobDetail extends Component {
                           <div className="content-job">
                             {ReactHtmlParser(desc)}
                           </div>
-
                         </div>
                       </div>
                     </div>
                   ) : (
-                      <div className="col-xl-7 pl-0 prm_0">
-                        <div className="card card-custom style-card-kitin">
-                          <div className="card-header flex-wrap border-0 pt-6 pb-0">
-                            <div className="card-title style-title-job">
-                              <div className="contain-title-job dr_col">
-                                <div style={{ width: "80%" }}>
-                                  <h3 className="m-0 pt-2">
-                                    <Skeleton height={24} />
-                                  </h3>
-                                </div>
-                                <div
-                                  style={{
-                                    width: "20%",
-                                    display: "flex",
-                                    justifyContent: "flex-end",
-                                  }}
-                                >
-                                  <div>
-                                    <Skeleton height={24} />
-                                  </div>
-                                </div>
+                    <div className="col-xl-7 pl-0 prm_0">
+                      <div className="card card-custom style-card-kitin">
+                        <div className="card-header flex-wrap border-0 pt-6 pb-0">
+                          <div className="card-title style-title-job">
+                            <div className="contain-title-job dr_col">
+                              <div style={{ width: "80%" }}>
+                                <h3 className="m-0 pt-2">
+                                  <Skeleton height={24} />
+                                </h3>
                               </div>
-                              <div className="style-info-job">
-                                <div className="style-job-detail dorlar-job-detail pr-3">
-                                  <Skeleton height={22} />
-                                </div>
-                                <div className="style-job-detail location-job-detail pr-3">
-                                  <Skeleton height={22} />
-                                </div>
-                                <div className="style-job-detail calendar-job-detail pr-3">
-                                  <Skeleton height={22} />
+                              <div
+                                style={{
+                                  width: "20%",
+                                  display: "flex",
+                                  justifyContent: "flex-end",
+                                }}
+                              >
+                                <div>
+                                  <Skeleton height={24} />
                                 </div>
                               </div>
                             </div>
-                          </div>
-                          <div className="card card-custom style-card-job">
-                            <div className="card-header flex-wrap border-0 pt-5 pb-0">
-                              {arrLoadingTwo.map((item, index) => {
-                                return (
-                                  <div className="content-job" key={index}>
-                                    <Skeleton height={20} />
-                                  </div>
-                                );
-                              })}
+                            <div className="style-info-job">
+                              <div className="style-job-detail dorlar-job-detail pr-3">
+                                <Skeleton height={22} />
+                              </div>
+                              <div className="style-job-detail location-job-detail pr-3">
+                                <Skeleton height={22} />
+                              </div>
+                              <div className="style-job-detail calendar-job-detail pr-3">
+                                <Skeleton height={22} />
+                              </div>
                             </div>
                           </div>
                         </div>
+                        <div className="card card-custom style-card-job">
+                          <div className="card-header flex-wrap border-0 pt-5 pb-0">
+                            {arrLoadingTwo.map((item, index) => {
+                              return (
+                                <div className="content-job" key={index}>
+                                  <Skeleton height={20} />
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
                       </div>
-                    )}
+                    </div>
+                  )}
 
                   <div className="col-xl-5 p-0">
                     <div className="card card-custom">
@@ -1147,109 +1221,109 @@ class JobDetail extends Component {
                           </div>
                         </div>
                       ) : (
-                          <div
-                            className="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
-                            id="kt_datatable"
-                            style={{
-                              position: "static",
-                              zoom: 1,
-                              marginLeft: "12px",
-                            }}
+                        <div
+                          className="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
+                          id="kt_datatable"
+                          style={{
+                            position: "static",
+                            zoom: 1,
+                            marginLeft: "12px",
+                          }}
+                        >
+                          <table
+                            className="datatable-table"
+                            style={{ display: "block" }}
                           >
-                            <table
-                              className="datatable-table"
-                              style={{ display: "block" }}
-                            >
-                              <thead className="datatable-head">
-                                <tr
-                                  className="datatable-row"
-                                  style={{ left: "0px" }}
+                            <thead className="datatable-head">
+                              <tr
+                                className="datatable-row"
+                                style={{ left: "0px" }}
+                              >
+                                <th
+                                  data-field="OrderID"
+                                  className="datatable-cell datatable-cell-sort"
                                 >
-                                  <th
-                                    data-field="OrderID"
-                                    className="datatable-cell datatable-cell-sort"
-                                  >
-                                    <span style={{ width: "160px" }}>Name</span>
-                                  </th>
-                                  <th
-                                    data-field="ShipDate"
-                                    className="datatable-cell datatable-cell-sort"
-                                  >
-                                    <span style={{ width: "120px" }}>
-                                      Date Apply
+                                  <span style={{ width: "160px" }}>Name</span>
+                                </th>
+                                <th
+                                  data-field="ShipDate"
+                                  className="datatable-cell datatable-cell-sort"
+                                >
+                                  <span style={{ width: "120px" }}>
+                                    Date Apply
                                   </span>
-                                  </th>
-                                  <th
-                                    data-field="Actions"
-                                    data-autohide-disabled="false"
-                                    className="datatable-cell datatable-cell-sort"
+                                </th>
+                                <th
+                                  data-field="Actions"
+                                  data-autohide-disabled="false"
+                                  className="datatable-cell datatable-cell-sort"
+                                >
+                                  <span
+                                    style={{
+                                      width: "137px",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                    }}
                                   >
-                                    <span
-                                      style={{
-                                        width: "137px",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                      }}
-                                    >
-                                      Actions
+                                    Actions
                                   </span>
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody className="datatable-body">
-                                {arrLoading.map((item, index) => {
-                                  return (
-                                    <tr
-                                      key={index}
-                                      data-row={1}
-                                      className="datatable-row datatable-row-even"
-                                      style={{ left: "0px" }}
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody className="datatable-body">
+                              {arrLoading.map((item, index) => {
+                                return (
+                                  <tr
+                                    key={index}
+                                    data-row={1}
+                                    className="datatable-row datatable-row-even"
+                                    style={{ left: "0px" }}
+                                  >
+                                    <td
+                                      data-field="OrderID"
+                                      aria-label="63868-257"
+                                      className="datatable-cell"
                                     >
-                                      <td
-                                        data-field="OrderID"
-                                        aria-label="63868-257"
-                                        className="datatable-cell"
-                                      >
-                                        <span style={{ width: "160px" }}>
-                                          <Skeleton height={24} />
-                                        </span>
-                                      </td>
-                                      <td
-                                        data-field="ShipDate"
-                                        aria-label="9/3/2017"
-                                        className="datatable-cell"
-                                      >
-                                        <span style={{ width: "120px" }}>
-                                          <Skeleton height={24} />
-                                        </span>
-                                      </td>
-                                      <td
-                                        data-field="ShipDate"
-                                        aria-label="9/3/2017"
-                                        className="datatable-cell"
-                                      >
-                                        <span style={{ width: "137px" }}>
-                                          <Skeleton height={24} />
-                                        </span>
-                                      </td>
-                                    </tr>
-                                  );
-                                })}
-                              </tbody>
-                            </table>
-                            <div className="datatable-pager datatable-paging-loaded fl_end mb-4 mr-2">
-                              <Pagination
-                                defaultPageSize={this.state.numberInPage}
-                                current={this.state.pageNumber}
-                                hideOnSinglePage={true}
-                                showTitle={false}
-                                onChange={this.handlePagination}
-                                total={this.state.totalRow}
-                                showLessItems={true}
-                              />
-                            </div>
+                                      <span style={{ width: "160px" }}>
+                                        <Skeleton height={24} />
+                                      </span>
+                                    </td>
+                                    <td
+                                      data-field="ShipDate"
+                                      aria-label="9/3/2017"
+                                      className="datatable-cell"
+                                    >
+                                      <span style={{ width: "120px" }}>
+                                        <Skeleton height={24} />
+                                      </span>
+                                    </td>
+                                    <td
+                                      data-field="ShipDate"
+                                      aria-label="9/3/2017"
+                                      className="datatable-cell"
+                                    >
+                                      <span style={{ width: "137px" }}>
+                                        <Skeleton height={24} />
+                                      </span>
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                          <div className="datatable-pager datatable-paging-loaded fl_end mb-4 mr-2">
+                            <Pagination
+                              defaultPageSize={this.state.numberInPage}
+                              current={this.state.pageNumber}
+                              hideOnSinglePage={true}
+                              showTitle={false}
+                              onChange={this.handlePagination}
+                              total={this.state.totalRow}
+                              showLessItems={true}
+                            />
                           </div>
-                        )}
+                        </div>
+                      )}
                       {this.state.isDisplay ? (
                         <div className="d-flex flex-column style-no-result">
                           <img src="/img/no-result.png" alt="" />
@@ -1263,9 +1337,7 @@ class JobDetail extends Component {
                       <div className="container p-0 mt-4">
                         <div className="card card-custom card-stretch gutter-b">
                           <div className="card-header border-0 justify-content-center">
-                            <h3 className="card-title text-dark">
-                              Followers
-                            </h3>
+                            <h3 className="card-title text-dark">Followers</h3>
                           </div>
                           <div className="card-body pt-0">
                             <div className="table-responsive mt-3">
@@ -1301,9 +1373,9 @@ class JobDetail extends Component {
                                           popperConfig={{
                                             modifiers: {
                                               preventOverflow: {
-                                                enabled: false
-                                              }
-                                            }
+                                                enabled: false,
+                                              },
+                                            },
                                           }}
                                         >
                                           <CopyToClipboard
@@ -1343,101 +1415,98 @@ class JobDetail extends Component {
                         </div>
                       </div>
                     ) : (
-                        <div className="container p-0 mt-4">
-                          <div className="card card-custom card-stretch gutter-b">
-                            <div className="card-header border-0 justify-content-center">
-                              <h3 className="card-title text-dark">
-                                Followers
-                            </h3>
-                            </div>
-                            <div className="card-body pt-0">
-                              <div className="table-responsive mt-3">
-                                <table className="table table-borderless table-vertical-center">
-                                  <thead>
-                                    <tr className="d-flex">
-                                      <th
-                                        className="p-0"
-                                        style={{ width: "40px" }}
-                                      />
-                                      <th
-                                        className="p-0"
-                                        style={{ minWidth: "60px" }}
-                                      />
-                                      <th
-                                        className="p-0"
-                                        style={{ minWidth: "60px" }}
-                                      />
-                                    </tr>
-                                  </thead>
+                      <div className="container p-0 mt-4">
+                        <div className="card card-custom card-stretch gutter-b">
+                          <div className="card-header border-0 justify-content-center">
+                            <h3 className="card-title text-dark">Followers</h3>
+                          </div>
+                          <div className="card-body pt-0">
+                            <div className="table-responsive mt-3">
+                              <table className="table table-borderless table-vertical-center">
+                                <thead>
+                                  <tr className="d-flex">
+                                    <th
+                                      className="p-0"
+                                      style={{ width: "40px" }}
+                                    />
+                                    <th
+                                      className="p-0"
+                                      style={{ minWidth: "60px" }}
+                                    />
+                                    <th
+                                      className="p-0"
+                                      style={{ minWidth: "60px" }}
+                                    />
+                                  </tr>
+                                </thead>
 
-                                  <tbody>
-                                    {dataUserAssignJob.map((user, index) => {
-                                      if (user.urlShort) {
-                                        return (
-                                          <tr key={user.id}>
-                                            <td className="pl-0">
-                                              <span className="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">
-                                                {user.User.name}
-                                              </span>
-                                              <span className="text-muted font-weight-bold d-block pt-3">
-                                                <OverlayTrigger
-                                                  key={`bottom-${index}`}
-                                                  placement={"top"}
-                                                  overlay={
-                                                    <Tooltip id={`tooltip-top`}>
-                                                      Click to copy
+                                <tbody>
+                                  {dataUserAssignJob.map((user, index) => {
+                                    if (user.urlShort) {
+                                      return (
+                                        <tr key={user.id}>
+                                          <td className="pl-0">
+                                            <span className="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">
+                                              {user.User.name}
+                                            </span>
+                                            <span className="text-muted font-weight-bold d-block pt-3">
+                                              <OverlayTrigger
+                                                key={`bottom-${index}`}
+                                                placement={"top"}
+                                                overlay={
+                                                  <Tooltip id={`tooltip-top`}>
+                                                    Click to copy
                                                   </Tooltip>
-                                                  }
-                                                  popperConfig={{
-                                                    modifiers: {
-                                                      preventOverflow: {
-                                                        enabled: false
-                                                      }
-                                                    }
-                                                  }}
+                                                }
+                                                popperConfig={{
+                                                  modifiers: {
+                                                    preventOverflow: {
+                                                      enabled: false,
+                                                    },
+                                                  },
+                                                }}
+                                              >
+                                                <CopyToClipboard
+                                                  text={user.urlShort}
+                                                  onCopy={this.successCopy}
                                                 >
-                                                  <CopyToClipboard
-                                                    text={user.urlShort}
-                                                    onCopy={this.successCopy}
-                                                  >
-                                                    <span className="linkbitly-css">
-                                                      {user.urlShort}
-                                                    </span>
-                                                  </CopyToClipboard>
-                                                </OverlayTrigger>
-                                              </span>
-                                            </td>
-                                            <td className="pl-0">
-                                              <span className="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">
-                                                Click
+                                                  <span className="linkbitly-css">
+                                                    {user.urlShort}
+                                                  </span>
+                                                </CopyToClipboard>
+                                              </OverlayTrigger>
                                             </span>
-                                              <span className="text-muted font-weight-bold d-block pt-3">
-                                                {user.totalClick}
-                                              </span>
-                                            </td>
-                                            <td className="pl-0">
-                                              <span className="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">
-                                                Candidate
+                                          </td>
+                                          <td className="pl-0">
+                                            <span className="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">
+                                              Click
                                             </span>
-                                              <span className="text-muted font-weight-bold d-block pt-3">
-                                                {user.numberCandidate}
-                                              </span>
-                                            </td>
-                                          </tr>
-                                        );
-                                      }
-                                    })}
-                                  </tbody>
-                                </table>
-                              </div>
+                                            <span className="text-muted font-weight-bold d-block pt-3">
+                                              {user.totalClick}
+                                            </span>
+                                          </td>
+                                          <td className="pl-0">
+                                            <span className="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">
+                                              Candidate
+                                            </span>
+                                            <span className="text-muted font-weight-bold d-block pt-3">
+                                              {user.numberCandidate}
+                                            </span>
+                                          </td>
+                                        </tr>
+                                      );
+                                    }
+                                  })}
+                                </tbody>
+                              </table>
                             </div>
                           </div>
                         </div>
-                      )}
+                      </div>
+                    )}
 
                     <div className="container p-0 mt-4">
                       <div className="card card-custom card-stretch gutter-b">
-
                         <div className="card-header border-0 justify-content-center">
                           <h3 className="card-title text-dark">
                             Note from leader
@@ -1457,7 +1526,7 @@ class JobDetail extends Component {
                                   defaultValue={data.note || ""}
                                   className="form-control-solid"
                                   readOnly
-                                  style={{ overflowY: 'scroll' }}
+                                  style={{ overflowY: "scroll" }}
                                 />
                               </div>
                             </div>
@@ -1475,7 +1544,7 @@ class JobDetail extends Component {
                                   defaultValue={data.keyword || ""}
                                   className="form-control-solid"
                                   readOnly
-                                  style={{ overflowY: 'scroll' }}
+                                  style={{ overflowY: "scroll" }}
                                 />
                               </div>
                             </div>
@@ -1493,7 +1562,7 @@ class JobDetail extends Component {
                                   rows="4"
                                   className="form-control-solid"
                                   readOnly
-                                  style={{ overflowY: 'scroll' }}
+                                  style={{ overflowY: "scroll" }}
                                 />
                               </div>
                             </div>
@@ -1510,7 +1579,7 @@ class JobDetail extends Component {
                                   defaultValue={data.interviewProcess || ""}
                                   className="form-control-solid"
                                   readOnly
-                                  style={{ overflowY: 'scroll' }}
+                                  style={{ overflowY: "scroll" }}
                                 />
                               </div>
                             </div>
@@ -1528,23 +1597,20 @@ class JobDetail extends Component {
                                   defaultValue={data.extraBenefit || ""}
                                   className="form-control-solid"
                                   readOnly
-                                  style={{ overflowY: 'scroll' }}
+                                  style={{ overflowY: "scroll" }}
                                 />
                               </div>
                             </div>
                           </div>
                         </div>
-
                       </div>
                     </div>
-
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     );
   }

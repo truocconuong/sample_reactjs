@@ -70,14 +70,27 @@ export default class CardTrello extends Component {
       noteApproach: this.props.data.noteApproach,
       arrayLane: this.props.lane,
       laneSelect: dataLane,
-    }, async () => {
-      if (this.state.cv) {
-        const base64 = await convertDriveToBase64(this.state.cv);
-        this.setState({
-          base64Drive: base64
-        })
-      }
     });
+  }
+  componentWillUpdate() {
+    if (this.state.idCard) {
+      if (this.state.idCard !== this.state.storageIdCard) {
+        this.setState({
+          storageIdCard: this.state.idCard,
+          base64Drive: "",
+        });
+        if (this.state.cv) {
+          new Promise(async (resolve, reject) => {
+            const base64 = await convertDriveToBase64(this.state.cv);
+            resolve(base64);
+          }).then((base64) => {
+            this.setState({
+              base64Drive: base64,
+            });
+          });
+        }
+      }
+    }
   }
 
   handleOnchange = async (event) => {
@@ -308,7 +321,6 @@ export default class CardTrello extends Component {
                 </div>
               </div>
 
-
               <div className="form-group">
                 <label>Cv</label>
                 <div className="input-group">
@@ -321,7 +333,25 @@ export default class CardTrello extends Component {
                     onChange={this.handleChangeData}
                     placeholder="Import CV"
                   />
-                  <a href={`data:application/pdf;base64,${this.state.base64Drive}`} download={`${this.state.base64Drive ? this.state.name : ''}.pdf`} className="input-group-append"><span className="input-group-text"><i className="fas fa-cloud-download-alt"></i></span></a>
+                  {this.state.base64Drive ? (
+                    <a
+                      href={`data:application/pdf;base64,${this.state.base64Drive}`}
+                      download={`${
+                        this.state.base64Drive ? this.state.name : ""
+                      }.pdf`}
+                      className="input-group-append"
+                    >
+                      <span className="input-group-text">
+                        <i className="fas fa-cloud-download-alt"></i>
+                      </span>
+                    </a>
+                  ) : (
+                    <a href="#" className="input-group-append">
+                      <span className="input-group-text">
+                        <i className="fas fa-cloud-download-alt"></i>
+                      </span>
+                    </a>
+                  )}
                 </div>
               </div>
               <div className="form-group">
@@ -329,7 +359,7 @@ export default class CardTrello extends Component {
                 <input
                   type="text"
                   name="position"
-                  value={this.state.position ? this.state.position : ''}
+                  value={this.state.position ? this.state.position : ""}
                   onChange={this.handleChangeData}
                   className="form-control"
                   placeholder="Enter position"
@@ -340,7 +370,7 @@ export default class CardTrello extends Component {
                 <textarea
                   type="text"
                   name="noteApproach"
-                  value={this.state.noteApproach ? this.state.noteApproach : ''}
+                  value={this.state.noteApproach ? this.state.noteApproach : ""}
                   onChange={this.handleChangeData}
                   className="form-control"
                   rows={3}
@@ -348,20 +378,35 @@ export default class CardTrello extends Component {
               </div>
             </div>
             <div className="card-footer add-card ">
-              {
-                this.props.data.cv ? (<Link to={`/preview/candidate/${this.props.data.candidateId}/job/${this.props.data.jobId}`} className="btn btn-primary font-weight-bolder style-btn-kitin mr-3">
+              {this.props.data.cv ? (
+                <Link
+                  to={`/preview/candidate/${this.props.data.candidateId}/job/${this.props.data.jobId}`}
+                  className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
+                >
                   Refined CV
-                </Link>) : ''
-              }
-              {this.props.data.cv ? (<a
-                onClick={() => {
-                  // this.props.previewPdf(this.props.data.id)
-                  this.props.openPreviewPdfAndCloseCardTrello();
-                }}
-                className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
-              >
-                Raw CV
-              </a>) : ''}
+                </Link>
+              ) : (
+                ""
+              )}
+              {this.props.data.cv &&
+                (this.props.base64 ? (
+                  <a
+                    onClick={() => {
+                      // this.props.previewPdf(this.props.data.id)
+                      this.props.openPreviewPdfAndCloseCardTrello();
+                    }}
+                    className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
+                  >
+                    Raw CV
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    class="btn btn-primary spinner font-weight-bolder spinner-white spinner-right mr-3"
+                  >
+                    Raw CV
+                  </button>
+                ))}
               <button
                 type="submit"
                 className={

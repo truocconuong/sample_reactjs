@@ -203,6 +203,7 @@ class PreviewCandidate extends Component {
   }
 
   render() {
+    console.log(this.props.history.location.pathname)
     const { candidateJob } = this.state;
     return (
       <div
@@ -259,7 +260,7 @@ class PreviewCandidate extends Component {
                   <div className="card-toolbar">
                     <div className="dropdown dropdown-inline mr-2"></div>
                     <span
-                      onClick={() => this.props.history.push(`/job-detail/${this.props.jobId}`)}
+                      onClick={() => this.props.history.goBack()}
                       className="btn btn-light-primary font-weight-bolder mr-2"
                     >
                       Back
