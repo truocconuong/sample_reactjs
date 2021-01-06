@@ -62,6 +62,7 @@ class DrawerProfile extends Component {
         className="navi-item rounded"
         style={!noti.status ? { backgroundColor: "#e1f0ff" } : null}
         onClick={forwardNoti.bind(this, noti.type, noti.content.id)}
+        title={noti.content.title}
       >
         <div className="navi-link rounded">
           <div className="symbol symbol-50 mr-3">

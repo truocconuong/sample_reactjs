@@ -13,25 +13,25 @@
 .datetime-picker .calendar table tbody tr td.now {
   color: #de5613 !important;
 }
-.wrap_footer{
+.wrap_footer {
   padding: 24px;
 }
-.wrap_container_list .css-mnd6b5{
+.wrap_container_list .css-mnd6b5 {
   padding: 0;
 }
-.wrap_container_list .css-mnd6b5 .card-body{
+.wrap_container_list .css-mnd6b5 .card-body {
   /* padding: 0; */
 }
-.cus_text_mute{
+.cus_text_mute {
   color: #5a5a61 !important;
 }
-.datatable_row{
+.datatable_row {
   border-bottom: 1px solid #ebedf3;
 }
-.date_newtask{
+.date_newtask {
   width: 45%;
 }
-.card-body-newtask{
+.card-body-newtask {
   padding-left: 0;
   padding-right: 0;
 }
@@ -39,11 +39,11 @@
   padding-left: 0;
   padding-right: 0;
 }
-.plus_add_task{
+.plus_add_task {
   width: 20px;
   height: 20px;
 }
-.wrap_delete_task{
+.wrap_delete_task {
   width: 100%;
   height: 100%;
   display: flex;
@@ -51,19 +51,40 @@
   align-items: center;
   cursor: pointer;
 }
-.row_input_task{
+.row_input_task {
   margin-bottom: 10px;
   margin-right: 0;
-  
 }
-.wrap_all_content{
+.row_input_task_cs {
+  margin-bottom: 5px;
+  margin-right: 0;
+}
+.cs_task_title{
+  font-size: 10px;
+  font-weight: 500;
+}
+.wrap_all_content {
   max-height: 207px;
   overflow-y: auto;
 }
-.wrap_delete_task:hover > .icon_trash{
-  color: #1BC5BD;
+.wrap_delete_task:hover > .icon_trash {
+  color: #1bc5bd;
 }
-.was-validated .form-control:invalid, .form-control.is-invalid {
+.was-validated .form-control:invalid,
+.form-control.is-invalid {
   background-image: none;
   padding-right: 0;
+}
+
+/* hide arrow input */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
