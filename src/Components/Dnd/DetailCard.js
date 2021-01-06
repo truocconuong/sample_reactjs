@@ -226,7 +226,7 @@ class DetailCard extends Component {
       this.props.updateCard();
     }
   };
-
+ 
   render() {
     const errors = this.state.errors;
     const users = [];
@@ -355,6 +355,19 @@ class DetailCard extends Component {
                     placeholder="Enter name"
                   />
                 </div>
+
+                <div className="form-group">
+                    <label>Name column </label>
+                    <span style={{ color: "red" }}>*</span>
+                    <Select
+                      name="option"
+                      options={this.props.lanes}
+                      value={data_detail.laneSelected}
+                      onChange={(e)=>{
+                        this.props.handleOnChangeLaneSelected(e)
+                      }}
+                    />
+                  </div>
 
                 <div className="form-group">
                   <label>Name job </label>

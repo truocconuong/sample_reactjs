@@ -73,6 +73,7 @@ class Broad extends Component {
       jobs: [],
       users: [],
       lanes: [],
+      laneSelected: {},
       isLoading: true,
       columnSelectedId: "",
       update: false,
@@ -176,6 +177,12 @@ class Broad extends Component {
   updateCard = async () => {
     const { card_data_detail } = this.state;
     const content = card_data_detail.content;
+
+
+    console.log(content)
+
+
+
     const data = {
       name: content.name,
       position: content.position,
@@ -395,7 +402,8 @@ class Broad extends Component {
           data.cards[cardId] = {
             id: cardId,
             content: {
-              candidateId : card.Candidate.id,
+              laneId : card.laneId,
+              candidateId: card.Candidate.id,
               name: card.Candidate.name,
               position: card.position || '',
               clientName: !_.isNil(card.Job.Client) ? card.Job.Client.name : "",
@@ -411,6 +419,10 @@ class Broad extends Component {
               jobSelected: {
                 value: card.Job.title,
                 label: card.Job.title,
+              },
+              laneSelected: {
+                value: card.Lane.id,
+                label: card.Lane.nameColumn,
               },
               user: _.map(card.Users, (user) => {
                 return {
@@ -583,11 +595,18 @@ class Broad extends Component {
     data.content.idJob = e.id;
     data.content.clientName = e.clientName;
     data.content.location = e.locationName;
-    console.log("isId", data);
     this.setState({
       card_data_detail: data,
     });
   };
+
+  handleOnChangeLaneSelected = (e) => {
+    const data = this.state.card_selected;
+    data.content.laneSelected = e
+    this.setState({
+      card_data_detail: data,
+    });
+  }
 
   updateColumn = (cards, column) => {
     const { data } = this.state;
@@ -602,7 +621,7 @@ class Broad extends Component {
       data.cards[cardId] = {
         id: cardId,
         content: {
-          candidateId : card.Candidate.id,
+          candidateId: card.Candidate.id,
           name: card.Candidate.name,
           position: card.position || '',
           clientName: !_.isNil(card.Job.Client) ? card.Job.Client.name : "",
@@ -637,9 +656,9 @@ class Broad extends Component {
 
 
   openPreviewPdfAndCloseCardTrello = () => {
-   
+
     this.setState({
-      base64 : '',
+      base64: '',
       show_detail_card: false,
       isOpenPreviewPdf: !this.state.isOpenPreviewPdf
     }, async () => {
@@ -716,6 +735,8 @@ class Broad extends Component {
           toggleDetailCardAndInterview={this.toggleDetailCardAndInterview}
           toggleDetailInterview={this.toggleDetailInterview}
           openPreviewPdfAndCloseCardTrello={this.openPreviewPdfAndCloseCardTrello}
+          lanes={this.state.lanes}
+          handleOnChangeLaneSelected={this.handleOnChangeLaneSelected}
         />
 
         <CreateInterviewCard

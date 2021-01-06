@@ -71,7 +71,6 @@ class CreateInterviewCard extends Component {
   handleInputChange(e) {
     let name = e.target.name;
     let value = e.target.value;
-
     this.setState({
       [name]: value,
     });
@@ -228,7 +227,7 @@ class CreateInterviewCard extends Component {
                     className="custom-date-picker-interview"
                   >
                     <div className="custom-date-picker-interview__wrap">
-                      <input readOnly name="timeInterview" value={this.state.timeInterview.format('DD/MM/YYYY HH:ss')} className={'form-control'}
+                      <input readOnly name="timeInterview" value={this.state.timeInterview.format('YYYY-MM-DD HH:mm')} className={'form-control'}
                         placeholder="Enter Time Interview" />
                       <div className="input-group-append">
                         <span className="input-group-text">
@@ -249,7 +248,7 @@ class CreateInterviewCard extends Component {
                     showTimePicker={true}
                   >
                     <div className="custom-date-picker-interview__wrap">
-                      <input readOnly name="timeInterviewEnd" value={this.state.timeInterviewEnd.format('HH:ss')} className={
+                      <input readOnly name="timeInterviewEnd" value={this.state.timeInterviewEnd.format('HH:mm')} className={
                         errors.timeInterviewEnd
                           ? "form-control is-invalid"
                           : "form-control"
