@@ -130,6 +130,7 @@ class Column extends Component {
                       this.props.column.title
                     )}
                     actionUpdateColumn = {this.props.actionUpdateColumn}
+                    storageCard={this.props.storageCard}
                   />
                 );
               })}

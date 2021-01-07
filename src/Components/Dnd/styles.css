@@ -615,7 +615,7 @@ textarea {
 }
 
 .form-move-card-footer button {
-  margin-top: 48px;
+  margin-top: 10px;
   padding-left: 40px;
   padding-right: 40px;
 }
@@ -655,4 +655,9 @@ textarea {
 }
 .skills-ok:hover{
   background-color: rgba(9, 30, 66, .04);
+}
+
+.form-move-card-footer .btn{
+  width: 100%;
+  margin-top: 20px;
 }
