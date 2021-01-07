@@ -74,6 +74,7 @@ class Broad extends Component {
       jobs: [],
       users: [],
       lanes: [],
+      laneSelected: {},
       isLoading: true,
       columnSelectedId: "",
       update: false,
@@ -335,6 +336,13 @@ class Broad extends Component {
           [newFinish.id]: newFinish,
         },
       };
+      // add laneIdNew for card Update
+      const column = data.columns[destination.droppableId]
+      data.cards[draggableId].content.laneId = destination.droppableId
+      data.cards[draggableId].content.laneSelected = {
+        value : column.id,
+        label : column.title
+      }
       this.setState({
         data: data,
       });
@@ -396,7 +404,8 @@ class Broad extends Component {
           data.cards[cardId] = {
             id: cardId,
             content: {
-              candidateId : card.Candidate.id,
+              laneId: card.laneId,
+              candidateId: card.Candidate.id,
               name: card.Candidate.name,
               position: card.position || '',
               clientName: !_.isNil(card.Job.Client) ? card.Job.Client.name : "",
@@ -412,6 +421,10 @@ class Broad extends Component {
               jobSelected: {
                 value: card.Job.title,
                 label: card.Job.title,
+              },
+              laneSelected: {
+                value: card.Lane.id,
+                label: card.Lane.nameColumn,
               },
               user: _.map(card.Users, (user) => {
                 return {
@@ -584,11 +597,18 @@ class Broad extends Component {
     data.content.idJob = e.id;
     data.content.clientName = e.clientName;
     data.content.location = e.locationName;
-    console.log("isId", data);
     this.setState({
       card_data_detail: data,
     });
   };
+
+  handleOnChangeLaneSelected = (e) => {
+    const data = this.state.card_selected;
+    data.content.laneSelected = e
+    this.setState({
+      card_data_detail: data,
+    });
+  }
 
   updateColumn = (cards, column) => {
     const { data } = this.state;
@@ -603,7 +623,7 @@ class Broad extends Component {
       data.cards[cardId] = {
         id: cardId,
         content: {
-          candidateId : card.Candidate.id,
+          candidateId: card.Candidate.id,
           name: card.Candidate.name,
           position: card.position || '',
           clientName: !_.isNil(card.Job.Client) ? card.Job.Client.name : "",
@@ -616,9 +636,14 @@ class Broad extends Component {
           noteApproach: card.noteApproach || '',
           interview: card.Interview,
           idJob: card.jobId,
+          laneId : card.laneId,
           jobSelected: {
             value: card.Job.title,
             label: card.Job.title,
+          },
+          laneSelected : {
+            value: card.Lane.id,
+            label: card.Lane.nameColumn,
           },
           user: _.map(card.Users, (user) => {
             return {
@@ -638,9 +663,9 @@ class Broad extends Component {
 
 
   openPreviewPdfAndCloseCardTrello = () => {
-   
+
     this.setState({
-      base64 : '',
+      base64: '',
       show_detail_card: false,
       isOpenPreviewPdf: !this.state.isOpenPreviewPdf
     }, async () => {
@@ -685,6 +710,52 @@ class Broad extends Component {
       })
     }
   }
+
+
+  actionUpdateColumn = (cardNew, laneId) => {
+    const data = this.state.data;
+    const cardId = cardNew.id;
+    const columnOldId = cardNew.content.laneId;
+    const column = data.columns[laneId];
+    cardNew.content = {...cardNew.content,laneId : laneId,laneSelected : {
+      value : column.id,
+      label : column.title
+    }}
+    data.cards[cardId] = cardNew;
+    data.columns[columnOldId].cardIds = _.filter(data.columns[columnOldId].cardIds, card => card !== cardId);
+    data.columns[laneId].cardIds.push(cardId);
+    this.setState({
+      data
+    })
+    this.actionUpdateLane(cardId, laneId)
+  }
+
+
+  actionUpdateLane = async (cardId, laneId) => {
+    const data = {
+      laneId
+    }
+    const response = await api.patch(`/api/cards/${cardId}`, data);
+    if (response) {
+      toast(<CustomToast title={"Update card successed !"} />, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        autoClose: 3000,
+        className: "toast_login",
+        closeButton: false,
+        hideProgressBar: true,
+        newestOnTop: true,
+        closeOnClick: true,
+        rtl: false,
+        pauseOnFocusLoss: true,
+        draggable: true,
+        pauseOnHover: true,
+        transition: Zoom,
+      });
+    }
+  }
+
+
+
   render() {
     return (
       <div
@@ -786,6 +857,8 @@ class Broad extends Component {
                         addMemberToCard={this.addMemberToCard}
                         removeMemberToCard={this.removeMemberToCard}
                         updateColumn={this.updateColumn}
+                        lanes={this.state.lanes}
+                        actionUpdateColumn={this.actionUpdateColumn}
                       />
                     );
                   })}

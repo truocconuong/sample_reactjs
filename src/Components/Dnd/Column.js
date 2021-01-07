@@ -74,8 +74,6 @@ class Column extends Component {
   onScroll = (e) => {
     // offsetHeight chieu cao cua div TaskList
     // scrollHeight chieu cao thuc cua scroll div
-    console.log(e.target.scrollTop + this.scrollCol.offsetHeight);
-    console.log(this.scrollCol.scrollHeight);
     if (
       Math.floor(e.target.scrollTop + this.scrollCol.offsetHeight) ==
       this.scrollCol.scrollHeight 
@@ -119,6 +117,7 @@ class Column extends Component {
               {this.props.cards.map((card, index) => {
                 return (
                   <Card
+                    lanes = {this.props.lanes}
                     removeMemberToCard={this.props.removeMemberToCard}
                     addMemberToCard={this.props.addMemberToCard}
                     users={this.props.users}
@@ -130,6 +129,7 @@ class Column extends Component {
                       card.id,
                       this.props.column.title
                     )}
+                    actionUpdateColumn = {this.props.actionUpdateColumn}
                   />
                 );
               })}

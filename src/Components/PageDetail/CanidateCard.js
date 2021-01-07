@@ -334,9 +334,8 @@ export default class CandidateCard extends Component {
                   {this.state.base64Drive ? (
                     <a
                       href={`data:application/pdf;base64,${this.state.base64Drive}`}
-                      download={`${
-                        this.state.base64Drive ? this.state.name : ""
-                      }.pdf`}
+                      download={`${this.state.base64Drive ? this.state.name : ""
+                        }.pdf`}
                       className="input-group-append"
                     >
                       <span className="input-group-text">
@@ -344,12 +343,12 @@ export default class CandidateCard extends Component {
                       </span>
                     </a>
                   ) : (
-                    <a href="#" className="input-group-append">
-                      <span className="input-group-text">
-                        <i className="fas fa-cloud-download-alt"></i>
-                      </span>
-                    </a>
-                  )}
+                      <a href="#" className="input-group-append">
+                        <span className="input-group-text">
+                          <i className="fas fa-cloud-download-alt"></i>
+                        </span>
+                      </a>
+                    )}
                 </div>
               </div>
               <div className="form-group">
@@ -376,16 +375,23 @@ export default class CandidateCard extends Component {
             </div>
             <div className="card-footer add-card">
               {this.props.data.cv ? (
-                <Link
-                  to={`/preview/candidate/${this.props.data.candidateId}/job/${this.props.data.jobId}`}
-                  className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
-                >
-                  Refined CV
-                </Link>
-              ) : (
-                ""
-              )}
-
+                this.props.base64 ? (
+                  <Link
+                    to={`/preview/candidate/${this.props.data.candidateId}/job/${this.props.data.jobId}`}
+                    className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
+                  >
+                    Refined CV
+                  </Link>
+                ) : (
+                    <button 
+                      disabled
+                      type="button"
+                      class="btn btn-primary style-btn-kitin font-weight-bolder mr-3"
+                    >
+                      Refined CV
+                    </button>
+                  )
+              ) : ""}
               {this.props.data.cv &&
                 (this.props.base64 ? (
                   <a
@@ -398,19 +404,20 @@ export default class CandidateCard extends Component {
                     Raw CV
                   </a>
                 ) : (
-                  <button
-                    type="button"
-                    class="btn btn-primary spinner font-weight-bolder spinner-white spinner-right mr-3"
-                  >
-                    Raw CV
-                  </button>
-                ))}
+                    <button
+                      disabled
+                      type="button"
+                      class="btn btn-primary style-btn-kitin font-weight-bolder mr-3"
+                    >
+                      Raw CV
+                    </button>
+                  ))}
 
               <button
                 type="reset"
                 className="btn btn-secondary"
                 onClick={this.props.onHide}
-                // style={{ marginLeft: "10px" }}
+              // style={{ marginLeft: "10px" }}
               >
                 Cancel
               </button>

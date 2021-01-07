@@ -39,10 +39,35 @@ class Card extends Component {
       showAddMember: false,
       userSelected: {},
       showListBoard: true,
+      showListSkill: false,
+      actions: [
+        {
+          slug: 'move',
+          title: 'Move Card'
+        },
+        {
+          slug: 'storage',
+          title: 'Storage Card'
+        }
+      ],
+      laneSelected: {},
+      showAction: ''
     };
     this.showInfoMember = [];
     this.addMemberToCard = this.addMemberToCard.bind(this);
     this.removeMemberToCard = this.removeMemberToCard.bind(this)
+  }
+
+  toggleListSkill = () => {
+    this.setState({
+      showListSkill: !this.state.showListSkill
+    }, () => {
+      if (!this.state.showListSkill) {
+        this.setState({
+          showAction: ''
+        })
+      }
+    })
   }
 
   toggleListBoard = () => {
@@ -137,11 +162,60 @@ class Card extends Component {
     }
   }
 
+  formMoveCard = () => (
+    <div className="form-move-card">
+      <div className="form-move-card-content">
+        <label>Name column </label>
+        <span style={{ color: "red" }}>*</span>
+        <Select
+          name="option"
+          options={this.props.lanes}
+          value={this.state.laneSelected}
+          onChange={(e) => {
+            this.setState({
+              laneSelected: e
+            })
+          }}
+        />
+      </div>
+      <div className="form-move-card-footer">
+        <button onClick={() => {
+          this.props.actionUpdateColumn(this.props.card, this.state.laneSelected.value);
+          this.toggleListSkill()
+        }} type="button" className="btn btn-primary">Save</button>
+      </div>
+
+    </div>
+  )
+
+  formStorage = () => (
+    <h1>Storage</h1>
+  )
+
+  backAction = () => {
+    const updateState = {}
+    if (this.state.showAction === '') {
+      updateState.showListSkill = false
+    } else {
+      updateState.showAction = ''
+    }
+    this.setState(updateState)
+  }
 
   render() {
     const users = this.props.card.content.user;
     const card = this.props.card.content;
     let usersTeam = [];
+    let formAction;
+    const action = {
+      move: this.formMoveCard,
+      storage: this.formStorage
+    }
+
+    if (this.state.showAction) {
+      formAction = action[this.state.showAction]
+    }
+
     if (!_.isEmpty(this.props.users)) {
       usersTeam.push(...this.props.users);
     }
@@ -155,7 +229,6 @@ class Card extends Component {
             ref={provided.innerRef}
           >
             <div>
-
               <PopoverPop popperClassName="popover-modal-card" trigger="legacy" placement="bottom" isOpen={this.state.showAddMember} target={`Popover${this.props.card.id}`} toggle={this.toggleAddMember}>
                 <PopoverBody>
                   <ul className="navi navi-hover navi-selected-ul">
@@ -182,24 +255,55 @@ class Card extends Component {
                   </ul>
                 </PopoverBody>
               </PopoverPop>
+              <PopoverPop popperClassName="popover-modal-card modal-actions" trigger="legacy" placement="bottom" isOpen={this.state.showListSkill} target={`PopoverSkill${this.props.card.id}`} toggle={this.toggleListSkill}>
+                <PopoverBody>
+                  <ul className="navi navi-hover navi-selected-ul">
+                    <li className="navi-header font-weight-bold py-4 action-actions">
+                      <span onClick={this.backAction} className="back-card"><i className="fas fa-arrow-left"></i></span>
+                      <span className="font-size-lg">{this.state.showAction === '' ? 'Actions' : this.state.showAction}</span>
+                    </li>
+                    <li className="navi-separator mb-3 opacity-70" />
 
+                    {this.state.showAction === '' ? (
+                      this.state.actions.map((action, key) => (
+                        <li key={key} onClick={() => {
+                          const stateUpdate = {
+                            showAction: action.slug
+                          }
+                          if (action.slug === 'move') {
+                            if (this.props.card.content) {
+                              const laneSelected = this.props.card.content.laneSelected;
+                              stateUpdate.laneSelected = laneSelected
+                            }
+                          }
+                          this.setState(stateUpdate)
+                        }} className="action quareo-ok">{action.title}</li>
+                      ))
+                    ) : (
+                        formAction()
+                      )}
+
+                  </ul>
+                </PopoverBody>
+              </PopoverPop>
               <div>
                 <div className="body_card">
                   <div className="card card-custom gutter-b card-stretch mb-0">
 
                     {card.interview ? <div className="card-header ribbon ribbon-clip ribbon-right ribbon-ver-cus">
-                      <div className="ribbon-target" style={{ top: '14px', height: '30px' }}>
+                      <div className="ribbon-target" style={{ top: '41px', height: '30px' }}>
                         <span className="ribbon-inner bg-success" /><i className="fa fa-star text-white" />
                       </div>
                     </div> : ''}
                     <div style={setPaddingBottomMembers(users.length)} className="card-body card-body-trello pt-4" onClick={this.props.open_detail_card}>
                       <div >
-
                         <div className="d-flex align-items-center mb-4">
                           <div className="d-flex flex-column card-header-detail">
                             <div className="card-header__title">
-                              <a className="text-dark font-weight-bold text-hover-primary font-size-h4 mb-0">{card.name} {card.nameJob}</a>
-
+                              <a className="text-dark font-weight-bold text-hover-primary font-size-h4 mb-0 manhxinh-style-title">{card.name} {card.nameJob}</a>
+                              <div className="btn-skills" id={`PopoverSkill${this.props.card.id}`} onClick={(e) => {
+                                e.stopPropagation();
+                              }}><div className="skills-ok"><i className="fas fa-pencil-alt"></i></div></div>
                             </div>
                             <span className="text-muted font-weight-bold">{moment(card.approachDate).format('DD/MM/YYYY')}</span>
                           </div>
@@ -290,8 +394,6 @@ class Card extends Component {
                           )
                         })}
                         <div id={`Popover${this.props.card.id}`} className={this.props.role !== roleName.DIRECTOR ? 'btn btn-md btn-icon btn-light-facebook btn-pill mx-2' : 'btn btn-md btn-icon btn-light-facebook btn-pill mx-2 off-button-add-user'} data-toggle="tooltip" title="" data-original-title="More users">
-
-
                           <i className="fas fa-plus"></i>
                         </div>
                       </div>
