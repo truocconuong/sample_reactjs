@@ -23,6 +23,7 @@ import { Overlay, Popover } from "react-bootstrap";
 import { Popover as PopoverPop, PopoverHeader, PopoverBody } from "reactstrap";
 import CustomToast from "../common/CustomToast";
 import PreviewPdf from "../Modal/PreviewPdf/PreviewPdf";
+import HistoryJob from "../Modal/JobDetail/HistoryJob";
 
 const api = new Network();
 const ref = React.createRef();
@@ -72,6 +73,10 @@ class JobDetail extends Component {
       // mang lane
       arrayLane: [],
       base64: "",
+
+      // history
+      dataHistory: [],
+      isShowHistoryJob: false,
     };
     this.showInfoMember = [];
     this.handlePagination = this.handlePagination.bind(this);
@@ -82,8 +87,13 @@ class JobDetail extends Component {
     this.toggleCandidateDetail = this.toggleCandidateDetail.bind(this);
     this.toggleCandidateAddCard = this.toggleCandidateAddCard.bind(this);
     this.toggleCardTrelo = this.toggleCardTrelo.bind(this);
+    this.toggleHistory = this.toggleHistory.bind(this);
   }
-
+  toggleHistory(isShow) {
+    this.setState({
+      isShowHistoryJob: isShow,
+    });
+  }
   closeModelDelete = () => {
     this.setState({
       isOpen: false,
@@ -177,10 +187,12 @@ class JobDetail extends Component {
       let jobDetail = api.get(`/api/admin/jobs/${idJob}`);
       let candiadateToJob = api.get(`/api/candidate/job/${idJob}`);
       let getLane = api.get(`/api/lanes`);
-      const [dataJob, dataCanidate, dataLane] = await Promise.all([
+      let historyJob = api.post(`/api/history/job`, { idJob: idJob });
+      const [dataJob, dataCanidate, dataLane, dataHistory] = await Promise.all([
         jobDetail,
         candiadateToJob,
         getLane,
+        historyJob,
       ]);
       if (dataJob && dataCanidate) {
         setTimeout(() => {
@@ -196,6 +208,7 @@ class JobDetail extends Component {
             totalRow: dataCanidate.data.list.length,
             isDisplay: dataCanidate.data.list.length === 0,
             arrayLane: dataLane.data.lane,
+            dataHistory: dataHistory.data.historyJob,
           });
         }, 800);
       }
@@ -248,7 +261,7 @@ class JobDetail extends Component {
       pageNumber: page,
     });
   }
-  async getUserAssign() {
+  async getUserAssign() { // dung để lấy danh sách các user để assign
     try {
       let response = await api.get(`/api/assign/list/user`);
       if (response.data.success) {
@@ -260,7 +273,7 @@ class JobDetail extends Component {
       console.log(err);
     }
   }
-  async getDataUserAssignJob() {
+  async getDataUserAssignJob() { // dung để lấy thông tin user được assign vào job
     try {
       const idJob = this.props.match.params.id;
       let response = await api.get(`/api/assignment/job/${idJob}`);
@@ -458,7 +471,7 @@ class JobDetail extends Component {
     });
   };
 
-  async getUserBitlink() {
+  async getUserBitlink() { // thông tin link bitly của member
     try {
       const idJob = this.props.match.params.id;
       let response = await api.get(`/api/member/assign/${idJob}`);
@@ -620,6 +633,11 @@ class JobDetail extends Component {
       <div
         className={`d-flex flex-column flex-row-fluid wrapper ${this.props.className_wrap_broad}`}
       >
+        <HistoryJob
+          show={this.state.isShowHistoryJob}
+          onHide={this.toggleHistory.bind(this, false)}
+          dataHistory={this.state.dataHistory}
+        />
         <ModalTransition>
           {this.state.isOpen && (
             <Modal
@@ -781,7 +799,7 @@ class JobDetail extends Component {
                         <div className="card-header flex-wrap border-0 pt-5 pb-0">
                           <div className="assign-user-css">
                             {dataUserAssignJob.map((user, index) => {
-                              if (user.urlShort) {
+                              if (!user.isFirst) {
                                 return (
                                   <div key={index}>
                                     <Overlay
@@ -1611,6 +1629,17 @@ class JobDetail extends Component {
             </div>
           </div>
         </div>
+        <button
+          onClick={this.toggleHistory.bind(this, true)}
+          class="btn-add-card-vip btn btn-primary"
+        >
+          <span class="card-vip__plus">
+            <i
+              style={{ paddingRight: "0" }}
+              className="flaticon2-calendar-1 custom_icon_history"
+            ></i>
+          </span>
+        </button>
       </div>
     );
   }
