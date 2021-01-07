@@ -173,14 +173,14 @@ class Card extends Component {
           value={this.state.laneSelected}
           onChange={(e) => {
             this.setState({
-              laneSelected : e
+              laneSelected: e
             })
           }}
         />
       </div>
       <div className="form-move-card-footer">
-        <button onClick={()=>{
-          this.props.actionUpdateColumn(this.props.card,this.state.laneSelected.value);
+        <button onClick={() => {
+          this.props.actionUpdateColumn(this.props.card, this.state.laneSelected.value);
           this.toggleListSkill()
         }} type="button" className="btn btn-primary">Save</button>
       </div>
@@ -192,6 +192,15 @@ class Card extends Component {
     <h1>Storage</h1>
   )
 
+  backAction = () => {
+    const updateState = {}
+    if (this.state.showAction === '') {
+      updateState.showListSkill = false
+    } else {
+      updateState.showAction = ''
+    }
+    this.setState(updateState)
+  }
 
   render() {
     const users = this.props.card.content.user;
@@ -246,10 +255,11 @@ class Card extends Component {
                   </ul>
                 </PopoverBody>
               </PopoverPop>
-              <PopoverPop popperClassName="popover-modal-card modal-actions" trigger="legacy" placement="left" isOpen={this.state.showListSkill} target={`PopoverSkill${this.props.card.id}`} toggle={this.toggleListSkill}>
+              <PopoverPop popperClassName="popover-modal-card modal-actions" trigger="legacy" placement="bottom" isOpen={this.state.showListSkill} target={`PopoverSkill${this.props.card.id}`} toggle={this.toggleListSkill}>
                 <PopoverBody>
                   <ul className="navi navi-hover navi-selected-ul">
                     <li className="navi-header font-weight-bold py-4 action-actions">
+                      <span onClick={this.backAction} className="back-card"><i className="fas fa-arrow-left"></i></span>
                       <span className="font-size-lg">{this.state.showAction === '' ? 'Actions' : this.state.showAction}</span>
                     </li>
                     <li className="navi-separator mb-3 opacity-70" />
@@ -292,9 +302,8 @@ class Card extends Component {
                             <div className="card-header__title">
                               <a className="text-dark font-weight-bold text-hover-primary font-size-h4 mb-0 manhxinh-style-title">{card.name} {card.nameJob}</a>
                               <div className="btn-skills" id={`PopoverSkill${this.props.card.id}`} onClick={(e) => {
-
                                 e.stopPropagation();
-                              }}><span><i className="fas fa-pencil-alt"></i></span></div>
+                              }}><div className="skills-ok"><i className="fas fa-pencil-alt"></i></div></div>
                             </div>
                             <span className="text-muted font-weight-bold">{moment(card.approachDate).format('DD/MM/YYYY')}</span>
                           </div>

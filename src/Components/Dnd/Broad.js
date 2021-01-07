@@ -337,7 +337,12 @@ class Broad extends Component {
         },
       };
       // add laneIdNew for card Update
+      const column = data.columns[destination.droppableId]
       data.cards[draggableId].content.laneId = destination.droppableId
+      data.cards[draggableId].content.laneSelected = {
+        value : column.id,
+        label : column.title
+      }
       this.setState({
         data: data,
       });
@@ -631,9 +636,14 @@ class Broad extends Component {
           noteApproach: card.noteApproach || '',
           interview: card.Interview,
           idJob: card.jobId,
+          laneId : card.laneId,
           jobSelected: {
             value: card.Job.title,
             label: card.Job.title,
+          },
+          laneSelected : {
+            value: card.Lane.id,
+            label: card.Lane.nameColumn,
           },
           user: _.map(card.Users, (user) => {
             return {
@@ -706,7 +716,11 @@ class Broad extends Component {
     const data = this.state.data;
     const cardId = cardNew.id;
     const columnOldId = cardNew.content.laneId;
-    cardNew.content.laneId = laneId;
+    const column = data.columns[laneId];
+    cardNew.content = {...cardNew.content,laneId : laneId,laneSelected : {
+      value : column.id,
+      label : column.title
+    }}
     data.cards[cardId] = cardNew;
     data.columns[columnOldId].cardIds = _.filter(data.columns[columnOldId].cardIds, card => card !== cardId);
     data.columns[laneId].cardIds.push(cardId);

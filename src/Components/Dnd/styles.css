@@ -587,6 +587,7 @@ textarea {
 }
 
 .btn-skills {
+  /* display: none; */
   width: 25px;
   height: 25px;
   /* background: red; */
@@ -595,20 +596,18 @@ textarea {
   right: 0px;
   top: 8px;
 }
-.btn-skills:hover{
-  background-color: rgba(9, 30, 66, .04);
-}
 
 .btn-skills .fa-pencil-alt {
-  font-size: 12px;
+  font-size: 0px;
 }
 
 .modal-actions {
-  left: 270px !important;
+  /* left: 270px !important; */
 }
 
 .modal-actions .action-actions {
-  justify-content: center;
+  justify-content: flex-start;
+  padding: 0;
 }
 
 .modal-actions .action {
@@ -639,4 +638,21 @@ textarea {
 
 .manhxinh-style-title {
   padding-right: 18px;
+}
+
+.body_card:hover .skills-ok i {
+  font-size: 16px;
+}
+
+.back-card{
+  margin-right: 84px;
+}
+
+.skills-ok{
+  padding-top: 5px;
+  width: 100%;
+  height: 100%;
+}
+.skills-ok:hover{
+  background-color: rgba(9, 30, 66, .04);
 }
