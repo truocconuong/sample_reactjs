@@ -340,8 +340,8 @@ class Broad extends Component {
       const column = data.columns[destination.droppableId]
       data.cards[draggableId].content.laneId = destination.droppableId
       data.cards[draggableId].content.laneSelected = {
-        value : column.id,
-        label : column.title
+        value: column.id,
+        label: column.title
       }
       this.setState({
         data: data,
@@ -636,12 +636,12 @@ class Broad extends Component {
           noteApproach: card.noteApproach || '',
           interview: card.Interview,
           idJob: card.jobId,
-          laneId : card.laneId,
+          laneId: card.laneId,
           jobSelected: {
             value: card.Job.title,
             label: card.Job.title,
           },
-          laneSelected : {
+          laneSelected: {
             value: card.Lane.id,
             label: card.Lane.nameColumn,
           },
@@ -717,10 +717,12 @@ class Broad extends Component {
     const cardId = cardNew.id;
     const columnOldId = cardNew.content.laneId;
     const column = data.columns[laneId];
-    cardNew.content = {...cardNew.content,laneId : laneId,laneSelected : {
-      value : column.id,
-      label : column.title
-    }}
+    cardNew.content = {
+      ...cardNew.content, laneId: laneId, laneSelected: {
+        value: column.id,
+        label: column.title
+      }
+    }
     data.cards[cardId] = cardNew;
     data.columns[columnOldId].cardIds = _.filter(data.columns[columnOldId].cardIds, card => card !== cardId);
     data.columns[laneId].cardIds.push(cardId);
@@ -754,6 +756,24 @@ class Broad extends Component {
     }
   }
 
+  storageCard = async(card) => {
+    const data = this.state.data;
+    const cardId = card.id;
+    const columnId = card.content.laneId;
+    data.columns[columnId].cardIds = _.filter(data.columns[columnId].cardIds, card => card !== cardId);
+    delete data.cards[cardId];
+    //remove card
+    this.setState({
+      data: data
+    });
+    const dataUpdate = {
+      storage : true
+    }
+    const response = await api.patch(`/api/cards/${cardId}`,dataUpdate)
+    if(response){
+      console.log('successed')
+    }
+  }
 
 
   render() {
@@ -859,6 +879,7 @@ class Broad extends Component {
                         updateColumn={this.updateColumn}
                         lanes={this.state.lanes}
                         actionUpdateColumn={this.actionUpdateColumn}
+                        storageCard={this.storageCard}
                       />
                     );
                   })}

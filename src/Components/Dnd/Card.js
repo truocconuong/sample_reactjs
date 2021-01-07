@@ -43,11 +43,13 @@ class Card extends Component {
       actions: [
         {
           slug: 'move',
-          title: 'Move Card'
+          title: 'Move Card',
+          roles: [roleName.LEADER, roleName.MEMBER]
         },
         {
           slug: 'storage',
-          title: 'Storage Card'
+          title: 'Storage Card',
+          roles: [roleName.DIRECTOR, roleName.LEADER, roleName.MEMBER]
         }
       ],
       laneSelected: {},
@@ -178,18 +180,37 @@ class Card extends Component {
           }}
         />
       </div>
-      <div className="form-move-card-footer">
+      <div className="form-move-card-footer text-center">
         <button onClick={() => {
           this.props.actionUpdateColumn(this.props.card, this.state.laneSelected.value);
           this.toggleListSkill()
         }} type="button" className="btn btn-primary">Save</button>
       </div>
-
     </div>
   )
 
   formStorage = () => (
-    <h1>Storage</h1>
+    <div className="form-move-card">
+      <div className="form-move-card-content text-center">
+        <h4>Do you want to storage this card ?</h4>
+        {/* <Select
+          name="option"
+          options={this.props.lanes}
+          value={this.state.laneSelected}
+          onChange={(e) => {
+            this.setState({
+              laneSelected: e
+            })
+          }}
+        /> */}
+      </div>
+      <div className="form-move-card-footer text-center">
+        <button onClick={() => {
+          this.props.storageCard(this.props.card)
+          this.toggleListSkill();
+        }} type="button" className="btn btn-primary">Save</button>
+      </div>
+    </div>
   )
 
   backAction = () => {
@@ -266,18 +287,20 @@ class Card extends Component {
 
                     {this.state.showAction === '' ? (
                       this.state.actions.map((action, key) => (
-                        <li key={key} onClick={() => {
-                          const stateUpdate = {
-                            showAction: action.slug
-                          }
-                          if (action.slug === 'move') {
-                            if (this.props.card.content) {
-                              const laneSelected = this.props.card.content.laneSelected;
-                              stateUpdate.laneSelected = laneSelected
+                        _.includes(action.roles, this.props.role) ? (
+                          <li key={key} onClick={() => {
+                            const stateUpdate = {
+                              showAction: action.slug
                             }
-                          }
-                          this.setState(stateUpdate)
-                        }} className="action quareo-ok">{action.title}</li>
+                            if (action.slug === 'move') {
+                              if (this.props.card.content) {
+                                const laneSelected = this.props.card.content.laneSelected;
+                                stateUpdate.laneSelected = laneSelected
+                              }
+                            }
+                            this.setState(stateUpdate)
+                          }} className="action quareo-ok">{action.title}</li>
+                        ) : ''
                       ))
                     ) : (
                         formAction()
