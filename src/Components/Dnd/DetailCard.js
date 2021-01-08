@@ -655,7 +655,7 @@ class DetailCard extends Component {
                 onClick={this.props.toggleDetailInterview}
                 variant="btn btn-success btn-interview"
               >
-                {moment(data_detail.interview.timeInterview).format(
+                {moment(data_detail.interview.timeInterview).subtract(7,'hours').format(
                   "dddd DD/MM/YYYY HH:mm"
                 )}
               </Button>
