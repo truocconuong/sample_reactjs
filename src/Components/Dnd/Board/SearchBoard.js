@@ -1,42 +1,116 @@
 import React, { Component } from 'react';
 import { Button as ButtonPop, Popover as PopoverPop, PopoverHeader, PopoverBody } from 'reactstrap';
+import Network from '../../../Service/Network';
+import { defaultAva, domainServer } from '../../../utils/config';
+const api = new Network();
+
 class SearchBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showFormSeach: false
+            showFormSeach: false,
+            search: '',
+            users: []
         }
+        this.timeOut = '';
     }
     toggleFormSearch = () => {
         this.setState({
             showFormSeach: !this.state.showFormSeach
         })
     }
+
+    handleChangeInput = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        this.setState({
+            [name]: value
+        }, () => {
+            this.debount();
+        })
+    }
+
+    searchMembers = async () => {
+        const response = await api.get(`/api/search/board/members?search=${this.state.search}`)
+        if (response) {
+            const users = response.data.list;
+            this.setState({
+                users: users
+            })
+        }
+
+    }
+    debount = () => {
+        clearTimeout(this.timeOut);
+        this.timeOut = setTimeout(() => {
+            this.searchMembers()
+        }, 2000)
+    }
+
+    elementFormSearchUsers = () => {
+        return (
+            <ul className="navi navi-hover navi-selected-ul  header-users">
+                <li className="navi-header font-weight-bold py-4">
+                    <span className="font-size-lg">Members</span>
+                </li>
+                <li className="navi-separator mb-3 opacity-70" />
+                {
+                    this.state.users.map((user,index)=>(
+                        <div className="search-user" key={index}>
+                        <div className="d-flex align-items-center">
+                            <div className="symbol symbol-50 symbol-light mr-5">
+                                <span className="symbol-label symbol-label-cs">
+                                    <img
+                                        src={
+                                            user.linkAvatar
+                                                ? domainServer + "/" + user.linkAvatar
+                                                : defaultAva
+                                        }
+                                        className="h-100 align-self-end"
+                                        alt=""
+                                    />
+                                </span>
+                            </div>
+                            <div className="d-flex flex-column flex-grow-1">
+                                <div
+                                    style={{ cursor: "pointer" }}
+                                    className="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1"
+                                >
+                                    {user.name}
+                                </div>
+                                <span className="text-muted font-weight-bold">
+                                    {user.email}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    ))
+                }
+                <div >
+                </div>
+            </ul>
+        )
+    }
+
     render() {
         return (
-            <div className="search-board">
-                <PopoverPop popperClassName="popover-modal-card pop-search-board" trigger="legacy" placement="bottom" isOpen={this.state.showFormSeach} target={`Popover-searchBoard`} toggle={this.toggleFormSearch}>
+            <div className={this.state.showFormSeach ? 'search-board-on' : 'search-board-off'}>
+                <PopoverPop className="popover-container" popperClassName="popover-modal-card pop-search-board" trigger="legacy" placement="bottom" isOpen={this.state.showFormSeach} target={`Popover-searchBoard`} toggle={this.toggleFormSearch}>
                     <PopoverBody>
-                        <ul className="navi navi-hover navi-selected-ul">
-                            <li className="navi-header font-weight-bold py-4">
-                                <span className="font-size-lg">Search</span>
-                                <i className="flaticon2-information icon-md text-muted" data-toggle="tooltip" data-placement="right" title="Click to learn more..." />
-                            </li>
-                            <li className="navi-separator mb-3 opacity-70" />
-                            <div>Chu huu manh</div>
-                        </ul>
+                        <div className="search-board-form">
+                            {this.elementFormSearchUsers()}
+                        </div>
                     </PopoverBody>
                 </PopoverPop>
-                <div className="input-icon" id="Popover-searchBoard">
+                <div onClick={this.toggleFormSearch} className="input-icon" id="Popover-searchBoard">
                     <input
-                        onClick={this.toggleFormSearch}
-                        name="title"
+                        name="search"
                         type="text"
                         className="form-control"
                         placeholder="Search..."
-                        // value={this.state.title}
-                        autocomplete="off"
-                        // onChange={this.onChangeSearch}
+                        value={this.state.search}
+                        autoComplete="off"
+                        onChange={this.handleChangeInput}
                         id="kt_datatable_search_query"
                     />
                     <span>

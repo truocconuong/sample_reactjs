@@ -682,6 +682,74 @@ textarea {
   font-weight: 700;
 }
 
-/* .search-board {
-  width: 200px;
+/* .search-board-on {
+  width: 500px;
+}
+
+.search-board-off {
+  animation-name: onHideSearch;
+  animation-duration: 4s;
+  width: 250px;
 } */
+
+.pop-search-board{
+  margin-left: 125px;
+  max-width:  500px;
+}
+.pop-search-board .arrow{
+  display: none;
+}
+
+.search-board {
+  width: 250px;
+}
+
+.search-board-on {
+  width: 500px;
+  animation-name: onDisplaySearch;
+  animation-duration: 0.1s;
+}
+
+@keyframes onDisplaySearch {
+  from {width: 250px;}
+  to {width: 500px;}
+}
+
+.select-search{
+  display: flex;
+}
+
+.select-search .hinhvuong {
+  background-color: rgb(75, 191, 107);
+  width: 36px;
+  height: 36px;
+}
+.select-search .content {
+  padding: 9px 0 9px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+}
+.select-search .search-search{
+  align-items: center;
+  display: flex;
+  width: 100%;
+}
+
+.select-search .button-search{
+  width: 100% !important;
+}
+/* .search-users:hover {
+  background-color: rgb(75, 191, 107);
+} */
+
+.header-users{
+  height: auto !important;
+  max-height: 400px;
+}
+.header-users .navi-header {
+  justify-content: center !important;
+}
+.search-user{
+  padding-bottom: 6px;
+}
