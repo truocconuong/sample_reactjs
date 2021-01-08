@@ -9,7 +9,8 @@ import { DatetimePickerTrigger } from "../libs/rc-datetime-picker";
 import Select from "react-select";
 import { Link } from "react-router-dom";
 import { convertDriveToBase64 } from "../../utils/common/convertDriveToBase64";
-
+import Popover from "react-popover";
+import { defaultAva, domainServer } from "../../utils/config";
 const api = new Network();
 
 export default class CandidateCard extends Component {
@@ -32,10 +33,33 @@ export default class CandidateCard extends Component {
       id: null, // id của CandidateJob
       arrayLane: [],
       idLane: "",
+      isOpenAddMember: false,
+      users: [],
+      listAssign: [],
     };
     this.formCard = React.createRef();
+    this.toggleAddMember = this.toggleAddMember.bind(this);
+    this.renderBodyAddMember = this.renderBodyAddMember.bind(this);
+    this.assignMember = this.assignMember.bind(this);
+    this.removeUserCard = this.removeUserCard.bind(this);
   }
-
+  removeUserCard(member){
+    this.setState((state) => ({
+      users: [...state.users, member],
+      listAssign: [...state.listAssign.filter(user => user.userId != member.userId)], // them lai vao list user
+    }));
+  }
+  assignMember(member) {
+    this.setState((state) => ({
+      listAssign: [...state.listAssign, member],
+      users: [...state.users.filter(user => user.userId != member.userId)], //xoa user khoi list sau khi add
+    }));
+  }
+  toggleAddMember(isShow) {
+    this.setState({
+      isOpenAddMember: isShow,
+    });
+  }
   handleChangeData = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -44,7 +68,7 @@ export default class CandidateCard extends Component {
     });
   };
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(props) {
     this.setState({
       id: this.props.data.idCandidateJob,
       name: this.props.data.name,
@@ -58,6 +82,7 @@ export default class CandidateCard extends Component {
       cv: this.props.data.cv,
       arrayLane: this.props.lane,
       idLane: this.props.lane.length > 0 ? this.props.lane[0].id : "",
+      users: [...props.users]
     });
   }
 
@@ -82,20 +107,17 @@ export default class CandidateCard extends Component {
     }
     try {
       const data = {
-        // name: this.state.name,
-        // idJob: this.state.idJob,
-        // nameJob: this.state.nameJob,
-        // location: this.state.location,
-        // clientName: this.state.nameClient,
-        // email: this.state.email,
-        // phone: this.state.phone,
         approachDate: moment(this.state.approachDate).format("YYYY-MM-DD"),
         cv: this.state.cv,
         position: this.state.position,
         noteApproach: this.state.noteApproach,
         laneId: this.state.idLane,
         isAddCard: true,
+        from: "detail_job",
+        listAssign: this.state.listAssign
       };
+      console.log(this.state.listAssign)
+      // return;
       const response = await api.patch(`/api/cards/${this.state.id}`, data);
       if (response) {
         setTimeout(() => {
@@ -172,7 +194,47 @@ export default class CandidateCard extends Component {
       }
     }
   }
-
+ 
+  renderBodyAddMember() {
+    return (
+      <div className="">
+        {/*begin::Card*/}
+        <div className="card card-custom card-stretch card_add_mem">
+          <div className="card-header">
+            <div className="card-title">
+              <h4 className="card-label">Assign member</h4>
+            </div>
+          </div>
+          <div className="card-body">
+            <div className="wrap_member_add_card">
+              {this.state.users.map((e, index) => {
+                return (
+                  <div
+                    onClick={this.assignMember.bind(this, e)}
+                    className="row_add_mem_card"
+                    key={index}
+                  >
+                    <div className="ava_add_mem_card">
+                      <img
+                        style={{ width: "100%" }}
+                        src={
+                          e.linkAvatar
+                            ? `${domainServer + "/" + e.linkAvatar}`
+                            : `${defaultAva}`
+                        }
+                      />
+                    </div>
+                    <div className="name_member_add">{e.name} </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+        {/*end::Card*/}
+      </div>
+    );
+  }
   render() {
     const { validated, arrayLane } = this.state;
     const optLane = arrayLane.map((lane) => {
@@ -373,9 +435,47 @@ export default class CandidateCard extends Component {
                 />
               </div>
             </div>
-            <div className="card-footer add-card">
-              {this.props.data.cv ? (
-                this.props.base64 ? (
+            <div className="card-footer add-card add-card-nam pl-0 pr-0">
+              <div>
+                <Popover
+                  isOpen={this.state.isOpenAddMember}
+                  body={this.renderBodyAddMember()}
+                  onOuterAction={this.toggleAddMember.bind(this, false)}
+                  className="pop_cs_nam"
+                  preferPlace={"above"}
+                  place={"above"}
+                >
+                  <div
+                    onClick={this.toggleAddMember.bind(this, true)}
+                    className={
+                      this.props.role !== "Director"
+                        ? "btn btn-md btn-icon btn-light-facebook btn-pill mr-1"
+                        : "btn btn-md btn-icon btn-light-facebook btn-pill off-button-add-user mr-1"
+                    }
+                  >
+                    <i className="fas fa-plus"></i>
+                  </div>
+                </Popover>
+                {this.state.listAssign.map((e, index) => {
+                  return (
+                    <div title={e.name} key={index} className="btn btn-md btn-icon btn-light-facebook btn-pill mx-1 cs_btn_fb" style={{position: 'relative'}}>
+                      <div onClick={this.removeUserCard.bind(this, e)} className="wrap_icon_x"><i className="ki ki-close"></i></div>
+                      <img
+                        style={{ height: "100%", borderRadius: "50%" }}
+                        width="100%"
+                        alt="Pic"
+                        src={
+                          e.linkAvatar
+                            ? `${domainServer + "/" + e.linkAvatar}`
+                            : `${defaultAva}`
+                        }
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+              <div>
+                {this.props.data.cv ? (
                   <Link
                     to={`/preview/candidate/${this.props.data.candidateId}/job/${this.props.data.jobId}`}
                     className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
@@ -383,44 +483,49 @@ export default class CandidateCard extends Component {
                     Refined CV
                   </Link>
                 ) : (
-                    <button 
-                      disabled
-                      type="button"
-                      class="btn btn-primary style-btn-kitin font-weight-bolder mr-3"
+                  ""
+                )}
+
+                {this.props.data.cv &&
+                  (this.props.base64 ? (
+                    <a
+                      onClick={() => {
+                        // this.props.previewPdf(this.props.data.id)
+                        this.props.openPreviewPdfAndCloseCandidateCard();
+                      }}
+                      className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
                     >
-                      Refined CV
-                    </button>
-                  )
-              ) : ""}
-              {this.props.data.cv &&
-                (this.props.base64 ? (
-                  <a
-                    onClick={() => {
-                      // this.props.previewPdf(this.props.data.id)
-                      this.props.openPreviewPdfAndCloseCandidateCard();
-                    }}
-                    className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
-                  >
-                    Raw CV
-                  </a>
-                ) : (
+                      Raw CV
+                    </a>
+                  ) : (
                     <button
-                      disabled
                       type="button"
-                      class="btn btn-primary style-btn-kitin font-weight-bolder mr-3"
+                      className="btn btn-primary spinner font-weight-bolder spinner-white spinner-right mr-3"
                     >
                       Raw CV
                     </button>
                   ))}
-
-              <button
-                type="reset"
-                className="btn btn-secondary"
-                onClick={this.props.onHide}
-              // style={{ marginLeft: "10px" }}
-              >
-                Cancel
-              </button>
+                {this.props.role !== "Director" ? (
+                  <button
+                    type="submit"
+                    className={
+                      this.state.isLoading
+                        ? "btn btn-primary font-weight-bolder style-btn-kitin spinner spinner-white spinner-right mr-3"
+                        : "btn btn-primary font-weight-bolder style-btn-kitin mr-3"
+                    }
+                  >
+                    Save
+                  </button>
+                ) : null}
+                <button
+                  type="reset"
+                  className="btn btn-secondary"
+                  onClick={this.props.onHide}
+                  // style={{ marginLeft: "10px" }}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </Form>
         </Modal.Body>

@@ -137,7 +137,7 @@
   border-radius: 100%;
 }
 .assign-user-css .btn.btn-light-facebook i {
-  color: #B5B5C3;
+  color: #b5b5c3;
   font-size: 13px;
 }
 .assign-user-css .custom-pointer {
@@ -152,7 +152,7 @@
 .custom-popver-kitin p {
   padding-top: 4px;
 }
-.custom-popver-kitin span{
+.custom-popver-kitin span {
   width: 23px !important;
   height: 23px !important;
   margin-left: 8px;
@@ -186,10 +186,10 @@
   .datatable-row-detail.hide_desktop {
   display: none;
 }
-.title_job_detail{
+.title_job_detail {
   width: 70%;
 }
-.wrap_edit_job{
+.wrap_edit_job {
   width: 30%;
   display: flex;
   justify-content: flex-end;
@@ -199,7 +199,70 @@
   text-overflow: ellipsis;
   overflow: hidden;
 }
-
+.pop_cs_nam {
+  z-index: 1051;
+}
+.card.card-custom.card_add_mem {
+  width: 300px;
+  border: 1px #b9b1b170 solid;
+}
+.card.card-custom.card_add_mem > .card-header {
+  min-height: 45px;
+  display: flex;
+  justify-content: center;
+}
+.row_add_mem_card {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.row_add_mem_card:hover {
+  cursor: pointer;
+}
+.row_add_mem_card:hover .name_member_add {
+  color: #3699ff;
+}
+.name_member_add {
+  font-size: 12px;
+}
+.wrap_icon_x {
+  position: absolute;
+  border-radius: 50%;
+  top: -3px;
+  right: -2px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12);
+  
+  justify-content: center;
+  width: 13px;
+  z-index: 99;
+  height: 13px;
+}
+.cs_btn_fb:hover{
+  color: #3e4044 !important;
+}
+.wrap_icon_x .ki.ki-close{
+  font-size: 6px;
+  color: #3e4044 !important;
+}
+.card.card-custom.card_add_mem > .card-body {
+  padding: 8px 15px;
+}
+.ava_add_mem_card {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 8px;
+}
+.wrap_member_add_card {
+  max-height: 400px;
+  overflow-y: auto;
+}
 @media screen and (max-width: 766px) {
   .assign-user-css {
     display: block;
@@ -266,28 +329,28 @@
   .cs_detail_font {
     font-size: 12px;
   }
-  .ml--10{
+  .ml--10 {
     margin-left: -10px;
   }
-  .mr--10{
+  .mr--10 {
     margin-right: -10px;
   }
-  .custom_date_pickeer{
+  .custom_date_pickeer {
     width: 38%;
   }
-  .custom_date_pickeer_job{
+  .custom_date_pickeer_job {
     width: 38%;
   }
-  .calendar-body-card{
+  .calendar-body-card {
     padding: 0 !important;
   }
-  .date_in_week{
+  .date_in_week {
     font-size: 11px !important;
   }
-  .calendar .body .cell .number{
+  .calendar .body .cell .number {
     font-size: 12px !important;
   }
-  .calendar .body .cell{
+  .calendar .body .cell {
     height: 49px !important;
   }
   .custom_date_pickeer_job.right.datetime-trigger .datetime-picker {
@@ -304,46 +367,46 @@
   .custom_date_pickeer.right.datetime-trigger .datetime-picker {
     left: -104px !important;
   }
-  .body_card_dashboard_task{
+  .body_card_dashboard_task {
     overflow: unset;
     padding-bottom: 24px !important;
   }
-  .card-header-mobile{
+  .card-header-mobile {
     padding-left: 16px;
     padding-right: 16px;
   }
-  .title_job_detail{
+  .title_job_detail {
     width: 100%;
     text-align: center;
     padding-top: 10px;
   }
-  .wrap_edit_job{
+  .wrap_edit_job {
     width: 100%;
     /* justify-content: center; */
     margin-bottom: 5px;
   }
-  .style-info-job{
+  .style-info-job {
     font-size: 12px;
     display: block;
     /* display: flex;
     justify-content: space-between; */
   }
-  .style-job-detail{
+  .style-job-detail {
     /* text-align: center; */
     margin-bottom: 15px;
   }
-  .contain-title-job{
+  .contain-title-job {
     flex-direction: column-reverse;
   }
-  .datatable-row.datatable-row-even{
+  .datatable-row.datatable-row-even {
     display: flex !important;
     align-items: center;
   }
-  .card-body-new-client{
+  .card-body-new-client {
     padding-left: 0;
     padding-right: 0;
   }
-  .wrap_container_list{
+  .wrap_container_list {
     height: 82%;
   }
   .dorlar-job-detail {
@@ -358,14 +421,14 @@
   .padding-input-kitin {
     padding-top: 20px;
   }
-  .body_card_dashboard{
+  .body_card_dashboard {
     max-height: unset;
   }
-  .hqk-status{
+  .hqk-status {
     width: 100%;
     margin-top: 5px;
   }
-  .toggle_button{
+  .toggle_button {
     display: none !important;
   }
 }
@@ -373,9 +436,9 @@
 /* end responsive mobile */
 
 /* manhdavaoday */
-.song-song{
+.song-song {
   display: flex;
 }
-.preview-cv{
+.preview-cv {
   padding-right: 5px;
 }
