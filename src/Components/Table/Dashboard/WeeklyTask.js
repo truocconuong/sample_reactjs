@@ -528,8 +528,8 @@ class WeeklyTask extends Component {
                     <div>No result in this time!</div>
                   </div>
                 ) : (
-                  <div className="table-responsive">
-                    <table className="table table-borderless table-vertical-center">
+                  <div className="table-responsive table_weekly_task">
+                    <table className="table table-borderless table-vertical-center ">
                       {this.renderHeader(this.props.role)}
                       <tbody>
                         {!this.props.isLoading ? (
@@ -597,7 +597,7 @@ class WeeklyTask extends Component {
                         )}
                       </tbody>
                     </table>
-                    {this.props.role == "Member" ? null : (
+                    {/* {this.props.role == "Member" ? null : (
                       <div className="datatable-pager datatable-paging-loaded fl_end">
                         <Pagination
                           defaultPageSize={this.props.pageSize}
@@ -609,7 +609,7 @@ class WeeklyTask extends Component {
                           showLessItems={true}
                         />
                       </div>
-                    )}
+                    )} */}
                   </div>
                 )}
               </div>

@@ -11,10 +11,11 @@ import { Link } from "react-router-dom";
 import { convertDriveToBase64 } from "../../utils/common/convertDriveToBase64";
 import Popover from "react-popover";
 import { defaultAva, domainServer } from "../../utils/config";
+import { connect } from "react-redux";
 
 const api = new Network();
 
-export default class CardTrello extends Component {
+class CardTrello extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -248,7 +249,7 @@ export default class CardTrello extends Component {
     const optLane = arrayLane.map((lane) => {
       return { label: lane.nameColumn, value: lane.id };
     });
-    const userCreateId = this.props.data.userCreate ? this.props.data.userCreate : ""; // khong cho xoa user create khoi card
+    const userCreateId = this.props.userId; // khong cho xoa user create khoi card
     return (
       <Modal
         size="lg"
@@ -558,3 +559,13 @@ export default class CardTrello extends Component {
     );
   }
 }
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+const mapStateToProps = (state, ownProps) => {
+  return {
+    userId: state.auth.userId,
+  };
+};
+
+export default connect(mapStateToProps)(CardTrello);
