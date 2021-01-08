@@ -39,7 +39,7 @@
   color: #3699ff;
 }
 .btn-style-kitin {
-  padding: 0.45rem 0.85rem;
+  padding: 0.40rem 0.55rem;
   font-size: 0.95rem;
 }
 .style-no-result {
@@ -167,7 +167,7 @@
   width: 82%;
   font-weight: bold;
   color: white;
-  padding-right: 1px;
+  /* padding-right: 1px; */
 }
 .kitin-card-trello-job:hover {
   color: white;
