@@ -240,7 +240,6 @@ class Card extends Component {
     if (!_.isEmpty(this.props.users)) {
       usersTeam.push(...this.props.users);
     }
-
     return (
       <Draggable draggableId={this.props.card.id} index={this.props.index}>
         {(provided) => (
@@ -323,7 +322,19 @@ class Card extends Component {
                         <div className="d-flex align-items-center mb-4">
                           <div className="d-flex flex-column card-header-detail">
                             <div className="card-header__title">
-                              <a className="text-dark font-weight-bold text-hover-primary font-size-h4 mb-0 manhxinh-style-title">{card.name} {card.nameJob}</a>
+                              <div className="client-and-title">
+                                {
+                                  this.props.card.content.clientName ? (
+                                    <div title={this.props.card.content.clientName} style={{ background: this.props.card.content.backgroundClient }} className="card-label">
+                                      <span className="label-text">
+                                        {this.props.card.content.clientName}
+                                      </span>
+                                    </div>
+                                  ) : ''
+                                }
+
+                                <a className="text-dark font-weight-bold text-hover-primary font-size-h4 mb-0 manhxinh-style-title">{card.name} {card.nameJob}</a>
+                              </div>
                               <div className="btn-skills" id={`PopoverSkill${this.props.card.id}`} onClick={(e) => {
                                 e.stopPropagation();
                               }}><div className="skills-ok"><i className="fas fa-pencil-alt"></i></div></div>

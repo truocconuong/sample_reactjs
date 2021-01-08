@@ -11,7 +11,7 @@ import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import "./../style.css";
 import Network from "../../../Service/Network";
-
+import reactCSS from 'reactcss'
 const api = new Network();
 
 export default class DetailClient extends Component {
@@ -23,6 +23,7 @@ export default class DetailClient extends Component {
       name: "",
       website: "",
       about: "",
+      background: "",
       editorAbout: EditorState.createEmpty(),
     };
     this.renderFooter = this.renderFooter.bind(this);
@@ -35,6 +36,7 @@ export default class DetailClient extends Component {
       name: "",
       website: "",
       about: "",
+      background: '',
       editorAbout: EditorState.createEmpty(),
     });
   };
@@ -99,9 +101,37 @@ export default class DetailClient extends Component {
         blocksFromHTML.contentBlocks,
         blocksFromHTML.entityMap
       );
-
       dataEditor = EditorState.createWithContent(contentState);
     }
+    const styles = reactCSS({
+      'default': {
+        color: {
+          width: '36px',
+          height: '14px',
+          borderRadius: '2px',
+          background: `${client.background ? client.background : '#ffff'}`,
+        },
+        swatch: {
+          padding: '5px',
+          background: '#fff',
+          borderRadius: '1px',
+          boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+          display: 'inline-block',
+          cursor: 'pointer',
+        },
+        popover: {
+          position: 'absolute',
+          zIndex: '2',
+        },
+        cover: {
+          position: 'fixed',
+          top: '0px',
+          right: '0px',
+          bottom: '0px',
+          left: '0px',
+        },
+      },
+    });
     return (
       <ModalTransition>
         {this.props.show && (
@@ -140,6 +170,16 @@ export default class DetailClient extends Component {
                       placeholder="Enter website"
                     />
                   </div>
+                </div>
+
+
+                <div className="form-group row">
+                  {this.props.show ? (<div className="col-lg-12 style-make-color">
+                    <label>Color:</label>
+                    <div className="color-style" style={styles.swatch} onClick={this.handleClick}>
+                      <div style={styles.color} />
+                    </div>
+                  </div>) : ''}
                 </div>
                 <div className="form-group row">
                   <div className="col-lg-12">

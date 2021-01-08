@@ -12,6 +12,8 @@ import { rulesAddAndUpdateClient } from '../../utils/rule';
 import Validator from '../../utils/validator';
 import { ToastContainer, toast, Zoom } from "react-toastify";
 import CustomToast from "../common/CustomToast";
+import { SketchPicker ,ChromePicker } from 'react-color'
+import reactCSS from 'reactcss'
 
 const api = new Network();
 
@@ -24,12 +26,24 @@ class UpdateClient extends Component {
       name: '',
       website: '',
       about: '',
+      background : '',
       editorAbout: EditorState.createEmpty(),
       redirectToClient: false,
       errors: {}
     };
     this.validator = new Validator(rulesAddAndUpdateClient);
   }
+  handleClick = () => {
+    this.setState({ displayColorPicker: !this.state.displayColorPicker })
+  };
+
+  handleClose = () => {
+    this.setState({ displayColorPicker: false })
+  };
+
+  handleChange = (color) => {
+    this.setState({ background: color.hex })
+  };
 
   setDefaultState = () => {
     this.setState({
@@ -65,9 +79,9 @@ class UpdateClient extends Component {
     });
 
     if (this.isEmpty(errors)) {
-      const { name, website, about } = this.state
+      const { name, website, about ,background } = this.state
       const data = {
-        name, website, about
+        name, website, about , background
       }
       try {
         const response = await api.patch(`/api/admin/client/${this.props.id}`, data);
@@ -105,6 +119,9 @@ class UpdateClient extends Component {
     const response = await api.get(`/api/client/${id}`)
     if (response) {
       const data = response.data.client;
+      if(!data.background){
+        data.background = '#ffff'
+      }
       const blocksFromHTML = convertFromHTML(data.about);
       const content = ContentState.createFromBlockArray(
         blocksFromHTML.contentBlocks,
@@ -140,6 +157,36 @@ class UpdateClient extends Component {
   render() {
     const self = this;
     const { editorAbout, errors } = this.state
+
+    const styles = reactCSS({
+      'default': {
+        color: {
+          width: '36px',
+          height: '14px',
+          borderRadius: '2px',
+          background: `${this.state.background}`,
+        },
+        swatch: {
+          padding: '5px',
+          background: '#fff',
+          borderRadius: '1px',
+          boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+          display: 'inline-block',
+          cursor: 'pointer',
+        },
+        popover: {
+          position: 'absolute',
+          zIndex: '2',
+        },
+        cover: {
+          position: 'fixed',
+          top: '0px',
+          right: '0px',
+          bottom: '0px',
+          left: '0px',
+        },
+      },
+    });
 
 
     return (
@@ -206,6 +253,18 @@ class UpdateClient extends Component {
                           } placeholder="Enter website" />
                         </div>
                       </div>
+                      <div className="form-group row">
+                  <div className="col-lg-12 style-make-color">
+                    <label>Color:</label>
+                    <div className="color-style" style={styles.swatch} onClick={this.handleClick}>
+                      <div style={styles.color} />
+                    </div>
+                    {this.state.displayColorPicker ? <div style={styles.popover}>
+                      <div style={styles.cover} onClick={this.handleClose} />
+                      <ChromePicker color={this.state.background} onChange={this.handleChange} />
+                    </div> : null}
+                  </div>
+                </div>
                       <div className="form-group row">
                         <div className="col-lg-12">
                           <label>About:</label>

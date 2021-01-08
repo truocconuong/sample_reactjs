@@ -88,3 +88,10 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.color-style{
+  margin-left: 20px !important;
+}
+.style-make-color{
+  display: flex;
+}
