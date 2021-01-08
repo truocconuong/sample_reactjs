@@ -355,3 +355,7 @@ main {
   text-overflow: ellipsis;
   overflow: hidden;
 }
+.table_weekly_task{
+  max-height: 336px;
+  overflow-y: auto;
+}
