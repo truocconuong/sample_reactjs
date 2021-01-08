@@ -172,6 +172,14 @@
 .kitin-card-trello-job:hover {
   color: white;
 }
+.search-kitin-candidate {
+  width: 100%;
+  font-weight: bold;
+  color: white;
+}
+.search-kitin-candidate:hover {
+  color: white;
+}
 .convert-pdf {
   /* display: none; */
   width: 100%;
