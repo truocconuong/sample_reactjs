@@ -544,7 +544,12 @@ class SearchCandidate extends Component {
                         >
                           <span style={{ width: "150px" }}>Name</span>
                         </th>
-
+                        <th
+                          data-field="Status"
+                          className="datatable-cell datatable-cell-sort hide_mb"
+                        >
+                          <span style={{ width: "100px" }}>Phone</span>
+                        </th>
                         <th
                           data-field="ShipDate"
                           className="datatable-cell datatable-cell-sort hide_mb"
@@ -557,20 +562,32 @@ class SearchCandidate extends Component {
                         >
                           <span style={{ width: "200px" }}>Job apply</span>
                         </th>
+                       
                         <th
                           data-field="Status"
                           className="datatable-cell datatable-cell-sort hide_mb"
                         >
-                          <span style={{ width: "100px" }}>Phone</span>
+                          <span style={{ width: "100px" }}>Source</span>
                         </th>
-
                         <th
+                          data-field="Status"
+                          className="datatable-cell datatable-cell-sort hide_mb"
+                        >
+                          <span style={{ width: "100px" }}>Column</span>
+                        </th>
+                        <th
+                          data-field="CompanyName"
+                          className="datatable-cell datatable-cell-sort hide_mb"
+                        >
+                          <span style={{ width: "200px" }}>Follower</span>
+                        </th>
+                        {/* <th
                           data-field="Actions"
                           data-autohide-disabled="false"
                           className="datatable-cell datatable-cell-sort"
                         >
                           <span style={{ width: "70px" }}>Actions</span>
-                        </th>
+                        </th> */}
                       </tr>
                     </thead>
                     <tbody className="datatable-body">
@@ -609,26 +626,6 @@ class SearchCandidate extends Component {
                                   {can.name}
                                 </span>
                               </td>
-
-                              <td
-                                data-field="ShipDate"
-                                aria-label="9/3/2017"
-                                className="datatable-cell hide_mb"
-                              >
-                                <span style={{ width: "130px" }}>
-                                  {can.date}
-                                </span>
-                              </td>
-                              <td
-                                data-field="CompanyName"
-                                aria-label="Stanton, Friesen and Grant"
-                                className="datatable-cell hide_mb"
-                              >
-                                <span style={{ width: "200px" }}>
-                                  {can.titleJob}
-                                </span>
-                              </td>
-
                               <td
                                 data-field="Type"
                                 data-autohide-disabled="false"
@@ -642,66 +639,90 @@ class SearchCandidate extends Component {
                                 </span>
                               </td>
                               <td
-                                data-field="Actions"
-                                data-autohide-disabled="false"
-                                aria-label="null"
-                                className="datatable-cell"
+                                data-field="ShipDate"
+                                aria-label="9/3/2017"
+                                className="datatable-cell hide_mb"
                               >
-                                <span
-                                  style={{
-                                    overflow: "visible",
-                                    position: "relative",
-                                    width: "70px",
-                                  }}
-                                >
-                                  <div
-                                    //   href="#"
-                                    className="btn btn-sm btn-clean btn-icon mr-2"
-                                    data-toggle="dropdown"
-                                    onClick={this.getCandidateDetail.bind(
-                                      this,
-                                      can.id
-                                    )}
-                                  >
-                                    <span className="svg-icon svg-icon-md">
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        xmlnsXlink="http://www.w3.org/1999/xlink"
-                                        width="24px"
-                                        height="24px"
-                                        viewBox="0 0 24 24"
-                                        version="1.1"
-                                      >
-                                        <g
-                                          stroke="none"
-                                          strokeWidth={1}
-                                          fill="none"
-                                          fillRule="evenodd"
-                                        >
-                                          <rect
-                                            x={0}
-                                            y={0}
-                                            width={24}
-                                            height={24}
-                                          />
-                                          <path
-                                            d="M10.9,2 C11.4522847,2 11.9,2.44771525 11.9,3 C11.9,3.55228475 11.4522847,4 10.9,4 L6,4 C4.8954305,4 4,4.8954305 4,6 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,16 C20,15.4477153 20.4477153,15 21,15 C21.5522847,15 22,15.4477153 22,16 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,6 C2,3.790861 3.790861,2 6,2 L10.9,2 Z"
-                                            fill="#000000"
-                                            fillRule="nonzero"
-                                            opacity="0.3"
-                                          />
-                                          <path
-                                            d="M24.0690576,13.8973499 C24.0690576,13.1346331 24.2324969,10.1246259 21.8580869,7.73659596 C20.2600137,6.12944276 17.8683518,5.85068794 15.0081639,5.72356847 L15.0081639,1.83791555 C15.0081639,1.42370199 14.6723775,1.08791555 14.2581639,1.08791555 C14.0718537,1.08791555 13.892213,1.15726043 13.7542266,1.28244533 L7.24606818,7.18681951 C6.93929045,7.46513642 6.9162184,7.93944934 7.1945353,8.24622707 C7.20914339,8.26232899 7.22444472,8.27778811 7.24039592,8.29256062 L13.7485543,14.3198102 C14.0524605,14.6012598 14.5269852,14.5830551 14.8084348,14.2791489 C14.9368329,14.140506 15.0081639,13.9585047 15.0081639,13.7695393 L15.0081639,9.90761477 C16.8241562,9.95755456 18.1177196,10.0730665 19.2929978,10.4469645 C20.9778605,10.9829796 22.2816185,12.4994368 23.2042718,14.996336 L23.2043032,14.9963244 C23.313119,15.2908036 23.5938372,15.4863432 23.9077781,15.4863432 L24.0735976,15.4863432 C24.0735976,15.0278051 24.0690576,14.3014082 24.0690576,13.8973499 Z"
-                                            fill="#000000"
-                                            fillRule="nonzero"
-                                            transform="translate(15.536799, 8.287129) scale(-1, 1) translate(-15.536799, -8.287129) "
-                                          />
-                                        </g>
-                                      </svg>
-                                    </span>
-                                  </div>
+                                <span style={{ width: "130px" }}>
+                                    {
+                                      can.date.map((date, i) => {
+                                        return (<p key={i}>{date}</p>);
+                                      }) 
+                                    }
                                 </span>
                               </td>
+                              <td
+                                data-field="CompanyName"
+                                aria-label="Stanton, Friesen and Grant"
+                                className="datatable-cell hide_mb"
+                              >
+                                <span style={{ width: "200px" }}>
+                                    {
+                                      can.titleJob.map((title, i) => {
+                                        return (<p key={i}>{title}</p>);
+                                      }) 
+                                    }
+                                </span>
+                              </td>
+                              <td
+                                data-field="Type"
+                                data-autohide-disabled="false"
+                                aria-label={2}
+                                className="datatable-cell hide_mb"
+                              >
+                                <span style={{ width: "100px" }}>
+                                    {
+                                      can.source.map((source, i) => {
+                                        return (<p key={i}>{source}</p>);
+                                      }) 
+                                    }
+                                </span>
+                              </td>
+
+                              <td
+                                data-field="Type"
+                                data-autohide-disabled="false"
+                                aria-label={2}
+                                className="datatable-cell hide_mb"
+                              >
+                                <span style={{ width: "100px" }}>
+                                    {
+                                      can.lane.map((column, i) => {
+                                        return (<button
+                                            key={i}
+                                            className="btn btn-style-kitin search-kitin-candidate hiden-kitin-column mb-2"
+                                            style={{
+                                              width: '100%',
+                                              textAlign: 'center',
+                                              background: column.background,
+                                              border: "none",
+                                            }}
+                                            title={column.nameColumn}
+                                          >
+                                            {column.nameColumn}
+                                          </button>);
+                                      }) 
+                                    }
+                                  {/* <span className="label font-weight-bold label-lg  label-light-success label-inline">
+                                    {can.phone}
+                                  </span> */}
+                                </span>
+                              </td>
+                              <td
+                                data-field="Type"
+                                data-autohide-disabled="false"
+                                aria-label={2}
+                                className="datatable-cell hide_mb"
+                              >
+                                <span style={{ width: "200px" }}>
+                                    {
+                                      can.follower.map((follower, i) => {
+                                        return (<p key={i}>{follower}</p>);
+                                      }) 
+                                    }
+                                </span>
+                              </td>
+                              
                             </tr>
                             <tr
                               className={`datatable-row-detail hide_desktop ${this.state.classToggleDetail[index]}`}
@@ -720,7 +741,11 @@ class SearchCandidate extends Component {
                                         style={{}}
                                       >
                                         <span style={{ width: 110 }}>
-                                          {can.titleJob}
+                                        {
+                                          can.titleJob.map((title, i) => {
+                                            return (<p key={i}>{title}</p>);
+                                          }) 
+                                        }
                                         </span>
                                       </td>
                                     </tr>
@@ -735,7 +760,11 @@ class SearchCandidate extends Component {
                                         style={{}}
                                       >
                                         <span style={{ width: 110 }}>
-                                          {can.date}
+                                        {
+                                          can.date.map((date, i) => {
+                                            return (<p key={i}>{date}</p>);
+                                          }) 
+                                        }
                                         </span>
                                       </td>
                                     </tr>
