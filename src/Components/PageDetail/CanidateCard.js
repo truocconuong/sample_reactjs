@@ -396,9 +396,8 @@ export default class CandidateCard extends Component {
                   {this.state.base64Drive ? (
                     <a
                       href={`data:application/pdf;base64,${this.state.base64Drive}`}
-                      download={`${
-                        this.state.base64Drive ? this.state.name : ""
-                      }.pdf`}
+                      download={`${this.state.base64Drive ? this.state.name : ""
+                        }.pdf`}
                       className="input-group-append"
                     >
                       <span className="input-group-text">
@@ -406,12 +405,12 @@ export default class CandidateCard extends Component {
                       </span>
                     </a>
                   ) : (
-                    <a href="#" className="input-group-append">
-                      <span className="input-group-text">
-                        <i className="fas fa-cloud-download-alt"></i>
-                      </span>
-                    </a>
-                  )}
+                      <a href="#" className="input-group-append">
+                        <span className="input-group-text">
+                          <i className="fas fa-cloud-download-alt"></i>
+                        </span>
+                      </a>
+                    )}
                 </div>
               </div>
               <div className="form-group">

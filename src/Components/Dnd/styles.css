@@ -177,8 +177,7 @@ textarea {
   border-bottom: 1px solid #e4e6ef;
 }
 
-.popover-body {
-}
+.popover-body {}
 
 .mini-profile {
   margin: 8px 0;
@@ -277,8 +276,7 @@ textarea {
   margin-top: 16px;
 }
 
-.icon-sm icon-check checked-icon {
-}
+.icon-sm icon-check checked-icon {}
 
 .member-low {
   background-color: #dfe1e6;
@@ -358,8 +356,7 @@ textarea {
   /* padding: 0px !important; */
 }
 
-.navi-link-cus {
-}
+.navi-link-cus {}
 
 .card-detail-header {
   display: flex;
@@ -423,6 +420,7 @@ textarea {
 .card-body-trello {
   padding-left: 1rem !important;
   padding-right: 1rem !important;
+  padding-top: 8px !important;
 }
 
 .ribbon-ver-cus {
@@ -440,12 +438,7 @@ textarea {
 
 .make-color {
   background: rgb(96, 92, 159);
-  background: linear-gradient(
-    90deg,
-    rgba(96, 92, 159, 1) 0%,
-    rgba(25, 82, 59, 1) 0%,
-    rgba(91, 149, 126, 0.9150035014005602) 100%
-  );
+  background: linear-gradient( 90deg, rgba(96, 92, 159, 1) 0%, rgba(25, 82, 59, 1) 0%, rgba(91, 149, 126, 0.9150035014005602) 100%);
   height: 5.5px;
 }
 
@@ -483,12 +476,7 @@ textarea {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: linear-gradient(
-    90deg,
-    rgba(96, 92, 159, 1) 0%,
-    rgba(0, 128, 240, 1) 0%,
-    rgba(123, 174, 236, 1) 100%
-  );
+  background: linear-gradient( 90deg, rgba(96, 92, 159, 1) 0%, rgba(0, 128, 240, 1) 0%, rgba(123, 174, 236, 1) 100%);
   text-align: center;
   align-items: center;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -537,13 +525,16 @@ textarea {
 .label-custom-name {
   height: 39px !important;
 }
+
 .Wrap_history_card {
   padding: 20px 22px 22px;
 }
+
 .custom_icon_history {
   color: #717179;
   font-size: 19px;
 }
+
 .act_history {
   font-weight: 400;
   color: #3f4254;
@@ -552,41 +543,145 @@ textarea {
   display: flex;
   align-items: center;
 }
+
 .wrap_icon_history {
   display: flex;
   justify-content: space-between;
   margin-bottom: 15px;
 }
+
 .wrap_left_icon_act {
   display: flex;
   justify-content: flex-end;
 }
+
 .row_history {
   display: flex;
   align-items: center;
   padding: 0.5rem 0;
 }
+
 .name_history {
   font-weight: 500;
   color: #172b4d;
 }
+
 .cs_ava_history {
   width: 35px !important;
   height: 35px !important;
 }
+
 .wrap_left_content_history {
   margin-left: 6px;
 }
+
 .time_history {
   font-size: 11px;
   color: #000;
 }
+
 .wrap_row_history {
   max-height: 0;
   transition: max-height 0.35s cubic-bezier(0.57, 0.06, 0.58, 0.96);
   overflow-y: auto;
 }
+
 .wrap_row_history.active_history {
   max-height: 250px;
   transition: max-height 0.35s cubic-bezier(0.57, 0.06, 0.58, 0.96);
+}
+
+.btn-skills {
+  /* display: none; */
+  width: 25px;
+  height: 25px;
+  /* background: red; */
+  text-align: center;
+  position: absolute;
+  right: 5px;
+  top: 8px;
+}
+
+.btn-skills .fa-pencil-alt {
+  font-size: 0px;
+}
+
+.modal-actions {
+  /* left: 270px !important; */
+}
+
+.modal-actions .action-actions {
+  justify-content: flex-start;
+  padding: 0;
+}
+
+.modal-actions .action {
+  font-size: 15px;
+}
+
+.form-move-card-footer button {
+  margin-top: 10px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.quareo-ok {
+  margin-left: 2px;
+  cursor: pointer;
+  display: block;
+  font-weight: 400;
+  padding: 6px 12px;
+  position: relative;
+  margin: 0 -12px;
+  text-decoration: none;
+  padding-left: 20px;
+}
+
+.quareo-ok:hover {
+  background-color: rgba(9, 30, 66, .04);
+}
+
+.manhxinh-style-title {
+  padding-right: 18px;
+}
+
+.body_card:hover .skills-ok i {
+  font-size: 16px;
+}
+
+.back-card{
+  margin-right: 84px;
+}
+
+.skills-ok{
+  padding-top: 5px;
+  width: 100%;
+  height: 100%;
+}
+.skills-ok:hover{
+  background-color: rgba(9, 30, 66, .04);
+}
+
+.form-move-card-footer .btn{
+  width: 100%;
+  margin-top: 20px;
+}
+
+.client-and-title .card-label{
+    text-align: center;
+    height: 18px;
+    width: 100px;
+    background-color: #b3bac5;
+    border-radius: 4px;
+    color: #fff;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-bottom: 3px;
+}
+
+.client-and-title .label-text {
+  font-size: 12px;
+  font-weight: 700;
 }

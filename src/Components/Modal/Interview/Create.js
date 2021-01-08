@@ -68,6 +68,7 @@ class Create extends Component {
     }
 
     handleChangeDatePicker(_moment, fields) {
+        console.log({ [fields]: moment(_moment) })
         this.setState({
             [fields]: moment(_moment),
         });
@@ -173,11 +174,14 @@ class Create extends Component {
                 type: data.type,
                 password: data.password
             }
-            this.defaultState();
             this.props.createInterview(item);
         }
     }
-
+    componentWillReceiveProps (){
+        if(!this.props.show){
+            this.defaultState();
+        }
+    }
 
     render() {
         const self = this;
@@ -272,7 +276,7 @@ class Create extends Component {
                                                 className="custom-date-picker-interview"
                                             >
                                                 <div className="custom-date-picker-interview__wrap">
-                                                    <input readOnly name="timeInterview" value={this.state.timeInterview.format('DD/MM/YYYY HH:ss')} className={'form-control'}
+                                                    <input readOnly name="timeInterview" value={this.state.timeInterview.format('YYYY-MM-DD HH:mm')} className={'form-control'}
                                                         placeholder="Enter Time Interview" />
                                                     <div className="input-group-append">
                                                         <span className="input-group-text">
@@ -293,7 +297,7 @@ class Create extends Component {
                                                 showTimePicker={true}
                                             >
                                                 <div className="custom-date-picker-interview__wrap">
-                                                    <input readOnly name="timeInterviewEnd" value={this.state.timeInterviewEnd.format('HH:ss')} className={
+                                                    <input readOnly name="timeInterviewEnd" value={this.state.timeInterviewEnd.format('HH:mm')} className={
                                                         errors.timeInterviewEnd
                                                             ? "form-control is-invalid"
                                                             : "form-control"
