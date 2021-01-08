@@ -416,6 +416,7 @@ textarea {
 .card-body-trello {
   padding-left: 1rem !important;
   padding-right: 1rem !important;
+  padding-top: 8px !important;
 }
 
 .ribbon-ver-cus {
@@ -593,7 +594,7 @@ textarea {
   /* background: red; */
   text-align: center;
   position: absolute;
-  right: 0px;
+  right: 5px;
   top: 8px;
 }
 
@@ -660,4 +661,23 @@ textarea {
 .form-move-card-footer .btn{
   width: 100%;
   margin-top: 20px;
+}
+
+.client-and-title .card-label{
+    text-align: center;
+    height: 18px;
+    width: 100px;
+    background-color: #b3bac5;
+    border-radius: 4px;
+    color: #fff;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-bottom: 3px;
+}
+
+.client-and-title .label-text {
+  font-size: 12px;
+  font-weight: 700;
 }
