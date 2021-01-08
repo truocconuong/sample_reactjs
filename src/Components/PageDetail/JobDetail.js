@@ -1094,12 +1094,20 @@ class JobDetail extends Component {
                                 >
                                   <span style={{ width: "160px" }}>Name</span>
                                 </th>
+                                {/* <th
+                                  data-field="ShipDate"
+                                  className="datatable-cell datatable-cell-sort"
+                                >
+                                  <span style={{ width: "68px" }}>
+                                    Date
+                                  </span>
+                                </th> */}
                                 <th
                                   data-field="ShipDate"
                                   className="datatable-cell datatable-cell-sort"
                                 >
-                                  <span style={{ width: "120px" }}>
-                                    Date Apply
+                                  <span style={{ width: "130px" }}>
+                                    Follower
                                   </span>
                                 </th>
                                 <th
@@ -1109,7 +1117,7 @@ class JobDetail extends Component {
                                 >
                                   <span
                                     style={{
-                                      width: "137px",
+                                      width: "120px",
                                       display: "flex",
                                       justifyContent: "center",
                                     }}
@@ -1147,15 +1155,26 @@ class JobDetail extends Component {
                                           {candidate.name}
                                         </span>
                                       </td>
-                                      <td
+                                      {/* <td
                                         data-field="ShipDate"
                                         aria-label="9/3/2017"
                                         className="datatable-cell"
                                       >
-                                        <span style={{ width: "120px" }}>
+                                        <span style={{ width: "68px" }}>
                                           {moment(candidate.date).format(
                                             "DD/MM/YYYY"
                                           )}
+                                        </span>
+                                      </td> */}
+                                      <td
+                                        className="datatable-cell"
+                                      >
+                                        <span style={{ width: "130px", fontSize: '12px' }}>
+                                          {
+                                            candidate.follower.map((follower, i) => {
+                                              return (<p key={i}>{follower}</p>)
+                                            })
+                                          }
                                         </span>
                                       </td>
                                       <td
@@ -1166,7 +1185,7 @@ class JobDetail extends Component {
                                       >
                                         <span
                                           style={{
-                                            width: "137px",
+                                            width: "120px",
                                             display: "flex",
                                             justifyContent: "center",
                                           }}
@@ -1216,15 +1235,18 @@ class JobDetail extends Component {
                                           {candidate.name}
                                         </span>
                                       </td>
+                                      
                                       <td
                                         data-field="ShipDate"
                                         aria-label="9/3/2017"
                                         className="datatable-cell"
                                       >
-                                        <span style={{ width: "120px" }}>
-                                          {moment(candidate.date).format(
-                                            "DD/MM/YYYY"
-                                          )}
+                                        <span style={{ width: "130px", fontSize: '12px' }}>
+                                          {
+                                            candidate.follower.map((follower, i) => {
+                                              return (<p key={i}>{follower}</p>)
+                                            })
+                                          }
                                         </span>
                                       </td>
                                       <td
@@ -1235,7 +1257,7 @@ class JobDetail extends Component {
                                       >
                                         <span
                                           style={{
-                                            width: "137px",
+                                            width: "120px",
                                             display: "flex",
                                             justifyContent: "center",
                                           }}
@@ -1295,12 +1317,13 @@ class JobDetail extends Component {
                                 >
                                   <span style={{ width: "160px" }}>Name</span>
                                 </th>
+                                
                                 <th
                                   data-field="ShipDate"
                                   className="datatable-cell datatable-cell-sort"
                                 >
-                                  <span style={{ width: "120px" }}>
-                                    Date Apply
+                                  <span style={{ width: "130px" }}>
+                                    Follower
                                   </span>
                                 </th>
                                 <th
@@ -1310,7 +1333,7 @@ class JobDetail extends Component {
                                 >
                                   <span
                                     style={{
-                                      width: "137px",
+                                      width: "120px",
                                       display: "flex",
                                       justifyContent: "center",
                                     }}
@@ -1338,12 +1361,13 @@ class JobDetail extends Component {
                                         <Skeleton height={24} />
                                       </span>
                                     </td>
+                                    
                                     <td
                                       data-field="ShipDate"
                                       aria-label="9/3/2017"
                                       className="datatable-cell"
                                     >
-                                      <span style={{ width: "120px" }}>
+                                      <span style={{ width: "130px" }}>
                                         <Skeleton height={24} />
                                       </span>
                                     </td>
@@ -1352,7 +1376,7 @@ class JobDetail extends Component {
                                       aria-label="9/3/2017"
                                       className="datatable-cell"
                                     >
-                                      <span style={{ width: "137px" }}>
+                                      <span style={{ width: "120px" }}>
                                         <Skeleton height={24} />
                                       </span>
                                     </td>
