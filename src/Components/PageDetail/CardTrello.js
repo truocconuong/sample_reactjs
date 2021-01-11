@@ -9,10 +9,13 @@ import { DatetimePickerTrigger } from "../libs/rc-datetime-picker";
 import Select from "react-select";
 import { Link } from "react-router-dom";
 import { convertDriveToBase64 } from "../../utils/common/convertDriveToBase64";
+import Popover from "react-popover";
+import { defaultAva, domainServer } from "../../utils/config";
+import { connect } from "react-redux";
 
 const api = new Network();
 
-export default class CardTrello extends Component {
+class CardTrello extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,10 +41,75 @@ export default class CardTrello extends Component {
         label: "",
         value: "",
       },
+      isOpenAddMember: false,
+      users: [],
+      listAssign: [],
     };
     this.formCard = React.createRef();
+    this.toggleAddMember = this.toggleAddMember.bind(this);
+    this.renderBodyAddMember = this.renderBodyAddMember.bind(this);
+    this.assignMember = this.assignMember.bind(this);
+    this.removeUserCard = this.removeUserCard.bind(this);
   }
-
+  removeUserCard(member) {
+    this.setState((state) => ({
+      users: [...state.users, member],
+      listAssign: [
+        ...state.listAssign.filter((user) => user.userId != member.userId),
+      ], // them lai vao list user
+    }));
+  }
+  assignMember(member) {
+    this.setState((state) => ({
+      listAssign: [...state.listAssign, member],
+      users: [...state.users.filter((user) => user.userId != member.userId)], //xoa user khoi list sau khi add
+    }));
+  }
+  toggleAddMember(isShow) {
+    this.setState({
+      isOpenAddMember: isShow,
+    });
+  }
+  renderBodyAddMember() {
+    return (
+      <div className="">
+        {/*begin::Card*/}
+        <div className="card card-custom card-stretch card_add_mem">
+          <div className="card-header">
+            <div className="card-title">
+              <h4 className="card-label">Assign member</h4>
+            </div>
+          </div>
+          <div className="card-body">
+            <div className="wrap_member_add_card">
+              {this.state.users.map((e, index) => {
+                return (
+                  <div
+                    onClick={this.assignMember.bind(this, e)}
+                    className="row_add_mem_card"
+                    key={index}
+                  >
+                    <div className="ava_add_mem_card">
+                      <img
+                        style={{ width: "100%" }}
+                        src={
+                          e.linkAvatar
+                            ? `${domainServer + "/" + e.linkAvatar}`
+                            : `${defaultAva}`
+                        }
+                      />
+                    </div>
+                    <div className="name_member_add">{e.name} </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+        {/*end::Card*/}
+      </div>
+    );
+  }
   handleChangeData = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -50,7 +118,7 @@ export default class CardTrello extends Component {
     });
   };
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(props) {
     let dataLane = {
       value: this.props.data.Lane ? this.props.data.Lane.id : "",
       label: this.props.data.Lane ? this.props.data.Lane.nameColumn : "",
@@ -70,6 +138,10 @@ export default class CardTrello extends Component {
       noteApproach: this.props.data.noteApproach,
       arrayLane: this.props.lane,
       laneSelect: dataLane,
+      listAssign: props.userCard,
+      users: props.users.filter(
+        (user) => !props.userCard.map((u) => u.userId).includes(user.userId)
+      ),
     });
   }
   componentWillUpdate() {
@@ -120,6 +192,7 @@ export default class CardTrello extends Component {
         cv: this.state.cv,
         position: this.state.position,
         noteApproach: this.state.noteApproach,
+        listAssign: this.state.listAssign,
       };
       const response = await api.patch(`/api/cards/${this.state.idCard}`, data);
       if (response) {
@@ -176,7 +249,7 @@ export default class CardTrello extends Component {
     const optLane = arrayLane.map((lane) => {
       return { label: lane.nameColumn, value: lane.id };
     });
-
+    const userCreateId = this.props.userId; // khong cho xoa user create khoi card
     return (
       <Modal
         size="lg"
@@ -376,9 +449,60 @@ export default class CardTrello extends Component {
                 />
               </div>
             </div>
-            <div className="card-footer add-card ">
-            {this.props.data.cv ? (
-                this.props.base64 ? (
+            <div className="card-footer add-card add-card-nam pl-0 pr-0">
+              <div>
+                <Popover
+                  isOpen={this.state.isOpenAddMember}
+                  body={this.renderBodyAddMember()}
+                  onOuterAction={this.toggleAddMember.bind(this, false)}
+                  className="pop_cs_nam"
+                  preferPlace={"above"}
+                  place={"above"}
+                >
+                  <div
+                    onClick={this.toggleAddMember.bind(this, true)}
+                    className={
+                      this.props.role !== "Director"
+                        ? "btn btn-md btn-icon btn-light-facebook btn-pill mr-1"
+                        : "btn btn-md btn-icon btn-light-facebook btn-pill off-button-add-user mr-1"
+                    }
+                  >
+                    <i className="fas fa-plus"></i>
+                  </div>
+                </Popover>
+                {this.state.listAssign.map((e, index) => {
+                  return (
+                    <div
+                      title={e.name}
+                      key={index}
+                      className="btn btn-md btn-icon btn-light-facebook btn-pill mx-1 cs_btn_fb"
+                      style={{ position: "relative" }}
+                    >
+                      <div
+                        onClick={this.removeUserCard.bind(this, e)}
+                        className="wrap_icon_x"
+                        style={
+                          userCreateId == e.userId ? { display: "none" } : {}
+                        }
+                      >
+                        <i className="ki ki-close"></i>
+                      </div>
+                      <img
+                        style={{ height: "100%", borderRadius: "50%" }}
+                        width="100%"
+                        alt="Pic"
+                        src={
+                          e.linkAvatar
+                            ? `${domainServer + "/" + e.linkAvatar}`
+                            : `${defaultAva}`
+                        }
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+              <div>
+                {this.props.data.cv ? (
                   <Link
                     to={`/preview/candidate/${this.props.data.candidateId}/job/${this.props.data.jobId}`}
                     className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
@@ -386,53 +510,48 @@ export default class CardTrello extends Component {
                     Refined CV
                   </Link>
                 ) : (
-                    <button 
-                      disabled
-                      type="button"
-                      class="btn btn-primary style-btn-kitin font-weight-bolder mr-3"
+                  ""
+                )}
+                {this.props.data.cv &&
+                  (this.props.base64 ? (
+                    <a
+                      onClick={() => {
+                        // this.props.previewPdf(this.props.data.id)
+                        this.props.openPreviewPdfAndCloseCardTrello();
+                      }}
+                      className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
                     >
-                      Refined CV
-                    </button>
-                  )
-              ) : ""}
-              {this.props.data.cv &&
-                (this.props.base64 ? (
-                  <a
-                    onClick={() => {
-                      // this.props.previewPdf(this.props.data.id)
-                      this.props.openPreviewPdfAndCloseCardTrello();
-                    }}
-                    className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
-                  >
-                    Raw CV
-                  </a>
-                ) : (
+                      Raw CV
+                    </a>
+                  ) : (
                     <button
-                      disabled
                       type="button"
-                      class="btn btn-primary style-btn-kitin font-weight-bolder  mr-3"
+                      className="btn btn-primary spinner font-weight-bolder spinner-white spinner-right mr-3"
                     >
                       Raw CV
                     </button>
                   ))}
-              <button
-                type="submit"
-                className={
-                  this.state.isLoading
-                    ? "btn btn-primary font-weight-bolder style-btn-kitin spinner spinner-white spinner-right"
-                    : "btn btn-primary font-weight-bolder style-btn-kitin "
-                }
-              >
-                Save
-              </button>
-              <button
-                type="reset"
-                className="btn btn-secondary"
-                onClick={this.props.onHide}
-                style={{ marginLeft: "10px" }}
-              >
-                Cancel
-              </button>
+                {this.props.role !== "Director" ? (
+                  <button
+                    type="submit"
+                    className={
+                      this.state.isLoading
+                        ? "btn btn-primary font-weight-bolder style-btn-kitin spinner spinner-white spinner-right "
+                        : "btn btn-primary font-weight-bolder style-btn-kitin "
+                    }
+                  >
+                    Save
+                  </button>
+                ) : null}
+                <button
+                  type="reset"
+                  className="btn btn-secondary"
+                  onClick={this.props.onHide}
+                  style={{ marginLeft: "10px" }}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </Form>
         </Modal.Body>
@@ -440,3 +559,13 @@ export default class CardTrello extends Component {
     );
   }
 }
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+const mapStateToProps = (state, ownProps) => {
+  return {
+    userId: state.auth.userId,
+  };
+};
+
+export default connect(mapStateToProps)(CardTrello);

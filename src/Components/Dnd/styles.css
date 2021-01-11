@@ -168,6 +168,10 @@ textarea {
 .add-card {
   text-align: right;
 }
+.add-card-nam{
+  display: flex;
+  justify-content: space-between;
+}
 
 .form-group-header {
   border-bottom: 1px solid #e4e6ef;
