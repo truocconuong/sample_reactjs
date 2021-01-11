@@ -36,7 +36,17 @@ class DetailCard extends Component {
       showAddMember: false,
       errors: {},
       history: [],
-      isShowHistory: false,
+      name: '',
+      position: '',
+      clientName: '',
+      phone: '',
+      email: '',
+      location: '',
+      approachDate: '',
+      cv:'',
+      nameJob: '',
+      noteApproach: '',
+      idJob: ''
     };
     this.addMember = [];
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -49,11 +59,11 @@ class DetailCard extends Component {
 
   async showHistoryCard() {
     try {
-      if(this.state.isShowHistory){
+      if (this.state.isShowHistory) {
         this.setState({
           isShowHistory: false
         })
-      }else{
+      } else {
         let self = this;
         const data = {
           cardId: self.props.data_detail.id,
@@ -64,7 +74,7 @@ class DetailCard extends Component {
             history: response.data.historyCard,
             isShowHistory: true
           });
-          
+
           console.log(response.data.historyCard);
         }
       }
@@ -113,7 +123,15 @@ class DetailCard extends Component {
   };
 
   handleInputChange(e) {
-    this.props.update(e);
+    const name = e.target.name;
+    const value = e.target.value;
+    console.log(name,value)
+
+    this.setState({
+      [name]: value
+    })
+
+    // this.props.update(e);
   }
 
   removeUserCard = (card_id, user_id, index) => {
@@ -136,8 +154,9 @@ class DetailCard extends Component {
   handleOnChangeJobSelected = (e) => {
     this.setState({
       jobSelected: e,
+      idJob: e.id
     });
-    this.props.handleOnChangeJobSelected(e);
+    // this.props.handleOnChangeJobSelected(e);
   };
 
   toggleAddMember = () => {
@@ -230,13 +249,16 @@ class DetailCard extends Component {
   }
 
   updatePropsLinkCv = (value) => {
-    const data = {
-      target: {
-        name: "linkCv",
-        value: value,
-      },
-    };
-    this.props.update(data);
+    this.setState({
+      linkCv : value
+    })
+    // const data = {
+    //   target: {
+    //     name: "linkCv",
+    //     value: value,
+    //   },
+    // };
+    // this.props.update(data);
   };
 
   isEmpty(obj) {
@@ -245,9 +267,10 @@ class DetailCard extends Component {
   }
 
   updateCard = () => {
-    const data = this.props.data_detail.content;
+    const data = this.state;
     const errors = this.validator.validate(data);
     delete errors["laneId"];
+    console.log(errors)
     this.setState({
       errors: errors,
       isShowHistory: false,
@@ -255,21 +278,45 @@ class DetailCard extends Component {
     });
 
     if (this.isEmpty(errors)) {
-      this.props.updateCard();
+      const content = this.state;
+      const data = {
+        name: content.name,
+        position: content.position,
+        clientName: content.clientName,
+        phone: content.phone,
+        email: content.email,
+        location: content.location,
+        approachDate: content.approachDate,
+        cv: content.linkCv,
+        nameJob: content.nameJob,
+        noteApproach: content.noteApproach,
+        idJob: content.idJob,
+      }
+      this.props.updateCard(data);
     }
   };
-  hideModal(){
+  hideModal() {
     this.props.onHide();
     this.setState({
       isShowHistory: false,
       history: []
     })
   }
+
+  componentWillReceiveProps = (props) => {
+    const content = props.data_detail.content;
+    this.setState(
+      content
+    )
+  }
+
+
+
   render() {
     const errors = this.state.errors;
     const users = [];
     let usersTeam = [];
-    const data_detail = this.props.data_detail.content;
+    const data_detail = this.state
     if (this.props.show) {
       users.push(...this.props.data.content.user);
     }
@@ -371,8 +418,8 @@ class DetailCard extends Component {
                   </PopoverPop>{" "}
                 </div>
               ) : (
-                ""
-              )}
+                  ""
+                )}
             </div>
           </div>
         </Modal.Header>
@@ -384,7 +431,6 @@ class DetailCard extends Component {
                   <label>Name </label>
                   <span style={{ color: "red" }}>*</span>
                   <input
-                    disabled
                     type="text"
                     value={data_detail.name}
                     onChange={this.handleInputChange.bind(this)}
@@ -515,6 +561,7 @@ class DetailCard extends Component {
                             onChange={this.onChangeUploadHandler}
                             id="uploadCV"
                             type="file"
+                            accept="application/pdf"
                             className="form-control mb-2 mr-sm-2"
                             style={{ display: "none" }}
                             placeholder="Jane Doe"
@@ -604,11 +651,11 @@ class DetailCard extends Component {
                                 </a>
                               </li>
                             ) : (
-                              ""
-                            )
+                                ""
+                              )
                           ) : (
-                            ""
-                          )}
+                              ""
+                            )}
                         </ul>
                       </Popover.Content>
                     </Popover>
@@ -644,8 +691,8 @@ class DetailCard extends Component {
                   users={this.props.users}
                 ></ModalAddMember>
               ) : (
-                ""
-              )}
+                  ""
+                )}
             </div>
           </div>
 
@@ -655,18 +702,18 @@ class DetailCard extends Component {
                 onClick={this.props.toggleDetailInterview}
                 variant="btn btn-success btn-interview"
               >
-                {moment(data_detail.interview.timeInterview).subtract(7,'hours').format(
+                {moment(data_detail.interview.timeInterview).subtract(7, 'hours').format(
                   "dddd DD/MM/YYYY HH:mm"
                 )}
               </Button>
             ) : (
-              <Button
-                variant="btn btn-success btn-interview"
-                onClick={() => this.props.toggleDetailCardAndInterview()}
-              >
-                Create Interview
-              </Button>
-            )}
+                <Button
+                  variant="btn btn-success btn-interview"
+                  onClick={() => this.props.toggleDetailCardAndInterview()}
+                >
+                  Create Interview
+                </Button>
+              )}
 
             {/* {
                 data_detail.linkCv ? (<Link to={`/preview/candidate/${this.props.data.candidateId}/job/${this.props.data.jobId}`} className="btn btn-primary font-weight-bolder style-btn-kitin mr-3">
@@ -681,8 +728,8 @@ class DetailCard extends Component {
                 Refined CV
               </Link>
             ) : (
-              ""
-            )}
+                ""
+              )}
             {data_detail.linkCv ? (
               <Button
                 variant="primary btn-interview"
@@ -691,15 +738,15 @@ class DetailCard extends Component {
                 Raw CV
               </Button>
             ) : (
-              ""
-            )}
+                ""
+              )}
             {this.props.role !== roleName.DIRECTOR ? (
               <Button variant="primary btn-interview" onClick={this.updateCard}>
                 Save
               </Button>
             ) : (
-              ""
-            )}
+                ""
+              )}
             <Button variant="light" onClick={this.hideModal}>
               Close
             </Button>
@@ -715,7 +762,7 @@ class DetailCard extends Component {
               className="btn btn-secondary btn-sm"
               onClick={this.showHistoryCard.bind(this)}
             >
-              {`${this.state.isShowHistory? "Hide": "Detail"}`}
+              {`${this.state.isShowHistory ? "Hide" : "Detail"}`}
             </button>
           </div>
           <div
@@ -740,11 +787,10 @@ class DetailCard extends Component {
                   <div className="wrap_left_content_history">
                     <div className="conten_history">
                       <span className="name_history"> {e.User.name} </span>
-                      {`has ${
-                        e.type == "move_card"
-                          ? "move this card"
-                          : "update this card"
-                      }`}
+                      {`has ${e.type == "move_card"
+                        ? "move this card"
+                        : "update this card"
+                        }`}
                     </div>
                     <div className="time_history">
                       {moment(e.createdAt).format("hh:mma DD/MM/YYYY")}
@@ -767,7 +813,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     role: state.auth.role,
     userId: state.auth.userId,
-    update: (e) => ownProps.update(e),
+    // update: (e) => ownProps.update(e),
     addMemberToCard: (data) => ownProps.addMemberToCard(data),
   };
 };

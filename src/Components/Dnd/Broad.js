@@ -177,25 +177,11 @@ class Broad extends Component {
     this.setState({ card_data_detail: cardDataDetail });
   }
 
-  updateCard = async () => {
+  updateCard = async (card) => {
     const { card_data_detail } = this.state;
-    const content = card_data_detail.content;
-    const data = {
-      name: content.name,
-      position: content.position,
-      clientName: content.clientName,
-      phone: content.phone,
-      email: content.email,
-      location: content.location,
-      approachDate: content.approachDate,
-      cv: content.linkCv,
-      nameJob: content.nameJob,
-      noteApproach: content.noteApproach,
-      idJob: content.idJob,
-    };
     const idCard = card_data_detail.id;
     try {
-      const response = await api.patch(`/api/cards/${idCard}`, data);
+      const response = await api.patch(`/api/cards/${idCard}`, card);
       if (response) {
         toast(<CustomToast title={"Update card successed !"} />, {
           position: toast.POSITION.BOTTOM_RIGHT,
@@ -215,22 +201,24 @@ class Broad extends Component {
         this.close_detail_card();
       }
     } catch (error) {
-      if (error.error.data) {
-        if (error.error.data.error === 'Cannot update candidate') {
-          toast(<CustomToast title={"Email or phone already exists!"} type={'error'} />, {
-            position: toast.POSITION.TOP_CENTER,
-            autoClose: 3000,
-            className: "toast_login",
-            closeButton: false,
-            hideProgressBar: true,
-            newestOnTop: true,
-            closeOnClick: true,
-            rtl: false,
-            pauseOnFocusLoss: true,
-            draggable: true,
-            pauseOnHover: true,
-            transition: Zoom,
-          });
+      if (error.error) {
+        if (error.error.data) {
+          if (error.error.data.error === 'Cannot update candidate') {
+            toast(<CustomToast title={"Email or phone already exists!"} type={'error'} />, {
+              position: toast.POSITION.TOP_CENTER,
+              autoClose: 3000,
+              className: "toast_login",
+              closeButton: false,
+              hideProgressBar: true,
+              newestOnTop: true,
+              closeOnClick: true,
+              rtl: false,
+              pauseOnFocusLoss: true,
+              draggable: true,
+              pauseOnHover: true,
+              transition: Zoom,
+            });
+          }
         }
       }
     }
@@ -809,9 +797,9 @@ class Broad extends Component {
           onHide={this.close_detail_card}
           data={this.state.card_selected}
           data_detail={this.state.card_data_detail}
-          update={this.handleInputUpdateCard.bind(this)}
+          // update={this.handleInputUpdateCard.bind(this)}
           updateCard={this.updateCard}
-          handleOnChangeJobSelected={this.handleOnChangeJobSelected}
+          // handleOnChangeJobSelected={this.handleOnChangeJobSelected}
           jobs={this.state.jobs}
           removeMemberToCard={this.removeMemberToCard}
           users={this.state.users}
