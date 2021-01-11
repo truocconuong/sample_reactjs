@@ -17,6 +17,7 @@ import DetailInterviewCard from "./DetailInterviewCard.js";
 import { ToastContainer, toast, Zoom } from "react-toastify";
 import CustomToast from "../common/CustomToast";
 import PreviewPdf from "../Modal/PreviewPdf/PreviewPdf.js";
+import SearchBoard from "./Board/SearchBoard.js";
 
 const api = new Network();
 
@@ -81,6 +82,7 @@ class Broad extends Component {
       show_form_create_interview: false,
       show_form_detail_interview: false,
       isAddCardNoColumn: false,
+      userId: ''
     };
     this.open_add_card_form = this.open_add_card_form.bind(this);
     this.close_add_card_form = this.close_add_card_form.bind(this);
@@ -387,7 +389,7 @@ class Broad extends Component {
       columnOrder: [],
     };
     try {
-      const lanes = await api.get(`/api/admin/new/cards`);
+      const lanes = await api.get(`/api/admin/new/cards${this.state.userId !== '' ? `?userId=${this.state.userId}` : ''}`);
       const columns = lanes.data.list;
       for (const column of columns) {
         data.columns[`${column.id}`] = {
@@ -409,7 +411,7 @@ class Broad extends Component {
               name: card.Candidate.name,
               position: card.position || '',
               clientName: !_.isNil(card.Job.Client) ? card.Job.Client.name : "",
-              backgroundClient: !_.isNil(card.Job.Client) ? card.Job.Client.background: "",
+              backgroundClient: !_.isNil(card.Job.Client) ? card.Job.Client.background : "",
               phone: card.Candidate.phone,
               email: card.Candidate.email,
               location: card.Job.Location.name,
@@ -628,7 +630,7 @@ class Broad extends Component {
           name: card.Candidate.name,
           position: card.position || '',
           clientName: !_.isNil(card.Job.Client) ? card.Job.Client.name : "",
-          backgroundClient: !_.isNil(card.Job.Client) ? card.Job.Client.background: "",
+          backgroundClient: !_.isNil(card.Job.Client) ? card.Job.Client.background : "",
           phone: card.Candidate.phone,
           email: card.Candidate.email,
           location: card.Job.Location.name,
@@ -758,7 +760,7 @@ class Broad extends Component {
     }
   }
 
-  storageCard = async(card) => {
+  storageCard = async (card) => {
     const data = this.state.data;
     const cardId = card.id;
     const columnId = card.content.laneId;
@@ -769,14 +771,22 @@ class Broad extends Component {
       data: data
     });
     const dataUpdate = {
-      storage : true
+      storage: true
     }
-    const response = await api.patch(`/api/cards/${cardId}`,dataUpdate)
-    if(response){
+    const response = await api.patch(`/api/cards/${cardId}`, dataUpdate)
+    if (response) {
       console.log('successed')
     }
   }
 
+  searchCardByUserId = (userId) => {
+    this.setState({
+      userId: userId,
+      isLoading: true
+    }, () => {
+      this.initData();
+    })
+  }
 
   render() {
     return (
@@ -836,6 +846,20 @@ class Broad extends Component {
           className="subheader py-3 py-lg-8 subheader-transparent"
           id="kt_subheader"
         >
+          <div className="header-board trello">
+            {
+              this.props.role === roleName.DIRECTOR ? (
+                <SearchBoard
+                  searchCardByUserId={this.searchCardByUserId}
+                />
+              ) : ''
+            }
+          </div>
+        </div>
+        {/* <div
+          className="subheader py-3 py-lg-8 subheader-transparent"
+          id="kt_subheader"
+        >
           <div className="trello">
             <div className="d-flex align-items-center mr-1">
               <div className="d-flex align-items-baseline flex-wrap mr-5">
@@ -854,6 +878,23 @@ class Broad extends Component {
             <div className="d-flex align-items-center flex-wrap"></div>
           </div>
         </div>
+        <div className="search-board trello">
+          <div className="input-icon">
+            <input
+              name="title"
+              type="text"
+              className="form-control"
+              placeholder="Search..."
+              // value={this.state.title}
+              // onChange={this.onChangeSearch}
+              id="kt_datatable_search_query"
+            />
+            <span>
+              <i className="flaticon2-search-1 text-muted"></i>
+            </span>
+          </div>
+        </div> */}
+
         <div className="d-flex flex-column-fluid trello-main">
           <div className="container_trello">
             {this.state.data.columnOrder ? (
@@ -882,6 +923,7 @@ class Broad extends Component {
                         lanes={this.state.lanes}
                         actionUpdateColumn={this.actionUpdateColumn}
                         storageCard={this.storageCard}
+                        userId={this.state.userId}
                       />
                     );
                   })}
