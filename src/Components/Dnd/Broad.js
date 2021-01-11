@@ -570,6 +570,16 @@ class Broad extends Component {
     }
   };
 
+  initDataAgain = () => {
+    this.setState({
+      isLoading: true
+    })
+    this.setState({
+      userId: ''
+    });
+    this.initData()
+  }
+
   removeMemberToCard = async (card_id, user_id) => {
     try {
       const response = await api.patch(
@@ -850,6 +860,7 @@ class Broad extends Component {
             {
               this.props.role === roleName.DIRECTOR ? (
                 <SearchBoard
+                  initDataAgain={this.initDataAgain}
                   searchCardByUserId={this.searchCardByUserId}
                 />
               ) : ''

@@ -32,15 +32,19 @@ class SearchBoard extends Component {
     }
 
     searchMembers = async () => {
-        const response = await api.get(`/api/search/board/members?search=${this.state.search}`)
-        if (response) {
-            this.offLoadingMember()
-            const users = response.data.list;
-            this.setState({
-                users: users
-            })
+        if (this.state.search !== '') {
+            const response = await api.get(`/api/search/board/members?search=${this.state.search}`)
+            if (response) {
+                this.offLoadingMember()
+                const users = response.data.list;
+                this.setState({
+                    users: users
+                })
+            }
+        } else {
+            this.toggleFormSearch();
+            this.props.initDataAgain();
         }
-
     }
     onLoadingMember = () => {
         this.setState({
@@ -68,9 +72,9 @@ class SearchBoard extends Component {
         )
     }
 
-    setDefaultSearch = () =>{
+    setDefaultSearch = () => {
         this.setState({
-            search : ''
+            search: ''
         })
     }
 
@@ -83,7 +87,7 @@ class SearchBoard extends Component {
                 <li className="navi-separator mb-3 opacity-70" />
                 {this.state.isLoadingMember ? this.elmIsLoading() : (
                     this.state.users.map((user, index) => (
-                        <div onClick={()=>{
+                        <div onClick={() => {
                             // this.setDefaultSearch();
                             this.toggleFormSearch();
                             this.props.searchCardByUserId(user.id)
