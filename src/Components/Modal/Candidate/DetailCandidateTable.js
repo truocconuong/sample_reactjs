@@ -42,6 +42,9 @@ export default class DetailCandidateTable extends Component {
               </a>
             ) : (
               <button
+               onClick={() => {
+                          window.open(this.props.data.jobs[0].cv, '_blank')
+                        }}
                 type="button"
                 className="btn btn-primary spinner font-weight-bolder spinner-white spinner-right mr-3"
               >

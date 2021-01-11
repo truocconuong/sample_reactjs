@@ -499,6 +499,9 @@ export default class CandidateCard extends Component {
                     </a>
                   ) : (
                     <button
+                    onClick={()=>{
+                      window.open(this.props.data.cv,'_blank')
+                    }}
                       type="button"
                       className="btn btn-primary spinner font-weight-bolder spinner-white spinner-right mr-3"
                     >
