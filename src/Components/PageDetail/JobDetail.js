@@ -77,6 +77,10 @@ class JobDetail extends Component {
       // history
       dataHistory: [],
       isShowHistoryJob: false,
+
+      // user add card
+      users: [],
+      userCard: [],
     };
     this.showInfoMember = [];
     this.handlePagination = this.handlePagination.bind(this);
@@ -188,29 +192,44 @@ class JobDetail extends Component {
       let candiadateToJob = api.get(`/api/candidate/job/${idJob}`);
       let getLane = api.get(`/api/lanes`);
       let historyJob = api.post(`/api/history/job`, { idJob: idJob });
-      const [dataJob, dataCanidate, dataLane, dataHistory] = await Promise.all([
+      let user = api.get(`/api/trello/user`);
+      const [
+        dataJob,
+        dataCanidate,
+        dataLane,
+        dataHistory,
+        dataUser,
+      ] = await Promise.all([
         jobDetail,
         candiadateToJob,
         getLane,
         historyJob,
+        user,
       ]);
       if (dataJob && dataCanidate) {
-        setTimeout(() => {
-          self.setState({
-            isLoading: false,
-            isLoadingTable: false,
-            data: dataJob.data,
-            dataCandidate: dataCanidate.data.list,
-            viewCandidate: dataCanidate.data.list.slice(
-              0,
-              this.state.numberInPage
-            ),
-            totalRow: dataCanidate.data.list.length,
-            isDisplay: dataCanidate.data.list.length === 0,
-            arrayLane: dataLane.data.lane,
-            dataHistory: dataHistory.data.historyJob,
-          });
-        }, 800);
+        self.setState({
+          isLoading: false,
+          isLoadingTable: false,
+          data: dataJob.data,
+          dataCandidate: dataCanidate.data.list,
+          viewCandidate: dataCanidate.data.list.slice(
+            0,
+            this.state.numberInPage
+          ),
+          totalRow: dataCanidate.data.list.length,
+          isDisplay: dataCanidate.data.list.length === 0,
+          arrayLane: dataLane.data.lane,
+          dataHistory: dataHistory.data.historyJob,
+          users: dataUser.data.list.map((user) => {
+            return {
+              userId: user.id,
+              label: user.email,
+              name: user.name,
+              linkAvatar: user.linkAvatar,
+            };
+          }),
+        });
+        console.log(this.state.users);
       }
     } catch (err) {
       console.log(err);
@@ -261,7 +280,8 @@ class JobDetail extends Component {
       pageNumber: page,
     });
   }
-  async getUserAssign() { // dung để lấy danh sách các user để assign
+  async getUserAssign() {
+    // dung để lấy danh sách các user để assign
     try {
       let response = await api.get(`/api/assign/list/user`);
       if (response.data.success) {
@@ -273,7 +293,8 @@ class JobDetail extends Component {
       console.log(err);
     }
   }
-  async getDataUserAssignJob() { // dung để lấy thông tin user được assign vào job
+  async getDataUserAssignJob() {
+    // dung để lấy thông tin user được assign vào job
     try {
       const idJob = this.props.match.params.id;
       let response = await api.get(`/api/assignment/job/${idJob}`);
@@ -393,10 +414,17 @@ class JobDetail extends Component {
     try {
       let self = this;
       const response = await api.get(`/api/cards/${id}`);
+      console.log(response.data);
       if (response) {
         this.setState(
           {
             cardTrello: response.data.card,
+            userCard: response.data.card.CardUsers.map((e) => {
+              return {
+                ...e.User,
+                userId: e.User.id,
+              };
+            }),
           },
           () => {
             self.toggleCardTrelo(true);
@@ -471,7 +499,8 @@ class JobDetail extends Component {
     });
   };
 
-  async getUserBitlink() { // thông tin link bitly của member
+  async getUserBitlink() {
+    // thông tin link bitly của member
     try {
       const idJob = this.props.match.params.id;
       let response = await api.get(`/api/member/assign/${idJob}`);
@@ -663,11 +692,14 @@ class JobDetail extends Component {
             this
           )}
           base64={this.state.base64}
+          users={this.state.users}
           // previewPdf={this.previewPdf.bind(this)}
         />
 
         <CardTrello
           data={this.state.cardTrello}
+          userCard={this.state.userCard}
+          users={this.state.users}
           show={this.state.isOpenCardTrello}
           lane={arrayLane}
           base64={this.state.base64}
@@ -1062,12 +1094,20 @@ class JobDetail extends Component {
                                 >
                                   <span style={{ width: "160px" }}>Name</span>
                                 </th>
+                                {/* <th
+                                  data-field="ShipDate"
+                                  className="datatable-cell datatable-cell-sort"
+                                >
+                                  <span style={{ width: "68px" }}>
+                                    Date
+                                  </span>
+                                </th> */}
                                 <th
                                   data-field="ShipDate"
                                   className="datatable-cell datatable-cell-sort"
                                 >
-                                  <span style={{ width: "120px" }}>
-                                    Date Apply
+                                  <span style={{ width: "130px" }}>
+                                    Follower
                                   </span>
                                 </th>
                                 <th
@@ -1077,7 +1117,7 @@ class JobDetail extends Component {
                                 >
                                   <span
                                     style={{
-                                      width: "137px",
+                                      width: "120px",
                                       display: "flex",
                                       justifyContent: "center",
                                     }}
@@ -1115,15 +1155,26 @@ class JobDetail extends Component {
                                           {candidate.name}
                                         </span>
                                       </td>
-                                      <td
+                                      {/* <td
                                         data-field="ShipDate"
                                         aria-label="9/3/2017"
                                         className="datatable-cell"
                                       >
-                                        <span style={{ width: "120px" }}>
+                                        <span style={{ width: "68px" }}>
                                           {moment(candidate.date).format(
                                             "DD/MM/YYYY"
                                           )}
+                                        </span>
+                                      </td> */}
+                                      <td
+                                        className="datatable-cell"
+                                      >
+                                        <span style={{ width: "130px", fontSize: '12px' }}>
+                                          {
+                                            candidate.follower.map((follower, i) => {
+                                              return (<p key={i}>{follower}</p>)
+                                            })
+                                          }
                                         </span>
                                       </td>
                                       <td
@@ -1134,7 +1185,7 @@ class JobDetail extends Component {
                                       >
                                         <span
                                           style={{
-                                            width: "137px",
+                                            width: "120px",
                                             display: "flex",
                                             justifyContent: "center",
                                           }}
@@ -1184,15 +1235,18 @@ class JobDetail extends Component {
                                           {candidate.name}
                                         </span>
                                       </td>
+                                      
                                       <td
                                         data-field="ShipDate"
                                         aria-label="9/3/2017"
                                         className="datatable-cell"
                                       >
-                                        <span style={{ width: "120px" }}>
-                                          {moment(candidate.date).format(
-                                            "DD/MM/YYYY"
-                                          )}
+                                        <span style={{ width: "130px", fontSize: '12px' }}>
+                                          {
+                                            candidate.follower.map((follower, i) => {
+                                              return (<p key={i}>{follower}</p>)
+                                            })
+                                          }
                                         </span>
                                       </td>
                                       <td
@@ -1203,7 +1257,7 @@ class JobDetail extends Component {
                                       >
                                         <span
                                           style={{
-                                            width: "137px",
+                                            width: "120px",
                                             display: "flex",
                                             justifyContent: "center",
                                           }}
@@ -1263,12 +1317,13 @@ class JobDetail extends Component {
                                 >
                                   <span style={{ width: "160px" }}>Name</span>
                                 </th>
+                                
                                 <th
                                   data-field="ShipDate"
                                   className="datatable-cell datatable-cell-sort"
                                 >
-                                  <span style={{ width: "120px" }}>
-                                    Date Apply
+                                  <span style={{ width: "130px" }}>
+                                    Follower
                                   </span>
                                 </th>
                                 <th
@@ -1278,7 +1333,7 @@ class JobDetail extends Component {
                                 >
                                   <span
                                     style={{
-                                      width: "137px",
+                                      width: "120px",
                                       display: "flex",
                                       justifyContent: "center",
                                     }}
@@ -1306,12 +1361,13 @@ class JobDetail extends Component {
                                         <Skeleton height={24} />
                                       </span>
                                     </td>
+                                    
                                     <td
                                       data-field="ShipDate"
                                       aria-label="9/3/2017"
                                       className="datatable-cell"
                                     >
-                                      <span style={{ width: "120px" }}>
+                                      <span style={{ width: "130px" }}>
                                         <Skeleton height={24} />
                                       </span>
                                     </td>
@@ -1320,7 +1376,7 @@ class JobDetail extends Component {
                                       aria-label="9/3/2017"
                                       className="datatable-cell"
                                     >
-                                      <span style={{ width: "137px" }}>
+                                      <span style={{ width: "120px" }}>
                                         <Skeleton height={24} />
                                       </span>
                                     </td>
@@ -1631,9 +1687,9 @@ class JobDetail extends Component {
         </div>
         <button
           onClick={this.toggleHistory.bind(this, true)}
-          class="btn-add-card-vip btn btn-primary"
+          className="btn-add-card-vip btn btn-primary"
         >
-          <span class="card-vip__plus">
+          <span className="card-vip__plus">
             <i
               style={{ paddingRight: "0" }}
               className="flaticon2-calendar-1 custom_icon_history"

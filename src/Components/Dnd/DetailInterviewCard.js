@@ -227,7 +227,7 @@ class DetailInterviewCard extends Component {
                       disabled
                       type="text"
                       name="timeInterview"
-                      value={moment(interview.timeInterview).format(
+                      value={moment(interview.timeInterview).subtract(7,'hours').format(
                         "DD/MM/YYYY HH:mm"
                       )}
                       onChange={this.handleInputChange}
@@ -245,7 +245,7 @@ class DetailInterviewCard extends Component {
                       disabled
                       type="text"
                       name="timeInterviewEnd"
-                      value={moment(interview.timeInterviewEnd).format(
+                      value={moment(interview.timeInterviewEnd).subtract(7,'hours').format(
                         "DD/MM/YYYY HH:mm"
                       )}
                       onChange={this.handleInputChange}

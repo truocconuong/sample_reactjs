@@ -43,7 +43,7 @@ export default class DetailCandidateTable extends Component {
             ) : (
               <button
                 type="button"
-                class="btn btn-primary spinner font-weight-bolder spinner-white spinner-right mr-3"
+                className="btn btn-primary spinner font-weight-bolder spinner-white spinner-right mr-3"
               >
                 Raw CV
               </button>
@@ -82,7 +82,7 @@ export default class DetailCandidateTable extends Component {
     this.setState({
       nameJob: data.label,
       clientName: data.value,
-      cv: data.value,
+      cv: data.cv,
       location: data.location,
     });
   };
