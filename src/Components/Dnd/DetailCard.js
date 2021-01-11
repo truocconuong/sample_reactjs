@@ -740,11 +740,7 @@ class DetailCard extends Component {
                   <div className="wrap_left_content_history">
                     <div className="conten_history">
                       <span className="name_history"> {e.User.name} </span>
-                      {`has ${
-                        e.type == "move_card"
-                          ? "move this card"
-                          : "update this card"
-                      }`}
+                      {`${e.content}`}
                     </div>
                     <div className="time_history">
                       {moment(e.createdAt).format("hh:mma DD/MM/YYYY")}
