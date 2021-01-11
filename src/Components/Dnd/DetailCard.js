@@ -43,7 +43,7 @@ class DetailCard extends Component {
       email: '',
       location: '',
       approachDate: '',
-      cv:'',
+      cv: '',
       nameJob: '',
       noteApproach: '',
       idJob: ''
@@ -125,7 +125,7 @@ class DetailCard extends Component {
   handleInputChange(e) {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(name,value)
+    console.log(name, value)
 
     this.setState({
       [name]: value
@@ -250,7 +250,7 @@ class DetailCard extends Component {
 
   updatePropsLinkCv = (value) => {
     this.setState({
-      linkCv : value
+      linkCv: value
     })
     // const data = {
     //   target: {
@@ -433,6 +433,7 @@ class DetailCard extends Component {
                   <input
                     type="text"
                     value={data_detail.name}
+                    disabled={this.props.role === roleName.DIRECTOR ? true : false}
                     onChange={this.handleInputChange.bind(this)}
                     name="name"
                     className="form-control"
@@ -444,6 +445,7 @@ class DetailCard extends Component {
                   <label>Name job </label>
                   <span style={{ color: "red" }}>*</span>
                   <Select
+                    isDisabled={this.props.role === roleName.DIRECTOR ? true : false}
                     name="option"
                     options={this.props.jobs}
                     value={data_detail.jobSelected}
@@ -481,6 +483,7 @@ class DetailCard extends Component {
                     <label>Email </label>
                     <span style={{ color: "red" }}>*</span>
                     <input
+                      disabled={this.props.role === roleName.DIRECTOR ? true : false}
                       value={data_detail.email}
                       type="email"
                       onChange={this.handleInputChange.bind(this)}
@@ -500,6 +503,7 @@ class DetailCard extends Component {
                     <label>Phone </label>
                     <span style={{ color: "red" }}>*</span>
                     <input
+                      disabled={this.props.role === roleName.DIRECTOR ? true : false}
                       value={data_detail.phone}
                       type="text"
                       onChange={this.handleInputChange.bind(this)}
@@ -515,6 +519,7 @@ class DetailCard extends Component {
                   <div className="col-lg-6">
                     <label>Approach Date </label>
                     <input
+                      disabled={this.props.role === roleName.DIRECTOR ? true : false}
                       value={data_detail.approachDate}
                       type="date"
                       onChange={this.handleInputChange.bind(this)}
@@ -528,6 +533,7 @@ class DetailCard extends Component {
                 <div className="form-group">
                   <label>Position </label>
                   <input
+                    disabled={this.props.role === roleName.DIRECTOR ? true : false}
                     value={data_detail.position ? data_detail.position : ""}
                     type="text"
                     onChange={this.handleInputChange.bind(this)}
@@ -576,6 +582,7 @@ class DetailCard extends Component {
                   <label htmlFor="exampleTextarea">Approach Point </label>
                   <span style={{ color: "red" }}>*</span>
                   <textarea
+                    disabled={this.props.role === roleName.DIRECTOR ? true : false}
                     value={
                       data_detail.noteApproach ? data_detail.noteApproach : ""
                     }
