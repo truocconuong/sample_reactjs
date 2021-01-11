@@ -82,6 +82,7 @@ class Broad extends Component {
       show_form_create_interview: false,
       show_form_detail_interview: false,
       isAddCardNoColumn: false,
+      userId: ''
     };
     this.open_add_card_form = this.open_add_card_form.bind(this);
     this.close_add_card_form = this.close_add_card_form.bind(this);
@@ -388,7 +389,7 @@ class Broad extends Component {
       columnOrder: [],
     };
     try {
-      const lanes = await api.get(`/api/admin/new/cards`);
+      const lanes = await api.get(`/api/admin/new/cards${this.state.userId !== '' ? `?userId=${this.state.userId}` : ''}`);
       const columns = lanes.data.list;
       for (const column of columns) {
         data.columns[`${column.id}`] = {
@@ -778,6 +779,14 @@ class Broad extends Component {
     }
   }
 
+  searchCardByUserId = (userId) => {
+    this.setState({
+      userId: userId,
+      isLoading: true
+    }, () => {
+      this.initData();
+    })
+  }
 
   render() {
     return (
@@ -838,7 +847,13 @@ class Broad extends Component {
           id="kt_subheader"
         >
           <div className="header-board trello">
-          <SearchBoard></SearchBoard>
+            {
+              this.props.role === roleName.DIRECTOR ? (
+                <SearchBoard
+                  searchCardByUserId={this.searchCardByUserId}
+                />
+              ) : ''
+            }
           </div>
         </div>
         {/* <div
@@ -908,6 +923,7 @@ class Broad extends Component {
                         lanes={this.state.lanes}
                         actionUpdateColumn={this.actionUpdateColumn}
                         storageCard={this.storageCard}
+                        userId={this.state.userId}
                       />
                     );
                   })}

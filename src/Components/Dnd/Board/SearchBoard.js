@@ -10,6 +10,7 @@ class SearchBoard extends Component {
         this.state = {
             showFormSeach: false,
             search: '',
+            isLoadingMember: false,
             users: []
         }
         this.timeOut = '';
@@ -33,6 +34,7 @@ class SearchBoard extends Component {
     searchMembers = async () => {
         const response = await api.get(`/api/search/board/members?search=${this.state.search}`)
         if (response) {
+            this.offLoadingMember()
             const users = response.data.list;
             this.setState({
                 users: users
@@ -40,11 +42,36 @@ class SearchBoard extends Component {
         }
 
     }
+    onLoadingMember = () => {
+        this.setState({
+            isLoadingMember: true
+        })
+    }
+    offLoadingMember = () => {
+        this.setState({
+            isLoadingMember: false
+        })
+    }
     debount = () => {
+        this.onLoadingMember();
         clearTimeout(this.timeOut);
         this.timeOut = setTimeout(() => {
             this.searchMembers()
         }, 2000)
+    }
+
+    elmIsLoading = () => {
+        return (
+            <div className="loading-search text-center">
+                <div className="spinner spinner-center make-spinner"></div>
+            </div>
+        )
+    }
+
+    setDefaultSearch = () =>{
+        this.setState({
+            search : ''
+        })
     }
 
     elementFormSearchUsers = () => {
@@ -54,38 +81,42 @@ class SearchBoard extends Component {
                     <span className="font-size-lg">Members</span>
                 </li>
                 <li className="navi-separator mb-3 opacity-70" />
-                {
-                    this.state.users.map((user,index)=>(
-                        <div className="search-user" key={index}>
-                        <div className="d-flex align-items-center">
-                            <div className="symbol symbol-50 symbol-light mr-5">
-                                <span className="symbol-label symbol-label-cs">
-                                    <img
-                                        src={
-                                            user.linkAvatar
-                                                ? domainServer + "/" + user.linkAvatar
-                                                : defaultAva
-                                        }
-                                        className="h-100 align-self-end"
-                                        alt=""
-                                    />
-                                </span>
-                            </div>
-                            <div className="d-flex flex-column flex-grow-1">
-                                <div
-                                    style={{ cursor: "pointer" }}
-                                    className="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1"
-                                >
-                                    {user.name}
+                {this.state.isLoadingMember ? this.elmIsLoading() : (
+                    this.state.users.map((user, index) => (
+                        <div onClick={()=>{
+                            // this.setDefaultSearch();
+                            this.toggleFormSearch();
+                            this.props.searchCardByUserId(user.id)
+                        }} className="search-user" key={index}>
+                            <div className="d-flex align-items-center">
+                                <div className="symbol symbol-50 symbol-light mr-5">
+                                    <span className="symbol-label symbol-label-cs">
+                                        <img
+                                            src={
+                                                user.linkAvatar
+                                                    ? domainServer + "/" + user.linkAvatar
+                                                    : defaultAva
+                                            }
+                                            className="h-100 align-self-end"
+                                            alt=""
+                                        />
+                                    </span>
                                 </div>
-                                <span className="text-muted font-weight-bold">
-                                    {user.email}
-                                </span>
+                                <div className="d-flex flex-column flex-grow-1">
+                                    <div
+                                        style={{ cursor: "pointer" }}
+                                        className="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1"
+                                    >
+                                        {user.name}
+                                    </div>
+                                    <span className="text-muted font-weight-bold">
+                                        {user.email}
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     ))
-                }
+                )}
                 <div >
                 </div>
             </ul>

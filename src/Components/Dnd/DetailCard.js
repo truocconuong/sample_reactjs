@@ -536,8 +536,8 @@ class DetailCard extends Component {
                     onChange={this.handleInputChange}
                     className={
                       errors.noteApproach
-                        ? "form-control is-invalid"
-                        : "form-control"
+                        ? "form-control scroll-approach is-invalid"
+                        : "form-control scroll-approach"
                     }
                     rows={3}
                   />

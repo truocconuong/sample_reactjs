@@ -44,7 +44,7 @@ class Column extends Component {
 
   getDataColumn = async (column) => {
     const response = await api.get(
-      `/api/admin/cards/${column.id}/lane?offset=${column.limit}`
+      `/api/admin/cards/${column.id}/lane?offset=${column.limit}${this.props.userId !== '' ? `&userId=${this.props.userId}` : ''}`
     );
     if (response) {
       const data = response.data.list;
@@ -63,20 +63,20 @@ class Column extends Component {
   };
 
   // tracking scroll
- 
+
 
   componentDidMount() {
     this.scrollCol = document.getElementById(this.props.column.id);
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() { }
 
   onScroll = (e) => {
     // offsetHeight chieu cao cua div TaskList
     // scrollHeight chieu cao thuc cua scroll div
     if (
       Math.floor(e.target.scrollTop + this.scrollCol.offsetHeight) ==
-      this.scrollCol.scrollHeight 
+      this.scrollCol.scrollHeight
     ) {
       console.log("load")
       this.loadMoreLane(this.props.column);
@@ -100,8 +100,8 @@ class Column extends Component {
               <img className="add_icon" src="/img/plus.png" />
             </div>
           ) : (
-            ""
-          )}
+              ""
+            )}
         </Title>
         <Droppable
           style={{ overflow: "hidden" }}
@@ -117,7 +117,7 @@ class Column extends Component {
               {this.props.cards.map((card, index) => {
                 return (
                   <Card
-                    lanes = {this.props.lanes}
+                    lanes={this.props.lanes}
                     removeMemberToCard={this.props.removeMemberToCard}
                     addMemberToCard={this.props.addMemberToCard}
                     users={this.props.users}
@@ -129,9 +129,9 @@ class Column extends Component {
                       card.id,
                       this.props.column.title
                     )}
-                    actionUpdateColumn = {this.props.actionUpdateColumn}
+                    actionUpdateColumn={this.props.actionUpdateColumn}
                     storageCard={this.props.storageCard}
-                    background ={this.props.column.background}
+                    background={this.props.column.background}
                   />
                 );
               })}
