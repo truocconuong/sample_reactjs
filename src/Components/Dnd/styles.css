@@ -557,12 +557,13 @@ textarea {
 
 .row_history {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   padding: 0.5rem 0;
+  border-bottom: 1px solid #172b4d45;
 }
 
 .name_history {
-  font-weight: 500;
+  font-weight: 600;
   color: #172b4d;
 }
 
@@ -715,6 +716,14 @@ textarea {
   animation-name: onDisplaySearch;
   animation-duration: 0.1s;
 }
+.cs_update_history{
+  /* margin-left: 5px; */
+}
+.key_history{
+  color: #4e5061;
+  font-weight: 600;
+}
+
 
 @keyframes onDisplaySearch {
   from {

@@ -36,7 +36,17 @@ class DetailCard extends Component {
       showAddMember: false,
       errors: {},
       history: [],
-      isShowHistory: false,
+      name: "",
+      position: "",
+      clientName: "",
+      phone: "",
+      email: "",
+      location: "",
+      approachDate: "",
+      cv: "",
+      nameJob: "",
+      noteApproach: "",
+      idJob: "",
     };
     this.addMember = [];
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -45,15 +55,16 @@ class DetailCard extends Component {
     this.validator = new Validator(rulesCreateNewCard);
     this.showHistoryCard = this.showHistoryCard.bind(this);
     this.hideModal = this.hideModal.bind(this);
+    this.renderRowActivity = this.renderRowActivity.bind(this);
   }
 
   async showHistoryCard() {
     try {
-      if(this.state.isShowHistory){
+      if (this.state.isShowHistory) {
         this.setState({
-          isShowHistory: false
-        })
-      }else{
+          isShowHistory: false,
+        });
+      } else {
         let self = this;
         const data = {
           cardId: self.props.data_detail.id,
@@ -62,10 +73,10 @@ class DetailCard extends Component {
         if (response) {
           this.setState({
             history: response.data.historyCard,
-            isShowHistory: true
+            isShowHistory: true,
           });
-          
-          console.log(response.data.historyCard);
+
+          // console.log(response.data.historyCard);
         }
       }
     } catch (error) {
@@ -113,7 +124,15 @@ class DetailCard extends Component {
   };
 
   handleInputChange(e) {
-    this.props.update(e);
+    const name = e.target.name;
+    const value = e.target.value;
+    console.log(name, value);
+
+    this.setState({
+      [name]: value,
+    });
+
+    // this.props.update(e);
   }
 
   removeUserCard = (card_id, user_id, index) => {
@@ -136,8 +155,9 @@ class DetailCard extends Component {
   handleOnChangeJobSelected = (e) => {
     this.setState({
       jobSelected: e,
+      idJob: e.id,
     });
-    this.props.handleOnChangeJobSelected(e);
+    // this.props.handleOnChangeJobSelected(e);
   };
 
   toggleAddMember = () => {
@@ -230,13 +250,16 @@ class DetailCard extends Component {
   }
 
   updatePropsLinkCv = (value) => {
-    const data = {
-      target: {
-        name: "linkCv",
-        value: value,
-      },
-    };
-    this.props.update(data);
+    this.setState({
+      linkCv: value,
+    });
+    // const data = {
+    //   target: {
+    //     name: "linkCv",
+    //     value: value,
+    //   },
+    // };
+    // this.props.update(data);
   };
 
   isEmpty(obj) {
@@ -245,31 +268,128 @@ class DetailCard extends Component {
   }
 
   updateCard = () => {
-    const data = this.props.data_detail.content;
+    const data = this.state;
     const errors = this.validator.validate(data);
     delete errors["laneId"];
+    console.log(errors);
     this.setState({
       errors: errors,
       isShowHistory: false,
-      history: []
+      history: [],
     });
 
     if (this.isEmpty(errors)) {
-      this.props.updateCard();
+      const content = this.state;
+      const data = {
+        name: content.name,
+        position: content.position,
+        clientName: content.clientName,
+        phone: content.phone,
+        email: content.email,
+        location: content.location,
+        approachDate: content.approachDate,
+        cv: content.linkCv,
+        nameJob: content.nameJob,
+        noteApproach: content.noteApproach,
+        idJob: content.idJob,
+      };
+      this.props.updateCard(data);
     }
   };
-  hideModal(){
+  hideModal() {
     this.props.onHide();
     this.setState({
       isShowHistory: false,
-      history: []
-    })
+      history: [],
+    });
   }
+
+  componentWillReceiveProps = (props) => {
+    const content = props.data_detail.content;
+    this.setState(content);
+  };
+
+  renderRowActivity(e, index) {
+    console.log(e.content)
+    if (e.type == "update_card") {
+      let content = JSON.parse(e.content);
+      console.log(content)
+      return (
+        <div className="row_history" key={index}>
+          <div className="symbol symbol-50 symbol-light ">
+            <span className="symbol-label symbol-label-cs cs_ava_history">
+              <img
+                src={
+                  e.User.linkAvatar
+                    ? domainServer + "/" + e.User.linkAvatar
+                    : defaultAva
+                }
+                className="h-100 align-self-end"
+                alt=""
+              />
+            </span>
+          </div>
+          <div className="wrap_left_content_history">
+            <div className="conten_history">
+              <span className="name_history">
+                {e.User.name} 
+              </span>
+              {` has update this card:`}
+             
+            </div>
+            <ul>
+              {content.map((e, i) => {
+                return (
+                  <li className="cs_update_history" key={i}>
+                    <span className="key_history">{`${e.path}: `}</span>
+                    {e.lhs} <span className="change_to">change to</span>  {e.rhs}
+                    {/* {`${e.lhs} => ${e.rhs}`} */}
+                  </li>
+                );
+              })}
+            </ul>
+            <div className="time_history">
+              {moment(e.createdAt).format("hh:mma DD/MM/YYYY")}
+            </div>
+          </div>
+        </div>
+
+      );
+    } else {
+      return (
+        <div className="row_history" key={index}>
+          <div className="symbol symbol-50 symbol-light ">
+            <span className="symbol-label symbol-label-cs cs_ava_history">
+              <img
+                src={
+                  e.User.linkAvatar
+                    ? domainServer + "/" + e.User.linkAvatar
+                    : defaultAva
+                }
+                className="h-100 align-self-end"
+                alt=""
+              />
+            </span>
+          </div>
+          <div className="wrap_left_content_history">
+            <div className="conten_history">
+              <span className="name_history"> {e.User.name} </span>
+              {`${e.content}`}
+            </div>
+            <div className="time_history">
+              {moment(e.createdAt).format("hh:mma DD/MM/YYYY")}
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
+
   render() {
     const errors = this.state.errors;
     const users = [];
     let usersTeam = [];
-    const data_detail = this.props.data_detail.content;
+    const data_detail = this.state;
     if (this.props.show) {
       users.push(...this.props.data.content.user);
     }
@@ -281,12 +401,7 @@ class DetailCard extends Component {
     );
 
     return (
-      <Modal
-        size="lg"
-        show={this.props.show}
-        onHide={this.hideModal}
-        centered
-      >
+      <Modal size="lg" show={this.props.show} onHide={this.hideModal} centered>
         <Modal.Header closeButton>
           <div className="card-detail-header">
             <div className="detail-header__title">
@@ -384,7 +499,6 @@ class DetailCard extends Component {
                   <label>Name </label>
                   <span style={{ color: "red" }}>*</span>
                   <input
-                    disabled
                     type="text"
                     value={data_detail.name}
                     onChange={this.handleInputChange.bind(this)}
@@ -515,6 +629,7 @@ class DetailCard extends Component {
                             onChange={this.onChangeUploadHandler}
                             id="uploadCV"
                             type="file"
+                            accept="application/pdf"
                             className="form-control mb-2 mr-sm-2"
                             style={{ display: "none" }}
                             placeholder="Jane Doe"
@@ -655,9 +770,9 @@ class DetailCard extends Component {
                 onClick={this.props.toggleDetailInterview}
                 variant="btn btn-success btn-interview"
               >
-                {moment(data_detail.interview.timeInterview).subtract(7,'hours').format(
-                  "dddd DD/MM/YYYY HH:mm"
-                )}
+                {moment(data_detail.interview.timeInterview)
+                  .subtract(7, "hours")
+                  .format("dddd DD/MM/YYYY HH:mm")}
               </Button>
             ) : (
               <Button
@@ -709,46 +824,29 @@ class DetailCard extends Component {
           <div className="wrap_icon_history">
             <div className="wrap_left_icon_act">
               <i className="flaticon2-calendar-1 custom_icon_history"></i>
-              <div className="act_history">Activity</div>
+              <div className="act_history">History</div>
             </div>
             <button
               className="btn btn-secondary btn-sm"
               onClick={this.showHistoryCard.bind(this)}
             >
-              {`${this.state.isShowHistory? "Hide": "Detail"}`}
+              {`${
+                this.state.isShowHistory ? "Close" : "Show"
+              }`}
             </button>
           </div>
           <div
-            className={`wrap_row_history ${this.state.isShowHistory ? "active_history" : ""}`}
+            className={`wrap_row_history ${
+              this.state.isShowHistory ? "active_history" : ""
+            }`}
           >
-            {this.state.history.map((e, index) => {
-              return (
-                <div className="row_history" key={index}>
-                  <div className="symbol symbol-50 symbol-light ">
-                    <span className="symbol-label symbol-label-cs cs_ava_history">
-                      <img
-                        src={
-                          e.User.linkAvatar
-                            ? domainServer + "/" + e.User.linkAvatar
-                            : defaultAva
-                        }
-                        className="h-100 align-self-end"
-                        alt=""
-                      />
-                    </span>
-                  </div>
-                  <div className="wrap_left_content_history">
-                    <div className="conten_history">
-                      <span className="name_history"> {e.User.name} </span>
-                      {`${e.content}`}
-                    </div>
-                    <div className="time_history">
-                      {moment(e.createdAt).format("hh:mma DD/MM/YYYY")}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {this.state.isShowHistory ? (
+              this.state.history.map((e, index) => {
+                return this.renderRowActivity(e, index);
+                
+              })
+            ) : null}
+            {}
           </div>
         </div>
       </Modal>
@@ -763,7 +861,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     role: state.auth.role,
     userId: state.auth.userId,
-    update: (e) => ownProps.update(e),
+    // update: (e) => ownProps.update(e),
     addMemberToCard: (data) => ownProps.addMemberToCard(data),
   };
 };
