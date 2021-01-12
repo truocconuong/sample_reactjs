@@ -44,6 +44,7 @@ class CardTrello extends Component {
       isOpenAddMember: false,
       users: [],
       listAssign: [],
+      disableSave: true,
     };
     this.formCard = React.createRef();
     this.toggleAddMember = this.toggleAddMember.bind(this);
@@ -115,6 +116,7 @@ class CardTrello extends Component {
     const value = event.target.value;
     this.setState({
       [name]: value,
+      disableSave: false,
     });
   };
 
@@ -142,6 +144,7 @@ class CardTrello extends Component {
       users: props.users.filter(
         (user) => !props.userCard.map((u) => u.userId).includes(user.userId)
       ),
+      disableSave: true
     });
   }
   componentWillUpdate() {
@@ -193,6 +196,7 @@ class CardTrello extends Component {
         position: this.state.position,
         noteApproach: this.state.noteApproach,
         listAssign: this.state.listAssign,
+        from: 'card_trello_modal'
       };
       const response = await api.patch(`/api/cards/${this.state.idCard}`, data);
       if (response) {
@@ -537,6 +541,7 @@ class CardTrello extends Component {
                 {this.props.role !== "Director" ? (
                   <button
                     type="submit"
+                    disabled={this.state.disableSave}
                     className={
                       this.state.isLoading
                         ? "btn btn-primary font-weight-bolder style-btn-kitin spinner spinner-white spinner-right "
