@@ -487,7 +487,7 @@ export default class CandidateCard extends Component {
                 )}
 
                 {this.props.data.cv &&
-                  (this.props.base64 ? (
+                  (this.props.base64 && !this.props.isLoadingPdf? (
                     <a
                       onClick={() => {
                         // this.props.previewPdf(this.props.data.id)
