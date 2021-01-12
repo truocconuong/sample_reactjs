@@ -30,7 +30,7 @@ export default class DetailCandidateTable extends Component {
       <div className="wrap_footer">
         <div className="modal-cus__right text-right">
           {this.props.data.jobs[0].cv &&
-            (this.props.base64 ? (
+            (this.props.base64 && !this.props.isLoadingPdf? (
               <a
                 onClick={() => {
                   // this.props.previewPdf(this.props.data.id)
@@ -41,7 +41,6 @@ export default class DetailCandidateTable extends Component {
                 Raw CV
               </a>
             ) : (
-
                 <button
                   onClick={() => {
                     window.open(this.props.data.jobs[0].cv, '_blank')
