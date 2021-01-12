@@ -29,7 +29,7 @@ export default class DetailCandidateTable extends Component {
     return (
       <div className="wrap_footer">
         <div className="modal-cus__right text-right">
-          {this.props.data.jobs[0].cv&&
+          {this.props.data.jobs[0].cv &&
             (this.props.base64 ? (
               <a
                 onClick={() => {
@@ -41,13 +41,19 @@ export default class DetailCandidateTable extends Component {
                 Raw CV
               </a>
             ) : (
-              <button
-                type="button"
-                className="btn btn-primary spinner font-weight-bolder spinner-white spinner-right mr-3"
-              >
-                Raw CV
-              </button>
-            ))}
+
+                <button
+                  onClick={() => {
+                    window.open(this.props.data.jobs[0].cv, '_blank')
+                  }}
+                  type="button"
+                  className={this.props.isLoadingPdf ? `btn btn-primary spinner font-weight-bolder spinner-white spinner-right mr-3` : `btn btn-primary font-weight-bolder mr-3`}
+                >
+                  Raw CV
+                </button>
+
+
+              ))}
           <button className="btn btn-secondary" onClick={self.props.onHide}>
             Cancel
           </button>
@@ -255,9 +261,8 @@ export default class DetailCandidateTable extends Component {
                   {this.state.base64Drive ? (
                     <a
                       href={`data:application/pdf;base64,${this.state.base64Drive}`}
-                      download={`${
-                        this.state.base64Drive ? data.name : ""
-                      }.pdf`}
+                      download={`${this.state.base64Drive ? data.name : ""
+                        }.pdf`}
                       className="input-group-append"
                     >
                       <span className="input-group-text">
@@ -265,12 +270,12 @@ export default class DetailCandidateTable extends Component {
                       </span>
                     </a>
                   ) : (
-                    <a href="#" className="input-group-append">
-                      <span className="input-group-text">
-                        <i className="fas fa-cloud-download-alt"></i>
-                      </span>
-                    </a>
-                  )}
+                      <a href="#" className="input-group-append">
+                        <span className="input-group-text">
+                          <i className="fas fa-cloud-download-alt"></i>
+                        </span>
+                      </a>
+                    )}
                 </div>
               </div>
               <div className="form-group">

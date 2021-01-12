@@ -40,6 +40,7 @@ class SearchCandidate extends Component {
       isOpenPreviewPdf: false,
       classToggleDetail: new Array(10).fill("hide_mb"),
       classArr: new Array(10).fill("fa fa-caret-right"),
+      isLoadingPdf : true,
     };
     this.refList = React.createRef();
     this.handlePagination = this.handlePagination.bind(this);
@@ -71,6 +72,7 @@ class SearchCandidate extends Component {
       classToggleDetail: new Array(10).fill("hide_mb"),
       classArr: new Array(10).fill("fa fa-caret-right"),
       jobId: "",
+      isLoadingPdf : true,
     });
   };
 
@@ -308,13 +310,16 @@ class SearchCandidate extends Component {
 
   async previewPdf(candidateJobId) {
     try {
-     
+     this.setState({
+       isLoadingPdf : true
+     })
       const response = await api.get(
         `/api/v1/admin/preview/pdf/candidateJob/${candidateJobId}`
       );
       if (response) {
         this.setState({
           base64: response.data.base64,
+          isLoadingPdf : false
         });
       }
     } catch (error) {
@@ -333,6 +338,7 @@ class SearchCandidate extends Component {
       //   transition: Zoom,
       // });
       this.setState({
+        isLoadingPdf : false,
         base64: "",
         isOpenPreviewPdf: false,
       });
@@ -359,6 +365,7 @@ class SearchCandidate extends Component {
           togglePreviewPdf={this.togglePreviewPdf.bind(this)}
           // previewPdf={this.previewPdf.bind(this)}
           base64={this.state.base64}
+          isLoadingPdf = {this.state.isLoadingPdf}
         />
         <PreviewPdf
           show={this.state.isOpenPreviewPdf}

@@ -615,7 +615,6 @@ class DetailCard extends Component {
                   <label>Link cv </label>
                   <div className="input-group">
                     <input
-                      disabled
                       type="text"
                       value={data_detail.linkCv ? data_detail.linkCv : ""}
                       onChange={this.handleInputChange.bind(this)}
