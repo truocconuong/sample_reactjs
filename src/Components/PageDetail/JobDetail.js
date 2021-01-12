@@ -697,6 +697,7 @@ class JobDetail extends Component {
           base64={this.state.base64}
           users={this.state.users}
         // previewPdf={this.previewPdf.bind(this)}
+        isLoadingPdf={this.state.isLoadingPdf}
         />
 
         <CardTrello

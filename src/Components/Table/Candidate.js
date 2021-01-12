@@ -31,6 +31,7 @@ class Candidate extends Component {
       classToggleDetail: new Array(10).fill("show_mb"),
       classArr: new Array(10).fill("fa fa-caret-down"),
       isOpenPreviewPdf: false,
+      isLoadingPdf : true,
     };
     this.handlePagination = this.handlePagination.bind(this);
     this.getDataCandidate = this.getDataCandidate.bind(this);
@@ -169,16 +170,21 @@ class Candidate extends Component {
 
   async previewPdf(candidateJobId) {
     try {
+      this.setState({
+        isLoadingPdf : true
+      })
       const response = await api.get(
         `/api/v1/admin/preview/pdf/candidateJob/${candidateJobId}`
       );
       if (response) {
         this.setState({
           base64: response.data.base64,
+          isLoadingPdf : false
         });
       }
     } catch (error) {
       this.setState({
+        isLoadingPdf : false,
         base64: "",
         isOpenPreviewPdf: false,
       });
@@ -202,6 +208,7 @@ class Candidate extends Component {
           togglePreviewPdf={this.togglePreviewPdf.bind(this)}
           // previewPdf={this.previewPdf.bind(this)}
           base64={this.state.base64}
+          isLoadingPdf = {this.state.isLoadingPdf}
         />
         <PreviewPdf
           show={this.state.isOpenPreviewPdf}
