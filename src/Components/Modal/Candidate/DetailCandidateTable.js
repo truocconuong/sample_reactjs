@@ -3,7 +3,7 @@ import Modal, { ModalTransition, ScrollBehavior } from "@atlaskit/modal-dialog";
 import { DatetimePickerTrigger } from "../../libs/rc-datetime-picker";
 import moment from "moment";
 import Select from "react-select";
-
+import "./style.css";
 import "../style.css";
 import { convertDriveToBase64 } from "../../../utils/common/convertDriveToBase64";
 
@@ -20,6 +20,8 @@ export default class DetailCandidateTable extends Component {
       cv: "",
       location: "",
       arrayJob: [],
+      position: "",
+      noteApproach: ""
     };
     this.renderHeaderCustom = this.renderHeaderCustom.bind(this);
     this.toggleShowCv = this.toggleShowCv.bind(this);
@@ -30,7 +32,7 @@ export default class DetailCandidateTable extends Component {
       <div className="wrap_footer">
         <div className="modal-cus__right text-right">
           {this.props.data.jobs[0].cv &&
-            (this.props.base64 && !this.props.isLoadingPdf? (
+            (this.props.base64 && !this.props.isLoadingPdf ? (
               <a
                 onClick={() => {
                   // this.props.previewPdf(this.props.data.id)
@@ -41,18 +43,20 @@ export default class DetailCandidateTable extends Component {
                 Raw CV
               </a>
             ) : (
-                <button
-                  onClick={() => {
-                    window.open(this.props.data.jobs[0].cv, '_blank')
-                  }}
-                  type="button"
-                  className={this.props.isLoadingPdf ? `btn btn-primary spinner font-weight-bolder spinner-white spinner-right mr-3` : `btn btn-primary font-weight-bolder mr-3`}
-                >
-                  Raw CV
-                </button>
-
-
-              ))}
+              <button
+                onClick={() => {
+                  window.open(this.props.data.jobs[0].cv, "_blank");
+                }}
+                type="button"
+                className={
+                  this.props.isLoadingPdf
+                    ? `btn btn-primary spinner font-weight-bolder spinner-white spinner-right mr-3`
+                    : `btn btn-primary font-weight-bolder mr-3`
+                }
+              >
+                Raw CV
+              </button>
+            ))}
           <button className="btn btn-secondary" onClick={self.props.onHide}>
             Cancel
           </button>
@@ -89,6 +93,8 @@ export default class DetailCandidateTable extends Component {
       clientName: data.value,
       cv: data.cv,
       location: data.location,
+      position: data.position ? data.position : "",
+      noteApproach: data.noteApproach ? data.noteApproach : ""
     });
   };
 
@@ -100,6 +106,8 @@ export default class DetailCandidateTable extends Component {
       cv: this.props.data.jobs ? this.props.data.jobs[0].cv : "",
       location: this.props.data.jobs ? this.props.data.jobs[0].location : "",
       arrayJob: this.props.data.jobs ? this.props.data.jobs : [],
+      position: this.props.data.jobs ? this.props.data.jobs[0].candidateJob.position : "",
+      noteApproach: this.props.data.jobs ? this.props.data.jobs[0].candidateJob.noteApproach : ""
     });
   }
 
@@ -162,15 +170,23 @@ export default class DetailCandidateTable extends Component {
                   Name job <span style={{ color: "red" }}>*</span>
                 </label>
                 <Select
-                  defaultValue={data.jobs[0]}
-                  options={data.jobs}
+                  defaultValue={{
+                    value: data.jobs[0].candidateJobId,
+                    label: data.jobs[0].label,
+                  }}
+                  options={data.jobs.map((e) => {
+                    return {
+                      value: e.candidateJobId,
+                      label: e.label,
+                    };
+                  })}
                   onChange={this.handleOnchange}
                   inputProps={{ readOnly: true }}
                 />
               </div>
 
               <div className="form-group row">
-                <div className="col-lg-6">
+                <div className="col-lg-6 mb_175">
                   <label>
                     Location <span style={{ color: "red" }}>*</span>
                   </label>
@@ -211,7 +227,7 @@ export default class DetailCandidateTable extends Component {
               </div>
 
               <div className="form-group row">
-                <div className="col-lg-6">
+                <div className="col-lg-6 mb_175">
                   <label>
                     Phone <span style={{ color: "red" }}>*</span>
                   </label>
@@ -260,8 +276,9 @@ export default class DetailCandidateTable extends Component {
                   {this.state.base64Drive ? (
                     <a
                       href={`data:application/pdf;base64,${this.state.base64Drive}`}
-                      download={`${this.state.base64Drive ? data.name : ""
-                        }.pdf`}
+                      download={`${
+                        this.state.base64Drive ? data.name : ""
+                      }.pdf`}
                       className="input-group-append"
                     >
                       <span className="input-group-text">
@@ -269,12 +286,12 @@ export default class DetailCandidateTable extends Component {
                       </span>
                     </a>
                   ) : (
-                      <a href="#" className="input-group-append">
-                        <span className="input-group-text">
-                          <i className="fas fa-cloud-download-alt"></i>
-                        </span>
-                      </a>
-                    )}
+                    <a href="#" className="input-group-append">
+                      <span className="input-group-text">
+                        <i className="fas fa-cloud-download-alt"></i>
+                      </span>
+                    </a>
+                  )}
                 </div>
               </div>
               <div className="form-group">
@@ -282,17 +299,17 @@ export default class DetailCandidateTable extends Component {
                 <input
                   type="text"
                   name="position"
-                  value={data.position}
+                  value={this.state.position}
                   readOnly
                   className="form-control"
                   placeholder="Enter position"
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="exampleTextarea">Note Approach</label>
+                <label htmlFor="exampleTextarea">Note Approach </label> 
                 <textarea
                   name="noteApproach"
-                  value={data.noteApproach}
+                  value={this.state.noteApproach}
                   readOnly
                   className="form-control form-control-solid"
                   rows={3}
