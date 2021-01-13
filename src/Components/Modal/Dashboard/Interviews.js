@@ -164,15 +164,13 @@ class Interviews extends Component {
                                     </span>
                                   </td>
                                   <td
-                                    data-field="Status"
+                         e           data-field="Status"
                                     aria-label={1}
                                     className="datatable-cell hide_mb"
                                   >
                                     <span style={{ width: "100px" }}>
                                       <span className="text-muted font-weight-bold cus_text_mute">
-                                        {moment(interview.timeInterview).format(
-                                          "hh:mm a DD/MM/YYYY"
-                                        )}
+                                        {moment(interview.timeInterview).subtract(7,'hour').format('DD/MM/YYYY HH:mm')}
                                       </span>
                                     </span>
                                   </td>
@@ -185,7 +183,7 @@ class Interviews extends Component {
                                       <span className="text-muted font-weight-bold cus_text_mute">
                                         {moment(
                                           interview.timeInterviewEnd
-                                        ).format("hh:mm a DD/MM/YYYY")}
+                                        ).subtract(7,'hour').format('DD/MM/YYYY HH:mm')}
                                       </span>
                                     </span>
                                   </td>
