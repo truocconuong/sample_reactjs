@@ -442,10 +442,11 @@ class CardTrello extends Component {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="exampleTextarea">Note Approach</label>
+                <label htmlFor="exampleTextarea">Note Approach</label> <span style={{ color: "red" }}>*</span>
                 <textarea
                   type="text"
                   name="noteApproach"
+                  required
                   value={this.state.noteApproach ? this.state.noteApproach : ""}
                   onChange={this.handleChangeData}
                   className="form-control"
