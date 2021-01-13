@@ -20,6 +20,7 @@ class EditTask extends Component {
     this.renderHeaderCustom = this.renderHeaderCustom.bind(this);
     this.submitTask = this.submitTask.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
+    this.calcTotal = this.calcTotal.bind(this);
   }
   async submitTask() {
     try {
@@ -54,9 +55,26 @@ class EditTask extends Component {
       </div>
     );
   }
+  calcTotal(arr, type){
+    if(type=="percent"){
+      const reducer = (accumulator, currentValue) => accumulator + Number(currentValue.percent);
+      return arr.reduce(reducer, 0)
+    }else{
+      const reducer = (accumulator, currentValue) => accumulator + Number(currentValue.target);
+      return arr.reduce(reducer, 0)
+    }
+  }
   renderFooter(self) {
     return (
       <div className="wrap_footer">
+        <div>
+          <div>
+            {`Total target: ${this.calcTotal(this.props.contentTask, "target")}%`}
+          </div>
+          <div>
+            {`Total achievement: ${this.calcTotal(this.props.contentTask, "percent")}%`}
+          </div>
+        </div>
         <div className="modal-cus__right text-right">
           <button onClick={self.submitTask} className="btn btn-primary mr-2">
             Update
@@ -85,11 +103,11 @@ class EditTask extends Component {
             }}
             scrollBehavior={this.state.scrollBehaviour}
             height={502}
-            width={520}
+            width={560}
           >
             <div>
               <div className="form">
-                <div className="card-body">
+                <div className="card-body card-body-newtask pb-0">
                   <div className="form-group row ">
                     <label className="col-form-label col-lg-3">
                       Deadline
@@ -193,10 +211,21 @@ class EditTask extends Component {
                       </span>
                     </label>
                     <div className="col-lg-9 pr-0 pl-0">
+                      <div className="row row_input_task_cs">
+                        <div className="col-lg-7 pr-0 cs_task_title">
+                          Task content
+                        </div>
+                        <div className="col-lg-2 pr-0 cs_task_title">
+                          Achievement
+                        </div>
+                        <div className="col-lg-2 pr-0 cs_task_title">
+                          Target
+                        </div>
+                      </div>
                       {props.contentTask.map((task, index) => {
                         return (
                           <div className="row row_input_task" key={index}>
-                            <div className="col-lg-8 pr-0">
+                            <div className="col-lg-7 pr-0">
                               <input
                                 className={
                                   props.errors.contentTask
@@ -215,7 +244,7 @@ class EditTask extends Component {
                                 )}
                               ></input>
                             </div>
-                            <div className="col-lg-3 ">
+                            <div className="col-lg-2 pr-0 ">
                               <input
                                 className={
                                   props.errors.contentTask
@@ -236,7 +265,29 @@ class EditTask extends Component {
                                 )}
                               ></input>
                             </div>
-                            <div className="col-lg-1 pl-0">
+                            <div className="col-lg-2 pr-0">
+                              <input
+                                className={
+                                  props.errors.contentTask
+                                    ? props.errors.contentTask[index]
+                                      ? props.errors.contentTask[index].target
+                                        ? "form-control is-invalid"
+                                        : "form-control "
+                                      : "form-control "
+                                    : "form-control "
+                                }
+                                name="target"
+                                type="number"
+                                min="0"
+                                max="100"
+                                value={task.target}
+                                onChange={this.props.handleChangeTargetTask.bind(
+                                  this,
+                                  index
+                                )}
+                              ></input>
+                            </div>
+                            <div className="col-lg-1 pr-0 pl-0">
                               <div
                                 className="wrap_delete_task"
                                 onClick={this.props.removeContentTask.bind(

@@ -137,7 +137,6 @@ export default class Networking {
   handleError(error, rejected) {
     if (error.response) {
       if (error.response.status === 401) {
-        console.log(error.response, "hihi");
         if (error.response.data.message == "Logout") {
           window.location.reload();
         } else {
@@ -145,6 +144,8 @@ export default class Networking {
         }
       } else if (error.response.status === 404) {
         // window.location.href = '/error';
+      } else if (error.response.status === 403) {
+        rejected({error : error.response.data})
       } else {
         rejected(error);
       }

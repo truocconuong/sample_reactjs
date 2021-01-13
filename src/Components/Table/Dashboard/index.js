@@ -41,8 +41,8 @@ class Dashboard extends Component {
       startDateJob: moment().subtract(3, "M"),
       endDateJob: moment(),
       // date of performance
-      startDate: moment().startOf("week"),
-      endDate: moment().endOf("week"),
+      startDate: moment().subtract(3, "M"),
+      endDate: moment(),
       // date of create new task
       startDateTask: moment(),
       endDateTask: moment().add(1, "days"),
@@ -54,7 +54,7 @@ class Dashboard extends Component {
         label: "",
         value: "",
       },
-      contentTask: [{ content: "", percent: "" }],
+      contentTask: [{ content: "", percent: "", target: "" }],
       dataListTeamMember: [],
       errors: {},
 
@@ -82,10 +82,16 @@ class Dashboard extends Component {
     this.removeContentTask = this.removeContentTask.bind(this);
     this.handleChangePercentTask = this.handleChangePercentTask.bind(this);
     this.handleChangeContentTask = this.handleChangeContentTask.bind(this);
+    this.handleChangeTargetTask = this.handleChangeTargetTask.bind(this);
   }
   handleChangePercentTask(i, event) {
     let contentTask = this.state.contentTask;
     contentTask[i].percent = event.target.value;
+    this.setState({ contentTask });
+  }
+  handleChangeTargetTask(i, event) {
+    let contentTask = this.state.contentTask;
+    contentTask[i].target = event.target.value;
     this.setState({ contentTask });
   }
   handleChangeContentTask(i, event) {
@@ -104,7 +110,7 @@ class Dashboard extends Component {
   }
   addContentTask() {
     this.setState((prevState) => ({
-      contentTask: [...prevState.contentTask, { content: "", percent: "" }],
+      contentTask: [...prevState.contentTask, { content: "", percent: "", target: "" }],
     }));
   }
   handleChangeSelect(e, type) {
@@ -131,10 +137,11 @@ class Dashboard extends Component {
   async handleCreateNewTask() {
     const errors = this.validator.validate(this.state);
     const contentTask = await this.state.contentTask.map((task, index) => {
-      if (task.content == "" || task.percent == "") {
+      if (task.content == "" || task.percent == "" || task.target == "" ) {
         return {
           content: task.content == "" ? "content not null" : null,
           percent: task.percent == "" ? "percent not null" : null,
+          target: task.target == "" ? "target not null" : null,
         };
       } else {
         return {};
@@ -157,6 +164,7 @@ class Dashboard extends Component {
           startDate: self.state.startDateTask.format("YYYY-MM-DD"),
           endDate: self.state.endDateTask.format("YYYY-MM-DD"),
         };
+        console.log(data)
         const response = await api.post(`/api/task`, data);
         if (response) {
           toast(<CustomToast title={"Success!"} />, {
@@ -176,7 +184,7 @@ class Dashboard extends Component {
           this.setState(
             {
               teamMemberId: "",
-              contentTask: [{ content: "", percent: "" }],
+              contentTask: [{ content: "", percent: "", target: "" }],
               startDateTask: moment(),
               endDateTask: moment().add(1, "days"),
               errors: {},
@@ -273,7 +281,7 @@ class Dashboard extends Component {
             totalRowTask: responseListWeeklyTask.data.total,
             dataWeeklyTask: responseListWeeklyTask.data.tasks,
           });
-          console.log(responsePerformance);
+          console.log(responseListWeeklyTask);
           setTimeout(() => {
             self.setState({
               isLoading: false,
@@ -523,6 +531,7 @@ class Dashboard extends Component {
           totalRowTask: response.data.total,
           startTask: start,
         });
+        console.log(response)
         setTimeout(() => {
           self.setState({
             isLoading: false,
@@ -657,6 +666,7 @@ class Dashboard extends Component {
                   removeContentTask={this.removeContentTask}
                   handleChangePercentTask={this.handleChangePercentTask}
                   handleChangeContentTask={this.handleChangeContentTask}
+                  handleChangeTargetTask={this.handleChangeTargetTask}
                 />
                 {this.props.role === "Member" ? (
                   <RecruitmentProgress history={this.props.history} />

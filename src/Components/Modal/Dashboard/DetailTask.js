@@ -69,7 +69,6 @@ class DetailTask extends Component {
         <h4 style={{ marginBottom: "0", textAlign: "center" }}>
           {data.titleJob}
         </h4>
-        
       </div>
     );
   }
@@ -77,7 +76,6 @@ class DetailTask extends Component {
   render() {
     let self = this;
     const data = this.props.data;
-    // console.log(data);
     return (
       <ModalTransition>
         {this.props.show && (
@@ -127,7 +125,9 @@ class DetailTask extends Component {
                         key={index}
                         className="text-dark-50 m-0 pt-3 font-weight-normal"
                       >
-                        {`${task.content} (${task.percent}%)`} 
+                        {`${task.content} (achievement: ${
+                          task.percent
+                        }%, target: ${task.target ? task.target : "0"}%)`}
                       </p>
                     );
                   } else {

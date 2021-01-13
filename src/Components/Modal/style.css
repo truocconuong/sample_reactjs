@@ -103,3 +103,7 @@
 .background-pdf{
   background: #fafafa;
 }
+
+.card-body-preview canvas {
+  width: 100%;
+}

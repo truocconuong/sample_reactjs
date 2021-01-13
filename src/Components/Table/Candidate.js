@@ -31,6 +31,7 @@ class Candidate extends Component {
       classToggleDetail: new Array(10).fill("show_mb"),
       classArr: new Array(10).fill("fa fa-caret-down"),
       isOpenPreviewPdf: false,
+      isLoadingPdf : true,
     };
     this.handlePagination = this.handlePagination.bind(this);
     this.getDataCandidate = this.getDataCandidate.bind(this);
@@ -129,57 +130,62 @@ class Candidate extends Component {
     this.getDataCandidate();
   }
   togglePreviewPdf() {
-    this.setState(
-      {
-        isOpenPreviewPdf: !this.state.isOpenPreviewPdf,
-        isOpenCandidateDetail : false,
-      },
-      () => {
-        if (!this.state.isOpenPreviewPdf)
-          this.setState({
-            base64: "",
-          });
-      }
-    );
+    if (this.state.base64 !== "") {
+      this.setState(
+        {
+          isOpenPreviewPdf: !this.state.isOpenPreviewPdf,
+          isOpenCandidateDetail: false,
+        },
+        () => {
+          if (!this.state.isOpenPreviewPdf) {
+            this.setState({
+              base64: "",
+            });
+          }
+        }
+      );
+    } else {
+      toast(
+        <CustomToast
+          title={"Cannot read file pdf please check again!"}
+          type="error"
+        />,
+        {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          autoClose: 3000,
+          className: "toast_login",
+          closeButton: false,
+          hideProgressBar: true,
+          newestOnTop: true,
+          closeOnClick: true,
+          rtl: false,
+          pauseOnFocusLoss: true,
+          draggable: true,
+          pauseOnHover: true,
+          transition: Zoom,
+        }
+      );
+    }
   }
 
   async previewPdf(candidateJobId) {
     try {
       this.setState({
-        isLoading: true,
-      });
+        isLoadingPdf : true
+      })
       const response = await api.get(
         `/api/v1/admin/preview/pdf/candidateJob/${candidateJobId}`
       );
       if (response) {
         this.setState({
           base64: response.data.base64,
-          isLoading: false,
+          isLoadingPdf : false
         });
       }
     } catch (error) {
-      // toast(
-      //   <CustomToast
-      //     title={"You do not have permission to access files ! "}
-      //     type="error"
-      //   />,
-      //   {
-      //     position: toast.POSITION.BOTTOM_RIGHT,
-      //     autoClose: 3000,
-      //     className: "toast_login",
-      //     closeButton: false,
-      //     hideProgressBar: true,
-      //     newestOnTop: true,
-      //     closeOnClick: true,
-      //     rtl: false,
-      //     pauseOnFocusLoss: true,
-      //     draggable: true,
-      //     pauseOnHover: true,
-      //     transition: Zoom,
-      //   }
-      // );
       this.setState({
-        isLoading: false,
+        isLoadingPdf : false,
+        base64: "",
         isOpenPreviewPdf: false,
       });
     }
@@ -201,6 +207,8 @@ class Candidate extends Component {
           onHide={this.toggleCandidateDetail.bind(this, false)}
           togglePreviewPdf={this.togglePreviewPdf.bind(this)}
           // previewPdf={this.previewPdf.bind(this)}
+          base64={this.state.base64}
+          isLoadingPdf = {this.state.isLoadingPdf}
         />
         <PreviewPdf
           show={this.state.isOpenPreviewPdf}

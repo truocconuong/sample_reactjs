@@ -89,15 +89,17 @@ class Team extends Component {
       isLoading: false,
       isSelected: false,
       formAddTeam: true,
+      isOpenDeleteUserPop: new Array(10).fill(false),
     })
   }
   toggleForm(team) {
-    this.setState({ formAddTeam: !this.state.formAddTeam })
     this.resetForm();
-    if (this.state.formAddTeam) {
-      this.setState({ team: team })
-      this.loadDataUpdateToState(team.id);
-    }
+    this.setState({ formAddTeam: this.state.team !== '' && this.state.team.id === team.id ? !this.state.formAddTeam : false },()=>{
+      if (!this.state.formAddTeam) {
+        this.setState({ team: team })
+        this.loadDataUpdateToState(team.id);
+      }
+    })
   }
   async loadDataUpdateToState(id) {
     const response = await api.get(`/api/teams/${id}`);
