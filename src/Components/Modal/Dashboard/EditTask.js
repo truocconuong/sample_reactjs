@@ -20,6 +20,7 @@ class EditTask extends Component {
     this.renderHeaderCustom = this.renderHeaderCustom.bind(this);
     this.submitTask = this.submitTask.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
+    this.calcTotal = this.calcTotal.bind(this);
   }
   async submitTask() {
     try {
@@ -54,16 +55,25 @@ class EditTask extends Component {
       </div>
     );
   }
+  calcTotal(arr, type){
+    if(type=="percent"){
+      const reducer = (accumulator, currentValue) => accumulator + Number(currentValue.percent);
+      return arr.reduce(reducer, 0)
+    }else{
+      const reducer = (accumulator, currentValue) => accumulator + Number(currentValue.target);
+      return arr.reduce(reducer, 0)
+    }
+  }
   renderFooter(self) {
     return (
       <div className="wrap_footer">
         <div>
-          {/* <div>
+          <div>
             {`Total target: ${this.calcTotal(this.props.contentTask, "target")}%`}
           </div>
           <div>
             {`Total achievement: ${this.calcTotal(this.props.contentTask, "percent")}%`}
-          </div> */}
+          </div>
         </div>
         <div className="modal-cus__right text-right">
           <button onClick={self.submitTask} className="btn btn-primary mr-2">
