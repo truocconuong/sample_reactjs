@@ -800,3 +800,6 @@ textarea {
   resize: none;
   overflow-y: scroll;
 }
+.select_user{
+  width: 280px;
+}
