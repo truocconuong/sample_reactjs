@@ -343,19 +343,22 @@ main {
   text-overflow: ellipsis;
   overflow: hidden;
 }
-.table_flex_between{
+.table_flex_between {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 405px;
 }
-.cs_title_job_dashboard{
+.cs_title_job_dashboard {
   max-width: 390px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
-.table_weekly_task{
+.table_weekly_task {
   max-height: 336px;
   overflow-y: auto;
+}
+.cs_height_card {
+  height: calc(100% - 25px);
 }

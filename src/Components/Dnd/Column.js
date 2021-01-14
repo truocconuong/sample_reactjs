@@ -38,6 +38,7 @@ class Column extends Component {
     this.state = {
       loadMore: false,
       heightOfTaskList: 0,
+      hasNextPage: true,
     };
     this.scrollCol = null;
   }
@@ -51,7 +52,9 @@ class Column extends Component {
       this.props.updateColumn(data, column);
       this.setState({
         loadMore: false,
+        hasNextPage: response.data.list.length == 0 ? false : true
       });
+      console.log(response.data.list.length)
     }
   };
 
@@ -76,7 +79,7 @@ class Column extends Component {
     // scrollHeight chieu cao thuc cua scroll div
     if (
       Math.floor(e.target.scrollTop + this.scrollCol.offsetHeight) ==
-      this.scrollCol.scrollHeight
+      this.scrollCol.scrollHeight && this.state.hasNextPage
     ) {
       console.log("load")
       this.loadMoreLane(this.props.column);

@@ -18,6 +18,8 @@ import { ToastContainer, toast, Zoom } from "react-toastify";
 import CustomToast from "../common/CustomToast";
 import PreviewPdf from "../Modal/PreviewPdf/PreviewPdf.js";
 import SearchBoard from "./Board/SearchBoard.js";
+import FilterMember from "./Board/FilterMember.js";
+
 
 const api = new Network();
 
@@ -82,7 +84,7 @@ class Broad extends Component {
       show_form_create_interview: false,
       show_form_detail_interview: false,
       isAddCardNoColumn: false,
-      userId: ''
+      userId: "",
     };
     this.open_add_card_form = this.open_add_card_form.bind(this);
     this.close_add_card_form = this.close_add_card_form.bind(this);
@@ -203,21 +205,27 @@ class Broad extends Component {
     } catch (error) {
       if (error.error) {
         if (error.error.data) {
-          if (error.error.data.error === 'Cannot update candidate') {
-            toast(<CustomToast title={"Email or phone already exists!"} type={'error'} />, {
-              position: toast.POSITION.TOP_CENTER,
-              autoClose: 3000,
-              className: "toast_login",
-              closeButton: false,
-              hideProgressBar: true,
-              newestOnTop: true,
-              closeOnClick: true,
-              rtl: false,
-              pauseOnFocusLoss: true,
-              draggable: true,
-              pauseOnHover: true,
-              transition: Zoom,
-            });
+          if (error.error.data.error === "Cannot update candidate") {
+            toast(
+              <CustomToast
+                title={"Email or phone already exists!"}
+                type={"error"}
+              />,
+              {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 3000,
+                className: "toast_login",
+                closeButton: false,
+                hideProgressBar: true,
+                newestOnTop: true,
+                closeOnClick: true,
+                rtl: false,
+                pauseOnFocusLoss: true,
+                draggable: true,
+                pauseOnHover: true,
+                transition: Zoom,
+              }
+            );
           }
         }
       }
@@ -327,12 +335,12 @@ class Broad extends Component {
         },
       };
       // add laneIdNew for card Update
-      const column = data.columns[destination.droppableId]
-      data.cards[draggableId].content.laneId = destination.droppableId
+      const column = data.columns[destination.droppableId];
+      data.cards[draggableId].content.laneId = destination.droppableId;
       data.cards[draggableId].content.laneSelected = {
         value: column.id,
-        label: column.title
-      }
+        label: column.title,
+      };
       this.setState({
         data: data,
       });
@@ -377,7 +385,11 @@ class Broad extends Component {
       columnOrder: [],
     };
     try {
-      const lanes = await api.get(`/api/admin/new/cards${this.state.userId !== '' ? `?userId=${this.state.userId}` : ''}`);
+      const lanes = await api.get(
+        `/api/admin/new/cards${
+          this.state.userId !== "" ? `?userId=${this.state.userId}` : ""
+        }`
+      );
       const columns = lanes.data.list;
       for (const column of columns) {
         data.columns[`${column.id}`] = {
@@ -397,16 +409,18 @@ class Broad extends Component {
               laneId: card.laneId,
               candidateId: card.Candidate.id,
               name: card.Candidate.name,
-              position: card.position || '',
+              position: card.position || "",
               clientName: !_.isNil(card.Job.Client) ? card.Job.Client.name : "",
-              backgroundClient: !_.isNil(card.Job.Client) ? card.Job.Client.background : "",
+              backgroundClient: !_.isNil(card.Job.Client)
+                ? card.Job.Client.background
+                : "",
               phone: card.Candidate.phone,
               email: card.Candidate.email,
               location: card.Job.Location.name,
               approachDate: card.approachDate,
               linkCv: card.cv,
               nameJob: card.Job.title,
-              noteApproach: card.noteApproach || '',
+              noteApproach: card.noteApproach || "",
               interview: card.Interview,
               idJob: card.jobId,
               jobSelected: {
@@ -466,7 +480,7 @@ class Broad extends Component {
         });
         this.setState({ jobs: jobs });
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   initUserTeam = async () => {
@@ -486,7 +500,7 @@ class Broad extends Component {
           users: users,
         });
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   createCardToLane = async (item) => {
@@ -521,7 +535,7 @@ class Broad extends Component {
       }
     } catch (error) {
       this.close_add_card_form();
-      toast(<CustomToast title={"Card already exists !"} type={'error'} />, {
+      toast(<CustomToast title={"Card already exists !"} type={"error"} />, {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
         className: "toast_login",
@@ -560,13 +574,13 @@ class Broad extends Component {
 
   initDataAgain = () => {
     this.setState({
-      isLoading: true
-    })
-    this.setState({
-      userId: ''
+      isLoading: true,
     });
-    this.initData()
-  }
+    this.setState({
+      userId: "",
+    });
+    this.initData();
+  };
 
   removeMemberToCard = async (card_id, user_id) => {
     try {
@@ -605,11 +619,11 @@ class Broad extends Component {
 
   handleOnChangeLaneSelected = (e) => {
     const data = this.state.card_selected;
-    data.content.laneSelected = e
+    data.content.laneSelected = e;
     this.setState({
       card_data_detail: data,
     });
-  }
+  };
 
   updateColumn = (cards, column) => {
     const { data } = this.state;
@@ -626,16 +640,18 @@ class Broad extends Component {
         content: {
           candidateId: card.Candidate.id,
           name: card.Candidate.name,
-          position: card.position || '',
+          position: card.position || "",
           clientName: !_.isNil(card.Job.Client) ? card.Job.Client.name : "",
-          backgroundClient: !_.isNil(card.Job.Client) ? card.Job.Client.background : "",
+          backgroundClient: !_.isNil(card.Job.Client)
+            ? card.Job.Client.background
+            : "",
           phone: card.Candidate.phone,
           email: card.Candidate.email,
           location: card.Job.Location.name,
           approachDate: card.approachDate,
           linkCv: card.cv,
           nameJob: card.Job.title,
-          noteApproach: card.noteApproach || '',
+          noteApproach: card.noteApproach || "",
           interview: card.Interview,
           idJob: card.jobId,
           laneId: card.laneId,
@@ -663,37 +679,40 @@ class Broad extends Component {
     });
   };
 
-
   openPreviewPdfAndCloseCardTrello = () => {
-
-    this.setState({
-      base64: '',
-      show_detail_card: false,
-      isOpenPreviewPdf: !this.state.isOpenPreviewPdf
-    }, async () => {
-      if (this.state.isOpenPreviewPdf) {
-        const cardId = this.state.card_data_detail.id;
-        this.previewPdf(cardId)
+    this.setState(
+      {
+        base64: "",
+        show_detail_card: false,
+        isOpenPreviewPdf: !this.state.isOpenPreviewPdf,
+      },
+      async () => {
+        if (this.state.isOpenPreviewPdf) {
+          const cardId = this.state.card_data_detail.id;
+          this.previewPdf(cardId);
+        }
       }
-    })
-  }
+    );
+  };
 
   async previewPdf(candidateJobId) {
     this.setState({
-      isLoading: true
-    })
+      isLoading: true,
+    });
     try {
-      const response = await api.get(`/api/v1/admin/preview/pdf/candidateJob/${candidateJobId}`)
+      const response = await api.get(
+        `/api/v1/admin/preview/pdf/candidateJob/${candidateJobId}`
+      );
       if (response) {
         this.setState({
           base64: response.data.base64,
-          isLoading: false
-        })
+          isLoading: false,
+        });
       }
     } catch (error) {
       const content = this.state.card_data_detail.content;
-      if(content.linkCv){
-        window.open(content.linkCv,`_blank`)
+      if (content.linkCv) {
+        window.open(content.linkCv, `_blank`);
       }
       // toast(<CustomToast title={"The link cannot be read!"} type={'error'} />, {
       //   position: toast.POSITION.TOP_CENTER,
@@ -710,13 +729,12 @@ class Broad extends Component {
       //   transition: Zoom,
       // });
       this.setState({
-        base64: '',
+        base64: "",
         isLoading: false,
-        isOpenPreviewPdf: false
-      })
+        isOpenPreviewPdf: false,
+      });
     }
   }
-
 
   actionUpdateColumn = (cardNew, laneId) => {
     const data = this.state.data;
@@ -724,25 +742,29 @@ class Broad extends Component {
     const columnOldId = cardNew.content.laneId;
     const column = data.columns[laneId];
     cardNew.content = {
-      ...cardNew.content, laneId: laneId, laneSelected: {
+      ...cardNew.content,
+      laneId: laneId,
+      laneSelected: {
         value: column.id,
-        label: column.title
-      }
-    }
+        label: column.title,
+      },
+    };
     data.cards[cardId] = cardNew;
-    data.columns[columnOldId].cardIds = _.filter(data.columns[columnOldId].cardIds, card => card !== cardId);
+    data.columns[columnOldId].cardIds = _.filter(
+      data.columns[columnOldId].cardIds,
+      (card) => card !== cardId
+    );
     data.columns[laneId].cardIds.push(cardId);
     this.setState({
-      data
-    })
-    this.actionUpdateLane(cardId, laneId)
-  }
-
+      data,
+    });
+    this.actionUpdateLane(cardId, laneId);
+  };
 
   actionUpdateLane = async (cardId, laneId) => {
     const data = {
-      laneId
-    }
+      laneId,
+    };
     const response = await api.patch(`/api/cards/${cardId}`, data);
     if (response) {
       toast(<CustomToast title={"Update card successed !"} />, {
@@ -760,35 +782,41 @@ class Broad extends Component {
         transition: Zoom,
       });
     }
-  }
+  };
 
   storageCard = async (card) => {
     const data = this.state.data;
     const cardId = card.id;
     const columnId = card.content.laneId;
-    data.columns[columnId].cardIds = _.filter(data.columns[columnId].cardIds, card => card !== cardId);
+    data.columns[columnId].cardIds = _.filter(
+      data.columns[columnId].cardIds,
+      (card) => card !== cardId
+    );
     delete data.cards[cardId];
     //remove card
     this.setState({
-      data: data
+      data: data,
     });
     const dataUpdate = {
-      storage: true
-    }
-    const response = await api.patch(`/api/cards/${cardId}`, dataUpdate)
+      storage: true,
+    };
+    const response = await api.patch(`/api/cards/${cardId}`, dataUpdate);
     if (response) {
-      console.log('successed')
+      console.log("successed");
     }
-  }
+  };
 
   searchCardByUserId = (userId) => {
-    this.setState({
-      userId: userId,
-      isLoading: true
-    }, () => {
-      this.initData();
-    })
-  }
+    this.setState(
+      {
+        userId: userId,
+        isLoading: true,
+      },
+      () => {
+        this.initData();
+      }
+    );
+  };
 
   render() {
     return (
@@ -821,7 +849,9 @@ class Broad extends Component {
           addMemberToCard={this.addMemberToCard}
           toggleDetailCardAndInterview={this.toggleDetailCardAndInterview}
           toggleDetailInterview={this.toggleDetailInterview}
-          openPreviewPdfAndCloseCardTrello={this.openPreviewPdfAndCloseCardTrello}
+          openPreviewPdfAndCloseCardTrello={
+            this.openPreviewPdfAndCloseCardTrello
+          }
         />
 
         <CreateInterviewCard
@@ -835,68 +865,31 @@ class Broad extends Component {
           data={this.state.card_selected}
           onHide={this.toggleDetailInterview}
         />
-        {
-          this.state.base64 && this.state.isOpenPreviewPdf ? (
-            <PreviewPdf
-              show={this.state.isOpenPreviewPdf}
-              base64={this.state.base64}
-              onHide={this.openPreviewPdfAndCloseCardTrello.bind(this)}
-            />
-          ) : ''
-        }
+        {this.state.base64 && this.state.isOpenPreviewPdf ? (
+          <PreviewPdf
+            show={this.state.isOpenPreviewPdf}
+            base64={this.state.base64}
+            onHide={this.openPreviewPdfAndCloseCardTrello.bind(this)}
+          />
+        ) : (
+          ""
+        )}
         <div
           className="subheader py-3 py-lg-8 subheader-transparent"
           id="kt_subheader"
         >
           <div className="header-board trello">
-            {
-              this.props.role === roleName.DIRECTOR ? (
-                <SearchBoard
-                  initDataAgain={this.initDataAgain}
-                  searchCardByUserId={this.searchCardByUserId}
-                />
-              ) : ''
-            }
+            {this.props.role === roleName.DIRECTOR ? (
+              <FilterMember
+                initDataAgain={this.initDataAgain}
+                searchCardByUserId={this.searchCardByUserId}
+              />
+            ) : (
+              ""
+            )}
           </div>
         </div>
-        {/* <div
-          className="subheader py-3 py-lg-8 subheader-transparent"
-          id="kt_subheader"
-        >
-          <div className="trello">
-            <div className="d-flex align-items-center mr-1">
-              <div className="d-flex align-items-baseline flex-wrap mr-5">
-                <ul className="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold my-2 p-0">
-                  <li className="breadcrumb-item">
-                    <Link to="/" className="text-dark">
-                      Dashboard
-                    </Link>
-                  </li>
-                  <li className="breadcrumb-item">
-                    <div className="text-dark">List Cards</div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="d-flex align-items-center flex-wrap"></div>
-          </div>
-        </div>
-        <div className="search-board trello">
-          <div className="input-icon">
-            <input
-              name="title"
-              type="text"
-              className="form-control"
-              placeholder="Search..."
-              // value={this.state.title}
-              // onChange={this.onChangeSearch}
-              id="kt_datatable_search_query"
-            />
-            <span>
-              <i className="flaticon2-search-1 text-muted"></i>
-            </span>
-          </div>
-        </div> */}
+       
 
         <div className="d-flex flex-column-fluid trello-main">
           <div className="container_trello">
@@ -933,8 +926,8 @@ class Broad extends Component {
                 </Container>
               </DragDropContext>
             ) : (
-                ""
-              )}
+              ""
+            )}
           </div>
         </div>
 
@@ -947,8 +940,8 @@ class Broad extends Component {
             <span className="card-vip__plus">+</span>
           </button>
         ) : (
-            ""
-          )}
+          ""
+        )}
       </div>
     );
   }

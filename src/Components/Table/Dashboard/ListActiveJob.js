@@ -39,7 +39,7 @@ class ListActiveJob extends Component {
     const { classes } = this.props;
     return (
       <div className="col-xl-8 pl-0 prm_0">
-        <div className="card card-custom gutter-b">
+        <div className="card card-custom gutter-b cs_height_card">
           <div className="card-header card-header-mobile border-0 pt-5">
             <h3 className="card-title align-items-start flex-column">
               <span className="card-label font-weight-bolder text-dark">

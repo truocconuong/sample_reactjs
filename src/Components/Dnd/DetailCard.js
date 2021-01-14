@@ -390,7 +390,6 @@ class DetailCard extends Component {
     const users = [];
     let usersTeam = [];
     const data_detail = this.state;
-    console.log(data_detail)
     if (this.props.show) {
       users.push(...this.props.data.content.user);
     }
