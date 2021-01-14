@@ -789,12 +789,7 @@ class DetailCard extends Component {
               </Button>
             )}
 
-            {/* {
-                data_detail.linkCv ? (<Link to={`/preview/candidate/${this.props.data.candidateId}/job/${this.props.data.jobId}`} className="btn btn-primary font-weight-bolder style-btn-kitin mr-3">
-                  Refined CV
-                </Link>) : ''
-              } */}
-            {data_detail.linkCv ? (
+            {data_detail.isRefinePdf ? (
               <Link
                 to={`/preview/candidate/${data_detail.candidateId}/job/${data_detail.idJob}`}
                 className="btn btn-primary style-btn-kitin mr-3"
