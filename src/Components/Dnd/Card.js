@@ -334,6 +334,15 @@ class Card extends Component {
                                 }
 
                                 <a className="text-dark font-weight-bold text-hover-primary font-size-h4 mb-0 manhxinh-style-title">{card.name} {card.nameJob}</a>
+                                {
+                                  card.interview ? (
+                                    <div className="time-interview">
+                                      <a href="#" className="btn btn-sm btn-success font-weight-bold">
+                                        <i className="fas fa-clock"></i> {moment(card.interview.timeInterview).subtract(7,'hour').format(`Do MMM`)}
+                                     </a>
+                                    </div>
+                                  ) : ''
+                                }
                               </div>
                               <div className="btn-skills" id={`PopoverSkill${this.props.card.id}`} onClick={(e) => {
                                 e.stopPropagation();
