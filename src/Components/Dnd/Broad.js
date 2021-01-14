@@ -66,6 +66,7 @@ class Broad extends Component {
           nameJob: "",
           idJob: "",
           noteApproach: "",
+          isRefinePdf : "",
           user: [],
           jobSelected: {},
           laneSelected: {},
@@ -423,6 +424,7 @@ class Broad extends Component {
               noteApproach: card.noteApproach || "",
               interview: card.Interview,
               idJob: card.jobId,
+              isRefinePdf : card.isRefinePdf,
               jobSelected: {
                 value: card.Job.title,
                 label: card.Job.title,
@@ -655,6 +657,7 @@ class Broad extends Component {
           interview: card.Interview,
           idJob: card.jobId,
           laneId: card.laneId,
+          isRefinePdf : card.isRefinePdf,
           jobSelected: {
             value: card.Job.title,
             label: card.Job.title,
