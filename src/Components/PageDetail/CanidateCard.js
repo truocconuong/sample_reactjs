@@ -476,7 +476,7 @@ export default class CandidateCard extends Component {
                 })}
               </div>
               <div>
-                {this.props.data.cv ? (
+                {this.props.data.parserPdf ? (
                   <Link
                     to={`/preview/candidate/${this.props.data.candidateId}/job/${this.props.data.jobId}`}
                     className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"
