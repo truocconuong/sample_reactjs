@@ -64,6 +64,7 @@ class CardTrello extends Component {
     this.setState((state) => ({
       listAssign: [...state.listAssign, member],
       users: [...state.users.filter((user) => user.userId != member.userId)], //xoa user khoi list sau khi add
+      disableSave: false
     }));
   }
   toggleAddMember(isShow) {
@@ -254,6 +255,7 @@ class CardTrello extends Component {
       return { label: lane.nameColumn, value: lane.id };
     });
     const userCreateId = this.props.userId; // khong cho xoa user create khoi card
+    
     return (
       <Modal
         size="lg"
@@ -460,7 +462,7 @@ class CardTrello extends Component {
                   isOpen={this.state.isOpenAddMember}
                   body={this.renderBodyAddMember()}
                   onOuterAction={this.toggleAddMember.bind(this, false)}
-                  className="pop_cs_nam"
+                  className={`pop_cs_nam `}
                   preferPlace={"above"}
                   place={"above"}
                 >
@@ -469,7 +471,7 @@ class CardTrello extends Component {
                     className={
                       this.props.role !== "Director"
                         ? "btn btn-md btn-icon btn-light-facebook btn-pill mr-1"
-                        : "btn btn-md btn-icon btn-light-facebook btn-pill off-button-add-user mr-1"
+                        : "btn btn-md btn-icon btn-light-facebook btn-pill off-button-add-user mr-1 hide_delete_member"
                     }
                   >
                     <i className="fas fa-plus"></i>
@@ -485,7 +487,7 @@ class CardTrello extends Component {
                     >
                       <div
                         onClick={this.removeUserCard.bind(this, e)}
-                        className="wrap_icon_x"
+                        className={`wrap_icon_x ${ this.props.role === "Director"? "hide_delete_member":""}`}
                         style={
                           userCreateId == e.userId ? { display: "none" } : {}
                         }
@@ -574,6 +576,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state, ownProps) => {
   return {
     userId: state.auth.userId,
+    role: state.auth.role,
   };
 };
 
