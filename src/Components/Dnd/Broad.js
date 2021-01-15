@@ -387,8 +387,7 @@ class Broad extends Component {
     };
     try {
       const lanes = await api.get(
-        `/api/admin/new/cards${
-          this.state.userId !== "" ? `?userId=${this.state.userId}` : ""
+        `/api/admin/new/cards${this.state.userId !== "" ? `?userId=${this.state.userId}` : ""
         }`
       );
       const columns = lanes.data.list;
@@ -482,7 +481,7 @@ class Broad extends Component {
         });
         this.setState({ jobs: jobs });
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   initUserTeam = async () => {
@@ -502,7 +501,7 @@ class Broad extends Component {
           users: users,
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   createCardToLane = async (item) => {
@@ -577,11 +576,10 @@ class Broad extends Component {
   initDataAgain = () => {
     this.setState({
       isLoading: true,
-    });
-    this.setState({
       userId: "",
+    }, () => {
+      this.initData();
     });
-    this.initData();
   };
 
   removeMemberToCard = async (card_id, user_id) => {
@@ -875,8 +873,8 @@ class Broad extends Component {
             onHide={this.openPreviewPdfAndCloseCardTrello.bind(this)}
           />
         ) : (
-          ""
-        )}
+            ""
+          )}
         <div
           className="subheader py-3 py-lg-8 subheader-transparent"
           id="kt_subheader"
@@ -888,11 +886,11 @@ class Broad extends Component {
                 searchCardByUserId={this.searchCardByUserId}
               />
             ) : (
-              ""
-            )}
+                ""
+              )}
           </div>
         </div>
-       
+
 
         <div className="d-flex flex-column-fluid trello-main">
           <div className="container_trello">
@@ -929,8 +927,8 @@ class Broad extends Component {
                 </Container>
               </DragDropContext>
             ) : (
-              ""
-            )}
+                ""
+              )}
           </div>
         </div>
 
@@ -943,8 +941,8 @@ class Broad extends Component {
             <span className="card-vip__plus">+</span>
           </button>
         ) : (
-          ""
-        )}
+            ""
+          )}
       </div>
     );
   }

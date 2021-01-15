@@ -450,3 +450,6 @@
 .preview-cv {
   padding-right: 5px;
 }
+.hide_delete_member{
+  display: none;
+}
