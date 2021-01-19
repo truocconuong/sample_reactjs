@@ -45,7 +45,8 @@ class CaculatorSalary extends Component {
   onChangeInput = (e) => {
     const name = e.target.name;
     let value = e.target.value;
-    if (!_.isNaN(value)) {
+    const checkingNow = value.replaceAll('.', '')
+    if (+checkingNow) {
       if (name === 'salary') {
         value = value.replaceAll('.', '')
       }
@@ -207,7 +208,7 @@ class CaculatorSalary extends Component {
                       <label className="col-1 col-form-label form-label-title-caculator">Phụ thuộc:</label>
                       <div className="col-2">
                         <div className="div-input-caculator">
-                          <input className="form-control" type="number" /><span className="sub-input-caculator">(người)</span>
+                          <input name="peopleDependent" onChange={this.onChangeInput} className="form-control" type="number" /><span className="sub-input-caculator">(người)</span>
                         </div>
                       </div>
                     </div>
@@ -226,7 +227,7 @@ class CaculatorSalary extends Component {
                     <div className="result-caculator">
                       <div className="card-body">
                         <div className="firstone-table">
-                          <table class="table">
+                          <table className="table">
                             <thead>
                               <tr>
                                 <th scope="col">Lương Gross</th>
@@ -236,7 +237,7 @@ class CaculatorSalary extends Component {
                               </tr>
                             </thead>
                             <tbody>
-                              <tr class="table-active">
+                              <tr className="table-active">
                                 <td>{this.state.data.moneyGross}</td>
                                 <td>{this.state.data.insuranceMoney}</td>
                                 <td>{this.state.data.taxPersonal}</td>
@@ -249,48 +250,48 @@ class CaculatorSalary extends Component {
                           Diễn giải chi tiết (VNĐ)
                     </div>
                         <div className="thetwo-table">
-                          <table class="table">
+                          <table className="table">
                             <tbody>
-                              <tr class="table-active">
+                              <tr className="table-active">
                                 <th className="title-caculator">Lương Gross</th>
                                 <td className="content-caculator">{this.state.data.moneyGross}</td>
                               </tr>
-                              <tr class="table">
+                              <tr className="table">
                                 <th className="title-caculator">Bảo hiểm xã hội (8%)</th>
                                 <td className="content-caculator">{this.state.data.bhxh}</td>
                               </tr>
-                              <tr class="table">
+                              <tr className="table">
                                 <th className="title-caculator">Bảo hiểm y tế (1.5%)</th>
                                 <td className="content-caculator">{this.state.data.bhyt}</td>
                               </tr>
-                              <tr class="table">
+                              <tr className="table">
                                 <th className="title-caculator">Bảo hiểm thất nghiệp (1%)</th>
                                 <td className="content-caculator">{this.state.data.bhtn}</td>
                               </tr>
 
-                              <tr class="table">
+                              <tr className="table">
                                 <th className="title-caculator">Thu nhập trước thuế</th>
                                 <td className="content-caculator">{this.state.data.beforeTax}</td>
                               </tr>
 
-                              <tr class="table">
+                              <tr className="table">
                                 <th className="title-caculator">Giảm trừ gia cảnh bản thân</th>
                                 <td className="content-caculator">{this.state.data.reducerYourself}</td>
                               </tr>
 
-                              <tr class="table">
+                              <tr className="table">
                                 <th className="title-caculator">Giảm trừ gia cảnh người phụ thuộc</th>
                                 <td className="content-caculator">{this.state.data.circumstances}</td>
                               </tr>
-                              <tr class="table">
+                              <tr className="table">
                                 <th className="title-caculator">Thu nhập chịu thuế</th>
                                 <td className="content-caculator">{this.state.data.taxesGross}</td>
                               </tr>
-                              <tr class="table">
+                              <tr className="table">
                                 <th className="title-caculator">Thuế thu nhập cá nhân(*)</th>
                                 <td className="content-caculator">{this.state.data.taxPersonal}</td>
                               </tr>
-                              <tr class="table-active">
+                              <tr className="table-active">
                                 <th className="title-caculator">Lương NET</th>
                                 <td className="content-caculator">{this.state.data.moneyNet}</td>
                               </tr>
