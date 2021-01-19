@@ -16,6 +16,7 @@ import Setting from './Components/Table/Setting.js';
 import SearchCandidate from './Components/Table/SearchCandidate';
 import PreviewCandidate from './Components/Table/PreviewCandidate';
 import RefinedPdf from './Components/Table/RefinedPdf';
+import CaculatorSalary from './Components/Dnd/CaculatorSalary';
 
 const routes = [
   {
@@ -110,6 +111,11 @@ const routes = [
     path: "/refine/candidate/:candidateId/job/:jobId",
     exact: true,
     main: (props) => < RefinedPdf {...props} />
+  },
+  {
+    path: "/caculator-salary",
+    exact: true,
+    main: (props) => < CaculatorSalary {...props} />
   },
 
 ];
