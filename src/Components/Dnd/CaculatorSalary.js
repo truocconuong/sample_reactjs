@@ -46,7 +46,7 @@ class CaculatorSalary extends Component {
     const name = e.target.name;
     let value = e.target.value;
     const checkingNow = value.replaceAll('.', '')
-    if (+checkingNow) {
+    if (+checkingNow || value ==='') {
       if (name === 'salary') {
         value = value.replaceAll('.', '')
       }
@@ -239,8 +239,8 @@ class CaculatorSalary extends Component {
                             <tbody>
                               <tr className="table-active">
                                 <td>{this.state.data.moneyGross}</td>
-                                <td>{this.state.data.insuranceMoney}</td>
-                                <td>{this.state.data.taxPersonal}</td>
+                                <td>- {this.state.data.insuranceMoney}</td>
+                                <td>- {this.state.data.taxPersonal}</td>
                                 <td>{this.state.data.moneyNet}</td>
                               </tr>
                             </tbody>
@@ -248,7 +248,7 @@ class CaculatorSalary extends Component {
                         </div>
                         <div className="detail-caculator">
                           Diễn giải chi tiết (VNĐ)
-                    </div>
+                        </div>
                         <div className="thetwo-table">
                           <table className="table">
                             <tbody>
@@ -258,15 +258,15 @@ class CaculatorSalary extends Component {
                               </tr>
                               <tr className="table">
                                 <th className="title-caculator">Bảo hiểm xã hội (8%)</th>
-                                <td className="content-caculator">{this.state.data.bhxh}</td>
+                                <td className="content-caculator">- {this.state.data.bhxh}</td>
                               </tr>
                               <tr className="table">
                                 <th className="title-caculator">Bảo hiểm y tế (1.5%)</th>
-                                <td className="content-caculator">{this.state.data.bhyt}</td>
+                                <td className="content-caculator">- {this.state.data.bhyt}</td>
                               </tr>
                               <tr className="table">
                                 <th className="title-caculator">Bảo hiểm thất nghiệp (1%)</th>
-                                <td className="content-caculator">{this.state.data.bhtn}</td>
+                                <td className="content-caculator">- {this.state.data.bhtn}</td>
                               </tr>
 
                               <tr className="table">
@@ -275,13 +275,13 @@ class CaculatorSalary extends Component {
                               </tr>
 
                               <tr className="table">
-                                <th className="title-caculator">Giảm trừ gia cảnh bản thân</th>
-                                <td className="content-caculator">{this.state.data.reducerYourself}</td>
+                                <th className="title-caculator">Giảm trừ gia cảnh</th>
+                                <td className="content-caculator">- {this.state.data.reducerYourself}</td>
                               </tr>
 
                               <tr className="table">
                                 <th className="title-caculator">Giảm trừ gia cảnh người phụ thuộc</th>
-                                <td className="content-caculator">{this.state.data.circumstances}</td>
+                                <td className="content-caculator">- {this.state.data.circumstances}</td>
                               </tr>
                               <tr className="table">
                                 <th className="title-caculator">Thu nhập chịu thuế</th>
@@ -289,11 +289,44 @@ class CaculatorSalary extends Component {
                               </tr>
                               <tr className="table">
                                 <th className="title-caculator">Thuế thu nhập cá nhân(*)</th>
-                                <td className="content-caculator">{this.state.data.taxPersonal}</td>
+                                <td className="content-caculator">- {this.state.data.taxPersonal}</td>
                               </tr>
                               <tr className="table-active">
                                 <th className="title-caculator">Lương NET</th>
                                 <td className="content-caculator">{this.state.data.moneyNet}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div className="detail-caculator">
+                        Người sử dụng lao động trả (VNĐ)
+                        </div>
+                        <div className="thetwo-table">
+                          <table className="table">
+                            <tbody>
+                              <tr className="table-active">
+                                <th className="title-caculator">Lương Gross</th>
+                                <td className="content-caculator">{this.state.data.companySalaryGross}</td>
+                              </tr>
+                              <tr className="table">
+                                <th className="title-caculator">Bảo hiểm xã hội (17%)</th>
+                                <td className="content-caculator">{this.state.data.companyBhxh}</td>
+                              </tr>
+                              <tr className="table">
+                                <th className="title-caculator">Bảo hiểm y tế (3%)</th>
+                                <td className="content-caculator">{this.state.data.companyBhyt}</td>
+                              </tr>
+                              <tr className="table">
+                                <th className="title-caculator">Bảo hiểm nghề nghiệp (0.5%)</th>
+                                <td className="content-caculator">{this.state.data.companyBhnn}</td>
+                              </tr>
+                              <tr className="table">
+                                <th className="title-caculator">Bảo hiểm thất nhiệp (1%)</th>
+                                <td className="content-caculator">{this.state.data.companyBhtn}</td>
+                              </tr>
+                              <tr className="table-active">
+                                <th className="title-caculator">Tổng</th>
+                                <td className="content-caculator">{this.state.data.companyTotal}</td>
                               </tr>
                             </tbody>
                           </table>

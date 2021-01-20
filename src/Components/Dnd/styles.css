@@ -838,12 +838,12 @@ textarea {
 
 .title-caculator {
   float: right;
-  width: 200px;
+  width: 256px;
 }
 
 .content-caculator {
   text-align: right;
-  width: 50px;
+  width: 95px;
 }
 .detail-caculator{
   color: #00b14f;
