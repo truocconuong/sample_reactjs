@@ -168,7 +168,8 @@ textarea {
 .add-card {
   text-align: right;
 }
-.add-card-nam{
+
+.add-card-nam {
   display: flex;
   justify-content: space-between;
 }
@@ -716,14 +717,15 @@ textarea {
   animation-name: onDisplaySearch;
   animation-duration: 0.1s;
 }
-.cs_update_history{
+
+.cs_update_history {
   /* margin-left: 5px; */
 }
-.key_history{
+
+.key_history {
   color: #4e5061;
   font-weight: 600;
 }
-
 
 @keyframes onDisplaySearch {
   from {
@@ -799,6 +801,55 @@ textarea {
   height: 70px;
   resize: none;
   overflow-y: scroll;
+}
+
+/* manhfreestyle */
+
+.div-input-caculator {
+  display: flex;
+  align-items: center;
+}
+
+.salary-chinhthuc {
+  padding-right: 20px;
+}
+
+.custom-input-bhxh {
+  margin-left: 10px;
+  width: 33%;
+}
+
+.sub-input-caculator {
+  margin-left: 5px;
+}
+
+.form-label-title-caculator {
+  font-weight: 700 !important;
+}
+
+.footer-caculator {
+  text-align: center;
+}
+
+.btn-custom-caculator {
+  font-weight: 700 !important;
+  margin: 5px;
+}
+
+.title-caculator {
+  float: right;
+  width: 256px;
+}
+
+.content-caculator {
+  text-align: right;
+  width: 95px;
+}
+.detail-caculator{
+  color: #00b14f;
+  font-weight: 700;
+  margin-top: 50px;
+  margin-bottom: 20px;
 }
 .select_user{
   width: 280px;

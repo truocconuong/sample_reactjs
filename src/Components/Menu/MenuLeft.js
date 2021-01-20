@@ -479,6 +479,22 @@ class MenuLeft extends Component {
               </div>
               <div className="content_menu">Board</div>
             </NavLink>
+            <NavLink
+              exact
+              activeClassName="selected"
+              to="/caculator-salary"
+              onClick={
+                this.props.isMobile
+                  ? (e) => this.handleOnClick(e, "/caculator-salary")
+                  : () => null
+              }
+              className="row_icon"
+            >
+              <div className="wrap_icon_menu">
+                <i className="far fa-money-bill-alt hover_icon"></i>
+              </div>
+              <div className="content_menu">Board</div>
+            </NavLink>
             {this.props.role === "Director" ? (
               <NavLink
                 exact
