@@ -851,3 +851,9 @@ textarea {
   margin-top: 50px;
   margin-bottom: 20px;
 }
+.select_user{
+  width: 280px;
+}
+.time-interview{
+  padding-top : 5px
+}

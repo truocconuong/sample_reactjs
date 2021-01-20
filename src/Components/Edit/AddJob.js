@@ -21,6 +21,7 @@ var benefit = `<h2 style="font-size: 16px;"><span style="color: rgb(21, 188, 197
 var requirement = `<h2 style="font-size: 16px;"><span style="color: rgb(21, 188, 197);"><strong>3. REQUIREMENT</strong></span></h2><br/>`;
 
 class AddJob extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.editorOne = React.createRef();
@@ -71,6 +72,7 @@ class AddJob extends Component {
       validated: false,
       isOpenAddSkill: false,
       newSkill: "",
+      isDisableSave: false,
     };
   }
 
@@ -363,28 +365,32 @@ class AddJob extends Component {
         interviewProcess: data.interviewProcess,
         extraBenefit: data.extraBenefit,
       };
-      this.setState({ validated: false, isLoading: true });
+      this.setState({ validated: false, isLoading: true, isDisableSave: true });
       // console.log(dataJob);
       const response = await api.post(`/api/jobs`, dataJob);
       if (response.data.success) {
+        toast(<CustomToast title={"Post Job Success!"} />, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          autoClose: 3000,
+          className: "toast_login",
+          closeButton: false,
+          hideProgressBar: true,
+          newestOnTop: true,
+          closeOnClick: true,
+          rtl: false,
+          pauseOnFocusLoss: true,
+          draggable: true,
+          pauseOnHover: true,
+        });
+        this.props.history.push("/job");
         setTimeout(() => {
-          self.setState({
-            isLoading: false,
-          });
-          toast(<CustomToast title={"Post Job Success!"} />, {
-            position: toast.POSITION.BOTTOM_RIGHT,
-            autoClose: 3000,
-            className: "toast_login",
-            closeButton: false,
-            hideProgressBar: true,
-            newestOnTop: true,
-            closeOnClick: true,
-            rtl: false,
-            pauseOnFocusLoss: true,
-            draggable: true,
-            pauseOnHover: true,
-          });
-        }, 1000);
+          if (this._isMounted) {
+            self.setState({
+              isDisableSave: false,
+              isLoading: false,
+            });
+          }
+        }, 2000);
       } else {
         toast(
           <CustomToast
@@ -592,6 +598,7 @@ class AddJob extends Component {
                       </span>
                       <div className="btn-group">
                         <button
+                          disabled={this.state.isDisableSave}
                           type="submit"
                           className={
                             this.state.isLoading
@@ -1134,6 +1141,7 @@ class AddJob extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     className_wrap_broad: state.ui.className_wrap_broad,
+    history: ownProps.history,
   };
 };
 

@@ -1,0 +1,27 @@
+# cho biết cái docker image nào được sử dụng 
+
+image: node:10.15.1 
+
+stages: # hai giai đoạn
+  # - build
+  - deploy
+
+before_script: # các lệnh được thực thi trước các công việc
+  # Đảm bảo openssh-client được cài đặt
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )' 
+  - npm install
+
+
+# build:
+#   only: 
+#     - UAT
+#   stage: build
+#   script:
+#     - npm run build
+
+deploy:
+  only: # chỉ trên nhánh UAT
+    - UAT
+  stage: deploy
+  script:
+    - bash deploy/deploy.sh
