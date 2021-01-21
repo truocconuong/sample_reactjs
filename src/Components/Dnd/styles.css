@@ -702,6 +702,7 @@ textarea {
 .pop-search-board {
   margin-left: 125px;
   max-width: 500px;
+  /* background: #EFF2F9; */
 }
 
 .pop-search-board .arrow {
@@ -856,4 +857,7 @@ textarea {
 }
 .time-interview{
   padding-top : 5px
+}
+.header-board{
+  display: flex;
 }

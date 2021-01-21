@@ -66,7 +66,7 @@ class Broad extends Component {
           nameJob: "",
           idJob: "",
           noteApproach: "",
-          isRefinePdf : "",
+          isRefinePdf: "",
           user: [],
           jobSelected: {},
           laneSelected: {},
@@ -180,10 +180,25 @@ class Broad extends Component {
     this.setState({ card_data_detail: cardDataDetail });
   }
 
+  updateLane = async (cardId,laneId) => {
+    const laneIdUpdate = {
+      laneId: laneId
+    };
+    try {
+      await api.patch(`/api/cards/${cardId}`, laneIdUpdate);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   updateCard = async (card) => {
     const { card_data_detail } = this.state;
     const idCard = card_data_detail.id;
     try {
+      if (card.laneId) { 
+        await this.updateLane(idCard,card.laneId);
+        delete card['laneId']
+      }
       const response = await api.patch(`/api/cards/${idCard}`, card);
       if (response) {
         toast(<CustomToast title={"Update card successed !"} />, {
@@ -423,7 +438,7 @@ class Broad extends Component {
               noteApproach: card.noteApproach || "",
               interview: card.Interview,
               idJob: card.jobId,
-              isRefinePdf : card.isRefinePdf,
+              isRefinePdf: card.isRefinePdf,
               jobSelected: {
                 value: card.Job.title,
                 label: card.Job.title,
@@ -655,7 +670,7 @@ class Broad extends Component {
           interview: card.Interview,
           idJob: card.jobId,
           laneId: card.laneId,
-          isRefinePdf : card.isRefinePdf,
+          isRefinePdf: card.isRefinePdf,
           jobSelected: {
             value: card.Job.title,
             label: card.Job.title,
@@ -818,7 +833,52 @@ class Broad extends Component {
       }
     );
   };
-
+  searchCardDetail = (card) => {
+    const dataCard = {
+      id: card.id,
+      content: {
+        laneId: card.laneId,
+        candidateId: card.Candidate.id,
+        name: card.Candidate.name,
+        position: card.position || "",
+        clientName: !_.isNil(card.Job.Client) ? card.Job.Client.name : "",
+        backgroundClient: !_.isNil(card.Job.Client)
+          ? card.Job.Client.background
+          : "",
+        phone: card.Candidate.phone,
+        email: card.Candidate.email,
+        location: card.Job.Location.name,
+        approachDate: card.approachDate,
+        linkCv: card.cv,
+        nameJob: card.Job.title,
+        noteApproach: card.noteApproach || "",
+        interview: card.Interview,
+        idJob: card.jobId,
+        isRefinePdf: card.isRefinePdf,
+        jobSelected: {
+          value: card.Job.title,
+          label: card.Job.title,
+        },
+        laneSelected: {
+          value: card.Lane.id,
+          label: card.Lane.nameColumn,
+        },
+        user: _.map(card.Users, (user) => {
+          return {
+            name: user.name,
+            id: user.id,
+            email: user.email,
+            linkAvatar: user.linkAvatar,
+          };
+        }),
+      },
+    };
+    this.setState({
+      show_detail_card: true,
+      card_selected: _.cloneDeep(dataCard),
+      card_data_detail: _.cloneDeep(dataCard),
+    });
+  }
   render() {
     return (
       <div
@@ -850,6 +910,7 @@ class Broad extends Component {
           addMemberToCard={this.addMemberToCard}
           toggleDetailCardAndInterview={this.toggleDetailCardAndInterview}
           toggleDetailInterview={this.toggleDetailInterview}
+          lanes={this.state.lanes}
           openPreviewPdfAndCloseCardTrello={
             this.openPreviewPdfAndCloseCardTrello
           }
@@ -880,6 +941,10 @@ class Broad extends Component {
           id="kt_subheader"
         >
           <div className="header-board trello">
+            <SearchBoard
+              // initDataAgain={this.initDataAgain}
+              searchCardDetail={this.searchCardDetail}
+            />
             {this.props.role === roleName.DIRECTOR ? (
               <FilterMember
                 initDataAgain={this.initDataAgain}
