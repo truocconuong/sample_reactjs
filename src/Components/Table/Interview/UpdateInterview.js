@@ -11,6 +11,7 @@ import { DatetimePickerTrigger } from "../../libs/rc-datetime-picker";
 import moment from 'moment'
 import { ToastContainer, toast, Zoom } from "react-toastify";
 import CustomToast from "../../common/CustomToast";
+import { convertDateLocal ,convertDateLocalHour } from '../../../utils/common/convertDate';
 const api = new Network();
 
 class UpdateInterview extends Component {
@@ -108,8 +109,8 @@ class UpdateInterview extends Component {
             const data = {
                 isLoading: false,
                 location: interview.CandidateJob.Job.Location.name,
-                timeInterview: moment(interview.timeInterview).subtract('7','hours'),
-                timeInterviewEnd: moment(interview.timeInterviewEnd).subtract('7','hours'),
+                timeInterview: moment(interview.timeInterview),
+                timeInterviewEnd: moment(interview.timeInterviewEnd),
                 linkZoom: interview.linkZoom,
                 jobName: interview.CandidateJob.Job.title,
                 candidateId: interview.CandidateJob.Candidate.id,
@@ -191,7 +192,6 @@ class UpdateInterview extends Component {
     async handleUpdateInterview(e) {
         e.preventDefault();
         const data = this.state;
-        console.log(data)
         const errors = this.validator.validate(this.state);
         this.setState({
             errors: errors,
@@ -434,7 +434,7 @@ class UpdateInterview extends Component {
                                                             className="custom-date-picker-interview"
                                                         >
                                                             <div className="custom-date-picker-interview__wrap">
-                                                                <input readOnly name="timeInterview" value={this.state.timeInterview.format('DD/MM/YYYY HH:mm')} className={'form-control'}
+                                                                <input readOnly name="timeInterview" value={convertDateLocal(this.state.timeInterview)} className={'form-control'}
                                                                     placeholder="Enter Time Interview" />
                                                                 <div className="input-group-append">
                                                                     <span className="input-group-text">
@@ -455,7 +455,7 @@ class UpdateInterview extends Component {
                                                             showTimePicker={true}
                                                         >
                                                             <div className="custom-date-picker-interview__wrap">
-                                                                <input readOnly name="timeInterviewEnd" value={this.state.timeInterviewEnd.format('HH:mm')} className={
+                                                                <input readOnly name="timeInterviewEnd" value={convertDateLocalHour(this.state.timeInterviewEnd)} className={
                                                                     errors.timeInterviewEnd
                                                                         ? "form-control is-invalid"
                                                                         : "form-control"
