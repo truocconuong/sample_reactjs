@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button, Modal, Overlay } from "react-bootstrap";
 import Select from "react-select";
 import * as moment from "moment";
+import { convertDateLocal } from "../../../utils/common/convertDate";
 class DetailInterviewCard extends Component {
   constructor() {
     super();
@@ -126,9 +127,7 @@ class DetailInterviewCard extends Component {
                       disabled
                       type="text"
                       name="timeInterview"
-                      value= {moment(
-                        data.timeInterview
-                      ).subtract(7,'hour').format('DD/MM/YYYY HH:mm')}
+                      value= {convertDateLocal(data.timeInterview)}
                       onChange={this.handleInputChange}
                       className={
                         errors.timeInterview
@@ -144,9 +143,7 @@ class DetailInterviewCard extends Component {
                       disabled
                       type="text"
                       name="timeInterviewEnd"
-                      value={moment(
-                        data.timeInterviewEnd
-                      ).subtract(7,'hour').format('DD/MM/YYYY HH:mm')}
+                      value={convertDateLocal(data.timeInterviewEnd)}
                       onChange={this.handleInputChange}
                       className={
                         errors.timeInterviewEnd

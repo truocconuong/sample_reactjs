@@ -459,7 +459,6 @@ class Interview extends Component {
                                     {convertDateLocal(interview.timeInterview)}
                                   </span>
                                 </td>
-
                                 <td
                                   data-field="ShipDate"
                                   aria-label="9/3/2017"

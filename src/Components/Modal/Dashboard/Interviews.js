@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import moment from "moment";
 import Modal, { ModalTransition, ScrollBehavior } from "@atlaskit/modal-dialog";
+import { convertDateLocal } from "../../../utils/common/convertDate";
 
 class Interviews extends Component {
   constructor(props) {
@@ -170,7 +171,7 @@ class Interviews extends Component {
                                   >
                                     <span style={{ width: "100px" }}>
                                       <span className="text-muted font-weight-bold cus_text_mute">
-                                        {moment(interview.timeInterview).subtract(7,'hour').format('DD/MM/YYYY HH:mm')}
+                                        {convertDateLocal(interview.timeInterview)}
                                       </span>
                                     </span>
                                   </td>
@@ -181,9 +182,7 @@ class Interviews extends Component {
                                   >
                                     <span style={{ width: "100px" }}>
                                       <span className="text-muted font-weight-bold cus_text_mute">
-                                        {moment(
-                                          interview.timeInterviewEnd
-                                        ).subtract(7,'hour').format('DD/MM/YYYY HH:mm')}
+                                        {convertDateLocal(interview.timeInterviewEnd)}
                                       </span>
                                     </span>
                                   </td>
