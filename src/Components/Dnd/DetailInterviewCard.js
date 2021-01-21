@@ -4,6 +4,7 @@ import { rulesCreateCardInterview } from "../../utils/rule";
 import Validator from "../../utils/validator";
 import Select from "react-select";
 import * as moment from "moment";
+import { convertDateLocal } from "../../utils/common/convertDate";
 class DetailInterviewCard extends Component {
   constructor() {
     super();
@@ -227,9 +228,7 @@ class DetailInterviewCard extends Component {
                       disabled
                       type="text"
                       name="timeInterview"
-                      value={moment(interview.timeInterview).subtract(7,'hours').format(
-                        "DD/MM/YYYY HH:mm"
-                      )}
+                      value={convertDateLocal(interview.timeInterview)}
                       onChange={this.handleInputChange}
                       className={
                         errors.timeInterview
@@ -245,9 +244,7 @@ class DetailInterviewCard extends Component {
                       disabled
                       type="text"
                       name="timeInterviewEnd"
-                      value={moment(interview.timeInterviewEnd).subtract(7,'hours').format(
-                        "DD/MM/YYYY HH:mm"
-                      )}
+                      value={convertDateLocal(interview.timeInterviewEnd)}
                       onChange={this.handleInputChange}
                       className={
                         errors.timeInterviewEnd
