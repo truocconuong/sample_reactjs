@@ -21,6 +21,7 @@ import * as moment from "moment";
 import Validator from "../../utils/validator";
 import { rulesCreateNewCard } from "../../utils/rule";
 import { Link } from "react-router-dom";
+import { convertDateLocal } from "../../utils/common/convertDate";
 
 const api = new Network();
 class DetailCard extends Component {
@@ -776,9 +777,7 @@ class DetailCard extends Component {
                 onClick={this.props.toggleDetailInterview}
                 variant="btn btn-success btn-interview"
               >
-                {moment(data_detail.interview.timeInterview)
-                  .subtract(7, "hours")
-                  .format("dddd DD/MM/YYYY HH:mm")}
+                {convertDateLocal(data_detail.interview.timeInterview)}
               </Button>
             ) : (
               <Button

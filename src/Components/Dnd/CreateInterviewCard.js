@@ -5,6 +5,7 @@ import Select from "react-select";
 import { Button, Modal, Overlay } from "react-bootstrap";
 import moment from 'moment'
 import { DatetimePickerTrigger } from "../libs/rc-datetime-picker";
+import { dynamicDateServer } from '../../utils/common/convertDate';
 class CreateInterviewCard extends Component {
   constructor() {
     super();
@@ -118,10 +119,10 @@ class CreateInterviewCard extends Component {
         cardId: this.props.data.id,
         jobName: content.nameJob,
         location: content.location,
-        timeInterview: this.state.timeInterview.format('MM/DD/YYYY HH:mm'),
-        timeInterviewEnd: `${this.state.timeInterview.format('MM/DD/YYYY HH:mm').substring(0, 11)}${this.state.timeInterviewEnd.format('HH:mm')}`,
+        timeInterview: dynamicDateServer(this.state.timeInterview).format('MM/DD/YYYY HH:mm'),
+        timeInterviewEnd: `${dynamicDateServer(this.state.timeInterview).format('MM/DD/YYYY HH:mm').substring(0, 11)}${this.state.timeInterviewEnd.format('HH:mm')}`,
         type: this.state.type,
-        password : this.state.password
+        password: this.state.password
       }
       this.props.createInterview(data);
       this.defaultState();
