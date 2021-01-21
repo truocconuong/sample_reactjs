@@ -46,7 +46,9 @@ class DetailCard extends Component {
       cv: '',
       nameJob: '',
       noteApproach: '',
-      idJob: ''
+      idJob: '',
+      laneId: '',
+      laneSelected: {}
     };
     this.addMember = [];
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -57,6 +59,13 @@ class DetailCard extends Component {
     this.hideModal = this.hideModal.bind(this);
     this.renderRowActivity = this.renderRowActivity.bind(this);
   }
+  handleOnChangeLane = (e) => {
+    this.setState({
+      laneSelected: e,
+      laneId: e.value
+    });
+  }
+
 
   async showHistoryCard() {
     try {
@@ -271,7 +280,6 @@ class DetailCard extends Component {
     const data = this.state;
     const errors = this.validator.validate(data);
     delete errors["laneId"];
-    console.log(errors);
     this.setState({
       errors: errors,
       isShowHistory: false,
@@ -292,6 +300,7 @@ class DetailCard extends Component {
         nameJob: content.nameJob,
         noteApproach: content.noteApproach,
         idJob: content.idJob,
+        laneId: content.laneId
       };
       this.props.updateCard(data);
     }
@@ -332,10 +341,10 @@ class DetailCard extends Component {
           <div className="wrap_left_content_history">
             <div className="conten_history">
               <span className="name_history">
-                {e.User.name} 
+                {e.User.name}
               </span>
               {` has update this card:`}
-             
+
             </div>
             <ul>
               {content.map((e, i) => {
@@ -399,6 +408,7 @@ class DetailCard extends Component {
     data_detail.approachDate = moment(data_detail.approachDate).format(
       "YYYY-MM-DD"
     );
+    console.log(data_detail)
 
     return (
       <Modal size="lg" show={this.props.show} onHide={this.hideModal} centered>
@@ -486,8 +496,8 @@ class DetailCard extends Component {
                   </PopoverPop>{" "}
                 </div>
               ) : (
-                ""
-              )}
+                  ""
+                )}
             </div>
           </div>
         </Modal.Header>
@@ -520,7 +530,19 @@ class DetailCard extends Component {
                     onChange={this.handleOnChangeJobSelected}
                   />
                 </div>
-
+                {
+                  <div className="form-group">
+                    <label>Column</label>
+                    <span style={{ color: "red" }}>*</span>
+                    <Select
+                      isDisabled={this.props.role === roleName.DIRECTOR ? true : false}
+                      name="option"
+                      options={this.props.lanes}
+                      value={data_detail.laneSelected}
+                      onChange={this.handleOnChangeLane}
+                    />
+                  </div>
+                }
                 <div className="form-group row">
                   <div className="col-lg-6">
                     <label>Location</label>
@@ -616,6 +638,7 @@ class DetailCard extends Component {
                   <div className="input-group">
                     <input
                       type="text"
+                      disabled={this.props.role === roleName.DIRECTOR ? true : false}
                       value={data_detail.linkCv ? data_detail.linkCv : ""}
                       onChange={this.handleInputChange.bind(this)}
                       name="linkCv"
@@ -725,11 +748,11 @@ class DetailCard extends Component {
                                 </a>
                               </li>
                             ) : (
-                              ""
-                            )
+                                ""
+                              )
                           ) : (
-                            ""
-                          )}
+                              ""
+                            )}
                         </ul>
                       </Popover.Content>
                     </Popover>
@@ -765,8 +788,8 @@ class DetailCard extends Component {
                   users={this.props.users}
                 ></ModalAddMember>
               ) : (
-                ""
-              )}
+                  ""
+                )}
             </div>
           </div>
 
@@ -781,13 +804,13 @@ class DetailCard extends Component {
                   .format("dddd DD/MM/YYYY HH:mm")}
               </Button>
             ) : (
-              <Button
-                variant="btn btn-success btn-interview"
-                onClick={() => this.props.toggleDetailCardAndInterview()}
-              >
-                Create Interview
-              </Button>
-            )}
+                <Button
+                  variant="btn btn-success btn-interview"
+                  onClick={() => this.props.toggleDetailCardAndInterview()}
+                >
+                  Create Interview
+                </Button>
+              )}
 
             {data_detail.isRefinePdf ? (
               <Link
@@ -797,8 +820,8 @@ class DetailCard extends Component {
                 Refined CV
               </Link>
             ) : (
-              ""
-            )}
+                ""
+              )}
             {data_detail.linkCv ? (
               <Button
                 variant="primary btn-interview"
@@ -807,15 +830,15 @@ class DetailCard extends Component {
                 Raw CV
               </Button>
             ) : (
-              ""
-            )}
+                ""
+              )}
             {this.props.role !== roleName.DIRECTOR ? (
               <Button variant="primary btn-interview" onClick={this.updateCard}>
                 Save
               </Button>
             ) : (
-              ""
-            )}
+                ""
+              )}
             <Button variant="light" onClick={this.hideModal}>
               Close
             </Button>
@@ -831,23 +854,21 @@ class DetailCard extends Component {
               className="btn btn-secondary btn-sm"
               onClick={this.showHistoryCard.bind(this)}
             >
-              {`${
-                this.state.isShowHistory ? "Close" : "Show"
-              }`}
+              {`${this.state.isShowHistory ? "Close" : "Show"
+                }`}
             </button>
           </div>
           <div
-            className={`wrap_row_history ${
-              this.state.isShowHistory ? "active_history" : ""
-            }`}
+            className={`wrap_row_history ${this.state.isShowHistory ? "active_history" : ""
+              }`}
           >
             {this.state.isShowHistory ? (
               this.state.history.map((e, index) => {
                 return this.renderRowActivity(e, index);
-                
+
               })
             ) : null}
-            {}
+            { }
           </div>
         </div>
       </Modal>
