@@ -10,8 +10,8 @@ class SearchBoard extends Component {
         this.state = {
             showFormSeach: false,
             search: '',
-            isLoadingMember: false,
-            users: []
+            isLoadingMember: true,
+            cards: []
         }
         this.timeOut = '';
     }
@@ -31,19 +31,19 @@ class SearchBoard extends Component {
         })
     }
 
-    searchMembers = async () => {
+    searchCards = async () => {
         if (this.state.search !== '') {
-            const response = await api.get(`/api/search/board/members?search=${this.state.search}`)
+            const response = await api.get(`/api/v1/search/card?search=${this.state.search}`)
             if (response) {
                 this.offLoadingMember()
-                const users = response.data.list;
+                const cards = response.data.list;
                 this.setState({
-                    users: users
+                    cards: cards
                 })
             }
         } else {
             this.toggleFormSearch();
-            this.props.initDataAgain();
+            // this.props.initDataAgain();
         }
     }
     onLoadingMember = () => {
@@ -60,7 +60,7 @@ class SearchBoard extends Component {
         this.onLoadingMember();
         clearTimeout(this.timeOut);
         this.timeOut = setTimeout(() => {
-            this.searchMembers()
+            this.searchCards()
         }, 2000)
     }
 
@@ -82,40 +82,32 @@ class SearchBoard extends Component {
         return (
             <ul className="navi navi-hover navi-selected-ul  header-users">
                 <li className="navi-header font-weight-bold py-4">
-                    <span className="font-size-lg">Members</span>
+                    <span className="font-size-lg">Cards</span>
                 </li>
                 <li className="navi-separator mb-3 opacity-70" />
                 {this.state.isLoadingMember ? this.elmIsLoading() : (
-                    this.state.users.map((user, index) => (
+                    this.state.cards.map((card, index) => (
                         <div onClick={() => {
                             // this.setDefaultSearch();
                             this.toggleFormSearch();
-                            this.props.searchCardByUserId(user.id)
+                            this.props.searchCardDetail(card)
                         }} className="search-user" key={index}>
-                            <div className="d-flex align-items-center">
-                                <div className="symbol symbol-50 symbol-light mr-5">
-                                    <span className="symbol-label symbol-label-cs">
-                                        <img
-                                            src={
-                                                user.linkAvatar
-                                                    ? domainServer + "/" + user.linkAvatar
-                                                    : defaultAva
-                                            }
-                                            className="h-100 align-self-end"
-                                            alt=""
-                                        />
-                                    </span>
-                                </div>
-                                <div className="d-flex flex-column flex-grow-1">
-                                    <div
-                                        style={{ cursor: "pointer" }}
-                                        className="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1"
-                                    >
-                                        {user.name}
+                            <div className="chay-ra-an-dam">
+                                <div className="card card-custom gutter-b bg-diagonal bg-diagonal-light-primary">
+                                    <div className="card-body">
+                                        <div className="d-flex align-items-center justify-content-between p-4 flex-lg-wrap flex-xl-nowrap">
+                                            <div className="d-flex flex-column mr-5">
+                                                <h4 style={{ fontWeight: 'bold' }}>
+                                                    {card.Candidate.name} {card.Job.title}
+                                                </h4>
+                                            </div>
+                                            <div className="ml-6 ml-lg-0 ml-xxl-6 flex-shrink-0">
+                                                <a style={{ background: card.Lane.background }} target="_blank" className="btn font-weight-bolder text-uppercase btn-primary py-4 px-6">
+                                                    {card.Lane.nameColumn}
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <span className="text-muted font-weight-bold">
-                                        {user.email}
-                                    </span>
                                 </div>
                             </div>
                         </div>
