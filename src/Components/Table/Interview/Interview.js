@@ -15,6 +15,7 @@ import Network from "../../../Service/Network";
 import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 import { ToastContainer, toast, Zoom } from "react-toastify";
 import CustomToast from "../../common/CustomToast";
+import { convertDateLocal } from "../../../utils/common/convertDate";
 
 const api = new Network();
 
@@ -455,7 +456,7 @@ class Interview extends Component {
                                   className="datatable-cell hide_mb"
                                 >
                                   <span style={{ width: "137px" }}>
-                                    {`${moment(interview.timeInterview).utc().format('DD/MM/YYYY')} ${moment(interview.timeInterview).add(17, 'hours').format('HH:mm')}`}
+                                    {convertDateLocal(interview.timeInterview)}
                                   </span>
                                 </td>
 
@@ -465,10 +466,9 @@ class Interview extends Component {
                                   className="datatable-cell hide_mb"
                                 >
                                   <span style={{ width: "137px" }}>
-                                    {`${moment(interview.timeInterviewEnd).utc().format('DD/MM/YYYY')} ${moment(interview.timeInterviewEnd).add(17, 'hours').format('HH:mm')}`}
+                                  {convertDateLocal(interview.timeInterviewEnd)}
                                   </span>
                                 </td>
-
                                 <td
                                   data-field="Actions"
                                   data-autohide-disabled="false"
@@ -647,9 +647,9 @@ class Interview extends Component {
                                           className="datatable-cell"
                                           style={{}}
                                         >
-                                          <span style={{ width: 110 }}>
+                                          {/* <span style={{ width: 110 }}>
                                             {`${moment(interview.timeInterview).utc().format('DD/MM/YYYY')} ${moment(interview.timeInterview).add(17, 'hours').format('HH:mm')}`}
-                                          </span>
+                                          </span> */}
                                         </td>
                                       </tr>
 
