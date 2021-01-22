@@ -838,7 +838,7 @@ textarea {
 }
 
 .title-caculator {
-  float: right;
+  /* float: right; */
   width: 256px;
 }
 
@@ -846,18 +846,85 @@ textarea {
   text-align: right;
   width: 95px;
 }
-.detail-caculator{
+
+.detail-caculator {
   color: #00b14f;
   font-weight: 700;
   margin-top: 50px;
   margin-bottom: 20px;
+  align-items: center;
 }
-.select_user{
+
+.select_user {
   width: 280px;
 }
-.time-interview{
-  padding-top : 5px
+
+.time-interview {
+  padding-top: 5px
 }
-.header-board{
+
+.header-board {
   display: flex;
+}
+
+.title-caculator {
+  border-top: none !important;
+}
+
+.table-custom-caculator {
+  border: 1px solid #EDEDED;
+  /* border-left: none; */
+}
+
+.result-caculator {
+  /* padding: 0px 157px; */
+}
+
+.thunhap-caculator {
+  display: flex;
+}
+
+.caculator-item {
+  display: flex;
+  align-items: center;
+  padding-right: 20px;
+}
+
+.the-first-caculator {
+  /* padding-right: 10px; */
+}
+
+.form-label-title-caculator {}
+
+.row-caculator-hi {
+  display: flex;
+  align-items: center;
+}
+
+.custom-input-usd {
+  margin-left: 15px;
+}
+
+.title-detail-caculator {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-copy-to-clipboard {
+  margin: 20px 0;
+  height: 36px;
+  margin-top: 34px;
+}
+
+
+.detail-two-column-caculator{
+  display: flex;
+}
+.wrap-caculator-detail{
+  width: 100%;
+  margin: 10px;
+}
+
+.setWidth45{
+  width: 45%;
 }
