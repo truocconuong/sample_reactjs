@@ -516,6 +516,22 @@ class CaculatorSalary extends Component {
                                     <th className="title-caculator">UnEmployment Insurance(1%)</th>
                                     <td className="content-caculator">{this.state.data.companyBhtn}</td>
                                   </tr>
+                                  <tr className="table table-custom-caculator">
+                                    <th className="title-caculator title-caculator-empty"></th>
+                                    <td className="content-caculator"></td>
+                                  </tr>
+                                  <tr className="table table-custom-caculator">
+                                    <th className="title-caculator title-caculator-empty"></th>
+                                    <td className="content-caculator"></td>
+                                  </tr>
+                                  <tr className="table table-custom-caculator">
+                                    <th className="title-caculator title-caculator-empty"></th>
+                                    <td className="content-caculator"></td>
+                                  </tr>
+                                  <tr className="table table-custom-caculator">
+                                    <th className="title-caculator title-caculator-empty"></th>
+                                    <td className="content-caculator"></td>
+                                  </tr>
                                   <tr className="table-active">
                                     <th className="title-caculator">Total</th>
                                     <td className="content-caculator">{this.state.data.companyTotal}</td>
