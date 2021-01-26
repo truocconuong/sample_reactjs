@@ -865,6 +865,7 @@ textarea {
 
 .header-board {
   display: flex;
+  width: 100%;
 }
 
 .title-caculator {
@@ -916,18 +917,68 @@ textarea {
   margin-top: 34px;
 }
 
-
-.detail-two-column-caculator{
+.detail-two-column-caculator {
   display: flex;
 }
-.wrap-caculator-detail{
+
+.wrap-caculator-detail {
   width: 100%;
   margin: 10px;
 }
 
-.setWidth45{
+.setWidth45 {
   width: 45%;
 }
-.title-caculator-empty{
+
+.title-caculator-empty {
   padding: 18.9px !important;
+}
+
+.filter-board {
+  display: flex;
+}
+
+.all-filter-board {
+  display: flex;
+}
+.filter-board-item{
+  padding: 2px;
+}
+
+.filter-board {
+  padding: 30px;
+  position: fixed;
+  right: 0;
+  z-index: 10;
+}
+.trello-search-director{
+  display: flex;
+  flex-direction: column;
+}
+
+.subheader-board{
+  margin-top: 17px;
+}
+.filter-of-directory{
+  position: absolute;
+  top: 9px;
+}
+
+.this-label{
+  display: flex;
+  flex-wrap: wrap;
+}
+.card-label-item{
+  margin-right: 2px;
+}
+.custom-label-remove{
+  font-size: 10px;
+  color: white;
+}
+.card-label-item {
+  position: relative;
+}
+.remove-label {
+  position: absolute;
+  right: 7px;
 }
