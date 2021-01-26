@@ -146,6 +146,8 @@ class Column extends Component {
                     actionUpdateColumn={this.props.actionUpdateColumn}
                     storageCard={this.props.storageCard}
                     background={this.props.column.background}
+                    createLabel = {this.props.createLabel}
+                    removeLabel= {this.props.removeLabel}
                   />
                 );
               })}

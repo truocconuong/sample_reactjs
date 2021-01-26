@@ -467,6 +467,7 @@ class Broad extends Component {
                   linkAvatar: user.linkAvatar,
                 };
               }),
+              labels: card.Labels
             },
           };
         }
@@ -699,6 +700,7 @@ class Broad extends Component {
               linkAvatar: user.linkAvatar,
             };
           }),
+          labels: card.Labels
         },
       };
     }
@@ -811,6 +813,32 @@ class Broad extends Component {
       });
     }
   };
+
+
+  createLabel = async (label) => {
+    const { data } = this.state;
+    const cardId = label.candidateJobId;
+    const response = await api.post(`/api/v1/card/label`, label);
+    if (response) {
+      const labelItem = response.data.label
+      data.cards[cardId].content.labels.push(labelItem);
+      this.setState({
+        data: data
+      })
+    }
+  }
+
+  removeLabel = async (label) => {
+    const { data } = this.state;
+    const { id, candidateJobId } = label;
+    const response = await api.delete(`/api/v1/card/${id}/label`);
+    if (response) {
+      data.cards[candidateJobId].content.labels = _.filter(data.cards[candidateJobId].content.labels,label => label.id !== id);
+      this.setState({
+        data: data
+      })
+    }
+  }
 
   storageCard = async (card) => {
     const data = this.state.data;
@@ -1017,6 +1045,8 @@ class Broad extends Component {
                         storageCard={this.storageCard}
                         userId={this.state.userId}
                         search={this.state.search}
+                        createLabel={this.createLabel}
+                        removeLabel={this.removeLabel}
                       />
                     );
                   })}

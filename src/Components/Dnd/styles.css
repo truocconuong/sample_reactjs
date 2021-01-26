@@ -963,3 +963,22 @@ textarea {
   position: absolute;
   top: 9px;
 }
+
+.this-label{
+  display: flex;
+  flex-wrap: wrap;
+}
+.card-label-item{
+  margin-right: 2px;
+}
+.custom-label-remove{
+  font-size: 10px;
+  color: white;
+}
+.card-label-item {
+  position: relative;
+}
+.remove-label {
+  position: absolute;
+  right: 7px;
+}
