@@ -1,11 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import Fbloader from "../libs/PageLoader/fbloader.js";
 import { Link } from "react-router-dom";
+import Network from "../../Service/Network";
+import moment from "moment";
 
+const api = new Network();
 
 function ListBlog(props) {
-  const [count, setCount] = useState(0);
+  const [state, setState] = useState({});
+  const [listBlog, setListBlog] = useState([]);
+
+  useEffect(() => {
+    // Update the document title using the browser API
+    async function fetchData() {
+      try {
+        const response = await api.get(`/api/blogs?pageSize=10&pageNumber=1`);
+        if (response) {
+          setListBlog(response.data.listBlog);
+          console.log(response.data);
+        }
+      } catch (error) {
+        console.log("err while fetch list blog", error);
+      }
+    }
+    fetchData();
+  }, []);
 
   return (
     <div
@@ -42,13 +62,13 @@ function ListBlog(props) {
             <div className="card card-custom">
               <div className="card-header flex-wrap border-0 pt-6 pb-0">
                 <div className="card-title">
-                  <h3 className="card-label">List job</h3>
+                  <h3 className="card-label">List Blog</h3>
                 </div>
                 <div className="card-toolbar">
                   <div className="dropdown dropdown-inline mr-2"></div>
 
                   <Link
-                    to={"/add-job"}
+                    to={"/new-blog"}
                     className="btn btn-primary font-weight-bolder"
                   >
                     <span className="svg-icon svg-icon-md">
@@ -81,10 +101,7 @@ function ListBlog(props) {
                 </div>
               </div>
               <div className="card-body">
-                <div className="row p-0 pb-5">
-                 
-                  
-                </div>
+                <div className="row p-0 pb-5"></div>
 
                 <div
                   className="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
@@ -119,7 +136,7 @@ function ListBlog(props) {
                         >
                           <span style={{ width: "137px" }}>Link</span>
                         </th>
-                       
+
                         <th
                           data-field="Type"
                           data-autohide-disabled="false"
@@ -137,7 +154,7 @@ function ListBlog(props) {
                       </tr>
                     </thead>
                     <tbody className="datatable-body" style={{}}>
-                      {/* {data.map((job, index) => {
+                      {listBlog.map((blog, index) => {
                         return (
                           <React.Fragment key={index}>
                             <tr
@@ -148,9 +165,9 @@ function ListBlog(props) {
                               <td className="datatable-cell datatable-toggle-detail hide_desktop show_mb">
                                 <span
                                   className="datatable-toggle-detail"
-                                  onClick={this.showDetail.bind(this, index)}
+                                  // onClick={this.showDetail.bind(this, index)}
                                 >
-                                  <i className={this.state.classArr[index]}></i>
+                                  {/* <i className={this.state.classArr[index]}></i> */}
                                 </span>
                               </td>
                               <td
@@ -161,7 +178,7 @@ function ListBlog(props) {
                                 <span
                                   onClick={() => {
                                     this.props.history.push(
-                                      `/job-detail/${job.id}`
+                                      `/job-detail/${blog.id}`
                                     );
                                   }}
                                   className="text-hover-primary"
@@ -170,7 +187,7 @@ function ListBlog(props) {
                                     cursor: "pointer",
                                   }}
                                 >
-                                  {job.title}
+                                  {blog.title}
                                 </span>
                               </td>
 
@@ -180,7 +197,7 @@ function ListBlog(props) {
                                 className="datatable-cell hide_mb"
                               >
                                 <span style={{ width: "137px" }}>
-                                  {job.time}
+                                  {moment(blog.createdAt).format("MMM D, YYYY")}
                                 </span>
                               </td>
                               <td
@@ -189,7 +206,7 @@ function ListBlog(props) {
                                 className="datatable-cell hide_mb"
                               >
                                 <span style={{ width: "137px" }}>
-                                  {job.salary}
+                                  {`http://localhost:2020/blog/${blog.slug}-${blog.id}`}
                                 </span>
                               </td>
                               <td
@@ -199,31 +216,11 @@ function ListBlog(props) {
                               >
                                 <span style={{ width: "80px" }}>
                                   <span className="label font-weight-bold label-lg  label-light-success label-inline">
-                                    {job.type}
+                                    {blog.isShow ? "Show" : "Hide"}
                                   </span>
                                 </span>
                               </td>
-                              <td
-                                data-field="Type"
-                                data-autohide-disabled="false"
-                                aria-label={2}
-                                className="datatable-cell hide_mb"
-                              >
-                                <span style={{ width: "80px" }}>
-                                  <span
-                                    className={`label label-${this.renderClassJobStatus(
-                                      job.jobStatus
-                                    )} label-dot mr-2`}
-                                  />
-                                  <span
-                                    className={`font-weight-bold text-${this.renderClassJobStatus(
-                                      job.jobStatus
-                                    )}`}
-                                  >
-                                    {job.jobStatus}
-                                  </span>
-                                </span>
-                              </td>
+
                               <td
                                 data-field="Actions"
                                 data-autohide-disabled="false"
@@ -238,9 +235,9 @@ function ListBlog(props) {
                                   }}
                                 >
                                   <Link
-                                    to={`/job-detail/${job.id}`}
+                                    to={`/edit-blog/${blog.id}`}
                                     className="btn btn-sm btn-clean btn-icon mr-2"
-                                    title="Edit details"
+                                    title="Edit blog"
                                   >
                                     <span className="svg-icon svg-icon-md">
                                       <svg
@@ -264,25 +261,25 @@ function ListBlog(props) {
                                             height={24}
                                           />
                                           <path
-                                            d="M10.9,2 C11.4522847,2 11.9,2.44771525 11.9,3 C11.9,3.55228475 11.4522847,4 10.9,4 L6,4 C4.8954305,4 4,4.8954305 4,6 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,16 C20,15.4477153 20.4477153,15 21,15 C21.5522847,15 22,15.4477153 22,16 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,6 C2,3.790861 3.790861,2 6,2 L10.9,2 Z"
+                                            d="M12.2674799,18.2323597 L12.0084872,5.45852451 C12.0004303,5.06114792 12.1504154,4.6768183 12.4255037,4.38993949 L15.0030167,1.70195304 L17.5910752,4.40093695 C17.8599071,4.6812911 18.0095067,5.05499603 18.0083938,5.44341307 L17.9718262,18.2062508 C17.9694575,19.0329966 17.2985816,19.701953 16.4718324,19.701953 L13.7671717,19.701953 C12.9505952,19.701953 12.2840328,19.0487684 12.2674799,18.2323597 Z"
+                                            fill="#000000"
+                                            fillRule="nonzero"
+                                            transform="translate(14.701953, 10.701953) rotate(-135.000000) translate(-14.701953, -10.701953) "
+                                          />
+                                          <path
+                                            d="M12.9,2 C13.4522847,2 13.9,2.44771525 13.9,3 C13.9,3.55228475 13.4522847,4 12.9,4 L6,4 C4.8954305,4 4,4.8954305 4,6 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,13 C20,12.4477153 20.4477153,12 21,12 C21.5522847,12 22,12.4477153 22,13 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,6 C2,3.790861 3.790861,2 6,2 L12.9,2 Z"
                                             fill="#000000"
                                             fillRule="nonzero"
                                             opacity="0.3"
                                           />
-                                          <path
-                                            d="M24.0690576,13.8973499 C24.0690576,13.1346331 24.2324969,10.1246259 21.8580869,7.73659596 C20.2600137,6.12944276 17.8683518,5.85068794 15.0081639,5.72356847 L15.0081639,1.83791555 C15.0081639,1.42370199 14.6723775,1.08791555 14.2581639,1.08791555 C14.0718537,1.08791555 13.892213,1.15726043 13.7542266,1.28244533 L7.24606818,7.18681951 C6.93929045,7.46513642 6.9162184,7.93944934 7.1945353,8.24622707 C7.20914339,8.26232899 7.22444472,8.27778811 7.24039592,8.29256062 L13.7485543,14.3198102 C14.0524605,14.6012598 14.5269852,14.5830551 14.8084348,14.2791489 C14.9368329,14.140506 15.0081639,13.9585047 15.0081639,13.7695393 L15.0081639,9.90761477 C16.8241562,9.95755456 18.1177196,10.0730665 19.2929978,10.4469645 C20.9778605,10.9829796 22.2816185,12.4994368 23.2042718,14.996336 L23.2043032,14.9963244 C23.313119,15.2908036 23.5938372,15.4863432 23.9077781,15.4863432 L24.0735976,15.4863432 C24.0735976,15.0278051 24.0690576,14.3014082 24.0690576,13.8973499 Z"
-                                            fill="#000000"
-                                            fillRule="nonzero"
-                                            transform="translate(15.536799, 8.287129) scale(-1, 1) translate(-15.536799, -8.287129) "
-                                          />
                                         </g>
                                       </svg>
-                                    </span>
+                                    </span>{" "}
                                   </Link>
                                 </span>
                               </td>
                             </tr>
-                            <tr
+                            {/* <tr
                               className={`datatable-row-detail hide_desktop ${this.state.classToggleDetail[index]}`}
                             >
                               <td
@@ -335,10 +332,10 @@ function ListBlog(props) {
                                   </tbody>
                                 </table>
                               </td>
-                            </tr>
+                            </tr> */}
                           </React.Fragment>
                         );
-                      })} */}
+                      })}
                     </tbody>
                   </table>
                 </div>
