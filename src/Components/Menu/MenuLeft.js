@@ -37,7 +37,6 @@ class MenuLeft extends Component {
     this.getProfile = this.getProfile.bind(this);
     this.uploadAvatarDone = this.uploadAvatarDone.bind(this);
     this.handleOnClick = this.handleOnClick.bind(this);
-    this.initPusher = this.initPusher.bind(this);
     this.markAllNotiRead = this.markAllNotiRead.bind(this);
     this.renderNotiToast = this.renderNotiToast.bind(this);
     this.forwardNoti = this.forwardNoti.bind(this);
@@ -160,36 +159,7 @@ class MenuLeft extends Component {
       });
     });
   }
-  initPusher(idUser) {
-    const pusher = new Pusher("e14503e929f2e0a46385", {
-      cluster: "ap1",
-      encrypted: true,
-    });
-
-    const channel = pusher.subscribe("notification");
-    channel.bind(idUser, (noti) => {
-      console.log(noti);
-      this.drawerProfile.current.receiveNewNoti(noti.content);
-      this.setState((prevState) => {
-        return {
-          countUnreadNoti: prevState.countUnreadNoti + 1,
-        };
-      });
-      toast(this.renderNotiToast(noti.content), {
-        position: "bottom-left",
-        autoClose: 3000,
-        hideProgressBar: true,
-        newestOnTop: true,
-        closeOnClick: true,
-        rtl: false,
-        pauseOnFocusLoss: true,
-        draggable: true,
-        pauseOnHover: true,
-        transition: Zoom,
-        className: "custom_toast",
-      });
-    });
-  }
+  
   uploadAvatarDone(linkAvatar) {
     let currentProfile = this.state.profile;
     currentProfile.linkAvatar = linkAvatar;
@@ -494,6 +464,22 @@ class MenuLeft extends Component {
                 <i className="far fa-money-bill-alt hover_icon"></i>
               </div>
               <div className="content_menu">Board</div>
+            </NavLink>
+            <NavLink
+              exact
+              activeClassName="selected"
+              to="/list-blog"
+              onClick={
+                this.props.isMobile
+                  ? (e) => this.handleOnClick(e, "/list-blog")
+                  : () => null
+              }
+              className="row_icon"
+            >
+              <div className="wrap_icon_menu">
+                <i className="fa fa-newspaper hover_icon"></i>
+              </div>
+              <div className="content_menu">Blogs</div>
             </NavLink>
             {this.props.role === "Director" ? (
               <NavLink
