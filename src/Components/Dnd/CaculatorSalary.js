@@ -28,6 +28,7 @@ class CaculatorSalary extends Component {
       peopleDependent: 0,
       sgd: '',
       tigia: 17423,
+      pvi: 250000,
       salaryShow: '',
       bhxhShow: '',
       errors: {},
@@ -142,6 +143,7 @@ class CaculatorSalary extends Component {
     });
     if (this.isEmpty(errors)) {
       const dataSending = {
+        pvi: data.pvi === '' ? 0 : data.pvi,
         type: type,
         salary: Number(data.salary),
         insuraneMoney: data.isSocialInsurance ? Number(data.salary) : Number(data.insuraneMoney),
@@ -166,15 +168,14 @@ class CaculatorSalary extends Component {
     let text = ''
     if (table === 'table-description') {
       text = `
-      GROSS Salary ${data.moneyGross}\n
+      GROSS Salary ${data.gross}\n
       Social insurance (8 %) ${data.bhxh}\n
       Health Insurance (1.5 %) ${data.bhyt}\n
       UnEmployment Insurance (1 %) ${data.bhtn}\n
-      Income before tax	${data.beforeTax}\n
-      For the tax payer	${data.reducerYourself}\n
-      Reduction based on family circumstances	${data.circumstances}\n
-      Assessable Income	${data.taxPersonal}\n
-      Net salary ${data.moneyNet}
+      Taxable Income ${data.tnct}\n
+      Personal income tax ${data.tncn}\n
+      Net salary ${data.net}
+      Total expense (SGD)	${data.SGD}
       `
     }
     if (table === 'table-detail-tax') {
@@ -190,12 +191,13 @@ class CaculatorSalary extends Component {
     }
     if (table === 'table-company') {
       text = `
-      GROSS Salary ${data.companySalaryGross}\n
-      Social insurance (17%) ${data.companyBhxh}\n
+      GROSS Salary ${data.gross}\n
+      Social insurance (17.5%) ${data.companyBhxh}\n
       Health Insurance (3%) ${data.companyBhyt}\n
-      Occupational Insurance (0.5%) ${data.companyBhnn}\n
       UnEmployment Insurance (1%) ${data.companyBhtn}\n
-      Total ${data.companyTotal}
+      Pvi care ${data.pvi}\n
+      Union tax ${data.unionTax}\n
+      Total expense ${data.total}
       `
     }
     return text;
@@ -347,6 +349,14 @@ class CaculatorSalary extends Component {
                       </div>
                     </div>
                     <div className="form-group row">
+                      <label className="col-1 col-form-label form-label-title-caculator">PVI:</label>
+                      <div className="col-2">
+                        <div className="div-input-caculator">
+                          <input name="pvi" value={this.state.pvi} onChange={this.onChangeInput} className="form-control" type="number" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="form-group row">
                       <label className="col-2 col-form-label form-label-title-caculator">Reduction based on family circumstances:</label>
                       <div className="col-2">
                         <div className="div-input-caculator">
@@ -395,17 +405,10 @@ class CaculatorSalary extends Component {
                                 >
                                   <div className="detail-caculator">
                                     Description (VND)
-                              </div>
+                                   <button type="button" class="btn btn-primary copy-to-clip-board">Copy to clipboard</button>
+                                  </div>
                                 </CopyToClipboard>
                               </OverlayTrigger>
-                              {/* <CopyToClipboard text={
-                                this.generateTextClipboard('table-description')
-                              }
-                                onCopy={() => {
-                                  this.successCopy()
-                                }}>
-                                <button type="button" className="btn btn-primary btn-copy-to-clipboard">Copy To Clipboard</button>
-                              </CopyToClipboard> */}
                             </div>
                             <div>
                             </div>
@@ -414,7 +417,7 @@ class CaculatorSalary extends Component {
                                 <tbody>
                                   <tr className="table-active">
                                     <th className="title-caculator">GROSS Salary</th>
-                                    <td className="content-caculator">{this.state.data.moneyGross}</td>
+                                    <td className="content-caculator">{this.state.data.gross}</td>
                                   </tr>
                                   <tr className="table table-custom-caculator">
                                     <th className="title-caculator">Social insurance (8 %)</th>
@@ -430,30 +433,16 @@ class CaculatorSalary extends Component {
                                   </tr>
 
                                   <tr className="table table-custom-caculator">
-                                    <th className="title-caculator">Income before tax</th>
-                                    <td className="content-caculator">{this.state.data.beforeTax}</td>
-                                  </tr>
-
-                                  <tr className="table table-custom-caculator">
-                                    <th className="title-caculator">For the tax payer</th>
-                                    <td className="content-caculator">- {this.state.data.reducerYourself}</td>
-                                  </tr>
-
-                                  <tr className="table table-custom-caculator">
-                                    <th className="title-caculator">Reduction based on family circumstances</th>
-                                    <td className="content-caculator">- {this.state.data.circumstances}</td>
-                                  </tr>
-                                  <tr className="table table-custom-caculator">
-                                    <th className="title-caculator">Assessable Income</th>
-                                    <td className="content-caculator">{this.state.data.taxesGross}</td>
+                                    <th className="title-caculator">Taxable Income</th>
+                                    <td className="content-caculator">{this.state.data.tnct}</td>
                                   </tr>
                                   <tr className="table table-custom-caculator">
                                     <th className="title-caculator">Personal income tax</th>
-                                    <td className="content-caculator">- {this.state.data.taxPersonal}</td>
+                                    <td className="content-caculator">- {this.state.data.tncn}</td>
                                   </tr>
                                   <tr className="table-active">
                                     <th className="title-caculator">Net salary</th>
-                                    <td className="content-caculator">{this.state.data.moneyNet}</td>
+                                    <td className="content-caculator">{this.state.data.net}</td>
                                   </tr>
                                 </tbody>
                               </table>
@@ -489,7 +478,9 @@ class CaculatorSalary extends Component {
                                 >
                                   <div className="detail-caculator">
                                     Paid by the employer gross (VND)
-                              </div>
+                                   <button type="button" class="btn btn-primary copy-to-clip-board">Copy to clipboard</button>
+
+                                  </div>
                                 </CopyToClipboard>
                               </OverlayTrigger>
                             </div>
@@ -498,10 +489,10 @@ class CaculatorSalary extends Component {
                                 <tbody>
                                   <tr className="table-active">
                                     <th className="title-caculator">GROSS Salary</th>
-                                    <td className="content-caculator">{this.state.data.companySalaryGross}</td>
+                                    <td className="content-caculator">{this.state.data.gross}</td>
                                   </tr>
                                   <tr className="table table-custom-caculator">
-                                    <th className="title-caculator">Social insurance (17%)</th>
+                                    <th className="title-caculator">Social insurance (17.5%)</th>
                                     <td className="content-caculator">{this.state.data.companyBhxh}</td>
                                   </tr>
                                   <tr className="table table-custom-caculator">
@@ -509,32 +500,24 @@ class CaculatorSalary extends Component {
                                     <td className="content-caculator">{this.state.data.companyBhyt}</td>
                                   </tr>
                                   <tr className="table table-custom-caculator">
-                                    <th className="title-caculator">Occupational Insurance(0.5%)</th>
-                                    <td className="content-caculator">{this.state.data.companyBhnn}</td>
-                                  </tr>
-                                  <tr className="table table-custom-caculator">
                                     <th className="title-caculator">UnEmployment Insurance(1%)</th>
                                     <td className="content-caculator">{this.state.data.companyBhtn}</td>
                                   </tr>
                                   <tr className="table table-custom-caculator">
-                                    <th className="title-caculator title-caculator-empty"></th>
-                                    <td className="content-caculator"></td>
+                                    <th className="title-caculator">Pvi care</th>
+                                    <td className="content-caculator">{this.state.data.pvi}</td>
                                   </tr>
                                   <tr className="table table-custom-caculator">
-                                    <th className="title-caculator title-caculator-empty"></th>
-                                    <td className="content-caculator"></td>
+                                    <th className="title-caculator">Union tax</th>
+                                    <td className="content-caculator">{this.state.data.unionTax}</td>
                                   </tr>
                                   <tr className="table table-custom-caculator">
-                                    <th className="title-caculator title-caculator-empty"></th>
-                                    <td className="content-caculator"></td>
+                                    <th className="title-caculator">Total expense</th>
+                                    <td className="content-caculator">{this.state.data.total}</td>
                                   </tr>
-                                  <tr className="table table-custom-caculator">
-                                    <th className="title-caculator title-caculator-empty"></th>
-                                    <td className="content-caculator"></td>
-                                  </tr>
-                                  <tr className="table-active">
-                                    <th className="title-caculator">Total</th>
-                                    <td className="content-caculator">{this.state.data.companyTotal}</td>
+                                  <tr className="table-active table-custom-caculator">
+                                    <th className="title-caculator">Total expense (SGD)</th>
+                                    <td className="content-caculator">{this.state.data.SGD}</td>
                                   </tr>
                                 </tbody>
                               </table>
@@ -566,6 +549,8 @@ class CaculatorSalary extends Component {
                             >
                               <div className="detail-caculator">
                                 Personal income tax details (VND)
+                                <button type="button" class="btn btn-primary copy-to-clip-board">Copy to clipboard</button>
+
                               </div>
                             </CopyToClipboard>
                           </OverlayTrigger>
