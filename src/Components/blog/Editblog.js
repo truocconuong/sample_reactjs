@@ -141,7 +141,7 @@ function EditBlog(props) {
             var percentCompleted = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total
             );
-            self.setState({ uploadProcess: percentCompleted });
+            // self.setState({ uploadProcess: percentCompleted });
           },
         };
         config.headers = request_header.headers;
