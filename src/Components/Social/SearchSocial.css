@@ -1,0 +1,112 @@
+.contain-item-candidate {
+    width: 100%;
+    display: flex;
+}
+.gutter-b-kitin {
+    margin-bottom: 12px;
+}
+.sp-candItem__main {
+    padding-bottom: 7px;
+    display: flex;
+    width: 100%;
+}
+.sp-photoField_sm {
+    width: 45px;
+    height: 45px;
+}
+.sp-photoFiel-dkm {
+    width: 80px;
+    height: 80px;
+}
+.sp-candItem__avatar {
+    width: 20%;
+}
+.sp-candItem__mainBody {
+    width: 80%;
+}
+.sp-photoField__overflowWrap {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    max-height: 100%;
+    border-radius: 50%;
+    background: #bbbfc4;
+    position: relative;
+}
+.sp-photoField__img-wrap {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-size: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border-radius: 50%;
+}
+
+.sp-candItem_checked, .sp-candItem_checked:hover {
+    box-shadow: inset 0 0 0 2px rgba(26,179,148,.8)!important;
+    cursor: default;
+}
+.sp-nameField__inner {
+    font-size: 16px;
+    font-weight: 500;
+    color: #181C32;
+}
+.sp-candItem__contacts {
+    display: flex;
+    width: 100%;
+    list-style: none;
+}
+.sp-candItem__contacts li {
+    padding: 5px;
+}
+.sp-candItem__contacts .btn-social-kitin {
+    width: 24px;
+    height: 24px;
+    line-height: 14px;
+    border-radius: 22px;
+    cursor: inherit;
+}
+.sp-candItem__contacts li {
+    margin: 0 5px 5px 0;
+}
+.sp-candItem__contacts li i{
+    font-size: 13px;
+    color: white;
+}
+.sp-candItem__contacts .btn-social_li {
+    background-color: #0077b5;
+}
+.sp-candItem__contacts .btn-social_twitter {
+    background-color: #55acee;
+}
+.sp-candItem__contacts .btn-social_fb {
+    background-color: #4d65a3;
+}
+.sp-candItem__contacts .btn-social_pinterest {
+    background-color: #cb2027;
+}
+.sp-candItem__contacts .btn-social_skype {
+    background-color: #00aff0;
+}
+.custom-icon__skype i{
+    padding-left: 1px;
+    padding-bottom: 3px;
+}
+.custom-kt-card {
+    max-height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+}
+.dkm-custom-cc {
+    padding-left: 2.25rem;
+    padding-top: 5px;
+    padding-bottom: 25px;
+}
+.custom-list-cdd {
+    overflow: scroll;
+    height: calc(100vh - 260px);    
+}

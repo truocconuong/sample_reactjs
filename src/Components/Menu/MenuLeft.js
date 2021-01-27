@@ -495,6 +495,38 @@ class MenuLeft extends Component {
               </div>
               <div className="content_menu">Board</div>
             </NavLink>
+            <NavLink
+              exact
+              activeClassName="selected"
+              to="/search-social"
+              onClick={
+                this.props.isMobile
+                  ? (e) => this.handleOnClick(e, "/search-social")
+                  : () => null
+              }
+              className="row_icon"
+            >
+              <div className="wrap_icon_menu">
+                <i className="fas fa-globe-asia hover_icon"></i>
+              </div>
+              <div className="content_menu">Search Social</div>
+            </NavLink>
+            {/* <NavLink
+              exact
+              activeClassName="selected"
+              to="/search-social"
+              onClick={
+                this.props.isMobile
+                  ? (e) => this.handleOnClick(e, "/search-social")
+                  : () => null
+              }
+              className="row_icon"
+            >
+              <div className="wrap_icon_menu">
+                <i className="fab fa-trello hover_icon"></i>
+              </div>
+              <div className="content_menu">Search Candidate Social</div>
+            </NavLink> */}
             {this.props.role === "Director" ? (
               <NavLink
                 exact

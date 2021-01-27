@@ -17,6 +17,7 @@ import SearchCandidate from './Components/Table/SearchCandidate';
 import PreviewCandidate from './Components/Table/PreviewCandidate';
 import RefinedPdf from './Components/Table/RefinedPdf';
 import CaculatorSalary from './Components/Dnd/CaculatorSalary';
+import SearchSocial from './Components/Social/SearchSocial';
 
 const routes = [
   {
@@ -117,6 +118,11 @@ const routes = [
     exact: true,
     main: (props) => < CaculatorSalary {...props} />
   },
+  {
+    path: "/search-social",
+    exact: true,
+    main: () => <SearchSocial />
+  }
 
 ];
 
