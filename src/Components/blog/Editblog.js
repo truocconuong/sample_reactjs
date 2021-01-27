@@ -12,6 +12,7 @@ import { getSelectedBlock } from "draftjs-utils";
 import slugify from "slugify";
 import { toast } from "react-toastify";
 import CustomToast from "../common/CustomToast";
+import Fbloader from "../libs/PageLoader/fbloader.js";
 
 import "./blog.css";
 
@@ -24,6 +25,7 @@ const contentState = ContentState.createFromBlockArray(
 
 function EditBlog(props) {
   const [styleHeader, setStyleHeader] = useState("card-header");
+  const [isLoading, setIsLoading] = useState(true);
   const [editorState, setEditorState] = useState(
     EditorState.createWithContent(contentState)
   );
@@ -48,12 +50,14 @@ function EditBlog(props) {
       try {
         const response = await api.get(`/api/blog/${id}`);
         if (response) {
-          console.log(response.data.blog);
+          // console.log(response.data.blog);
           const contentBlock = htmlToDraft(response.data.blog.content);
+          setTitle(response.data.blog.title);
+          setIsLoading(false);
           const contentState = ContentState.createFromBlockArray(
             contentBlock.contentBlocks
           );
-          setEditorState(EditorState.createWithContent(contentState))
+          setEditorState(EditorState.createWithContent(contentState));
         }
       } catch (error) {
         console.log("err while fetch list blog", error);
@@ -86,17 +90,22 @@ function EditBlog(props) {
     }
     try {
       let data = {
+        id: props.match.params.id,
         title: title,
         content: content,
         img: JSON.stringify(urls),
         firstPara: firstPara,
-        slug: slugify(title.toLowerCase()),
+        slug: slugify(
+          title
+            .toLowerCase()
+            .replaceAll(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, " ")
+        ),
       };
       console.log(data);
-      const response = await api.post(`/api/blog`, data);
+      const response = await api.patch(`/api/blog`, data);
       if (response) {
         console.log(response.data);
-        toast(<CustomToast title={"Post Success!"} />, {
+        toast(<CustomToast title={"Update Success!"} />, {
           position: toast.POSITION.BOTTOM_RIGHT,
           autoClose: 3000,
           className: "toast_login",
@@ -182,6 +191,7 @@ function EditBlog(props) {
     <div
       className={`d-flex flex-column flex-row-fluid wrapper ${props.className_wrap_broad}`}
     >
+      {isLoading ? <Fbloader /> : null}
       <div className="content d-flex flex-column flex-column-fluid p-0">
         {/* <ToastContainer /> */}
         <div
@@ -198,13 +208,13 @@ function EditBlog(props) {
                     </NavLink>
                   </li>
                   <li className="breadcrumb-item">
-                    <NavLink to="/job" className="text-muted">
-                      Job
+                    <NavLink to="/list-blog" className="text-muted">
+                      Blog
                     </NavLink>
                   </li>
                   <li className="breadcrumb-item">
                     <span className="text-muted" style={{ cursor: "pointer" }}>
-                      Add Job
+                      Edit Blog
                     </span>
                   </li>
                 </ul>
@@ -222,13 +232,13 @@ function EditBlog(props) {
               <div className={styleHeader}>
                 <div className="card-title">
                   <h3 className="card-label">
-                    Create New Blog
+                    Edit Blog
                     <i className="mr-2" />
                   </h3>
                 </div>
                 <div className="card-toolbar">
                   <span
-                    onClick={() => this.props.history.push("/list-blog")}
+                    onClick={() => props.history.push("/list-blog")}
                     className="btn btn-light-primary font-weight-bolder mr-2"
                   >
                     Back

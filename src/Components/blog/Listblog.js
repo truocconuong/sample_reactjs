@@ -4,36 +4,91 @@ import Fbloader from "../libs/PageLoader/fbloader.js";
 import { Link } from "react-router-dom";
 import Network from "../../Service/Network";
 import moment from "moment";
+import CustomToast from "../common/CustomToast";
+import { toast } from "react-toastify";
+import Pagination from "rc-pagination";
 
 const api = new Network();
+const domainFetchTech = "https://fetch.tech";
 
 function ListBlog(props) {
-  const [state, setState] = useState({});
   const [listBlog, setListBlog] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [state, setState] = useState({
+    pageNumber: 1,
+    pageSize: 10,
+    totalRow: 0,
+  });
 
-  useEffect(() => {
-    // Update the document title using the browser API
-    async function fetchData() {
-      try {
-        const response = await api.get(`/api/blogs?pageSize=10&pageNumber=1`);
-        if (response) {
-          setListBlog(response.data.listBlog);
-          console.log(response.data);
-        }
-      } catch (error) {
-        console.log("err while fetch list blog", error);
+  const openBlog = async (blog) => {
+    window.open(`${domainFetchTech}/blog/${blog.slug}-${blog.id}`, "_blank");
+  };
+  const toggleBlog = async (id, isShow, index) => {
+    try {
+      let data = {
+        id: id,
+        isShow: !isShow,
+      };
+      const response = await api.patch(`/api/blog`, data);
+      if (response) {
+        let newList = [...listBlog];
+        newList[index].isShow = !isShow;
+        setListBlog(newList);
+        toast(<CustomToast title={"Update Success!"} />, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          autoClose: 3000,
+          className: "toast_login",
+          closeButton: false,
+          hideProgressBar: true,
+          newestOnTop: true,
+          closeOnClick: true,
+          rtl: false,
+          pauseOnFocusLoss: true,
+          draggable: true,
+          pauseOnHover: true,
+        });
       }
+    } catch (error) {
+      console.log("err while update status blog", error);
     }
+  };
+  const fetchData = async () => {
+    try {
+      const response = await api.get(
+        `/api/portal/blogs?pageSize=${state.pageSize}&pageNumber=${state.pageNumber}`
+      );
+      if (response) {
+        setListBlog(response.data.listBlog);
+        setIsLoading(false);
+        setState((preState) => ({
+          ...preState,
+          totalRow: response.data.count,
+        }));
+        console.log(response.data);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.log("err while fetch list blog", error);
+    }
+  };
+  useEffect(() => {
     fetchData();
   }, []);
-
+  useEffect(() => {
+    fetchData();
+  }, [state.pageNumber]);
+  const handlePagination = (page) => {
+    setState((preState) => ({
+      ...preState,
+      pageNumber: page,
+    }));
+  };
   return (
     <div
       className={`d-flex flex-column flex-row-fluid wrapper ${props.className_wrap_broad}`}
     >
+      {isLoading ? <Fbloader /> : null}
       <div className="content d-flex flex-column flex-column-fluid">
-        {/* {this.state.isLoading ? <Fbloader /> : null} */}
-
         <div
           className="subheader py-3 py-lg-8 subheader-transparent"
           id="kt_subheader"
@@ -130,12 +185,6 @@ function ListBlog(props) {
                         >
                           <span style={{ width: "137px" }}>Time</span>
                         </th>
-                        <th
-                          data-field="CompanyName"
-                          className="datatable-cell datatable-cell-sort hide_mb"
-                        >
-                          <span style={{ width: "137px" }}>Link</span>
-                        </th>
 
                         <th
                           data-field="Type"
@@ -176,11 +225,7 @@ function ListBlog(props) {
                                 className="datatable-cell"
                               >
                                 <span
-                                  onClick={() => {
-                                    this.props.history.push(
-                                      `/job-detail/${blog.id}`
-                                    );
-                                  }}
+                                  onClick={() => openBlog(blog)}
                                   className="text-hover-primary"
                                   style={{
                                     width: "220px",
@@ -200,23 +245,29 @@ function ListBlog(props) {
                                   {moment(blog.createdAt).format("MMM D, YYYY")}
                                 </span>
                               </td>
-                              <td
-                                data-field="CompanyName"
-                                aria-label="Stanton, Friesen and Grant"
-                                className="datatable-cell hide_mb"
-                              >
-                                <span style={{ width: "137px" }}>
-                                  {`http://localhost:2020/blog/${blog.slug}-${blog.id}`}
-                                </span>
-                              </td>
+
                               <td
                                 data-field="Status"
                                 aria-label={1}
                                 className="datatable-cell hide_mb"
                               >
                                 <span style={{ width: "80px" }}>
-                                  <span className="label font-weight-bold label-lg  label-light-success label-inline">
-                                    {blog.isShow ? "Show" : "Hide"}
+                                  <span className="switch switch-outline switch-icon switch-primary">
+                                    <label>
+                                      <input
+                                        type="checkbox"
+                                        checked={blog.isShow}
+                                        name="isShow"
+                                        onChange={() =>
+                                          toggleBlog(
+                                            blog.id,
+                                            blog.isShow,
+                                            index
+                                          )
+                                        }
+                                      />
+                                      <span></span>
+                                    </label>
                                   </span>
                                 </span>
                               </td>
@@ -338,6 +389,17 @@ function ListBlog(props) {
                       })}
                     </tbody>
                   </table>
+                  <div className="datatable-pager datatable-paging-loaded fl_end">
+                    <Pagination
+                      defaultPageSize={state.pageSize}
+                      current={state.pageNumber}
+                      hideOnSinglePage={true}
+                      showTitle={false}
+                      onChange={handlePagination}
+                      total={state.totalRow}
+                      showLessItems={true}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

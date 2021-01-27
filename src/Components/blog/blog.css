@@ -223,6 +223,12 @@
   padding: 15px;
   color: rgba(41, 41, 41, 1);
 }
+.editorClassName .rdw-image-center{
+  justify-content: flex-start;
+}
+.editorClassName .rdw-image-center img{
+  width: 680px !important;
+}
 .toolbarClassName {
   border: 1px solid #dcdfe6 !important;
   font-family: Sohne_300;

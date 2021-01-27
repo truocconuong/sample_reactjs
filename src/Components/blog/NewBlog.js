@@ -24,6 +24,7 @@ const contentState = ContentState.createFromBlockArray(
 
 function NewBlog(props) {
   const [styleHeader, setStyleHeader] = useState("card-header");
+  const [isDisableSave, setIsDisableSave] = useState(false);
   const [editorState, setEditorState] = useState(
     EditorState.createWithContent(contentState)
   );
@@ -45,7 +46,9 @@ function NewBlog(props) {
   });
 
   const getContent = () => {
-    return draftToHtml(convertToRaw(editorState.getCurrentContent())).replaceAll(/\r?\n|\r/g, "");
+    return draftToHtml(
+      convertToRaw(editorState.getCurrentContent())
+    ).replaceAll(/\r?\n|\r/g, "");
   };
 
   const getStringdata = () => {
@@ -77,20 +80,21 @@ function NewBlog(props) {
       console.log(data);
       const response = await api.post(`/api/blog`, data);
       if (response) {
-        console.log(response.data);
+        // console.log(response.data);
+        setIsDisableSave(true);
         toast(<CustomToast title={"Post Success!"} />, {
-            position: toast.POSITION.BOTTOM_RIGHT,
-            autoClose: 3000,
-            className: "toast_login",
-            closeButton: false,
-            hideProgressBar: true,
-            newestOnTop: true,
-            closeOnClick: true,
-            rtl: false,
-            pauseOnFocusLoss: true,
-            draggable: true,
-            pauseOnHover: true,
-          });
+          position: toast.POSITION.BOTTOM_RIGHT,
+          autoClose: 3000,
+          className: "toast_login",
+          closeButton: false,
+          hideProgressBar: true,
+          newestOnTop: true,
+          closeOnClick: true,
+          rtl: false,
+          pauseOnFocusLoss: true,
+          draggable: true,
+          pauseOnHover: true,
+        });
       }
     } catch (error) {
       console.log("err while post blog");
@@ -180,13 +184,13 @@ function NewBlog(props) {
                     </NavLink>
                   </li>
                   <li className="breadcrumb-item">
-                    <NavLink to="/job" className="text-muted">
-                      Job
+                    <NavLink to="/list-blog" className="text-muted">
+                      Blog
                     </NavLink>
                   </li>
                   <li className="breadcrumb-item">
                     <span className="text-muted" style={{ cursor: "pointer" }}>
-                      Add Job
+                      Create Blog
                     </span>
                   </li>
                 </ul>
@@ -210,14 +214,14 @@ function NewBlog(props) {
                 </div>
                 <div className="card-toolbar">
                   <span
-                    onClick={() => this.props.history.push("/list-blog")}
+                    onClick={() => props.history.push("/list-blog")}
                     className="btn btn-light-primary font-weight-bolder mr-2"
                   >
                     Back
                   </span>
                   <div className="btn-group">
                     <button
-                      //   disabled={this.state.isDisableSave}
+                      disabled={isDisableSave}
                       type="button"
                       onClick={onSave}
                       className={
