@@ -933,7 +933,9 @@ textarea {
 .title-caculator-empty {
   padding: 18.9px !important;
 }
-
+.copy-to-clip-board{
+  margin-left: 6px;
+}
 .filter-board {
   display: flex;
 }
