@@ -106,7 +106,7 @@ class FilterMember extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="filter-of-directory">
         <Select
           className="select_user"
           classNamePrefix="select"

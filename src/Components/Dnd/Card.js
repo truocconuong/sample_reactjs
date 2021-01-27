@@ -11,6 +11,9 @@ import { connect } from "react-redux";
 import roleName from '../../utils/const'
 import { defaultAva, domainServer } from "../../utils/config";
 import * as moment from 'moment'
+import reactCSS from 'reactcss'
+import { SketchPicker, ChromePicker } from 'react-color'
+
 const Container = styled.div`
   margin-bottom: 8px;
   border-radius: 3px;
@@ -50,10 +53,16 @@ class Card extends Component {
           slug: 'storage',
           title: 'Storage Card',
           roles: [roleName.DIRECTOR, roleName.LEADER, roleName.MEMBER]
+        },
+        {
+          slug: 'label',
+          title: 'Create Label',
+          roles: [roleName.LEADER, roleName.MEMBER]
         }
       ],
       laneSelected: {},
-      showAction: ''
+      showAction: '',
+      background: '#f9f9f9',
     };
     this.showInfoMember = [];
     this.addMemberToCard = this.addMemberToCard.bind(this);
@@ -123,9 +132,17 @@ class Card extends Component {
     this.toggleAddMember();
   }
 
+  handleClick = () => {
+    this.setState({ displayColorPicker: !this.state.displayColorPicker })
+  };
+
+  handleClose = () => {
+    this.setState({ displayColorPicker: false })
+  };
+
+
 
   removeMemberToCard = (index, card_id, user_id) => {
-    console.log("da vao day")
     this.props.removeMemberToCard(card_id, user_id);
     let currentIsOpenDeleteUserPop = this.state.isOpenDeleteUserPop;
     currentIsOpenDeleteUserPop[index] = false;
@@ -213,6 +230,90 @@ class Card extends Component {
     </div>
   )
 
+  handleChange = (color) => {
+    this.setState({ background: color.hex })
+  };
+
+  defaultLabel = () => {
+    this.setState({
+      nameLabel: '',
+      background: ''
+    })
+  }
+
+
+  formLabel = () => {
+    const styles = reactCSS({
+      'default': {
+        color: {
+          width: '36px',
+          height: '14px',
+          borderRadius: '2px',
+          background: `${this.state.background}`,
+        },
+        swatch: {
+          padding: '5px',
+          background: '#fff',
+          borderRadius: '1px',
+          boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+          display: 'inline-block',
+          cursor: 'pointer',
+        },
+        popover: {
+          position: 'absolute',
+          zIndex: '2',
+        },
+        cover: {
+          position: 'fixed',
+          top: '0px',
+          right: '0px',
+          bottom: '0px',
+          left: '0px',
+        },
+      },
+    });
+    return (
+      <div className="form-move-card">
+        <div className="form-move-card-content">
+          <div class="form-group">
+            <label>Name:</label>
+            <input name="nameLabel" onChange={(e) => {
+              const name = e.target.name;
+              const value = e.target.value;
+              this.setState({
+                [name]: value
+              })
+            }} type="text" class="form-control" placeholder="Enter name label" />
+          </div>
+          <div class="form-group">
+            <div className="style-make-color">
+              <label>Background:</label>
+              <div className="color-style" style={styles.swatch} onClick={this.handleClick}>
+                <div style={styles.color} />
+              </div>
+              {this.state.displayColorPicker ? <div style={styles.popover}>
+                <div style={styles.cover} onClick={this.handleClose} />
+                <ChromePicker color={this.state.background} onChange={this.handleChange} />
+              </div> : null}
+            </div>
+          </div>
+        </div>
+        <div className="form-move-card-footer text-center">
+          <button disabled={this.state.nameLabel && this.state.background ? false : true} onClick={() => {
+            const dataLabel = {
+              title: this.state.nameLabel,
+              background: this.state.background,
+              candidateJobId: this.props.card.id
+            }
+            this.props.createLabel(dataLabel)
+            this.defaultLabel();
+            this.toggleListSkill();
+          }} style={{ marginTop: '0px' }} type="button" className="btn btn-primary">Save</button>
+        </div>
+      </div>
+    )
+  }
+
   backAction = () => {
     const updateState = {}
     if (this.state.showAction === '') {
@@ -230,9 +331,11 @@ class Card extends Component {
     let formAction;
     const action = {
       move: this.formMoveCard,
-      storage: this.formStorage
+      storage: this.formStorage,
+      label: this.formLabel
     }
 
+    console.log(this.props.card)
     if (this.state.showAction) {
       formAction = action[this.state.showAction]
     }
@@ -323,23 +426,40 @@ class Card extends Component {
                           <div className="d-flex flex-column card-header-detail">
                             <div className="card-header__title">
                               <div className="client-and-title">
-                                {
-                                  this.props.card.content.clientName ? (
-                                    <div title={this.props.card.content.clientName} style={{ background: this.props.card.content.backgroundClient }} className="card-label">
-                                      <span className="label-text">
-                                        {this.props.card.content.clientName}
-                                      </span>
-                                    </div>
-                                  ) : ''
-                                }
+                                <div className="this-label">
+                                  {
+                                    this.props.card.content.clientName ? (
+                                      <div title={this.props.card.content.clientName} style={{ background: this.props.card.content.backgroundClient }} className="card-label card-label-item">
+                                        <span className="label-text">
+                                          {this.props.card.content.clientName}
+                                        </span>
+                                      </div>
+                                    ) : ''
+                                  }
+                                  {
+                                    this.props.card.content.labels.map(label => {
+                                      return (
+                                        <div title={label.title} style={{ background: label.background }} className="card-label card-label-item">
+                                          <span onClick={(e) => {
+                                            this.props.removeLabel(label)
+                                            e.stopPropagation();
+                                          }} className="remove-label"><i className='fas fa-times custom-label-remove'></i></span>
+                                          <span className="label-text">
+                                            {label.title}
+                                          </span>
+                                        </div>
+                                      )
+                                    })
+                                  }
+                                </div>
 
                                 <a className="text-dark font-weight-bold text-hover-primary font-size-h4 mb-0 manhxinh-style-title">{card.name} {card.nameJob}</a>
                                 {
                                   card.interview ? (
                                     <div className="time-interview">
                                       <a href="#" className="btn btn-sm btn-success font-weight-bold">
-                                        <i className="fas fa-clock"></i> {moment(card.interview.timeInterview).subtract(7,'hour').format(`Do MMM`)}
-                                     </a>
+                                        <i className="fas fa-clock"></i> {moment(card.interview.timeInterview).subtract(7, 'hour').format(`Do MMM`)}
+                                      </a>
                                     </div>
                                   ) : ''
                                 }

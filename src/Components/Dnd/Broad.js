@@ -19,6 +19,7 @@ import CustomToast from "../common/CustomToast";
 import PreviewPdf from "../Modal/PreviewPdf/PreviewPdf.js";
 import SearchBoard from "./Board/SearchBoard.js";
 import FilterMember from "./Board/FilterMember.js";
+import FilterCard from "./Board/FilterCard.js";
 
 
 const api = new Network();
@@ -86,6 +87,7 @@ class Broad extends Component {
       show_form_detail_interview: false,
       isAddCardNoColumn: false,
       userId: "",
+      search: {},
     };
     this.open_add_card_form = this.open_add_card_form.bind(this);
     this.close_add_card_form = this.close_add_card_form.bind(this);
@@ -180,7 +182,7 @@ class Broad extends Component {
     this.setState({ card_data_detail: cardDataDetail });
   }
 
-  updateLane = async (cardId,laneId) => {
+  updateLane = async (cardId, laneId) => {
     const laneIdUpdate = {
       laneId: laneId
     };
@@ -195,8 +197,8 @@ class Broad extends Component {
     const { card_data_detail } = this.state;
     const idCard = card_data_detail.id;
     try {
-      if (card.laneId) { 
-        await this.updateLane(idCard,card.laneId);
+      if (card.laneId) {
+        await this.updateLane(idCard, card.laneId);
         delete card['laneId']
       }
       const response = await api.patch(`/api/cards/${idCard}`, card);
@@ -400,10 +402,20 @@ class Broad extends Component {
       cards: {},
       columnOrder: [],
     };
+    const { search } = this.state;
+    let url = `/api/v1/cards`;
+
+    // filter card 
+    for (const key in search) {
+      if (!_.isNil(search[key]) && search[key] !== '') {
+        const character = url.indexOf('?') === -1 ? '?' : '&'
+        url += `${character}${[key]}=${search[key]}`
+        // 
+      }
+    }
     try {
       const lanes = await api.get(
-        `/api/admin/new/cards${this.state.userId !== "" ? `?userId=${this.state.userId}` : ""
-        }`
+        url
       );
       const columns = lanes.data.list;
       for (const column of columns) {
@@ -455,6 +467,7 @@ class Broad extends Component {
                   linkAvatar: user.linkAvatar,
                 };
               }),
+              labels: card.Labels
             },
           };
         }
@@ -687,6 +700,7 @@ class Broad extends Component {
               linkAvatar: user.linkAvatar,
             };
           }),
+          labels: card.Labels
         },
       };
     }
@@ -800,6 +814,32 @@ class Broad extends Component {
     }
   };
 
+
+  createLabel = async (label) => {
+    const { data } = this.state;
+    const cardId = label.candidateJobId;
+    const response = await api.post(`/api/v1/card/label`, label);
+    if (response) {
+      const labelItem = response.data.label
+      data.cards[cardId].content.labels.push(labelItem);
+      this.setState({
+        data: data
+      })
+    }
+  }
+
+  removeLabel = async (label) => {
+    const { data } = this.state;
+    const { id, candidateJobId } = label;
+    const response = await api.delete(`/api/v1/card/${id}/label`);
+    if (response) {
+      data.cards[candidateJobId].content.labels = _.filter(data.cards[candidateJobId].content.labels,label => label.id !== id);
+      this.setState({
+        data: data
+      })
+    }
+  }
+
   storageCard = async (card) => {
     const data = this.state.data;
     const cardId = card.id;
@@ -823,10 +863,13 @@ class Broad extends Component {
   };
 
   searchCardByUserId = (userId) => {
+    const filterUser = {
+      userId: userId
+    }
+
     this.setState(
       {
-        userId: userId,
-        isLoading: true,
+        search: filterUser
       },
       () => {
         this.initData();
@@ -879,6 +922,15 @@ class Broad extends Component {
       card_data_detail: _.cloneDeep(dataCard),
     });
   }
+
+  callSearchCard = (item) => {
+    this.setState({
+      search: { ...this.state.search, ...item }
+    }, () => {
+      this.initData();
+    })
+  }
+
   render() {
     return (
       <div
@@ -937,22 +989,28 @@ class Broad extends Component {
             ""
           )}
         <div
-          className="subheader py-3 py-lg-8 subheader-transparent"
+          className="subheader py-3 py-lg-8 subheader-transparent  subheader-board"
           id="kt_subheader"
         >
           <div className="header-board trello">
-            <SearchBoard
-              // initDataAgain={this.initDataAgain}
-              searchCardDetail={this.searchCardDetail}
-            />
-            {this.props.role === roleName.DIRECTOR ? (
-              <FilterMember
-                initDataAgain={this.initDataAgain}
-                searchCardByUserId={this.searchCardByUserId}
+            <div className="trello-search-director">
+              {this.props.role === roleName.DIRECTOR ? (
+                <FilterMember
+                  initDataAgain={this.initDataAgain}
+                  searchCardByUserId={this.searchCardByUserId}
+                />
+
+              ) : ""}
+              <SearchBoard
+                // initDataAgain={this.initDataAgain}
+                searchCardDetail={this.searchCardDetail}
               />
-            ) : (
-                ""
-              )}
+            </div>
+          </div>
+          <div className="filter-board">
+            <FilterCard
+              callSearchCard={this.callSearchCard}
+            />
           </div>
         </div>
 
@@ -986,6 +1044,9 @@ class Broad extends Component {
                         actionUpdateColumn={this.actionUpdateColumn}
                         storageCard={this.storageCard}
                         userId={this.state.userId}
+                        search={this.state.search}
+                        createLabel={this.createLabel}
+                        removeLabel={this.removeLabel}
                       />
                     );
                   })}
