@@ -175,7 +175,6 @@ class CaculatorSalary extends Component {
       Taxable Income ${data.tnct}\n
       Personal income tax ${data.tncn}\n
       Net salary ${data.net}
-      Total expense (SGD)	${data.SGD}
       `
     }
     if (table === 'table-detail-tax') {
@@ -197,7 +196,8 @@ class CaculatorSalary extends Component {
       UnEmployment Insurance (1%) ${data.companyBhtn}\n
       Pvi care ${data.pvi}\n
       Union tax ${data.unionTax}\n
-      Total expense ${data.total}
+      Total expense ${data.total}\n
+      Total expense (SGD)	${data.SGD}
       `
     }
     return text;
