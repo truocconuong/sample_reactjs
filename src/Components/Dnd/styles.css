@@ -941,7 +941,8 @@ textarea {
 .all-filter-board {
   display: flex;
 }
-.filter-board-item{
+
+.filter-board-item {
   padding: 2px;
 }
 
@@ -951,34 +952,50 @@ textarea {
   right: 0;
   z-index: 10;
 }
-.trello-search-director{
+
+.trello-search-director {
   display: flex;
-  flex-direction: column;
+  padding-bottom: 39px;
+  /* flex-direction: column; */
 }
 
-.subheader-board{
-  margin-top: 17px;
-}
-.filter-of-directory{
-  position: absolute;
-  top: 9px;
+.subheader-board {
+  margin-top: 0px !important;
+  padding-top: 0px;
 }
 
-.this-label{
+.filter-of-directory {
+  /* position: absolute; */
+  /* top: 9px; */
+}
+
+.this-label {
   display: flex;
   flex-wrap: wrap;
 }
-.card-label-item{
+
+.card-label-item {
   margin-right: 2px;
 }
-.custom-label-remove{
+
+.custom-label-remove {
   font-size: 10px;
   color: white;
 }
+
 .card-label-item {
   position: relative;
 }
+
 .remove-label {
   position: absolute;
   right: 7px;
+}
+
+.filter-board {
+  padding-top: 42px;
+}
+
+.search-board-off{
+  padding-right: 3px;
 }
