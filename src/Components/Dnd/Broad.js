@@ -833,7 +833,7 @@ class Broad extends Component {
     const { id, candidateJobId } = label;
     const response = await api.delete(`/api/v1/card/${id}/label`);
     if (response) {
-      data.cards[candidateJobId].content.labels = _.filter(data.cards[candidateJobId].content.labels,label => label.id !== id);
+      data.cards[candidateJobId].content.labels = _.filter(data.cards[candidateJobId].content.labels, label => label.id !== id);
       this.setState({
         data: data
       })
@@ -989,11 +989,15 @@ class Broad extends Component {
             ""
           )}
         <div
-          className="subheader py-3 py-lg-8 subheader-transparent  subheader-board"
+          className="subheader py-3 subheader-transparent  subheader-board"
           id="kt_subheader"
         >
           <div className="header-board trello">
             <div className="trello-search-director">
+              <SearchBoard
+                // initDataAgain={this.initDataAgain}
+                searchCardDetail={this.searchCardDetail}
+              />
               {this.props.role === roleName.DIRECTOR ? (
                 <FilterMember
                   initDataAgain={this.initDataAgain}
@@ -1001,16 +1005,12 @@ class Broad extends Component {
                 />
 
               ) : ""}
-              <SearchBoard
-                // initDataAgain={this.initDataAgain}
-                searchCardDetail={this.searchCardDetail}
-              />
             </div>
-          </div>
-          <div className="filter-board">
+            <div className="filter-board">
             <FilterCard
               callSearchCard={this.callSearchCard}
             />
+          </div>
           </div>
         </div>
 
