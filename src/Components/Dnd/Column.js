@@ -5,7 +5,7 @@ import { Droppable } from "react-beautiful-dnd";
 import roleName from "../../utils/const";
 import { connect } from "react-redux";
 import Network from "../../Service/Network.js";
-
+import _ from 'lodash'
 const api = new Network();
 
 const Container = styled.div`
@@ -44,8 +44,19 @@ class Column extends Component {
   }
 
   getDataColumn = async (column) => {
+    let url = `/api/admin/cards/${column.id}/lane?offset=${column.limit}`;
+    const search = this.props.search
+    for (const key in search) {
+      if (!_.isNil(search[key]) && search[key] !== '') {
+        console.log(search[key])
+        const character = url.indexOf('?') === -1 ? '?' : '&'
+        url += `${character}${[key]}=${search[key]}`
+        // 
+      }
+    }
+    console.log('checker', url)
     const response = await api.get(
-      `/api/admin/cards/${column.id}/lane?offset=${column.limit}${this.props.userId !== '' ? `&userId=${this.props.userId}` : ''}`
+      url
     );
     if (response) {
       const data = response.data.list;
@@ -135,6 +146,8 @@ class Column extends Component {
                     actionUpdateColumn={this.props.actionUpdateColumn}
                     storageCard={this.props.storageCard}
                     background={this.props.column.background}
+                    createLabel = {this.props.createLabel}
+                    removeLabel= {this.props.removeLabel}
                   />
                 );
               })}
