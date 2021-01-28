@@ -10,6 +10,9 @@ import {
   Popover as PopoverPop,
   PopoverHeader,
   PopoverBody,
+  UncontrolledCollapse,
+  CardBody,
+  Card
 } from "reactstrap";
 import _ from "lodash";
 import roleName from "../../utils/const";
@@ -49,6 +52,11 @@ class DetailCard extends Component {
       noteApproach: '',
       idJob: '',
       laneId: '',
+      content: '',
+      contentEdit: '',
+      openFormEditComment: false,
+      openFormInputComment: false,
+      comments: [],
       laneSelected: {}
     };
     this.addMember = [];
@@ -59,6 +67,22 @@ class DetailCard extends Component {
     this.showHistoryCard = this.showHistoryCard.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.renderRowActivity = this.renderRowActivity.bind(this);
+  }
+  toggleFormEditContent = (comment) => {
+    this.setState({
+      [`contentEdit${comment.id}`]: comment.content
+    })
+  }
+
+  setDefaultCommentBox = () => {
+    this.setState({
+      openFormInputComment: false,
+    })
+  }
+  openFormInputComment = () => {
+    this.setState({
+      openFormInputComment: true
+    })
   }
   handleOnChangeLane = (e) => {
     this.setState({
@@ -136,8 +160,6 @@ class DetailCard extends Component {
   handleInputChange(e) {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(name, value)
-
     this.setState({
       [name]: value,
     });
@@ -315,9 +337,29 @@ class DetailCard extends Component {
   }
 
   componentWillReceiveProps = (props) => {
+    this.setDefaultCommentBox()
     const content = props.data_detail.content;
-    this.setState(content);
+    const cardIdOld = this.state.cardId;
+    content.cardId = props.data_detail.id;
+    this.setState(content, () => {
+      if (cardIdOld !== content.cardId) {
+        this.getAllCommentOfCard(content.cardId)
+      }
+    });
   };
+
+
+  getAllCommentOfCard = async (cardId) => {
+    const response = await api.get(`/api/v1/comment/${cardId}/card`);
+    if (response) {
+      const comments = response.data.list;
+      this.setState({
+        comments: comments
+      })
+    }
+  }
+
+
 
   renderRowActivity(e, index) {
     // console.log(e.content)
@@ -395,6 +437,59 @@ class DetailCard extends Component {
     }
   }
 
+  createComment = async () => {
+    const cardId = this.props.data_detail.id;
+    const { comments } = this.state;
+    const data = {
+      content: this.state.content
+    }
+    const response = await api.post(`/api/v1/comment/${cardId}/card`, data);
+    if (response) {
+      const comment = response.data.comment;
+      comments.unshift(comment);
+      this.setState({
+        comments,
+        openFormInputComment: false,
+        content: ''
+      })
+    }
+  }
+
+  removeComment = async (id) => {
+    const { comments } = this.state;
+    const response = await api.delete(`/api/v1/comment/${id}`);
+    if (response) {
+      this.setState({
+        comments: _.filter(comments, comment => comment.id !== id)
+      })
+    }
+  }
+
+  handleInputChangeEditContent = (e, comment) => {
+    const value = e.target.value
+    this.setState({
+      [`contentEdit${comment.id}`]: value
+    })
+  }
+  editComment = async (comment) => {
+    const content = this.state[`contentEdit${comment.id}`];
+    const { comments } = this.state;
+    const item = {
+      content: content
+    }
+    const response = await api.patch(`/api/v1/comment/${comment.id}`, item)
+    if (response) {
+      for (const commentState of comments) {
+        if (commentState.id === comment.id) {
+          commentState.content = content
+        }
+      }
+      this.setState({
+        comments: comments
+      })
+    }
+  }
+
   render() {
     const errors = this.state.errors;
     const users = [];
@@ -409,11 +504,12 @@ class DetailCard extends Component {
     data_detail.approachDate = moment(data_detail.approachDate).format(
       "YYYY-MM-DD"
     );
-    console.log(data_detail)
 
     return (
       <Modal size="lg" show={this.props.show} onHide={this.hideModal} centered>
         <Modal.Header closeButton>
+          <div>
+          </div>
           <div className="card-detail-header">
             <div className="detail-header__title">
               <h4>Update card</h4>
@@ -843,7 +939,7 @@ class DetailCard extends Component {
             </Button>
           </div>
         </Modal.Footer>
-        <div className="Wrap_history_card">
+        <div onClick={this.setDefaultCommentBox} className="Wrap_history_card">
           <div className="wrap_icon_history">
             <div className="wrap_left_icon_act">
               <i className="flaticon2-calendar-1 custom_icon_history"></i>
@@ -869,6 +965,89 @@ class DetailCard extends Component {
             ) : null}
             { }
           </div>
+          <div className="wrap-comment-card">
+            <div className="wrap_icon_history">
+              <div className="wrap_left_icon_act">
+                <i className="far fa-comment-dots custom_icon_history"></i>
+                <div className="act_history">Comments</div>
+              </div>
+            </div>
+            <div className="comment-card-content card-content-header">
+              <div className="symbol symbol-50 symbol-light ">
+                <span className="symbol-label symbol-label-cs cs_ava_history">
+                  <img
+                    src={
+                      this.props.linkAvatar
+                        ? domainServer + "/" + this.props.linkAvatar
+                        : defaultAva
+                    }
+                    className="h-100 align-self-end"
+                    alt=""
+                  />
+                </span>
+              </div>
+              <div className={
+                this.state.openFormInputComment ? 'height-open-form-comment comment-box' : 'height-default-form-comment comment-box'
+              }>
+                <textarea onClick={(e) => {
+                  e.stopPropagation();
+                  this.openFormInputComment();
+                }} onChange={this.handleInputChange} value={this.state.content} name="content" placeholder="Write a comment ..." className="comment-box-input"></textarea>
+                <div className="action-comment">
+                  <button onClick={this.createComment} disabled={this.state.content === '' ? true : false} type="button" className={this.state.content === '' ? 'btn btn-light  button-save-comment' : 'btn btn-primary button-save-comment'}>Save</button>
+                </div>
+              </div>
+            </div>
+            {this.state.comments.map(comment => (
+              <div className="comment-card-content">
+                <div className="content-item">
+                  <div className="symbol symbol-50 symbol-light ">
+                    <span className="symbol-label symbol-label-cs cs_ava_history">
+                      <img
+                        src={
+                          comment.User.linkAvatar
+                            ? domainServer + "/" + comment.User.linkAvatar
+                            : defaultAva
+                        }
+                        className="h-100 align-self-end"
+                        alt=""
+                      />
+                    </span>
+                  </div>
+                  <div className="name-comment">
+                    <span className="font-weight-name">{comment.User.name}</span>
+                    <span>{moment(comment.updatedAt).format('DD/MM/YYYY hh:mm')}</span>
+                    <div className="name-comment-content">
+                      {comment.content}
+                    </div>
+                    <div className="action-comment-content">
+                      <span>
+                        <a onClick={() => {
+                          this.toggleFormEditContent(comment);
+                        }} id={`action-comment-item${comment.id}`} className="action-comment-item">Edit</a> - <a onClick={() => {
+                          this.removeComment(comment.id)
+                        }} className="action-comment-item">Delete</a>
+                      </span>
+                    </div>
+                    <UncontrolledCollapse toggler={`#${`action-comment-item${comment.id}`}`}>
+                      <div className="height-open-form-comment comment-box-edit">
+                        <textarea onChange={(e) => {
+                          this.handleInputChangeEditContent(e, comment)
+                        }} value={`${this.state[`contentEdit${comment.id}`]}`} defaultValue={comment.content} name="contentEdit" placeholder="Write a comment ..." className="comment-box-input"></textarea>
+                        <div className="action-comment">
+                          <button onClick={() => {
+                            this.editComment(comment)
+                          }} type="button" className="btn btn-primary button-save-comment">Save</button>
+                        </div>
+                      </div>
+                    </UncontrolledCollapse>
+                  </div>
+                </div>
+              </div>
+
+            ))}
+
+          </div>
         </div>
       </Modal>
     );
@@ -882,6 +1061,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     role: state.auth.role,
     userId: state.auth.userId,
+    linkAvatar: state.auth.linkAvatar,
     // update: (e) => ownProps.update(e),
     addMemberToCard: (data) => ownProps.addMemberToCard(data),
   };
