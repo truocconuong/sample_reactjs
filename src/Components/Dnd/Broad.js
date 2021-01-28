@@ -992,23 +992,11 @@ class Broad extends Component {
           className="subheader py-3 subheader-transparent  subheader-board"
           id="kt_subheader"
         >
-          <div className="header-board trello">
-            <div className="trello-search-director">
-              <SearchBoard
-                // initDataAgain={this.initDataAgain}
-                searchCardDetail={this.searchCardDetail}
-              />
-              {this.props.role === roleName.DIRECTOR ? (
-                <FilterMember
-                  initDataAgain={this.initDataAgain}
-                  searchCardByUserId={this.searchCardByUserId}
-                />
-
-              ) : ""}
-            </div>
-            <div className="filter-board">
+          <div className="header-board trello trello-filter">
+          <div className="filter-board">
             <FilterCard
               callSearchCard={this.callSearchCard}
+              searchCardDetail = {this.searchCardDetail}
             />
           </div>
           </div>
