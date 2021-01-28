@@ -714,8 +714,8 @@ textarea {
 
 .search-board-on {
   width: 500px;
-  animation-name: onDisplaySearch;
-  animation-duration: 0.1s;
+  /* animation-name: onDisplaySearch; */
+  /* animation-duration: 0.1s; */
 }
 
 .cs_update_history {
@@ -727,14 +727,14 @@ textarea {
   font-weight: 600;
 }
 
-@keyframes onDisplaySearch {
+/* @keyframes onDisplaySearch {
   from {
     width: 250px;
   }
   to {
     width: 500px;
   }
-}
+} */
 
 .select-search {
   display: flex;
