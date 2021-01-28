@@ -700,8 +700,7 @@ textarea {
 } */
 
 .pop-search-board {
-  margin-left: 125px;
-  max-width: 500px;
+  max-width: 530px;
   /* background: #EFF2F9; */
 }
 
@@ -829,6 +828,7 @@ textarea {
 }
 
 .footer-caculator {
+  padding-top: 20px;
   text-align: center;
 }
 
@@ -951,10 +951,12 @@ textarea {
 }
 
 .filter-board {
+  padding-top: 0px !important;
   padding: 30px;
   position: fixed;
   right: 0;
   z-index: 10;
+  top: 3px;
 }
 
 .trello-search-director {
@@ -995,11 +997,6 @@ textarea {
   position: absolute;
   right: 7px;
 }
-
-.filter-board {
-  padding-top: 42px;
-}
-
 .search-board-off {
   padding-right: 3px;
 }
@@ -1104,4 +1101,45 @@ textarea {
   padding-left: 5px;
   padding-top: 6px;
   width: 100%;
+}
+.group-row-item{
+  display: flex;
+  align-items: center;
+}
+.group-row{
+  display: flex;
+}
+
+.group-row-label{
+  padding-right: 75px;
+}
+
+.group-row-label-long{
+  padding-left: 30px;
+  width: 220px;
+  padding-right: 10px;
+}
+.header-caculator .alert-custom{
+  height: 47px;
+}
+.card-body-caculator{
+  padding-top: 0px;
+}
+.filter-date-row{
+  display: flex;
+}
+.filter-board-item .select_client {
+  width: 100% ;
+}
+.trello-filter{
+  padding: 40px;
+}
+.btn-search-filter{
+  padding-top: 44px;
+}
+.board-item-search{
+  width: 533px;
+}
+.convert-tien{
+  font-weight: bold !important;
 }

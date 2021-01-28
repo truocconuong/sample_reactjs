@@ -27,7 +27,7 @@ class CaculatorSalary extends Component {
       type: 0,
       peopleDependent: 0,
       sgd: '',
-      tigia: 17423,
+      tigia: 17300,
       pvi: 250000,
       salaryShow: '',
       bhxhShow: '',
@@ -51,22 +51,11 @@ class CaculatorSalary extends Component {
     })
   }
 
-  // successCopy = () => {
-  //   toast(<CustomToast title={"Copied to clipboard!"} />, {
-  //     position: toast.POSITION.BOTTOM_RIGHT,
-  //     autoClose: 3000,
-  //     className: "toast_login",
-  //     closeButton: false,
-  //     hideProgressBar: true,
-  //     newestOnTop: true,
-  //     closeOnClick: true,
-  //     rtl: false,
-  //     pauseOnFocusLoss: true,
-  //     draggable: true,
-  //     pauseOnHover: true,
-  //     // transition: Zoom,
-  //   });
-  // };
+  convertVNDToSGD = (money) => {
+    const { tigia } = this.state;
+    const convert = money.replace(/\,/g, "") / tigia;
+    return convert.toFixed(0);
+  }
 
   onChangeInput = (e) => {
     const name = e.target.name;
@@ -168,13 +157,13 @@ class CaculatorSalary extends Component {
     let text = ''
     if (table === 'table-description') {
       text = `
-      GROSS Salary ${data.gross}\n
-      Social insurance (8 %) ${data.bhxh}\n
-      Health Insurance (1.5 %) ${data.bhyt}\n
-      UnEmployment Insurance (1 %) ${data.bhtn}\n
-      Taxable Income ${data.tnct}\n
-      Personal income tax ${data.tncn}\n
-      Net salary ${data.net}
+      GROSS Salary  Vnd:${data.gross} (SGD: ${this.convertVNDToSGD(data.gross)})\n
+      Social insurance (8 %) Vnd:${data.bhxh} (SGD: ${this.convertVNDToSGD(data.bhxh)})\n
+      Health Insurance (1.5 %) Vnd:${data.bhyt} (SGD: ${this.convertVNDToSGD(data.bhyt)})\n
+      UnEmployment Insurance (1 %) Vnd:${data.bhtn} (SGD: ${this.convertVNDToSGD(data.bhtn)})\n
+      Taxable Income Vnd:${data.tnct} (SGD: ${this.convertVNDToSGD(data.tnct)})\n
+      Personal income tax Vnd:${data.tncn} (SGD: ${this.convertVNDToSGD(data.tncn)})\n
+      Net salary Vnd:${data.net} (SGD: ${this.convertVNDToSGD(data.net)})
       `
     }
     if (table === 'table-detail-tax') {
@@ -190,14 +179,13 @@ class CaculatorSalary extends Component {
     }
     if (table === 'table-company') {
       text = `
-      GROSS Salary ${data.gross}\n
-      Social insurance (17.5%) ${data.companyBhxh}\n
-      Health Insurance (3%) ${data.companyBhyt}\n
-      UnEmployment Insurance (1%) ${data.companyBhtn}\n
-      Pvi care ${data.pvi}\n
-      Union tax ${data.unionTax}\n
-      Total expense ${data.total}\n
-      Total expense (SGD)	${data.SGD}
+      GROSS Salary Vnd:${data.gross} (SGD: ${this.convertVNDToSGD(data.gross)})\n
+      Social insurance (17.5%) Vnd:${data.companyBhxh} (SGD: ${this.convertVNDToSGD(data.companyBhxh)})\n
+      Health Insurance (3%) Vnd:${data.companyBhyt} (SGD: ${this.convertVNDToSGD(data.companyBhyt)})\n
+      UnEmployment Insurance (1%) Vnd:${data.companyBhtn} (SGD: ${this.convertVNDToSGD(data.companyBhtn)})\n
+      Pvi care Vnd:${data.pvi} (SGD: ${this.convertVNDToSGD(data.pvi)})\n
+      Union tax Vnd:${data.unionTax} (SGD: ${this.convertVNDToSGD(data.unionTax)})\n
+      Total expense Vnd:${data.total} (SGD: ${this.convertVNDToSGD(data.total)})\n
       `
     }
     return text;
@@ -265,8 +253,8 @@ class CaculatorSalary extends Component {
                   </div>
                 </div>
                 <form>
-                  <div className="card-body">
-                    <div className="form-group mb-8">
+                  <div className="card-body card-body-caculator">
+                    <div className="form-group mb-8 header-caculator">
                       <div className="alert alert-custom alert-default" role="alert">
                         <div className="alert-icon"><i className="flaticon-warning text-primary" /></div>
                         <div className="alert-text">
@@ -348,17 +336,15 @@ class CaculatorSalary extends Component {
                         </div>
                       </div>
                     </div>
-                    <div className="form-group row">
-                      <label className="col-1 col-form-label form-label-title-caculator">PVI:</label>
-                      <div className="col-2">
+                    <div className="group-row">
+                      <div className="group-row-item">
+                        <label className="col-form-label form-label-title-caculator group-row-label">PVI:</label>
                         <div className="div-input-caculator">
                           <input name="pvi" value={this.state.pvi} onChange={this.onChangeInput} className="form-control" type="number" />
                         </div>
                       </div>
-                    </div>
-                    <div className="form-group row">
-                      <label className="col-2 col-form-label form-label-title-caculator">Reduction based on family circumstances:</label>
-                      <div className="col-2">
+                      <div className="group-row-item">
+                        <label className="col-form-label form-label-title-caculator group-row-label-long">Reduction based on family circumstances:</label>
                         <div className="div-input-caculator">
                           <input name="peopleDependent" onChange={this.onChangeInput} className="form-control" type="number" /><span className="sub-input-caculator">(people)</span>
                         </div>
@@ -417,32 +403,38 @@ class CaculatorSalary extends Component {
                                 <tbody>
                                   <tr className="table-active">
                                     <th className="title-caculator">GROSS Salary</th>
-                                    <td className="content-caculator">{this.state.data.gross}</td>
+                                    <td className="content-caculator"><strong classsName="convert-tien">VND</strong>: {this.state.data.gross}(<strong classsName="convert-tien">SGD</strong>: {`${this.convertVNDToSGD(this.state.data.gross)}`})</td>
+
                                   </tr>
                                   <tr className="table table-custom-caculator">
                                     <th className="title-caculator">Social insurance (8 %)</th>
-                                    <td className="content-caculator">- {this.state.data.bhxh}</td>
+                                    <td className="content-caculator"><strong classsName="convert-tien">VND</strong>: {this.state.data.bhxh}(<strong classsName="convert-tien">SGD</strong>: {`${this.convertVNDToSGD(this.state.data.bhxh)}`})</td>
+
                                   </tr>
                                   <tr className="table table-custom-caculator">
                                     <th className="title-caculator">Health Insurance (1.5 %)</th>
-                                    <td className="content-caculator">- {this.state.data.bhyt}</td>
+                                    <td className="content-caculator"><strong classsName="convert-tien">VND</strong>: {this.state.data.bhyt}(<strong classsName="convert-tien">SGD</strong>: {`${this.convertVNDToSGD(this.state.data.bhyt)}`})</td>
+
                                   </tr>
                                   <tr className="table table-custom-caculator">
                                     <th className="title-caculator">UnEmployment Insurance (1 %)</th>
-                                    <td className="content-caculator">- {this.state.data.bhtn}</td>
+                                    <td className="content-caculator"><strong classsName="convert-tien">VND</strong>: {this.state.data.bhtn}(<strong classsName="convert-tien">SGD</strong>: {`${this.convertVNDToSGD(this.state.data.bhtn)}`})</td>
+
                                   </tr>
 
                                   <tr className="table table-custom-caculator">
                                     <th className="title-caculator">Taxable Income</th>
-                                    <td className="content-caculator">{this.state.data.tnct}</td>
+                                    <td className="content-caculator"><strong classsName="convert-tien">VND</strong>: {this.state.data.tnct}(<strong classsName="convert-tien">SGD</strong>: {`${this.convertVNDToSGD(this.state.data.tnct)}`})</td>
+
                                   </tr>
                                   <tr className="table table-custom-caculator">
                                     <th className="title-caculator">Personal income tax</th>
-                                    <td className="content-caculator">- {this.state.data.tncn}</td>
+                                    <td className="content-caculator"><strong classsName="convert-tien">VND</strong>: {this.state.data.tncn}(<strong classsName="convert-tien">SGD</strong>: {`${this.convertVNDToSGD(this.state.data.tncn)}`})</td>
+
                                   </tr>
                                   <tr className="table-active">
                                     <th className="title-caculator">Net salary</th>
-                                    <td className="content-caculator">{this.state.data.net}</td>
+                                    <td className="content-caculator"><strong classsName="convert-tien">VND</strong>: {this.state.data.net}(<strong classsName="convert-tien">SGD</strong>: {`${this.convertVNDToSGD(this.state.data.net)}`})</td>
                                   </tr>
                                 </tbody>
                               </table>
@@ -489,35 +481,34 @@ class CaculatorSalary extends Component {
                                 <tbody>
                                   <tr className="table-active">
                                     <th className="title-caculator">GROSS Salary</th>
-                                    <td className="content-caculator">{this.state.data.gross}</td>
+                                    <td className="content-caculator"><strong classsName="convert-tien">VND</strong>: {this.state.data.gross}(<strong classsName="convert-tien">SGD</strong>: {`${this.convertVNDToSGD(this.state.data.gross)}`})</td>
+
                                   </tr>
                                   <tr className="table table-custom-caculator">
                                     <th className="title-caculator">Social insurance (17.5%)</th>
-                                    <td className="content-caculator">{this.state.data.companyBhxh}</td>
+                                    <td className="content-caculator"><strong classsName="convert-tien">VND</strong>: {this.state.data.companyBhxh}(<strong classsName="convert-tien">SGD</strong>: {`${this.convertVNDToSGD(this.state.data.companyBhxh)}`})</td>
+
                                   </tr>
                                   <tr className="table table-custom-caculator">
                                     <th className="title-caculator">Health Insurance (3%)</th>
-                                    <td className="content-caculator">{this.state.data.companyBhyt}</td>
+                                    <td className="content-caculator"><strong classsName="convert-tien">VND</strong>: {this.state.data.companyBhyt}(<strong classsName="convert-tien">SGD</strong>: {`${this.convertVNDToSGD(this.state.data.companyBhyt)}`})</td>
                                   </tr>
                                   <tr className="table table-custom-caculator">
                                     <th className="title-caculator">UnEmployment Insurance(1%)</th>
-                                    <td className="content-caculator">{this.state.data.companyBhtn}</td>
+                                    <td className="content-caculator"><strong classsName="convert-tien">VND</strong>: {this.state.data.companyBhtn}(<strong classsName="convert-tien">SGD</strong>: {`${this.convertVNDToSGD(this.state.data.companyBhtn)}`})</td>
                                   </tr>
                                   <tr className="table table-custom-caculator">
                                     <th className="title-caculator">Pvi care</th>
-                                    <td className="content-caculator">{this.state.data.pvi}</td>
+                                    <td className="content-caculator"><strong classsName="convert-tien">VND</strong>: {this.state.data.pvi}(<strong classsName="convert-tien">SGD</strong>: {`${this.convertVNDToSGD(this.state.data.pvi)}`})</td>
+
                                   </tr>
                                   <tr className="table table-custom-caculator">
                                     <th className="title-caculator">Union tax</th>
-                                    <td className="content-caculator">{this.state.data.unionTax}</td>
-                                  </tr>
-                                  <tr className="table table-custom-caculator">
-                                    <th className="title-caculator">Total expense</th>
-                                    <td className="content-caculator">{this.state.data.total}</td>
+                                    <td className="content-caculator"><strong classsName="convert-tien">VND</strong>: {this.state.data.unionTax}(<strong classsName="convert-tien">SGD</strong>: {`${this.convertVNDToSGD(this.state.data.unionTax)}`})</td>
                                   </tr>
                                   <tr className="table-active table-custom-caculator">
-                                    <th className="title-caculator">Total expense (SGD)</th>
-                                    <td className="content-caculator">{this.state.data.SGD}</td>
+                                    <th className="title-caculator">Total expense</th>
+                                    <td className="content-caculator"><strong classsName="convert-tien">VND</strong>: {this.state.data.total}(<strong classsName="convert-tien">SGD</strong>: {`${this.convertVNDToSGD(this.state.data.total)}`})</td>
                                   </tr>
                                 </tbody>
                               </table>
