@@ -129,20 +129,22 @@ class SearchBoard extends Component {
                         </div>
                     </PopoverBody>
                 </PopoverPop>
-                <div onClick={this.toggleFormSearch} className="input-icon" id="Popover-searchBoard">
-                    <input
-                        name="search"
-                        type="text"
-                        className="form-control"
-                        placeholder="Search..."
-                        value={this.state.search}
-                        autoComplete="off"
-                        onChange={this.handleChangeInput}
-                        id="kt_datatable_search_query"
-                    />
-                    <span>
-                        <i className="flaticon2-search-1 text-muted"></i>
-                    </span>
+                <div className="filter-board-item board-item-search">
+                    <div onClick={this.toggleFormSearch} className="input-icon" id="Popover-searchBoard">
+                        <input
+                            name="search"
+                            type="text"
+                            className="form-control"
+                            placeholder="Search..."
+                            value={this.state.search}
+                            autoComplete="off"
+                            onChange={this.handleChangeInput}
+                            id="kt_datatable_search_query"
+                        />
+                        <span>
+                            <i className="flaticon2-search-1 text-muted"></i>
+                        </span>
+                    </div>
                 </div>
             </div>
         );
