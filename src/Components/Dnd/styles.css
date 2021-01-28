@@ -933,9 +933,11 @@ textarea {
 .title-caculator-empty {
   padding: 18.9px !important;
 }
-.copy-to-clip-board{
+
+.copy-to-clip-board {
   margin-left: 6px;
 }
+
 .filter-board {
   display: flex;
 }
@@ -998,6 +1000,108 @@ textarea {
   padding-top: 42px;
 }
 
-.search-board-off{
+.search-board-off {
   padding-right: 3px;
+}
+
+.wrap-comment-card {
+  padding-top: 30px;
+}
+
+.comment-box {
+  box-shadow: 0 4px 8px -2px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
+  background-color: #fff;
+  border-radius: 3px;
+  /* box-shadow: 0 1px 2px -1px rgba(9, 30, 66, .25), 0 0 0 1px rgba(9, 30, 66, .08); */
+  margin: 4px 4px 12px 0;
+  overflow: hidden;
+  position: relative;
+  transition: box-shadow 85ms ease;
+  padding-left: 5px;
+  padding-top: 6px;
+  width: 100%;
+  margin-left: 14px;
+}
+
+.comment-box-input:focus {
+  box-shadow: none;
+}
+
+.comment-box-input {
+  border: none;
+  overflow: auto;
+  outline: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  resize: none;
+  /*remove the resize handle on the bottom right*/
+  padding-top: 20px;
+  background: #fff!important;
+  box-sizing: content-box;
+  box-shadow: none;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  resize: none;
+}
+
+.button-save-comment {
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
+
+/* .action-comment {
+  position: absolute;
+  bottom: 34px;
+  left: 71px;
+} */
+
+.comment-card-content {
+  display: flex;
+}
+
+.name-comment {
+  padding-left: 12px;
+  width: 100%;
+}
+
+.font-weight-name {
+  padding-right: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.content-item {
+  display: flex;
+  padding-bottom: 5px;
+  width: 100%;
+}
+
+.height-default-form-comment {
+  height: 30px;
+}
+.height-open-form-comment {
+  height: 100px;
+}
+.card-content-header{
+  padding-bottom: 2px;
+}
+.action-comment-item{
+  cursor: pointer;
+}
+
+.comment-box-edit {
+  box-shadow: 0 4px 8px -2px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
+  background-color: #fff;
+  border-radius: 3px;
+  /* box-shadow: 0 1px 2px -1px rgba(9, 30, 66, .25), 0 0 0 1px rgba(9, 30, 66, .08); */
+  margin: 4px 4px 12px 0;
+  overflow: hidden;
+  position: relative;
+  transition: box-shadow 85ms ease;
+  padding-left: 5px;
+  padding-top: 6px;
+  width: 100%;
 }

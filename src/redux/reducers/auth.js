@@ -9,7 +9,8 @@ const authReducer = (state = initState, action) => {
 
     case "SET_USER_ID":
       return { ...state, userId: action.payload };
-
+      case "SET_AVATAR_USER":
+        return { ...state, linkAvatar: action.payload };
     default:
       return { ...state };
   }
