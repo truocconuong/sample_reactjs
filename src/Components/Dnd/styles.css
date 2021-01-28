@@ -713,7 +713,7 @@ textarea {
 }
 
 .search-board-on {
-  width: 500px;
+  /* width: 500px; */
   /* animation-name: onDisplaySearch; */
   /* animation-duration: 0.1s; */
 }
