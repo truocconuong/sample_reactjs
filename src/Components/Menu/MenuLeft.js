@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import "./style.css";
-import { addPaddingBroad, removePaddingBroad } from "../../redux/actions";
+import { addPaddingBroad, removePaddingBroad, setAvatarUser } from "../../redux/actions";
 import { connect } from "react-redux";
 import AuthService from "../../Service/AuthService.js";
 import Network from "../../Service/Network.js";
@@ -159,7 +159,7 @@ class MenuLeft extends Component {
       });
     });
   }
-  
+
   uploadAvatarDone(linkAvatar) {
     let currentProfile = this.state.profile;
     currentProfile.linkAvatar = linkAvatar;
@@ -179,8 +179,10 @@ class MenuLeft extends Component {
               ? responseProfile.data.user.countNotificationNotSeen
               : 0,
           },
-          function () {}
+          function () { }
         );
+        const linkAvatar = responseProfile.data.user.linkAvatar
+       await this.props.setAvatarUser(linkAvatar)
       }
     } catch (error) {
       console.log("err while get profile user: ", error);
@@ -206,8 +208,8 @@ class MenuLeft extends Component {
     // mark all noti as read => call api read noti
     if (this.state.countUnreadNoti != 0 && !open) {
       await this.markAllNotiRead();
-    }else{
-     
+    } else {
+
     }
     this.setState({ isOpenDrawer: open });
   }
@@ -280,8 +282,8 @@ class MenuLeft extends Component {
                     alt="ava"
                   />
                 ) : (
-                  <img className="ava_img" src={defaultAva} alt="ava" />
-                )}
+                    <img className="ava_img" src={defaultAva} alt="ava" />
+                  )}
                 {this.state.countUnreadNoti != 0 ? (
                   <span className="label label-sm  label-danger font-weight-bolder position-absolute noti_count mt-1 mr-1">
                     {this.state.countUnreadNoti}
@@ -512,6 +514,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addPadding: () => dispatch(addPaddingBroad()),
     removePadding: () => dispatch(removePaddingBroad()),
+    setAvatarUser: (linkAvatar) => dispatch(setAvatarUser(linkAvatar)),
   };
 };
 const mapStateToProps = (state, ownProps) => {
