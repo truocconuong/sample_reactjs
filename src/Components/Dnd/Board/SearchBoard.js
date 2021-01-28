@@ -121,7 +121,7 @@ class SearchBoard extends Component {
 
     render() {
         return (
-            <div className={this.state.showFormSeach ? 'search-board-on' : 'search-board-off'}>
+            <div className="search-board-on">
                 <PopoverPop className="popover-container" popperClassName="popover-modal-card pop-search-board" trigger="legacy" placement="bottom" isOpen={this.state.showFormSeach} target={`Popover-searchBoard`} toggle={this.toggleFormSearch}>
                     <PopoverBody>
                         <div className="search-board-form">

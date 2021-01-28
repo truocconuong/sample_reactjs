@@ -1024,9 +1024,10 @@ class DetailCard extends Component {
                       <span>
                         <a onClick={() => {
                           this.toggleFormEditContent(comment);
-                        }} id={`action-comment-item${comment.id}`} className="action-comment-item">Edit</a> - <a onClick={() => {
+                        }} id={`action-comment-item${comment.id}`} className="action-comment-item">Edit</a>
+                         {/* - <a onClick={() => {
                           this.removeComment(comment.id)
-                        }} className="action-comment-item">Delete</a>
+                        }} className="action-comment-item">Delete</a> */}
                       </span>
                     </div>
                     <UncontrolledCollapse toggler={`#${`action-comment-item${comment.id}`}`}>
