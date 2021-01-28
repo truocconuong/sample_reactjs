@@ -925,6 +925,7 @@ class Broad extends Component {
 
   callSearchCard = (item) => {
     this.setState({
+      isLoading:true,
       search: { ...this.state.search, ...item }
     }, () => {
       this.initData();
