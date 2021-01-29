@@ -157,7 +157,7 @@ const rulesEditUserNotDirector = [
     validWhen: false,
     message: "Role is required.",
   },
- 
+
 ];
 
 const rulesAddAndUpdateClient = [
@@ -387,9 +387,21 @@ const rulesUpdateConfig = [
     validWhen: false,
     message: "ZOOM_TOKEN is required.",
   },
-
 ];
-
+const rulesCaculatorSalary = [
+  {
+    field: "salary",
+    method: "isEmpty",
+    validWhen: false,
+    message: "salary is required.",
+  },
+  {
+    field: "insuraneMoney",
+    method: "isEmpty",
+    validWhen: false,
+    message: "insuraneMoney is required.",
+  },
+]
 export {
   rulesAddUser,
   rulesEditUser,
@@ -403,5 +415,7 @@ export {
   rulesUpdateInterview,
   rulesCreateCardInterview,
   rulesEditUserNotDirector,
-  rulesUpdateConfig
+  rulesUpdateConfig,
+  rulesCaculatorSalary
 };
+

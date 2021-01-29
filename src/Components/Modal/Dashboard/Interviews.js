@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import moment from "moment";
 import Modal, { ModalTransition, ScrollBehavior } from "@atlaskit/modal-dialog";
+import { convertDateLocal } from "../../../utils/common/convertDate";
 
 class Interviews extends Component {
   constructor(props) {
@@ -164,15 +165,13 @@ class Interviews extends Component {
                                     </span>
                                   </td>
                                   <td
-                                    data-field="Status"
+                         e           data-field="Status"
                                     aria-label={1}
                                     className="datatable-cell hide_mb"
                                   >
                                     <span style={{ width: "100px" }}>
                                       <span className="text-muted font-weight-bold cus_text_mute">
-                                        {moment(interview.timeInterview).format(
-                                          "hh:mm a DD/MM/YYYY"
-                                        )}
+                                        {convertDateLocal(interview.timeInterview)}
                                       </span>
                                     </span>
                                   </td>
@@ -183,9 +182,7 @@ class Interviews extends Component {
                                   >
                                     <span style={{ width: "100px" }}>
                                       <span className="text-muted font-weight-bold cus_text_mute">
-                                        {moment(
-                                          interview.timeInterviewEnd
-                                        ).format("hh:mm a DD/MM/YYYY")}
+                                        {convertDateLocal(interview.timeInterviewEnd)}
                                       </span>
                                     </span>
                                   </td>

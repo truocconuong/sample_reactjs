@@ -10,6 +10,9 @@ import {
   Popover as PopoverPop,
   PopoverHeader,
   PopoverBody,
+  UncontrolledCollapse,
+  CardBody,
+  Card
 } from "reactstrap";
 import _ from "lodash";
 import roleName from "../../utils/const";
@@ -21,6 +24,7 @@ import * as moment from "moment";
 import Validator from "../../utils/validator";
 import { rulesCreateNewCard } from "../../utils/rule";
 import { Link } from "react-router-dom";
+import { convertDateLocal } from "../../utils/common/convertDate";
 
 const api = new Network();
 class DetailCard extends Component {
@@ -46,7 +50,14 @@ class DetailCard extends Component {
       cv: '',
       nameJob: '',
       noteApproach: '',
-      idJob: ''
+      idJob: '',
+      laneId: '',
+      content: '',
+      contentEdit: '',
+      openFormEditComment: false,
+      openFormInputComment: false,
+      comments: [],
+      laneSelected: {}
     };
     this.addMember = [];
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -57,6 +68,29 @@ class DetailCard extends Component {
     this.hideModal = this.hideModal.bind(this);
     this.renderRowActivity = this.renderRowActivity.bind(this);
   }
+  toggleFormEditContent = (comment) => {
+    this.setState({
+      [`contentEdit${comment.id}`]: comment.content
+    })
+  }
+
+  setDefaultCommentBox = () => {
+    this.setState({
+      openFormInputComment: false,
+    })
+  }
+  openFormInputComment = () => {
+    this.setState({
+      openFormInputComment: true
+    })
+  }
+  handleOnChangeLane = (e) => {
+    this.setState({
+      laneSelected: e,
+      laneId: e.value
+    });
+  }
+
 
   async showHistoryCard() {
     try {
@@ -126,8 +160,6 @@ class DetailCard extends Component {
   handleInputChange(e) {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(name, value)
-
     this.setState({
       [name]: value,
     });
@@ -271,7 +303,6 @@ class DetailCard extends Component {
     const data = this.state;
     const errors = this.validator.validate(data);
     delete errors["laneId"];
-    console.log(errors);
     this.setState({
       errors: errors,
       isShowHistory: false,
@@ -292,6 +323,7 @@ class DetailCard extends Component {
         nameJob: content.nameJob,
         noteApproach: content.noteApproach,
         idJob: content.idJob,
+        laneId: content.laneId
       };
       this.props.updateCard(data);
     }
@@ -305,12 +337,32 @@ class DetailCard extends Component {
   }
 
   componentWillReceiveProps = (props) => {
+    this.setDefaultCommentBox()
     const content = props.data_detail.content;
-    this.setState(content);
+    const cardIdOld = this.state.cardId;
+    content.cardId = props.data_detail.id;
+    this.setState(content, () => {
+      if (cardIdOld !== content.cardId) {
+        this.getAllCommentOfCard(content.cardId)
+      }
+    });
   };
 
+
+  getAllCommentOfCard = async (cardId) => {
+    const response = await api.get(`/api/v1/comment/${cardId}/card`);
+    if (response) {
+      const comments = response.data.list;
+      this.setState({
+        comments: comments
+      })
+    }
+  }
+
+
+
   renderRowActivity(e, index) {
-    console.log(e.content)
+    // console.log(e.content)
     if (e.type == "update_card") {
       let content = JSON.parse(e.content);
       console.log(content)
@@ -332,10 +384,10 @@ class DetailCard extends Component {
           <div className="wrap_left_content_history">
             <div className="conten_history">
               <span className="name_history">
-                {e.User.name} 
+                {e.User.name}
               </span>
               {` has update this card:`}
-             
+
             </div>
             <ul>
               {content.map((e, i) => {
@@ -385,6 +437,59 @@ class DetailCard extends Component {
     }
   }
 
+  createComment = async () => {
+    const cardId = this.props.data_detail.id;
+    const { comments } = this.state;
+    const data = {
+      content: this.state.content
+    }
+    const response = await api.post(`/api/v1/comment/${cardId}/card`, data);
+    if (response) {
+      const comment = response.data.comment;
+      comments.unshift(comment);
+      this.setState({
+        comments,
+        openFormInputComment: false,
+        content: ''
+      })
+    }
+  }
+
+  removeComment = async (id) => {
+    const { comments } = this.state;
+    const response = await api.delete(`/api/v1/comment/${id}`);
+    if (response) {
+      this.setState({
+        comments: _.filter(comments, comment => comment.id !== id)
+      })
+    }
+  }
+
+  handleInputChangeEditContent = (e, comment) => {
+    const value = e.target.value
+    this.setState({
+      [`contentEdit${comment.id}`]: value
+    })
+  }
+  editComment = async (comment) => {
+    const content = this.state[`contentEdit${comment.id}`];
+    const { comments } = this.state;
+    const item = {
+      content: content
+    }
+    const response = await api.patch(`/api/v1/comment/${comment.id}`, item)
+    if (response) {
+      for (const commentState of comments) {
+        if (commentState.id === comment.id) {
+          commentState.content = content
+        }
+      }
+      this.setState({
+        comments: comments
+      })
+    }
+  }
+
   render() {
     const errors = this.state.errors;
     const users = [];
@@ -403,6 +508,8 @@ class DetailCard extends Component {
     return (
       <Modal size="lg" show={this.props.show} onHide={this.hideModal} centered>
         <Modal.Header closeButton>
+          <div>
+          </div>
           <div className="card-detail-header">
             <div className="detail-header__title">
               <h4>Update card</h4>
@@ -486,8 +593,8 @@ class DetailCard extends Component {
                   </PopoverPop>{" "}
                 </div>
               ) : (
-                ""
-              )}
+                  ""
+                )}
             </div>
           </div>
         </Modal.Header>
@@ -520,7 +627,19 @@ class DetailCard extends Component {
                     onChange={this.handleOnChangeJobSelected}
                   />
                 </div>
-
+                {
+                  <div className="form-group">
+                    <label>Column</label>
+                    <span style={{ color: "red" }}>*</span>
+                    <Select
+                      isDisabled={this.props.role === roleName.DIRECTOR ? true : false}
+                      name="option"
+                      options={this.props.lanes}
+                      value={data_detail.laneSelected}
+                      onChange={this.handleOnChangeLane}
+                    />
+                  </div>
+                }
                 <div className="form-group row">
                   <div className="col-lg-6">
                     <label>Location</label>
@@ -616,6 +735,7 @@ class DetailCard extends Component {
                   <div className="input-group">
                     <input
                       type="text"
+                      disabled={this.props.role === roleName.DIRECTOR ? true : false}
                       value={data_detail.linkCv ? data_detail.linkCv : ""}
                       onChange={this.handleInputChange.bind(this)}
                       name="linkCv"
@@ -725,11 +845,11 @@ class DetailCard extends Component {
                                 </a>
                               </li>
                             ) : (
-                              ""
-                            )
+                                ""
+                              )
                           ) : (
-                            ""
-                          )}
+                              ""
+                            )}
                         </ul>
                       </Popover.Content>
                     </Popover>
@@ -765,8 +885,8 @@ class DetailCard extends Component {
                   users={this.props.users}
                 ></ModalAddMember>
               ) : (
-                ""
-              )}
+                  ""
+                )}
             </div>
           </div>
 
@@ -776,25 +896,18 @@ class DetailCard extends Component {
                 onClick={this.props.toggleDetailInterview}
                 variant="btn btn-success btn-interview"
               >
-                {moment(data_detail.interview.timeInterview)
-                  .subtract(7, "hours")
-                  .format("dddd DD/MM/YYYY HH:mm")}
+                {convertDateLocal(data_detail.interview.timeInterview)}
               </Button>
             ) : (
-              <Button
-                variant="btn btn-success btn-interview"
-                onClick={() => this.props.toggleDetailCardAndInterview()}
-              >
-                Create Interview
-              </Button>
-            )}
+                <Button
+                  variant="btn btn-success btn-interview"
+                  onClick={() => this.props.toggleDetailCardAndInterview()}
+                >
+                  Create Interview
+                </Button>
+              )}
 
-            {/* {
-                data_detail.linkCv ? (<Link to={`/preview/candidate/${this.props.data.candidateId}/job/${this.props.data.jobId}`} className="btn btn-primary font-weight-bolder style-btn-kitin mr-3">
-                  Refined CV
-                </Link>) : ''
-              } */}
-            {data_detail.linkCv ? (
+            {data_detail.isRefinePdf ? (
               <Link
                 to={`/preview/candidate/${data_detail.candidateId}/job/${data_detail.idJob}`}
                 className="btn btn-primary style-btn-kitin mr-3"
@@ -802,8 +915,8 @@ class DetailCard extends Component {
                 Refined CV
               </Link>
             ) : (
-              ""
-            )}
+                ""
+              )}
             {data_detail.linkCv ? (
               <Button
                 variant="primary btn-interview"
@@ -812,21 +925,21 @@ class DetailCard extends Component {
                 Raw CV
               </Button>
             ) : (
-              ""
-            )}
+                ""
+              )}
             {this.props.role !== roleName.DIRECTOR ? (
               <Button variant="primary btn-interview" onClick={this.updateCard}>
                 Save
               </Button>
             ) : (
-              ""
-            )}
+                ""
+              )}
             <Button variant="light" onClick={this.hideModal}>
               Close
             </Button>
           </div>
         </Modal.Footer>
-        <div className="Wrap_history_card">
+        <div onClick={this.setDefaultCommentBox} className="Wrap_history_card">
           <div className="wrap_icon_history">
             <div className="wrap_left_icon_act">
               <i className="flaticon2-calendar-1 custom_icon_history"></i>
@@ -836,23 +949,105 @@ class DetailCard extends Component {
               className="btn btn-secondary btn-sm"
               onClick={this.showHistoryCard.bind(this)}
             >
-              {`${
-                this.state.isShowHistory ? "Close" : "Show"
-              }`}
+              {`${this.state.isShowHistory ? "Close" : "Show"
+                }`}
             </button>
           </div>
           <div
-            className={`wrap_row_history ${
-              this.state.isShowHistory ? "active_history" : ""
-            }`}
+            className={`wrap_row_history ${this.state.isShowHistory ? "active_history" : ""
+              }`}
           >
             {this.state.isShowHistory ? (
               this.state.history.map((e, index) => {
                 return this.renderRowActivity(e, index);
-                
+
               })
             ) : null}
-            {}
+            { }
+          </div>
+          <div className="wrap-comment-card">
+            <div className="wrap_icon_history">
+              <div className="wrap_left_icon_act">
+                <i className="far fa-comment-dots custom_icon_history"></i>
+                <div className="act_history">Comments</div>
+              </div>
+            </div>
+            <div className="comment-card-content card-content-header">
+              <div className="symbol symbol-50 symbol-light ">
+                <span className="symbol-label symbol-label-cs cs_ava_history">
+                  <img
+                    src={
+                      this.props.linkAvatar
+                        ? domainServer + "/" + this.props.linkAvatar
+                        : defaultAva
+                    }
+                    className="h-100 align-self-end"
+                    alt=""
+                  />
+                </span>
+              </div>
+              <div className={
+                this.state.openFormInputComment ? 'height-open-form-comment comment-box' : 'height-default-form-comment comment-box'
+              }>
+                <textarea onClick={(e) => {
+                  e.stopPropagation();
+                  this.openFormInputComment();
+                }} onChange={this.handleInputChange} value={this.state.content} name="content" placeholder="Write a comment ..." className="comment-box-input"></textarea>
+                <div className="action-comment">
+                  <button onClick={this.createComment} disabled={this.state.content === '' ? true : false} type="button" className={this.state.content === '' ? 'btn btn-light  button-save-comment' : 'btn btn-primary button-save-comment'}>Save</button>
+                </div>
+              </div>
+            </div>
+            {this.state.comments.map(comment => (
+              <div className="comment-card-content">
+                <div className="content-item">
+                  <div className="symbol symbol-50 symbol-light ">
+                    <span className="symbol-label symbol-label-cs cs_ava_history">
+                      <img
+                        src={
+                          comment.User.linkAvatar
+                            ? domainServer + "/" + comment.User.linkAvatar
+                            : defaultAva
+                        }
+                        className="h-100 align-self-end"
+                        alt=""
+                      />
+                    </span>
+                  </div>
+                  <div className="name-comment">
+                    <span className="font-weight-name">{comment.User.name}</span>
+                    <span>{moment(comment.updatedAt).format('DD/MM/YYYY hh:mm')}</span>
+                    <div className="name-comment-content">
+                      {comment.content}
+                    </div>
+                    <div className="action-comment-content">
+                      <span>
+                        <a onClick={() => {
+                          this.toggleFormEditContent(comment);
+                        }} id={`action-comment-item${comment.id}`} className="action-comment-item">Edit</a>
+                         {/* - <a onClick={() => {
+                          this.removeComment(comment.id)
+                        }} className="action-comment-item">Delete</a> */}
+                      </span>
+                    </div>
+                    <UncontrolledCollapse toggler={`#${`action-comment-item${comment.id}`}`}>
+                      <div className="height-open-form-comment comment-box-edit">
+                        <textarea onChange={(e) => {
+                          this.handleInputChangeEditContent(e, comment)
+                        }} value={`${this.state[`contentEdit${comment.id}`]}`} defaultValue={comment.content} name="contentEdit" placeholder="Write a comment ..." className="comment-box-input"></textarea>
+                        <div className="action-comment">
+                          <button onClick={() => {
+                            this.editComment(comment)
+                          }} type="button" className="btn btn-primary button-save-comment">Save</button>
+                        </div>
+                      </div>
+                    </UncontrolledCollapse>
+                  </div>
+                </div>
+              </div>
+
+            ))}
+
           </div>
         </div>
       </Modal>
@@ -867,6 +1062,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     role: state.auth.role,
     userId: state.auth.userId,
+    linkAvatar: state.auth.linkAvatar,
     // update: (e) => ownProps.update(e),
     addMemberToCard: (data) => ownProps.addMemberToCard(data),
   };

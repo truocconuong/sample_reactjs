@@ -5,6 +5,7 @@ import { rulesCreateInterview } from "../../../utils/rule";
 import Validator from "../../../utils/validator";
 import moment from 'moment'
 import { DatetimePickerTrigger } from "../../libs/rc-datetime-picker";
+import { dynamicDateServer } from "../../../utils/common/convertDate";
 class Create extends Component {
     constructor() {
         super();
@@ -168,8 +169,8 @@ class Create extends Component {
                 jobName: data.jobName,
                 location: data.location,
                 jobId: data.jobId,
-                timeInterview: data.timeInterview.format('MM/DD/YYYY HH:mm'),
-                timeInterviewEnd: `${data.timeInterview.format('MM/DD/YYYY HH:mm').substring(0, 11)}${data.timeInterviewEnd.format('HH:mm')}`,
+                timeInterview: dynamicDateServer(data.timeInterview).format('MM/DD/YYYY HH:mm'),
+                timeInterviewEnd: `${dynamicDateServer(data.timeInterview).format('MM/DD/YYYY HH:mm').substring(0, 11)}${data.timeInterviewEnd.format('HH:mm')}`,
                 candidateId: data.candidateId,
                 type: data.type,
                 password: data.password

@@ -210,13 +210,13 @@ class SearchCandidate extends Component {
           classToggleDetail: new Array(10).fill("hide_mb"),
           classArr: new Array(10).fill("fa fa-caret-right"),
         });
-
+        console.log(this.state.data)
         setTimeout(() => {
           // this.refList.current.scrollIntoView();
           self.setState({
             isLoading: false,
           });
-        }, 800);
+        }, 100);
       } else {
         this.setState({
           isLoading: false,

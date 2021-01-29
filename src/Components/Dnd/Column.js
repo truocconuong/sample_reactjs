@@ -5,7 +5,7 @@ import { Droppable } from "react-beautiful-dnd";
 import roleName from "../../utils/const";
 import { connect } from "react-redux";
 import Network from "../../Service/Network.js";
-
+import _ from 'lodash'
 const api = new Network();
 
 const Container = styled.div`
@@ -38,20 +38,34 @@ class Column extends Component {
     this.state = {
       loadMore: false,
       heightOfTaskList: 0,
+      hasNextPage: true,
     };
     this.scrollCol = null;
   }
 
   getDataColumn = async (column) => {
+    let url = `/api/admin/cards/${column.id}/lane?offset=${column.limit}`;
+    const search = this.props.search
+    for (const key in search) {
+      if (!_.isNil(search[key]) && search[key] !== '') {
+        console.log(search[key])
+        const character = url.indexOf('?') === -1 ? '?' : '&'
+        url += `${character}${[key]}=${search[key]}`
+        // 
+      }
+    }
+    console.log('checker', url)
     const response = await api.get(
-      `/api/admin/cards/${column.id}/lane?offset=${column.limit}${this.props.userId !== '' ? `&userId=${this.props.userId}` : ''}`
+      url
     );
     if (response) {
       const data = response.data.list;
       this.props.updateColumn(data, column);
       this.setState({
         loadMore: false,
+        hasNextPage: response.data.list.length == 0 ? false : true
       });
+      console.log(response.data.list.length)
     }
   };
 
@@ -76,7 +90,7 @@ class Column extends Component {
     // scrollHeight chieu cao thuc cua scroll div
     if (
       Math.floor(e.target.scrollTop + this.scrollCol.offsetHeight) ==
-      this.scrollCol.scrollHeight
+      this.scrollCol.scrollHeight && this.state.hasNextPage
     ) {
       console.log("load")
       this.loadMoreLane(this.props.column);
@@ -132,6 +146,8 @@ class Column extends Component {
                     actionUpdateColumn={this.props.actionUpdateColumn}
                     storageCard={this.props.storageCard}
                     background={this.props.column.background}
+                    createLabel = {this.props.createLabel}
+                    removeLabel= {this.props.removeLabel}
                   />
                 );
               })}

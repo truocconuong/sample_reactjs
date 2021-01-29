@@ -21,7 +21,6 @@ class Validator {
       const option = rule.option ? rule.option : {};
       const validationMethod =
         typeof rule.method === "string" ? methods[rule.method] : rule.method;
-
       if (validationMethod(fieldValue, option) !== rule.validWhen) {
         this.errors[rule.field] = rule.message;
       }

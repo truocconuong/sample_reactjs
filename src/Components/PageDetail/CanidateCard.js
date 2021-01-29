@@ -425,13 +425,14 @@ export default class CandidateCard extends Component {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="exampleTextarea">Note Approach</label>
+                <label htmlFor="exampleTextarea">Note Approach</label> <span style={{ color: "red" }}>*</span>
                 <textarea
                   name="noteApproach"
                   value={this.state.noteApproach}
                   onChange={this.handleChangeData}
                   className="form-control"
                   rows={3}
+                  required
                 />
               </div>
             </div>
@@ -475,7 +476,7 @@ export default class CandidateCard extends Component {
                 })}
               </div>
               <div>
-                {this.props.data.cv ? (
+                {this.props.data.parserPdf ? (
                   <Link
                     to={`/preview/candidate/${this.props.data.candidateId}/job/${this.props.data.jobId}`}
                     className="btn btn-primary font-weight-bolder style-btn-kitin mr-3"

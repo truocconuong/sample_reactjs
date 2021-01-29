@@ -19,3 +19,10 @@ export function setUserId(userId){
     payload: userId
   }
 }
+
+export function setAvatarUser(linkAvatar){
+  return {
+    type: "SET_AVATAR_USER",
+    payload: linkAvatar
+  }
+}
