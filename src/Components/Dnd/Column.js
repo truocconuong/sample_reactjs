@@ -88,11 +88,10 @@ class Column extends Component {
   onScroll = (e) => {
     // offsetHeight chieu cao cua div TaskList
     // scrollHeight chieu cao thuc cua scroll div
+    const scrollTop = Number(e.target.scrollTop.toFixed(0))
     if (
-      Math.floor(e.target.scrollTop + this.scrollCol.offsetHeight) ==
-      this.scrollCol.scrollHeight && this.state.hasNextPage
+      this.scrollCol.scrollHeight - Math.floor(scrollTop + this.scrollCol.offsetHeight) <= 1 && this.state.hasNextPage
     ) {
-      console.log("load")
       this.loadMoreLane(this.props.column);
     }
   };
@@ -146,8 +145,8 @@ class Column extends Component {
                     actionUpdateColumn={this.props.actionUpdateColumn}
                     storageCard={this.props.storageCard}
                     background={this.props.column.background}
-                    createLabel = {this.props.createLabel}
-                    removeLabel= {this.props.removeLabel}
+                    createLabel={this.props.createLabel}
+                    removeLabel={this.props.removeLabel}
                   />
                 );
               })}
