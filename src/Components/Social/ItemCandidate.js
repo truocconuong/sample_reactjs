@@ -80,7 +80,7 @@ export default class ItemCandidate extends Component {
                   <i className="fab fa-pinterest-p"></i>
                   </li>
                   <li className="btn btn-social-kitin btn-social_skype custom-icon__skype">
-                  <i class="fab fa-skype"></i>
+                  <i className="fab fa-skype"></i>
                   </li>
               </div>
             </div>

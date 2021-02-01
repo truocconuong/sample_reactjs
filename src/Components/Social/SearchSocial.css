@@ -101,6 +101,11 @@
     overflow: hidden;
     overflow-y: auto;
 }
+.item-cd-detail {
+    max-height: calc(100vh - 260px);
+    overflow: hidden;
+    overflow-y: auto;
+}
 .dkm-custom-cc {
     padding-left: 2.25rem;
     padding-top: 5px;
@@ -108,5 +113,70 @@
 }
 .custom-list-cdd {
     overflow: scroll;
-    height: calc(100vh - 260px);    
+    max-height: calc(100vh - 260px);  
+    display: flex;
+    flex-direction: column;
+}
+.cs-loading-item-kt {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+.tb-contact-k {
+    width: 20%;
+}
+.title-ct-if {
+    font-size: 14px;
+    font-weight: 500;
+    color: #181C32;
+    margin-bottom: 10px !important;
+}
+.title-ct-profile {
+    font-size: 16px;
+    font-weight: 500;
+    color: #181C32;
+}
+.p-t-kitin {
+    padding: 5px 0px;
+}
+.custom-ct-em {
+    padding: 5px 0px;
+    vertical-align: top;
+    width: 25%;
+}
+.color-content {
+    color: #494B4C
+}
+.contacts .break-word {
+    padding: 5px 0px;
+}
+.title-skill-dh {
+    width: 100%;
+    margin: 10px 0px;
+    font-size: 14px;
+    font-weight: bolder;
+    color: #181C32;
+}
+.sp-skillsList {
+    display: flex;
+    flex-wrap: wrap;
+}
+.sp-skillsList .sp-skillsList__item {
+    border-radius: 3px;
+    color: #494b4c;
+    background-color: #ebebed;
+    margin-right: 8px;
+    margin-top: 8px;
+}
+.sp-skillsList .sp-skillsList__item .sp-sk-item {
+    padding: 5px 10px;
+}
+.text-lighter {
+    color: #a6a6a6;
+}
+.text-muted {
+    color: #878787;
+}
+.bt-social-kt {
+    padding-bottom: 30px;
 }

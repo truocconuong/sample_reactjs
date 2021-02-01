@@ -1,6 +1,6 @@
 import axios from "axios";
 import AuthService from "./AuthService";
-import { domainServer } from "../utils/config.js";
+import { domainServer, apikey, urlCheckSignHire, urlGetCanidate, urlSearchSingHire } from "../utils/config.js";
 
 const auth = new AuthService();
 var self = null;
@@ -101,6 +101,87 @@ export default class Networking {
         })
         .catch(function (error) {
           // console.log('1234');
+          console.log(error);
+          self.handleError(error, rejected);
+        });
+    });
+  }
+
+  postSearchSignHire(params) {
+    console.log(params, apikey);
+    return new Promise((resolve, rejected) => {
+      axios
+        .post(urlSearchSingHire, params, {
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8",
+              "Access-Control-Allow-Origin": "*",
+              "apikey": apikey,
+            }
+        })
+        .then(function (response) {
+          return resolve(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+          self.handleError(error, rejected);
+        });
+    });
+  }
+
+  getRequestSignHire(id) {
+    return new Promise((resolve, rejected) => {
+      axios
+        .get(`${urlCheckSignHire}/${id}`, {
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8",
+              "Access-Control-Allow-Origin": "*",
+              "apikey": apikey,
+            }
+        })
+        .then(function (response) {
+          return resolve(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+          self.handleError(error, rejected);
+        });
+    });
+  }
+
+  getRequestSignHire(id) {
+    return new Promise((resolve, rejected) => {
+      axios
+        .get(`${urlCheckSignHire}/${id}`, {
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8",
+              "Access-Control-Allow-Origin": "*",
+              "apikey": apikey,
+            }
+        })
+        .then(function (response) {
+          return resolve(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+          self.handleError(error, rejected);
+        });
+    });
+  }
+
+  getCandidate(id) {
+    return new Promise((resolve, rejected) => {
+      axios
+        .get(`${urlCheckSignHire}/${id}`, {
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8",
+              "Access-Control-Allow-Origin": "*",
+              "apikey": apikey,
+            }
+        })
+        .then(function (response) {
+          return resolve(response.data);
+        })
+        .catch(function (error) {
           console.log(error);
           self.handleError(error, rejected);
         });
