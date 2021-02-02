@@ -465,7 +465,23 @@ class MenuLeft extends Component {
               <div className="wrap_icon_menu">
                 <i className="far fa-money-bill-alt hover_icon"></i>
               </div>
-              <div className="content_menu">Board</div>
+              <div className="content_menu">Caculator</div>
+            </NavLink>
+            <NavLink
+              exact
+              activeClassName="selected"
+              to="/search-social"
+              onClick={
+                this.props.isMobile
+                  ? (e) => this.handleOnClick(e, "/search-social")
+                  : () => null
+              }
+              className="row_icon"
+            >
+              <div className="wrap_icon_menu">
+                <i className="fas fa-globe-asia hover_icon"></i>
+              </div>
+              <div className="content_menu">Search Social</div>
             </NavLink>
             <NavLink
               exact

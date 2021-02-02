@@ -17,6 +17,7 @@ import SearchCandidate from './Components/Table/SearchCandidate';
 import PreviewCandidate from './Components/Table/PreviewCandidate';
 import RefinedPdf from './Components/Table/RefinedPdf';
 import CaculatorSalary from './Components/Dnd/CaculatorSalary';
+import SearchSocial from './Components/Social/SearchSocial';
 import ListBlog from './Components/blog/Listblog.js';
 import NewBlog from './Components/blog/NewBlog.js';
 import EditBlog from './Components/blog/Editblog.js';
@@ -119,6 +120,11 @@ const routes = [
     path: "/caculator-salary",
     exact: true,
     main: (props) => < CaculatorSalary {...props} />
+  },
+  {
+    path: "/search-social",
+    exact: true,
+    main: () => <SearchSocial />
   },
   {
     path: "/list-blog",
