@@ -997,6 +997,7 @@ textarea {
   position: absolute;
   right: 7px;
 }
+
 .search-board-off {
   padding-right: 3px;
 }
@@ -1006,7 +1007,7 @@ textarea {
 }
 
 .comment-box {
-  box-shadow: 0 4px 8px -2px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
+  box-shadow: 0 4px 8px -2px rgba(9, 30, 66, .25), 0 0 0 1px rgba(9, 30, 66, .08);
   background-color: #fff;
   border-radius: 3px;
   /* box-shadow: 0 1px 2px -1px rgba(9, 30, 66, .25), 0 0 0 1px rgba(9, 30, 66, .08); */
@@ -1079,18 +1080,21 @@ textarea {
 .height-default-form-comment {
   height: 30px;
 }
+
 .height-open-form-comment {
   height: 100px;
 }
-.card-content-header{
+
+.card-content-header {
   padding-bottom: 2px;
 }
-.action-comment-item{
+
+.action-comment-item {
   cursor: pointer;
 }
 
 .comment-box-edit {
-  box-shadow: 0 4px 8px -2px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
+  box-shadow: 0 4px 8px -2px rgba(9, 30, 66, .25), 0 0 0 1px rgba(9, 30, 66, .08);
   background-color: #fff;
   border-radius: 3px;
   /* box-shadow: 0 1px 2px -1px rgba(9, 30, 66, .25), 0 0 0 1px rgba(9, 30, 66, .08); */
@@ -1102,44 +1106,71 @@ textarea {
   padding-top: 6px;
   width: 100%;
 }
-.group-row-item{
+
+.group-row-item {
   display: flex;
   align-items: center;
 }
-.group-row{
+
+.group-row {
   display: flex;
 }
 
-.group-row-label{
+.group-row-label {
   padding-right: 75px;
 }
 
-.group-row-label-long{
+.group-row-label-long {
   padding-left: 30px;
   width: 220px;
   padding-right: 10px;
 }
-.header-caculator .alert-custom{
+
+.header-caculator .alert-custom {
   height: 47px;
 }
-.card-body-caculator{
+
+.card-body-caculator {
   padding-top: 0px;
 }
-.filter-date-row{
+
+.filter-date-row {
   display: flex;
 }
+
 .filter-board-item .select_client {
-  width: 100% ;
+  width: 100%;
 }
-.trello-filter{
+
+.trello-filter {
   padding: 40px;
 }
-.btn-search-filter{
+
+.btn-search-filter {
   padding-top: 44px;
 }
-.board-item-search{
+
+.board-item-search {
   width: 533px;
 }
-.convert-tien{
+
+.convert-tien {
   font-weight: bold !important;
+}
+
+.social-group {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-iniline-social {
+  padding-left: 10px;
+}
+
+.form-group-social {
+  padding-top: 10px;
+}
+
+.invalid-selected :focus {
+  border: none !important;
 }

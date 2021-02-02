@@ -196,6 +196,9 @@ class Broad extends Component {
   updateCard = async (card) => {
     const { card_data_detail } = this.state;
     const idCard = card_data_detail.id;
+    this.setState({
+      isLoading: true
+    })
     try {
       if (card.laneId) {
         await this.updateLane(idCard, card.laneId);
@@ -443,6 +446,9 @@ class Broad extends Component {
                 : "",
               phone: card.Candidate.phone,
               email: card.Candidate.email,
+              facebook: card.Candidate.facebook ? `https://www.facebook.com/profile.php?id=${card.Candidate.facebook}` : '',
+              linkedin: card.Candidate.linkedin ? `https://www.linkedin.com/in/${card.Candidate.linkedin}/` : '',
+              skype: card.Candidate.skype || '',
               location: card.Job.Location.name,
               approachDate: card.approachDate,
               linkCv: card.cv,
@@ -675,6 +681,9 @@ class Broad extends Component {
             : "",
           phone: card.Candidate.phone,
           email: card.Candidate.email,
+          facebook: card.Candidate.facebook ? `https://www.facebook.com/profile.php?id=${card.Candidate.facebook}` : '',
+          linkedin: card.Candidate.linkedin ? `https://www.linkedin.com/in/${card.Candidate.linkedin}/` : '',
+          skype: card.Candidate.skype || '',
           location: card.Job.Location.name,
           approachDate: card.approachDate,
           linkCv: card.cv,
@@ -925,7 +934,7 @@ class Broad extends Component {
 
   callSearchCard = (item) => {
     this.setState({
-      isLoading:true,
+      isLoading: true,
       search: { ...this.state.search, ...item }
     }, () => {
       this.initData();
@@ -994,12 +1003,12 @@ class Broad extends Component {
           id="kt_subheader"
         >
           <div className="header-board trello trello-filter">
-          <div className="filter-board">
-            <FilterCard
-              callSearchCard={this.callSearchCard}
-              searchCardDetail = {this.searchCardDetail}
-            />
-          </div>
+            <div className="filter-board">
+              <FilterCard
+                callSearchCard={this.callSearchCard}
+                searchCardDetail={this.searchCardDetail}
+              />
+            </div>
           </div>
         </div>
 
