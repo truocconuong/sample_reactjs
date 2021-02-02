@@ -1,182 +1,48 @@
-.contain-item-candidate {
+.cusmtom-kt-dkm {
+    height: calc(100vh - 140px);
+}
+.cusmtom-hd-dkc {
     width: 100%;
-    display: flex;
+    display: flex !important;
+    justify-content: center !important;
 }
-.gutter-b-kitin {
-    margin-bottom: 12px;
-}
-.sp-candItem__main {
-    padding-bottom: 7px;
-    display: flex;
-    width: 100%;
-}
-.sp-photoField_sm {
-    width: 45px;
-    height: 45px;
-}
-.sp-photoFiel-dkm {
-    width: 80px;
-    height: 80px;
-}
-.sp-candItem__avatar {
-    width: 20%;
-}
-.sp-candItem__mainBody {
-    width: 80%;
-}
-.sp-photoField__overflowWrap {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    max-height: 100%;
-    border-radius: 50%;
-    background: #bbbfc4;
-    position: relative;
-}
-.sp-photoField__img-wrap {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background-size: 100%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 50%;
-    border-radius: 50%;
-}
-
-.sp-candItem_checked, .sp-candItem_checked:hover {
-    box-shadow: inset 0 0 0 2px rgba(26,179,148,.8)!important;
-    cursor: default;
-}
-.sp-nameField__inner {
-    font-size: 16px;
-    font-weight: 500;
-    color: #181C32;
-}
-.sp-candItem__contacts {
-    display: flex;
-    width: 100%;
-    list-style: none;
-}
-.sp-candItem__contacts li {
-    padding: 5px;
-}
-.sp-candItem__contacts .btn-social-kitin {
-    width: 24px;
-    height: 24px;
-    line-height: 14px;
-    border-radius: 22px;
-    cursor: inherit;
-}
-.sp-candItem__contacts li {
-    margin: 0 5px 5px 0;
-}
-.sp-candItem__contacts li i{
-    font-size: 13px;
-    color: white;
-}
-.sp-candItem__contacts .btn-social_li {
-    background-color: #0077b5;
-}
-.sp-candItem__contacts .btn-social_twitter {
-    background-color: #55acee;
-}
-.sp-candItem__contacts .btn-social_fb {
-    background-color: #4d65a3;
-}
-.sp-candItem__contacts .btn-social_pinterest {
-    background-color: #cb2027;
-}
-.sp-candItem__contacts .btn-social_skype {
-    background-color: #00aff0;
-}
-.custom-icon__skype i{
-    padding-left: 1px;
-    padding-bottom: 3px;
-}
-.custom-kt-card {
-    max-height: 100%;
-    overflow: hidden;
-    overflow-y: auto;
-}
-.item-cd-detail {
-    max-height: calc(100vh - 260px);
-    overflow: hidden;
-    overflow-y: auto;
-}
-.dkm-custom-cc {
-    padding-left: 2.25rem;
-    padding-top: 5px;
-    padding-bottom: 25px;
-}
-.custom-list-cdd {
-    overflow: scroll;
-    max-height: calc(100vh - 260px);  
-    display: flex;
-    flex-direction: column;
-}
-.cs-loading-item-kt {
+.cs-kt-social {
     display: flex;
     justify-content: center;
-    margin-top: 10px;
 }
-.tb-contact-k {
-    width: 20%;
+.cs-kt-social .brand-social-dk {
+    padding-left: 6px;
 }
-.title-ct-if {
-    font-size: 14px;
-    font-weight: 500;
-    color: #181C32;
-    margin-bottom: 10px !important;
+.nav.nav-pills.nav-light-success .nav-link.active i {
+    color: #3699FF;
 }
-.title-ct-profile {
+.cusmtom-kt-dkm h4{
     font-size: 16px;
-    font-weight: 500;
-    color: #181C32;
 }
-.p-t-kitin {
-    padding: 5px 0px;
+.kt-form-dkc {
+    width: 80%;
 }
-.custom-ct-em {
-    padding: 5px 0px;
-    vertical-align: top;
-    width: 25%;
+.custom-pd-social {
+    padding-top: 35px;
 }
-.color-content {
-    color: #494B4C
+.cs-btn-find {
+    display: flex; 
+    justify-content: center;
+    padding-top: 20px;
 }
-.contacts .break-word {
-    padding: 5px 0px;
-}
-.title-skill-dh {
-    width: 100%;
-    margin: 10px 0px;
-    font-size: 14px;
-    font-weight: bolder;
-    color: #181C32;
-}
-.sp-skillsList {
+.card-hqk-dkc {
     display: flex;
-    flex-wrap: wrap;
+    justify-content: center;
 }
-.sp-skillsList .sp-skillsList__item {
-    border-radius: 3px;
-    color: #494b4c;
-    background-color: #ebebed;
-    margin-right: 8px;
-    margin-top: 8px;
+.cusm-btn-hqkl {
+    width: 200px;
 }
-.sp-skillsList .sp-skillsList__item .sp-sk-item {
-    padding: 5px 10px;
-}
-.text-lighter {
-    color: #a6a6a6;
-}
-.text-muted {
-    color: #878787;
-}
-.bt-social-kt {
-    padding-bottom: 30px;
+@media (max-width: 575.98px) {
+    .cs-kt-social {
+        padding-left: 15px;
+        padding-top: 10px;
+    }
+    .kt-form-dkc {
+        width: 100%;
+    }  
 }
