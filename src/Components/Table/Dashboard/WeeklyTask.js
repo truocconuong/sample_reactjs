@@ -108,7 +108,7 @@ class WeeklyTask extends Component {
   async submitTask() {
     const errors = this.validator.validate(this.state);
     const contentTask = await this.state.contentTask.map((task, index) => {
-      if (task.content == "" || task.percent == "" || task.target == "" ) {
+      if (task.content == "" || task.percent == "" || task.target == "") {
         return {
           content: task.content == "" ? "content not null" : null,
           percent: task.percent == "" ? "percent not null" : null,
@@ -279,14 +279,16 @@ class WeeklyTask extends Component {
         <tr key={index} className="row_weektask" style={{ border: "none" }}>
           <td className="text-left pl-0" style={{ maxWidth: "446px" }}>
             <div>
+              <div className="text-dark font-weight-bold font-size-lg ">{`${task.startDate} - ${task.endDate}`}</div>
               {task.content.map((e, index) => {
                 if (e) {
                   return (
                     <p
                       key={index}
                       className="text-muted font-weight-bold m-0 pt-1 "
+                      style={{ fontSize: "12px" }}
                     >
-                      {`${e.content} (${e.percent}%)`}
+                      {`${e.content} (achievement: ${e.percent}%), (target: ${e.target}%)`}
                     </p>
                   );
                 } else {
@@ -330,7 +332,10 @@ class WeeklyTask extends Component {
             </span>
           </td>
           <td className="text-right pr-0" style={{ maxWidth: "446px" }}>
-            <div className="text-dark font-weight-bold text-hover-primary mb-1 font-size-lg">
+            <div
+              className="text-dark font-weight-bold text-hover-primary mb-1 font-size-lg"
+              style={{ fontSize: "12px" }}
+            >
               {task.startDate} - {task.endDate}
             </div>
             <input
@@ -410,13 +415,13 @@ class WeeklyTask extends Component {
                 Weekly Task
               </span>
             </h3>
-            {this.props.role === "Member" ? (
+            {/* {this.props.role === "Member" ? (
               <div className="card-title align-items-start flex-column">
                 <div className="week_day">
                   {data[0] ? `${data[0].startDate} - ${data[0].endDate}` : null}
                 </div>
               </div>
-            ) : null}
+            ) : null} */}
             {this.props.role === "Leader" ? (
               <div className="card-toolbar">
                 <div
@@ -429,80 +434,78 @@ class WeeklyTask extends Component {
             ) : null}
           </div>
           <div className="card-body pt-0 pb-0 body_card_dashboard_task">
-            {this.props.role == "Member" ? null : (
-              <div className="mb-5 ml--10 mr--10">
-                <div className=" align-items-flex-end">
-                  <div className="">
-                    <div className=" align-items-center sp_bw">
-                      <div className="">
-                        <div className="d-flex align-items-center">
-                          <div className="wrap_date_picker">
-                            <DatetimePickerTrigger
-                              moment={this.props.startDateWeeklyTask}
-                              onChange={(_moment) =>
-                                this.props.handleChangeDatePicker(
-                                  _moment,
-                                  "startDateWeeklyTask"
-                                )
-                              }
-                              maxDate={this.props.endDateWeeklyTask}
-                              className="custom_date_pickeer "
-                              showTimePicker={false}
-                            >
-                              <div className="label_date_pick">From</div>
-                              <div className="input-group input-group-sm">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="From"
-                                  value={this.props.startDateWeeklyTask.format(
-                                    "DD/MM/YYYY"
-                                  )}
-                                  readOnly
-                                />
-                                <div className="input-group-append">
-                                  <span className="input-group-text">
-                                    <i className="la la-calendar icon-lg"></i>
-                                  </span>
-                                </div>
+            <div className="mb-5 ml--10 mr--10">
+              <div className=" align-items-flex-end">
+                <div className="">
+                  <div className=" align-items-center sp_bw">
+                    <div className="">
+                      <div className="d-flex align-items-center">
+                        <div className="wrap_date_picker">
+                          <DatetimePickerTrigger
+                            moment={this.props.startDateWeeklyTask}
+                            onChange={(_moment) =>
+                              this.props.handleChangeDatePicker(
+                                _moment,
+                                "startDateWeeklyTask"
+                              )
+                            }
+                            maxDate={this.props.endDateWeeklyTask}
+                            className="custom_date_pickeer "
+                            showTimePicker={false}
+                          >
+                            <div className="label_date_pick">From</div>
+                            <div className="input-group input-group-sm">
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="From"
+                                value={this.props.startDateWeeklyTask.format(
+                                  "DD/MM/YYYY"
+                                )}
+                                readOnly
+                              />
+                              <div className="input-group-append">
+                                <span className="input-group-text">
+                                  <i className="la la-calendar icon-lg"></i>
+                                </span>
                               </div>
-                            </DatetimePickerTrigger>
-                            <DatetimePickerTrigger
-                              moment={this.props.endDateWeeklyTask}
-                              onChange={(_moment) =>
-                                this.props.handleChangeDatePicker(
-                                  _moment,
-                                  "endDateWeeklyTask"
-                                )
-                              }
-                              minDate={this.props.startDateWeeklyTask}
-                              className="custom_date_pickeer  right"
-                              showTimePicker={false}
-                            >
-                              <div className="label_date_pick">To</div>
-                              <div className="input-group input-group-sm">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="To"
-                                  value={this.props.endDateWeeklyTask.format(
-                                    "DD/MM/YYYY"
-                                  )}
-                                  readOnly
-                                />
-                                <div className="input-group-append">
-                                  <span className="input-group-text">
-                                    <i className="la la-calendar icon-lg"></i>
-                                  </span>
-                                </div>
-                              </div>
-                            </DatetimePickerTrigger>
-                            <div
-                              onClick={this.props.applyTimeTask.bind(this)}
-                              className="btn btn-primary font-weight-bold btn-sm"
-                            >
-                              Apply
                             </div>
+                          </DatetimePickerTrigger>
+                          <DatetimePickerTrigger
+                            moment={this.props.endDateWeeklyTask}
+                            onChange={(_moment) =>
+                              this.props.handleChangeDatePicker(
+                                _moment,
+                                "endDateWeeklyTask"
+                              )
+                            }
+                            minDate={this.props.startDateWeeklyTask}
+                            className="custom_date_pickeer  right"
+                            showTimePicker={false}
+                          >
+                            <div className="label_date_pick">To</div>
+                            <div className="input-group input-group-sm">
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="To"
+                                value={this.props.endDateWeeklyTask.format(
+                                  "DD/MM/YYYY"
+                                )}
+                                readOnly
+                              />
+                              <div className="input-group-append">
+                                <span className="input-group-text">
+                                  <i className="la la-calendar icon-lg"></i>
+                                </span>
+                              </div>
+                            </div>
+                          </DatetimePickerTrigger>
+                          <div
+                            onClick={this.props.applyTimeTask.bind(this)}
+                            className="btn btn-primary font-weight-bold btn-sm"
+                          >
+                            Apply
                           </div>
                         </div>
                       </div>
@@ -510,7 +513,7 @@ class WeeklyTask extends Component {
                   </div>
                 </div>
               </div>
-            )}
+            </div>
 
             <div className="tab-content mt-0" id="myTabTables2">
               <div

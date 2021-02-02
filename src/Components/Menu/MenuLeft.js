@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import "./style.css";
-import { addPaddingBroad, removePaddingBroad } from "../../redux/actions";
+import { addPaddingBroad, removePaddingBroad, setAvatarUser } from "../../redux/actions";
 import { connect } from "react-redux";
 import AuthService from "../../Service/AuthService.js";
 import Network from "../../Service/Network.js";
@@ -37,7 +37,6 @@ class MenuLeft extends Component {
     this.getProfile = this.getProfile.bind(this);
     this.uploadAvatarDone = this.uploadAvatarDone.bind(this);
     this.handleOnClick = this.handleOnClick.bind(this);
-    this.initPusher = this.initPusher.bind(this);
     this.markAllNotiRead = this.markAllNotiRead.bind(this);
     this.renderNotiToast = this.renderNotiToast.bind(this);
     this.forwardNoti = this.forwardNoti.bind(this);
@@ -160,36 +159,7 @@ class MenuLeft extends Component {
       });
     });
   }
-  initPusher(idUser) {
-    const pusher = new Pusher("e14503e929f2e0a46385", {
-      cluster: "ap1",
-      encrypted: true,
-    });
 
-    const channel = pusher.subscribe("notification");
-    channel.bind(idUser, (noti) => {
-      console.log(noti);
-      this.drawerProfile.current.receiveNewNoti(noti.content);
-      this.setState((prevState) => {
-        return {
-          countUnreadNoti: prevState.countUnreadNoti + 1,
-        };
-      });
-      toast(this.renderNotiToast(noti.content), {
-        position: "bottom-left",
-        autoClose: 3000,
-        hideProgressBar: true,
-        newestOnTop: true,
-        closeOnClick: true,
-        rtl: false,
-        pauseOnFocusLoss: true,
-        draggable: true,
-        pauseOnHover: true,
-        transition: Zoom,
-        className: "custom_toast",
-      });
-    });
-  }
   uploadAvatarDone(linkAvatar) {
     let currentProfile = this.state.profile;
     currentProfile.linkAvatar = linkAvatar;
@@ -209,8 +179,10 @@ class MenuLeft extends Component {
               ? responseProfile.data.user.countNotificationNotSeen
               : 0,
           },
-          function () {}
+          function () { }
         );
+        const linkAvatar = responseProfile.data.user.linkAvatar
+       await this.props.setAvatarUser(linkAvatar)
       }
     } catch (error) {
       console.log("err while get profile user: ", error);
@@ -236,8 +208,8 @@ class MenuLeft extends Component {
     // mark all noti as read => call api read noti
     if (this.state.countUnreadNoti != 0 && !open) {
       await this.markAllNotiRead();
-    }else{
-     
+    } else {
+
     }
     this.setState({ isOpenDrawer: open });
   }
@@ -310,8 +282,8 @@ class MenuLeft extends Component {
                     alt="ava"
                   />
                 ) : (
-                  <img className="ava_img" src={defaultAva} alt="ava" />
-                )}
+                    <img className="ava_img" src={defaultAva} alt="ava" />
+                  )}
                 {this.state.countUnreadNoti != 0 ? (
                   <span className="label label-sm  label-danger font-weight-bolder position-absolute noti_count mt-1 mr-1">
                     {this.state.countUnreadNoti}
@@ -493,7 +465,7 @@ class MenuLeft extends Component {
               <div className="wrap_icon_menu">
                 <i className="far fa-money-bill-alt hover_icon"></i>
               </div>
-              <div className="content_menu">Board</div>
+              <div className="content_menu">Caculator</div>
             </NavLink>
             <NavLink
               exact
@@ -511,22 +483,22 @@ class MenuLeft extends Component {
               </div>
               <div className="content_menu">Search Social</div>
             </NavLink>
-            {/* <NavLink
+            <NavLink
               exact
               activeClassName="selected"
-              to="/search-social"
+              to="/list-blog"
               onClick={
                 this.props.isMobile
-                  ? (e) => this.handleOnClick(e, "/search-social")
+                  ? (e) => this.handleOnClick(e, "/list-blog")
                   : () => null
               }
               className="row_icon"
             >
               <div className="wrap_icon_menu">
-                <i className="fab fa-trello hover_icon"></i>
+                <i className="fa fa-newspaper hover_icon"></i>
               </div>
-              <div className="content_menu">Search Candidate Social</div>
-            </NavLink> */}
+              <div className="content_menu">Blogs</div>
+            </NavLink>
             {this.props.role === "Director" ? (
               <NavLink
                 exact
@@ -558,6 +530,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addPadding: () => dispatch(addPaddingBroad()),
     removePadding: () => dispatch(removePaddingBroad()),
+    setAvatarUser: (linkAvatar) => dispatch(setAvatarUser(linkAvatar)),
   };
 };
 const mapStateToProps = (state, ownProps) => {

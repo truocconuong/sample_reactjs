@@ -18,6 +18,10 @@ import PreviewCandidate from './Components/Table/PreviewCandidate';
 import RefinedPdf from './Components/Table/RefinedPdf';
 import CaculatorSalary from './Components/Dnd/CaculatorSalary';
 import SearchSocial from './Components/Social/SearchSocial';
+import ListBlog from './Components/blog/Listblog.js';
+import NewBlog from './Components/blog/NewBlog.js';
+import EditBlog from './Components/blog/Editblog.js';
+
 
 const routes = [
   {
@@ -107,7 +111,6 @@ const routes = [
     exact: true,
     main: (props) => < PreviewCandidate {...props} />
   },
-
   {
     path: "/refine/candidate/:candidateId/job/:jobId",
     exact: true,
@@ -122,8 +125,22 @@ const routes = [
     path: "/search-social",
     exact: true,
     main: () => <SearchSocial />
-  }
-
+  },
+  {
+    path: "/list-blog",
+    exact: true,
+    main: (props) => < ListBlog {...props} />
+  },
+  {
+    path: "/new-blog",
+    exact: true,
+    main: (props) => < NewBlog {...props} />
+  },
+  {
+    path: "/edit-blog/:id",
+    exact: true,
+    main: (props) => < EditBlog {...props} />
+  },
 ];
 
 export default routes;

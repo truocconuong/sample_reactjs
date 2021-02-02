@@ -335,7 +335,6 @@ class Card extends Component {
       label: this.formLabel
     }
 
-    console.log(this.props.card)
     if (this.state.showAction) {
       formAction = action[this.state.showAction]
     }

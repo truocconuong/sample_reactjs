@@ -700,8 +700,7 @@ textarea {
 } */
 
 .pop-search-board {
-  margin-left: 125px;
-  max-width: 500px;
+  max-width: 530px;
   /* background: #EFF2F9; */
 }
 
@@ -714,9 +713,9 @@ textarea {
 }
 
 .search-board-on {
-  width: 500px;
-  animation-name: onDisplaySearch;
-  animation-duration: 0.1s;
+  /* width: 500px; */
+  /* animation-name: onDisplaySearch; */
+  /* animation-duration: 0.1s; */
 }
 
 .cs_update_history {
@@ -728,14 +727,14 @@ textarea {
   font-weight: 600;
 }
 
-@keyframes onDisplaySearch {
+/* @keyframes onDisplaySearch {
   from {
     width: 250px;
   }
   to {
     width: 500px;
   }
-}
+} */
 
 .select-search {
   display: flex;
@@ -829,6 +828,7 @@ textarea {
 }
 
 .footer-caculator {
+  padding-top: 20px;
   text-align: center;
 }
 
@@ -934,6 +934,10 @@ textarea {
   padding: 18.9px !important;
 }
 
+.copy-to-clip-board {
+  margin-left: 6px;
+}
+
 .filter-board {
   display: flex;
 }
@@ -941,44 +945,232 @@ textarea {
 .all-filter-board {
   display: flex;
 }
-.filter-board-item{
+
+.filter-board-item {
   padding: 2px;
 }
 
 .filter-board {
+  padding-top: 0px !important;
   padding: 30px;
   position: fixed;
   right: 0;
   z-index: 10;
+  top: 3px;
 }
-.trello-search-director{
+
+.trello-search-director {
   display: flex;
-  flex-direction: column;
+  padding-bottom: 39px;
+  /* flex-direction: column; */
 }
 
-.subheader-board{
-  margin-top: 17px;
-}
-.filter-of-directory{
-  position: absolute;
-  top: 9px;
+.subheader-board {
+  margin-top: 0px !important;
+  padding-top: 0px;
 }
 
-.this-label{
+.filter-of-directory {
+  /* position: absolute; */
+  /* top: 9px; */
+}
+
+.this-label {
   display: flex;
   flex-wrap: wrap;
 }
-.card-label-item{
+
+.card-label-item {
   margin-right: 2px;
 }
-.custom-label-remove{
+
+.custom-label-remove {
   font-size: 10px;
   color: white;
 }
+
 .card-label-item {
   position: relative;
 }
+
 .remove-label {
   position: absolute;
   right: 7px;
+}
+
+.search-board-off {
+  padding-right: 3px;
+}
+
+.wrap-comment-card {
+  padding-top: 30px;
+}
+
+.comment-box {
+  box-shadow: 0 4px 8px -2px rgba(9, 30, 66, .25), 0 0 0 1px rgba(9, 30, 66, .08);
+  background-color: #fff;
+  border-radius: 3px;
+  /* box-shadow: 0 1px 2px -1px rgba(9, 30, 66, .25), 0 0 0 1px rgba(9, 30, 66, .08); */
+  margin: 4px 4px 12px 0;
+  overflow: hidden;
+  position: relative;
+  transition: box-shadow 85ms ease;
+  padding-left: 5px;
+  padding-top: 6px;
+  width: 100%;
+  margin-left: 14px;
+}
+
+.comment-box-input:focus {
+  box-shadow: none;
+}
+
+.comment-box-input {
+  border: none;
+  overflow: auto;
+  outline: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  resize: none;
+  /*remove the resize handle on the bottom right*/
+  padding-top: 20px;
+  background: #fff!important;
+  box-sizing: content-box;
+  box-shadow: none;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  resize: none;
+}
+
+.button-save-comment {
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
+
+/* .action-comment {
+  position: absolute;
+  bottom: 34px;
+  left: 71px;
+} */
+
+.comment-card-content {
+  display: flex;
+}
+
+.name-comment {
+  padding-left: 12px;
+  width: 100%;
+}
+
+.font-weight-name {
+  padding-right: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.content-item {
+  display: flex;
+  padding-bottom: 5px;
+  width: 100%;
+}
+
+.height-default-form-comment {
+  height: 30px;
+}
+
+.height-open-form-comment {
+  height: 100px;
+}
+
+.card-content-header {
+  padding-bottom: 2px;
+}
+
+.action-comment-item {
+  cursor: pointer;
+}
+
+.comment-box-edit {
+  box-shadow: 0 4px 8px -2px rgba(9, 30, 66, .25), 0 0 0 1px rgba(9, 30, 66, .08);
+  background-color: #fff;
+  border-radius: 3px;
+  /* box-shadow: 0 1px 2px -1px rgba(9, 30, 66, .25), 0 0 0 1px rgba(9, 30, 66, .08); */
+  margin: 4px 4px 12px 0;
+  overflow: hidden;
+  position: relative;
+  transition: box-shadow 85ms ease;
+  padding-left: 5px;
+  padding-top: 6px;
+  width: 100%;
+}
+
+.group-row-item {
+  display: flex;
+  align-items: center;
+}
+
+.group-row {
+  display: flex;
+}
+
+.group-row-label {
+  padding-right: 75px;
+}
+
+.group-row-label-long {
+  padding-left: 30px;
+  width: 220px;
+  padding-right: 10px;
+}
+
+.header-caculator .alert-custom {
+  height: 47px;
+}
+
+.card-body-caculator {
+  padding-top: 0px;
+}
+
+.filter-date-row {
+  display: flex;
+}
+
+.filter-board-item .select_client {
+  width: 100%;
+}
+
+.trello-filter {
+  padding: 40px;
+}
+
+.btn-search-filter {
+  padding-top: 44px;
+}
+
+.board-item-search {
+  width: 533px;
+}
+
+.convert-tien {
+  font-weight: bold !important;
+}
+
+.social-group {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-iniline-social {
+  padding-left: 10px;
+}
+
+.form-group-social {
+  padding-top: 10px;
+}
+
+.invalid-selected :focus {
+  border: none !important;
 }

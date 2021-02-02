@@ -121,7 +121,7 @@ class SearchBoard extends Component {
 
     render() {
         return (
-            <div className={this.state.showFormSeach ? 'search-board-on' : 'search-board-off'}>
+            <div className="search-board-on">
                 <PopoverPop className="popover-container" popperClassName="popover-modal-card pop-search-board" trigger="legacy" placement="bottom" isOpen={this.state.showFormSeach} target={`Popover-searchBoard`} toggle={this.toggleFormSearch}>
                     <PopoverBody>
                         <div className="search-board-form">
@@ -129,20 +129,22 @@ class SearchBoard extends Component {
                         </div>
                     </PopoverBody>
                 </PopoverPop>
-                <div onClick={this.toggleFormSearch} className="input-icon" id="Popover-searchBoard">
-                    <input
-                        name="search"
-                        type="text"
-                        className="form-control"
-                        placeholder="Search..."
-                        value={this.state.search}
-                        autoComplete="off"
-                        onChange={this.handleChangeInput}
-                        id="kt_datatable_search_query"
-                    />
-                    <span>
-                        <i className="flaticon2-search-1 text-muted"></i>
-                    </span>
+                <div className="filter-board-item board-item-search">
+                    <div onClick={this.toggleFormSearch} className="input-icon" id="Popover-searchBoard">
+                        <input
+                            name="search"
+                            type="text"
+                            className="form-control"
+                            placeholder="Search..."
+                            value={this.state.search}
+                            autoComplete="off"
+                            onChange={this.handleChangeInput}
+                            id="kt_datatable_search_query"
+                        />
+                        <span>
+                            <i className="flaticon2-search-1 text-muted"></i>
+                        </span>
+                    </div>
                 </div>
             </div>
         );

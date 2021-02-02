@@ -205,18 +205,6 @@ const rulesEditTask = [
 ];
 const rulesCreateNewCard = [
   {
-    field: "name",
-    method: "isEmpty",
-    validWhen: false,
-    message: "Name is required.",
-  },
-  // {
-  //   field: "position",
-  //   method: "isEmpty",
-  //   validWhen: false,
-  //   message: "Position is required.",
-  // },
-  {
     field: "phone",
     method: "isEmpty",
     validWhen: false,
@@ -255,6 +243,12 @@ const rulesCreateNewCard = [
   },
   {
     field: "laneId",
+    method: "isEmpty",
+    validWhen: false,
+    message: "laneId is required.",
+  },
+  {
+    field: "social",
     method: "isEmpty",
     validWhen: false,
     message: "laneId is required.",
