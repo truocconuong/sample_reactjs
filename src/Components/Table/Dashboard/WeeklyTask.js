@@ -429,7 +429,7 @@ class WeeklyTask extends Component {
             ) : null}
           </div>
           <div className="card-body pt-0 pb-0 body_card_dashboard_task">
-            {this.props.role == "Member" ? null : (
+            
               <div className="mb-5 ml--10 mr--10">
                 <div className=" align-items-flex-end">
                   <div className="">
@@ -510,7 +510,7 @@ class WeeklyTask extends Component {
                   </div>
                 </div>
               </div>
-            )}
+           
 
             <div className="tab-content mt-0" id="myTabTables2">
               <div
