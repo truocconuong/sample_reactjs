@@ -1,6 +1,6 @@
 import axios from "axios";
 import AuthService from "./AuthService";
-import { domainServer } from "../utils/config.js";
+import { domainServer, apikey, urlCheckSignHire, urlGetCanidate, urlSearchSingHire } from "../utils/config.js";
 
 const auth = new AuthService();
 var self = null;

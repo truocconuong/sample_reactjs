@@ -1,0 +1,48 @@
+.cusmtom-kt-dkm {
+    height: calc(100vh - 140px);
+}
+.cusmtom-hd-dkc {
+    width: 100%;
+    display: flex !important;
+    justify-content: center !important;
+}
+.cs-kt-social {
+    display: flex;
+    justify-content: center;
+}
+.cs-kt-social .brand-social-dk {
+    padding-left: 6px;
+}
+.nav.nav-pills.nav-light-success .nav-link.active i {
+    color: #3699FF;
+}
+.cusmtom-kt-dkm h4{
+    font-size: 16px;
+}
+.kt-form-dkc {
+    width: 80%;
+}
+.custom-pd-social {
+    padding-top: 35px;
+}
+.cs-btn-find {
+    display: flex; 
+    justify-content: center;
+    padding-top: 20px;
+}
+.card-hqk-dkc {
+    display: flex;
+    justify-content: center;
+}
+.cusm-btn-hqkl {
+    width: 200px;
+}
+@media (max-width: 575.98px) {
+    .cs-kt-social {
+        padding-left: 15px;
+        padding-top: 10px;
+    }
+    .kt-form-dkc {
+        width: 100%;
+    }  
+}
