@@ -44,8 +44,8 @@ class Dashboard extends Component {
       startDate: moment().subtract(3, "M"),
       endDate: moment(),
       // date of create new task
-      startDateTask: moment(),
-      endDateTask: moment().add(1, "days"),
+      startDateTask: moment().startOf("week"),
+      endDateTask: moment().endOf("week"),
       // date of weekly task
       startDateWeeklyTask: moment().startOf("week"),
       endDateWeeklyTask: moment().endOf("week"),
