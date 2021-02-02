@@ -224,6 +224,9 @@ class Broad extends Component {
         this.close_detail_card();
       }
     } catch (error) {
+      this.setState({
+        isLoading : false
+      })
       if (error.error) {
         if (error.error.data) {
           if (error.error.data.error === "Cannot update candidate") {
