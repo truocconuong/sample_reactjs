@@ -25,6 +25,7 @@ export default class ModelResult extends Component {
               </label>
               <Form.Control
                 name="result"
+                defaultValue={this.props.url}
                 type="text"
                 className="form-control-solid"
               />
@@ -38,18 +39,13 @@ export default class ModelResult extends Component {
               </button>
 
               <a
-                href="/"
+                href={this.props.url}
+                target="_blank"
                 className="btn btn-primary font-weight-bolder style-btn-kitin mr-2 cusm-btn-hqkl"
               >
                 Open in Google
               </a>
-              {/* <button
-                type="reset"
-                className="btn btn-secondary"
-                onClick={this.props.onHide}
-              >
-                Cancel
-              </button> */}
+             
             </div>
           </div>
         </Modal.Body>
