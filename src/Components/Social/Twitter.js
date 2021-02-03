@@ -15,6 +15,8 @@ export default class Twitter extends Component {
   render() {
     return (
       <div className="container kt-form-dkc">
+        <h3 style={{color: 'red', textAlign: 'center', padding: '10px 20px'}}>Sorry! we are developing.</h3>
+        <h3 style={{color: 'red', textAlign: 'center'}}>Coming soon.</h3>
         <div className="form-group row custom-pd-social">
           <div className="col-lg-6">
             <label>City and Country</label>
@@ -32,7 +34,6 @@ export default class Twitter extends Component {
           <div className="col-lg-6">
             <label>
               Skills (keywords) to include
-              <span style={{ fontWeight: "bold" }}>include</span>
             </label>
             <div>
               <Form.Control

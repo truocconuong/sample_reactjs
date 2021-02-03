@@ -16,6 +16,9 @@
 .nav.nav-pills.nav-light-success .nav-link.active i {
     color: #3699FF;
 }
+.nav.nav-pills.nav-light-success .nav-link:hover i {
+    color: #3699FF;
+}
 .cusmtom-kt-dkm h4{
     font-size: 16px;
 }
