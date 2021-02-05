@@ -25,6 +25,8 @@ const contentState = ContentState.createFromBlockArray(
 function NewBlog(props) {
   const [styleHeader, setStyleHeader] = useState("card-header");
   const [isDisableSave, setIsDisableSave] = useState(false);
+  const [requireTitle, setRequireTitle] = useState(false);
+  const [requireDraft, setRequireDraft] = useState(false);
   const [editorState, setEditorState] = useState(
     EditorState.createWithContent(contentState)
   );
@@ -55,11 +57,28 @@ function NewBlog(props) {
     return editorState;
   };
   const onSave = async () => {
-    console.log(convertToRaw(editorState.getCurrentContent()));
+    // console.log(convertToRaw(editorState.getCurrentContent()));
+    setRequireTitle(false);
+    setRequireDraft(false);
+    if (title === "") {
+      setRequireTitle(true);
+      return;
+    }
     let content = getContent();
+    if (content === "<p></p>") {
+      setRequireDraft(true);
+      return;
+    }
+    console.log(content);
+    console.log(convertToRaw(editorState.getCurrentContent()));
     let firstPara = convertToRaw(editorState.getCurrentContent()).blocks.find(
       (e) => e.text.replaceAll(" ", "") !== ""
-    ).text;
+    );
+    if (firstPara) {
+      firstPara = firstPara.text;
+    } else {
+      firstPara = "";
+    }
     // find img src
     let m,
       urls = [], // luu link anh
@@ -255,7 +274,9 @@ function NewBlog(props) {
                               value={title}
                               placeholder="Title"
                               onChange={(e) => setTitle(e.target.value)}
-                              className="form-control-solid form-control"
+                              className={`form-control ${
+                                requireTitle ? "is-invalid" : ""
+                              }`}
                             />
                           </div>
                         </div>
@@ -265,7 +286,9 @@ function NewBlog(props) {
                         editorState={editorState}
                         toolbarClassName="toolbarClassName"
                         wrapperClassName="wrapperClassName"
-                        editorClassName="editorClassName"
+                        editorClassName={`editorClassName ${
+                          requireDraft ? "require_draft" : ""
+                        }`}
                         editorStyle={{}}
                         onEditorStateChange={setEditorState}
                         stripPastedStyles={true}
