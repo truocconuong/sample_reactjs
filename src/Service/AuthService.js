@@ -29,7 +29,7 @@ export default class AuthService {
           response.data.data.tokenTimeStamp
         );
         localStorage.removeItem("forceLogout");
-        callback(true);
+        callback(true, response.data.data.role);
       })
       .catch(function (error) {
         console.log(error);

@@ -303,7 +303,7 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/")
                   : () => null
               }
-              className="row_icon"
+              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
             >
               <div className="wrap_icon_menu">
                 <svg
@@ -343,7 +343,7 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/job")
                   : () => null
               }
-              className="row_icon"
+              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
               style={this.props.role == "Member" ? { display: "none" } : null}
             >
               <div className="wrap_icon_menu">
@@ -360,7 +360,7 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/client")
                   : () => null
               }
-              className="row_icon"
+              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
               style={this.props.role == "Member" ? { display: "none" } : null}
             >
               <div className="wrap_icon_menu">
@@ -377,7 +377,7 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/candidate")
                   : () => null
               }
-              className="row_icon"
+              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
               style={this.props.role == "Member" ? { display: "none" } : null}
             >
               <div className="wrap_icon_menu">
@@ -395,7 +395,7 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/users")
                   : () => null
               }
-              className="row_icon"
+              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
               style={this.props.role == "Member" ? { display: "none" } : null}
             >
               <div className="wrap_icon_menu">
@@ -412,7 +412,7 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/search")
                   : () => null
               }
-              className="row_icon"
+              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
             >
               <div className="wrap_icon_menu">
                 <i className="fa fa-search hover_icon"></i>
@@ -428,7 +428,7 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/interview")
                   : () => null
               }
-              className="row_icon"
+              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
             >
               <div className="wrap_icon_menu">
                 <i className="far fa-handshake hover_icon"></i>
@@ -444,7 +444,7 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/board")
                   : () => null
               }
-              className="row_icon"
+              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
             >
               <div className="wrap_icon_menu">
                 <i className="fab fa-trello hover_icon"></i>
@@ -460,7 +460,7 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/caculator-salary")
                   : () => null
               }
-              className="row_icon"
+              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
             >
               <div className="wrap_icon_menu">
                 <i className="far fa-money-bill-alt hover_icon"></i>
@@ -476,7 +476,7 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/search-social")
                   : () => null
               }
-              className="row_icon"
+              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
             >
               <div className="wrap_icon_menu">
                 <i className="fas fa-globe-asia hover_icon"></i>
@@ -509,7 +509,7 @@ class MenuLeft extends Component {
                     ? (e) => this.handleOnClick(e, "/setting")
                     : () => null
                 }
-                className="row_icon"
+                className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
               >
                 <div className="wrap_icon_menu">
                   <i className="fa fa-cog hover_icon"></i>
