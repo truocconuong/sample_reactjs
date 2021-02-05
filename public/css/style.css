@@ -17,3 +17,6 @@
 .hideInAuth{
 	display: none;
 }
+.hide_bloger{
+	display: none !important;
+}
