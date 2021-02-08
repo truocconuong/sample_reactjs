@@ -117,6 +117,7 @@ export default class AddCard extends Component {
 
   handleInputChangeEmail = (email) => {
     if (email !== '') {
+      email = email.replace(/ /g,'');
       const response = api.get(`/api/admin/candidate/user?email=${email}`)
       response.then((result) => {
         const candidates = _.map(result.data.candidate, candidate => {
