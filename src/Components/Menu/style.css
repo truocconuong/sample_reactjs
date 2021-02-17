@@ -144,7 +144,7 @@ a.row_icon {
   display: none;
 }
 .navi_cs {
-  width: 294.594px;
+  /* width: 294.594px; */
   height: calc(100vh - 313px);
   overflow-y: auto;
   padding-right: 5px;
@@ -161,7 +161,7 @@ a.row_icon {
 }
 .content_title_noti {
   height: 20px;
-  width: 205px;
+  width: 180px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
