@@ -467,7 +467,7 @@ class MenuLeft extends Component {
               </div>
               <div className="content_menu">Caculator</div>
             </NavLink>
-            <NavLink
+            {/* <NavLink
               exact
               activeClassName="selected"
               to="/search-social"
@@ -482,7 +482,7 @@ class MenuLeft extends Component {
                 <i className="fas fa-globe-asia hover_icon"></i>
               </div>
               <div className="content_menu">Search Social</div>
-            </NavLink>
+            </NavLink> */}
             <NavLink
               exact
               activeClassName="selected"
