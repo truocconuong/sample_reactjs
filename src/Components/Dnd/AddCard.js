@@ -30,6 +30,14 @@ export default class AddCard extends Component {
       idJob: '',
       noteApproach: '',
       laneId: '',
+      facebook: '',
+      linkedin: '',
+      skype: '',
+      socialType: {
+        facebook: false,
+        linkedin: false,
+        skype: false
+      },
       candidates: [],
       candidatesPhone: [],
       jobSelected: {},
@@ -109,6 +117,7 @@ export default class AddCard extends Component {
 
   handleInputChangeEmail = (email) => {
     if (email !== '') {
+      email = email.replace(/ /g,'');
       const response = api.get(`/api/admin/candidate/user?email=${email}`)
       response.then((result) => {
         const candidates = _.map(result.data.candidate, candidate => {
@@ -150,7 +159,15 @@ export default class AddCard extends Component {
       emailSelected: {},
       laneSelected: {},
       phoneSelected: {},
-      errors: {}
+      errors: {},
+      facebook: '',
+      linkedin: '',
+      skype: '',
+      socialType: {
+        facebook: false,
+        linkedin: false,
+        skype: false
+      },
     })
   }
 
@@ -228,11 +245,27 @@ export default class AddCard extends Component {
   createCard = (e) => {
     e.preventDefault();
     const data = this.state;
-    const errors = this.validator.validate(data);
+    let errors = this.validator.validate(data);
     if (!this.props.isAddCardNoColumn) {
       delete data['laneId']
       delete errors['laneId']
     }
+    if (data.email !== '') {
+      delete errors['phone'];
+      delete errors['social'];
+    }
+
+    if (data.phone !== '') {
+      delete errors['email'];
+      delete errors['social'];
+    }
+
+    if (data.facebook !== '' || data.linkedin !== '' || data.skype !== '') {
+      delete errors['email'];
+      delete errors['phone'];
+      delete errors['social'];
+    }
+
     this.setState({
       errors: errors,
     });
@@ -245,6 +278,7 @@ export default class AddCard extends Component {
       delete data['emailSelected']
       delete data['phoneSelected']
       delete data['candidatesPhone']
+      delete data['socialType']
       this.props.createCardToLane(data);
       this.defaultState();
     }
@@ -252,7 +286,7 @@ export default class AddCard extends Component {
 
 
   async onChangeUploadHandler(event) {
-    const { name, nameJob , idJob} = this.state;
+    const { name, nameJob, idJob } = this.state;
     if (name === '' || nameJob === '') {
 
       toast(<CustomToast title={"You need to fill in all the information before uploading"} type={"error"} />, {
@@ -321,11 +355,21 @@ export default class AddCard extends Component {
     }
   }
 
+  toggleCheckBoxSocial = (e) => {
+    const name = e.target.name;
+    const { socialType } = this.state;
+    socialType[name] = !socialType[name];
+    this.setState({
+      socialType: socialType,
+      [name]: '',
+    })
+  }
+
   render() {
     const { errors } = this.state;
     const { isAddCardNoColumn, lanes } = this.props;
     return (
-      <Modal size="lg" show={this.props.show} onHide={()=>{
+      <Modal size="lg" show={this.props.show} onHide={() => {
         this.defaultState();
         this.props.onHide();
       }} centered>
@@ -400,8 +444,62 @@ export default class AddCard extends Component {
                     onInputChange={this.handleInputChangeEmail}
                     onChange={this.handleOnChangeEmail}
                     value={this.state.emailSelected}
-
                   />
+                </div>
+              </div>
+              <div className="form-group row">
+                <div className="col-lg-12">
+                  <div
+                    style={{ padding: "4px" }}
+                    className={
+                      errors.social ? 'social-group invalid-selected' : 'social-group'
+                    }
+                  >
+                    <label>Social </label>
+                    <span style={{ color: "red" }}>*</span>
+                    <div className="checkbox-inline checkbox-iniline-social">
+                      <label className="checkbox checkbox-lg">
+                        <input value={this.state.facebook} type="checkbox" onChange={this.toggleCheckBoxSocial} checked={this.state.socialType.facebook} name="facebook" />
+                        <span></span>
+                            Facebook
+                        </label>
+                      <label className="checkbox checkbox-lg">
+                        <input value={this.state.linkedin} type="checkbox" onChange={this.toggleCheckBoxSocial} checked={this.state.socialType.linkedin} name="linkedin" />
+                        <span></span>
+                          Linkedin
+                        </label>
+                      <label className="checkbox checkbox-lg">
+                        <input value={this.state.skype} type="checkbox" onChange={this.toggleCheckBoxSocial} checked={this.state.socialType.skype} name="skype" />
+                        <span></span>
+                            Skype
+                        </label>
+                    </div>
+                  </div>
+                  {this.state.socialType.facebook ? (
+                    <div className="form-group-social">
+                      <div className="input-group">
+                        <div className="input-group-prepend"><span className="input-group-text"><i className="la fab fa-facebook-square icon-lg"></i></span></div>
+                        <input onChange={this.handleInputChange} name="facebook" type="text" className="form-control" placeholder="Facebook" />
+                      </div>
+                    </div>
+                  ) : ''}
+                  {this.state.socialType.linkedin ? (
+                    <div className="form-group-social">
+                      <div className="input-group">
+                        <div className="input-group-prepend"><span className="input-group-text"><i className="la fab fa-linkedin icon-lg"></i></span></div>
+                        <input onChange={this.handleInputChange} name="linkedin" type="text" className="form-control" placeholder="Linkedin" />
+                      </div>
+                    </div>
+                  ) : ''}
+
+                  {this.state.socialType.skype ? (
+                    <div className="form-group-social">
+                      <div className="input-group">
+                        <div className="input-group-prepend"><span className="input-group-text"><i className="la fab fa-skype icon-lg"></i></span></div>
+                        <input onChange={this.handleInputChange} name="skype" type="text" className="form-control" placeholder="Skype" />
+                      </div>
+                    </div>
+                  ) : ''}
                 </div>
               </div>
 
@@ -471,7 +569,7 @@ export default class AddCard extends Component {
             </div>
           </form>
         </Modal.Body>
-      </Modal>
+      </Modal >
     );
   }
 }

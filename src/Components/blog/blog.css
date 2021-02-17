@@ -223,10 +223,10 @@
   padding: 15px;
   color: rgba(41, 41, 41, 1);
 }
-.editorClassName .rdw-image-center{
+.editorClassName .rdw-image-center {
   justify-content: flex-start;
 }
-.editorClassName .rdw-image-center img{
+.editorClassName .rdw-image-center img {
   width: 680px !important;
 }
 .toolbarClassName {
@@ -450,4 +450,8 @@ a.blog_row:hover {
 .login-form-cs {
   width: 100%;
   max-width: 450px;
+}
+
+.require_draft {
+  border-color: #f64e60;
 }

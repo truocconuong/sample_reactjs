@@ -54,6 +54,14 @@ class DetailCard extends Component {
       laneId: '',
       content: '',
       contentEdit: '',
+      facebook: '',
+      linkedin: '',
+      skype: '',
+      socialType: {
+        facebook: true,
+        linkedin: true,
+        skype: true
+      },
       openFormEditComment: false,
       openFormInputComment: false,
       comments: [],
@@ -163,7 +171,6 @@ class DetailCard extends Component {
     this.setState({
       [name]: value,
     });
-
     // this.props.update(e);
   }
 
@@ -309,6 +316,22 @@ class DetailCard extends Component {
       history: [],
     });
 
+    if (data.email !== '') {
+      delete errors['phone'];
+      delete errors['social'];
+    }
+
+    if (data.phone !== '') {
+      delete errors['email'];
+      delete errors['social'];
+    }
+
+    if (data.facebook !== '' || data.linkedin !== '' || data.skype !== '') {
+      delete errors['email'];
+      delete errors['phone'];
+      delete errors['social'];
+    }
+
     if (this.isEmpty(errors)) {
       const content = this.state;
       const data = {
@@ -323,7 +346,11 @@ class DetailCard extends Component {
         nameJob: content.nameJob,
         noteApproach: content.noteApproach,
         idJob: content.idJob,
-        laneId: content.laneId
+        laneId: content.laneId,
+        facebook: content.facebook,
+        linkedin: content.linkedin,
+        skype: content.skype,
+
       };
       this.props.updateCard(data);
     }
@@ -685,6 +712,63 @@ class DetailCard extends Component {
                   </div>
                 </div>
 
+
+                <div className="form-group row">
+                  <div className="col-lg-12">
+                    <div
+                      style={{padding:"4px"}}
+                      className={
+                        errors.social ? 'social-group invalid-selected' : 'social-group'
+                      }
+                    >
+                      <label>Social </label>
+                      <span style={{ color: "red" }}>*</span>
+                      {/* <div className="checkbox-inline checkbox-iniline-social">
+                      <label className="checkbox checkbox-lg">
+                        <input value={this.state.facebook} type="checkbox" onChange={this.toggleCheckBoxSocial} checked={this.state.socialType.facebook} name="facebook" />
+                        <span></span>
+                            Facebook
+                        </label>
+                      <label className="checkbox checkbox-lg">
+                        <input value={this.state.linkedin} type="checkbox" onChange={this.toggleCheckBoxSocial} checked={this.state.socialType.linkedin} name="linkedin" />
+                        <span></span>
+                          Linkedin
+                        </label>
+                      <label className="checkbox checkbox-lg">
+                        <input value={this.state.skype} type="checkbox" onChange={this.toggleCheckBoxSocial} checked={this.state.socialType.skype} name="skype" />
+                        <span></span>
+                            Skype
+                        </label>
+                    </div> */}
+                    </div>
+                    {this.state.socialType.facebook ? (
+                      <div className="form-group-social">
+                        <div className="input-group">
+                          <div className="input-group-prepend"><span className="input-group-text"><i className="la fab fa-facebook-square icon-lg"></i></span></div>
+                          <input value={data_detail.facebook} onChange={this.handleInputChange} name="facebook" type="text" className="form-control" placeholder="Facebook" />
+                        </div>
+                      </div>
+                    ) : ''}
+                    {this.state.socialType.linkedin ? (
+                      <div className="form-group-social">
+                        <div className="input-group">
+                          <div className="input-group-prepend"><span className="input-group-text"><i className="la fab fa-linkedin icon-lg"></i></span></div>
+                          <input value={data_detail.linkedin} onChange={this.handleInputChange} name="linkedin" type="text" className="form-control" placeholder="Linkedin" />
+                        </div>
+                      </div>
+                    ) : ''}
+
+                    {this.state.socialType.skype ? (
+                      <div className="form-group-social">
+                        <div className="input-group">
+                          <div className="input-group-prepend"><span className="input-group-text"><i className="la fab fa-skype icon-lg"></i></span></div>
+                          <input value={data_detail.skype} onChange={this.handleInputChange} name="skype" type="text" className="form-control" placeholder="Skype" />
+                        </div>
+                      </div>
+                    ) : ''}
+                  </div>
+                </div>
+
                 <div className="form-group row">
                   <div className="col-lg-6">
                     <label>Phone </label>
@@ -1025,7 +1109,7 @@ class DetailCard extends Component {
                         <a onClick={() => {
                           this.toggleFormEditContent(comment);
                         }} id={`action-comment-item${comment.id}`} className="action-comment-item">Edit</a>
-                         {/* - <a onClick={() => {
+                        {/* - <a onClick={() => {
                           this.removeComment(comment.id)
                         }} className="action-comment-item">Delete</a> */}
                       </span>

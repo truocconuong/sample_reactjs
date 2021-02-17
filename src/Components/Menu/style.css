@@ -54,9 +54,8 @@ a.row_icon {
   justify-content: space-between;
   padding-top: 50px;
   padding-left: 27.5px;
-
   transition: width 0.35s cubic-bezier(0.57, 0.06, 0.58, 0.96);
-  overflow: hidden;
+  overflow-x: hidden;
   overflow-y: auto;
 }
 .menu_extend {

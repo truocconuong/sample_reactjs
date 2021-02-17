@@ -36,7 +36,7 @@ export default class Login extends Component {
     this.setState({
       isLoading: true,
     });
-    auth.login(this.state.email, this.state.password, (login) => {
+    auth.login(this.state.email, this.state.password, (login, role) => {
       if (login) {
         toast(<CustomToast title={"Login Success!"} />, {
           position: toast.POSITION.BOTTOM_RIGHT,
@@ -67,7 +67,11 @@ export default class Login extends Component {
           self.setState({
             isLoading: false,
           });
-          window.location.reload();
+          if(role==="Bloger"){
+            window.location.assign('/list-blog')
+          }else{
+            window.location.reload();
+          }
         }, 500);
       } else {
         toast.error("Email or password wrong !", {
