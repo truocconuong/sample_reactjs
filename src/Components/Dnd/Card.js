@@ -439,10 +439,14 @@ class Card extends Component {
                                     this.props.card.content.labels.map(label => {
                                       return (
                                         <div title={label.title} style={{ background: label.background }} className="card-label card-label-item">
-                                          <span onClick={(e) => {
-                                            this.props.removeLabel(label)
-                                            e.stopPropagation();
-                                          }} className="remove-label"><i className='fas fa-times custom-label-remove'></i></span>
+                                          {
+                                            this.props.role !== roleName.DIRECTOR ? (
+                                              <span onClick={(e) => {
+                                                this.props.removeLabel(label)
+                                                e.stopPropagation();
+                                              }} className="remove-label"><i className='fas fa-times custom-label-remove'></i></span>
+                                            ) : ''
+                                          }
                                           <span className="label-text">
                                             {label.title}
                                           </span>
