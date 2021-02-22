@@ -13,6 +13,8 @@ import { defaultAva, domainServer } from "../../utils/config";
 import * as moment from 'moment'
 import reactCSS from 'reactcss'
 import { SketchPicker, ChromePicker } from 'react-color'
+import { ToastContainer, toast, Zoom } from "react-toastify";
+import CustomToast from "../common/CustomToast";
 
 const Container = styled.div`
   margin-bottom: 8px;
@@ -61,6 +63,7 @@ class Card extends Component {
         }
       ],
       laneSelected: {},
+      labelSelected: {},
       showAction: '',
       background: '#f9f9f9',
     };
@@ -133,7 +136,12 @@ class Card extends Component {
   }
 
   handleClick = () => {
-    this.setState({ displayColorPicker: !this.state.displayColorPicker })
+    const { nameLabel } = this.state;
+    const { labels } = this.props;
+    const checkExistLabel = _.some(labels, { label: nameLabel });
+    if (!checkExistLabel) {
+      this.setState({ displayColorPicker: !this.state.displayColorPicker });
+    }
   };
 
   handleClose = () => {
@@ -237,7 +245,8 @@ class Card extends Component {
   defaultLabel = () => {
     this.setState({
       nameLabel: '',
-      background: ''
+      background: '',
+      labelSelected: {}
     })
   }
 
@@ -277,13 +286,60 @@ class Card extends Component {
         <div className="form-move-card-content">
           <div class="form-group">
             <label>Name:</label>
-            <input name="nameLabel" onChange={(e) => {
+            <Select
+              name="option"
+              options={this.props.labels}
+              value={this.state.labelSelected}
+              onInputChange={(e) => {
+                if (e !== '') {
+                  this.setState({
+                    labelSelected: {
+                      value: e,
+                      label: e
+                    },
+                    nameLabel: e
+                  })
+                }
+              }}
+              onChange={(e) => {
+
+                const { label } = e;
+
+                const labelExists = this.props.card.content.labels;
+
+                const checkExistLabel = _.some(labelExists, { title: label });
+                if (checkExistLabel) {
+                  toast(<CustomToast title={"Label already exists on the card"} type={"error"} />, {
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 3000,
+                    className: "toast_login",
+                    closeButton: false,
+                    hideProgressBar: true,
+                    newestOnTop: true,
+                    closeOnClick: true,
+                    rtl: false,
+                    pauseOnFocusLoss: true,
+                    draggable: true,
+                    pauseOnHover: true,
+                    transition: Zoom,
+                  });
+                } else {
+                  this.setState({
+                    labelSelected: e,
+                    nameLabel: e.label,
+                    background: e.background
+                  })
+                }
+              }}
+            />
+
+            {/* <input name="nameLabel" onChange={(e) => {
               const name = e.target.name;
               const value = e.target.value;
               this.setState({
                 [name]: value
               })
-            }} type="text" class="form-control" placeholder="Enter name label" />
+            }} type="text" class="form-control" placeholder="Enter name label" /> */}
           </div>
           <div class="form-group">
             <div className="style-make-color">
@@ -342,6 +398,7 @@ class Card extends Component {
     if (!_.isEmpty(this.props.users)) {
       usersTeam.push(...this.props.users);
     }
+
     return (
       <Draggable draggableId={this.props.card.id} index={this.props.index}>
         {(provided) => (
@@ -353,6 +410,7 @@ class Card extends Component {
             <div>
               <PopoverPop popperClassName="popover-modal-card" trigger="legacy" placement="bottom" isOpen={this.state.showAddMember} target={`Popover${this.props.card.id}`} toggle={this.toggleAddMember}>
                 <PopoverBody>
+                <ToastContainer closeOnClick autoClose={1000} rtl={false} />
                   <ul className="navi navi-hover navi-selected-ul">
                     <li className="navi-header font-weight-bold py-4">
                       <span className="font-size-lg">Toggle member to card:</span>
