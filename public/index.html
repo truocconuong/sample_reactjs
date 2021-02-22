@@ -1,80 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="/img/favoicon-8.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Talent Acquisition Portal" />
-    <!-- css -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
 
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/img/newlogo.png">
-    <!--begin::Fonts-->
-    <!-- <link
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="/img/favoicon-8.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Talent Acquisition Portal" />
+  <!-- css -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
+
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/newlogo.png">
+  <!--begin::Fonts-->
+  <!-- <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700"
     /> -->
-    <!--end::Fonts-->
-    <!--begin::Global Theme Styles(used by all pages)-->
-   
-    <link href="/css/plugins.bundle1ff3.css" rel="stylesheet" type="text/css" />
-    <link href="/css/wizard.css" rel="stylesheet" type="text/css" />
-    <link
-      href="/css/prismjs.bundle1ff3.css?v=7.1.2"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      href="/css/style.bundle1ff3.css?v=7.1.2"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <!-- slick css -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      charset="UTF-8"
-      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
-    />
-    <!-- end slick css -->
-    <!-- date picker -->
-    <link href="/css/picker.min.css" rel="stylesheet" type="text/css" /> 
-    <link href="/css/style.css" rel="stylesheet" type="text/css" />
-    <!--end::Global Theme Styles-->
-    <!-- end css -->
+  <!--end::Fonts-->
+  <!--begin::Global Theme Styles(used by all pages)-->
 
-    <!-- <script src="https://use.fontawesome.com/bca6940579.js"></script> -->
+  <link href="/css/plugins.bundle1ff3.css" rel="stylesheet" type="text/css" />
+  <link href="/css/wizard.css" rel="stylesheet" type="text/css" />
+  <link href="/css/prismjs.bundle1ff3.css?v=7.1.2" rel="stylesheet" type="text/css" />
+  <link href="/css/style.bundle1ff3.css?v=7.1.2" rel="stylesheet" type="text/css" />
+  <!-- slick css -->
+  <link rel="stylesheet" type="text/css" charset="UTF-8"
+    href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
+  <!-- end slick css -->
+  <!-- date picker -->
+  <link href="/css/picker.min.css" rel="stylesheet" type="text/css" />
+  <link href="/css/style.css" rel="stylesheet" type="text/css" />
+  <!--end::Global Theme Styles-->
+  <!-- end css -->
 
-    <title>Talent Acquisition Portal</title>
-  </head>
+  <!-- <script src="https://use.fontawesome.com/bca6940579.js"></script> -->
 
-  <body>
-    <div id="root"></div>
+  <title>Talent Acquisition Portal</title>
+</head>
 
-    
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('worker.js').then(function(registration) {
-            console.log('Worker registration successful', registration.scope);
-          }, function(err) {
-            console.log('Worker registration failed', err);
-          }).catch(function(err) {
-            console.log(err);
-          });
+<body>
+  <div id="root"></div>
+
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('worker.js').then(function (registration) {
+          console.log('Worker registration successful', registration.scope);
+        }, function (err) {
+          console.log('Worker registration failed', err);
+        }).catch(function (err) {
+          console.log(err);
         });
-      } else {
-        console.log('Service Worker is not supported by browser.');
-      }
-    </script>
-  </body>
+      });
+    } else {
+      console.log('Service Worker is not supported by browser.');
+    }
+  </script>
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-analytics.js"></script>
+
+  <script>
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    var firebaseConfig = {
+      apiKey: "AIzaSyDqXqnEO7ejl23K26PklHqDZIH-8BePqvE",
+      authDomain: "fetch-portal.firebaseapp.com",
+      projectId: "fetch-portal",
+      storageBucket: "fetch-portal.appspot.com",
+      messagingSenderId: "367501656046",
+      appId: "1:367501656046:web:6aa3d8660e85be972058ff",
+      measurementId: "G-MWZ5YEJE5G"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+  </script>
+
+
+</body>
+
 </html>
