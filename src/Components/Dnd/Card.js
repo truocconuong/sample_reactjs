@@ -288,6 +288,7 @@ class Card extends Component {
             <label>Name:</label>
             <Select
               name="option"
+              maxMenuHeight={100}
               options={this.props.labels}
               value={this.state.labelSelected}
               onInputChange={(e) => {
