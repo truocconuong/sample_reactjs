@@ -77,8 +77,6 @@ class Column extends Component {
   };
 
   // tracking scroll
-
-
   componentDidMount() {
     this.scrollCol = document.getElementById(this.props.column.id);
   }
@@ -147,6 +145,7 @@ class Column extends Component {
                     background={this.props.column.background}
                     createLabel={this.props.createLabel}
                     removeLabel={this.props.removeLabel}
+                    labels = {this.props.labels}
                   />
                 );
               })}
