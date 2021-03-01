@@ -362,3 +362,9 @@ main {
 .cs_height_card {
   height: calc(100% - 25px);
 }
+.dot_client {
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
