@@ -778,7 +778,8 @@ class JobDetail extends Component {
                           <div className="card-title style-title-job">
                             <div className="contain-title-job dr_col">
                               <div className="title_job_detail">
-                                <h3 className="m-0 pt-2">{data.title}</h3>
+                                <h3 className="m-0 ">{data.title}</h3>
+                                <div className="text-muted font-weight-bold client_name">{data.client? data.client.name: null}</div>
                               </div>
                               <div className="wrap_edit_job">
                                 <div className="mr-2">

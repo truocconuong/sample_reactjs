@@ -12,7 +12,7 @@ import {
   PopoverBody,
   UncontrolledCollapse,
   CardBody,
-  Card
+  Card,
 } from "reactstrap";
 import _ from "lodash";
 import roleName from "../../utils/const";
@@ -40,32 +40,32 @@ class DetailCard extends Component {
       showAddMember: false,
       errors: {},
       history: [],
-      name: '',
-      position: '',
-      clientName: '',
-      phone: '',
-      email: '',
-      location: '',
-      approachDate: '',
-      cv: '',
-      nameJob: '',
-      noteApproach: '',
-      idJob: '',
-      laneId: '',
-      content: '',
-      contentEdit: '',
-      facebook: '',
-      linkedin: '',
-      skype: '',
+      name: "",
+      position: "",
+      clientName: "",
+      phone: "",
+      email: "",
+      location: "",
+      approachDate: "",
+      cv: "",
+      nameJob: "",
+      noteApproach: "",
+      idJob: "",
+      laneId: "",
+      content: "",
+      contentEdit: "",
+      facebook: "",
+      linkedin: "",
+      skype: "",
       socialType: {
         facebook: true,
         linkedin: true,
-        skype: true
+        skype: true,
       },
       openFormEditComment: false,
       openFormInputComment: false,
       comments: [],
-      laneSelected: {}
+      laneSelected: {},
     };
     this.addMember = [];
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -75,30 +75,31 @@ class DetailCard extends Component {
     this.showHistoryCard = this.showHistoryCard.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.renderRowActivity = this.renderRowActivity.bind(this);
+    this.removeUserCard = this.removeUserCard.bind(this);
   }
   toggleFormEditContent = (comment) => {
     this.setState({
-      [`contentEdit${comment.id}`]: comment.content
-    })
-  }
+      [`contentEdit${comment.id}`]: comment.content,
+    });
+  };
 
   setDefaultCommentBox = () => {
+    console.log("Da vao dayyyy")
     this.setState({
       openFormInputComment: false,
-    })
-  }
+    });
+  };
   openFormInputComment = () => {
     this.setState({
-      openFormInputComment: true
-    })
-  }
+      openFormInputComment: true,
+    });
+  };
   handleOnChangeLane = (e) => {
     this.setState({
       laneSelected: e,
-      laneId: e.value
+      laneId: e.value,
     });
-  }
-
+  };
 
   async showHistoryCard() {
     try {
@@ -133,6 +134,7 @@ class DetailCard extends Component {
   };
 
   toggleDeleteUserPop(index) {
+    console.log("da vao ham xoa")
     let self = this;
     const isShow = this.state.isOpenDeleteUserPop[index];
     let currentIsOpenDeleteUserPop = new Array(10).fill(false);
@@ -174,8 +176,10 @@ class DetailCard extends Component {
     // this.props.update(e);
   }
 
-  removeUserCard = (card_id, user_id, index) => {
-    this.props.removeMemberToCard(card_id, user_id);
+  removeUserCard = async (card_id, user_id, index) => {
+    await this.props.removeMemberToCard(card_id, user_id);
+    await this.toggleDeleteUserPop(index);
+    
   };
 
   addMemberToCard = (card_id, user) => {
@@ -290,8 +294,8 @@ class DetailCard extends Component {
 
   updatePropsLinkCv = (value) => {
     this.setState({
-      linkCv: value
-    })
+      linkCv: value,
+    });
     // const data = {
     //   target: {
     //     name: "linkCv",
@@ -316,20 +320,20 @@ class DetailCard extends Component {
       history: [],
     });
 
-    if (data.email !== '') {
-      delete errors['phone'];
-      delete errors['social'];
+    if (data.email !== "") {
+      delete errors["phone"];
+      delete errors["social"];
     }
 
-    if (data.phone !== '') {
-      delete errors['email'];
-      delete errors['social'];
+    if (data.phone !== "") {
+      delete errors["email"];
+      delete errors["social"];
     }
 
-    if (data.facebook !== '' || data.linkedin !== '' || data.skype !== '') {
-      delete errors['email'];
-      delete errors['phone'];
-      delete errors['social'];
+    if (data.facebook !== "" || data.linkedin !== "" || data.skype !== "") {
+      delete errors["email"];
+      delete errors["phone"];
+      delete errors["social"];
     }
 
     if (this.isEmpty(errors)) {
@@ -350,7 +354,6 @@ class DetailCard extends Component {
         facebook: content.facebook,
         linkedin: content.linkedin,
         skype: content.skype,
-
       };
       this.props.updateCard(data);
     }
@@ -364,35 +367,33 @@ class DetailCard extends Component {
   }
 
   componentWillReceiveProps = (props) => {
-    this.setDefaultCommentBox()
+    // console.log(props.data.content)
+    this.setDefaultCommentBox();
     const content = props.data_detail.content;
     const cardIdOld = this.state.cardId;
     content.cardId = props.data_detail.id;
     this.setState(content, () => {
       if (cardIdOld !== content.cardId) {
-        this.getAllCommentOfCard(content.cardId)
+        this.getAllCommentOfCard(content.cardId);
       }
     });
   };
-
 
   getAllCommentOfCard = async (cardId) => {
     const response = await api.get(`/api/v1/comment/${cardId}/card`);
     if (response) {
       const comments = response.data.list;
       this.setState({
-        comments: comments
-      })
+        comments: comments,
+      });
     }
-  }
-
-
+  };
 
   renderRowActivity(e, index) {
     // console.log(e.content)
     if (e.type == "update_card") {
       let content = JSON.parse(e.content);
-      console.log(content)
+      console.log(content);
       return (
         <div className="row_history" key={index}>
           <div className="symbol symbol-50 symbol-light ">
@@ -410,18 +411,15 @@ class DetailCard extends Component {
           </div>
           <div className="wrap_left_content_history">
             <div className="conten_history">
-              <span className="name_history">
-                {e.User.name}
-              </span>
+              <span className="name_history">{e.User.name}</span>
               {` has update this card:`}
-
             </div>
             <ul>
               {content.map((e, i) => {
                 return (
                   <li className="cs_update_history" key={i}>
                     <span className="key_history">{`${e.path}: `}</span>
-                    {e.lhs} <span className="change_to">change to</span>  {e.rhs}
+                    {e.lhs} <span className="change_to">change to</span> {e.rhs}
                     {/* {`${e.lhs} => ${e.rhs}`} */}
                   </li>
                 );
@@ -432,7 +430,6 @@ class DetailCard extends Component {
             </div>
           </div>
         </div>
-
       );
     } else {
       return (
@@ -468,8 +465,8 @@ class DetailCard extends Component {
     const cardId = this.props.data_detail.id;
     const { comments } = this.state;
     const data = {
-      content: this.state.content
-    }
+      content: this.state.content,
+    };
     const response = await api.post(`/api/v1/comment/${cardId}/card`, data);
     if (response) {
       const comment = response.data.comment;
@@ -477,47 +474,48 @@ class DetailCard extends Component {
       this.setState({
         comments,
         openFormInputComment: false,
-        content: ''
-      })
+        content: "",
+      });
     }
-  }
+  };
 
   removeComment = async (id) => {
     const { comments } = this.state;
     const response = await api.delete(`/api/v1/comment/${id}`);
     if (response) {
       this.setState({
-        comments: _.filter(comments, comment => comment.id !== id)
-      })
+        comments: _.filter(comments, (comment) => comment.id !== id),
+      });
     }
-  }
+  };
 
   handleInputChangeEditContent = (e, comment) => {
-    const value = e.target.value
+    const value = e.target.value;
     this.setState({
-      [`contentEdit${comment.id}`]: value
-    })
-  }
+      [`contentEdit${comment.id}`]: value,
+    });
+  };
   editComment = async (comment) => {
     const content = this.state[`contentEdit${comment.id}`];
     const { comments } = this.state;
     const item = {
-      content: content
-    }
-    const response = await api.patch(`/api/v1/comment/${comment.id}`, item)
+      content: content,
+    };
+    const response = await api.patch(`/api/v1/comment/${comment.id}`, item);
     if (response) {
       for (const commentState of comments) {
         if (commentState.id === comment.id) {
-          commentState.content = content
+          commentState.content = content;
         }
       }
       this.setState({
-        comments: comments
-      })
+        comments: comments,
+      });
     }
-  }
+  };
 
   render() {
+    console.log("da render")
     const errors = this.state.errors;
     const users = [];
     let usersTeam = [];
@@ -525,6 +523,7 @@ class DetailCard extends Component {
     if (this.props.show) {
       users.push(...this.props.data.content.user);
     }
+    console.log(this.props.data.content.user)
     if (!_.isEmpty(this.props.users)) {
       usersTeam.push(...this.props.users);
     }
@@ -535,8 +534,7 @@ class DetailCard extends Component {
     return (
       <Modal size="lg" show={this.props.show} onHide={this.hideModal} centered>
         <Modal.Header closeButton>
-          <div>
-          </div>
+          <div></div>
           <div className="card-detail-header">
             <div className="detail-header__title">
               <h4>Update card</h4>
@@ -620,8 +618,8 @@ class DetailCard extends Component {
                   </PopoverPop>{" "}
                 </div>
               ) : (
-                  ""
-                )}
+                ""
+              )}
             </div>
           </div>
         </Modal.Header>
@@ -635,7 +633,9 @@ class DetailCard extends Component {
                   <input
                     type="text"
                     value={data_detail.name}
-                    disabled={this.props.role === roleName.DIRECTOR ? true : false}
+                    disabled={
+                      this.props.role === roleName.DIRECTOR ? true : false
+                    }
                     onChange={this.handleInputChange.bind(this)}
                     name="name"
                     className="form-control"
@@ -647,7 +647,9 @@ class DetailCard extends Component {
                   <label>Name job </label>
                   <span style={{ color: "red" }}>*</span>
                   <Select
-                    isDisabled={this.props.role === roleName.DIRECTOR ? true : false}
+                    isDisabled={
+                      this.props.role === roleName.DIRECTOR ? true : false
+                    }
                     name="option"
                     options={this.props.jobs}
                     value={data_detail.jobSelected}
@@ -659,7 +661,9 @@ class DetailCard extends Component {
                     <label>Column</label>
                     <span style={{ color: "red" }}>*</span>
                     <Select
-                      isDisabled={this.props.role === roleName.DIRECTOR ? true : false}
+                      isDisabled={
+                        this.props.role === roleName.DIRECTOR ? true : false
+                      }
                       name="option"
                       options={this.props.lanes}
                       value={data_detail.laneSelected}
@@ -697,7 +701,9 @@ class DetailCard extends Component {
                     <label>Email </label>
                     <span style={{ color: "red" }}>*</span>
                     <input
-                      disabled={this.props.role === roleName.DIRECTOR ? true : false}
+                      disabled={
+                        this.props.role === roleName.DIRECTOR ? true : false
+                      }
                       value={data_detail.email}
                       type="email"
                       onChange={this.handleInputChange.bind(this)}
@@ -712,13 +718,14 @@ class DetailCard extends Component {
                   </div>
                 </div>
 
-
                 <div className="form-group row">
                   <div className="col-lg-12">
                     <div
-                      style={{padding:"4px"}}
+                      style={{ padding: "4px" }}
                       className={
-                        errors.social ? 'social-group invalid-selected' : 'social-group'
+                        errors.social
+                          ? "social-group invalid-selected"
+                          : "social-group"
                       }
                     >
                       <label>Social </label>
@@ -744,28 +751,67 @@ class DetailCard extends Component {
                     {this.state.socialType.facebook ? (
                       <div className="form-group-social">
                         <div className="input-group">
-                          <div className="input-group-prepend"><span className="input-group-text"><i className="la fab fa-facebook-square icon-lg"></i></span></div>
-                          <input value={data_detail.facebook} onChange={this.handleInputChange} name="facebook" type="text" className="form-control" placeholder="Facebook" />
+                          <div className="input-group-prepend">
+                            <span className="input-group-text">
+                              <i className="la fab fa-facebook-square icon-lg"></i>
+                            </span>
+                          </div>
+                          <input
+                            value={data_detail.facebook}
+                            onChange={this.handleInputChange}
+                            name="facebook"
+                            type="text"
+                            className="form-control"
+                            placeholder="Facebook"
+                          />
                         </div>
                       </div>
-                    ) : ''}
+                    ) : (
+                      ""
+                    )}
                     {this.state.socialType.linkedin ? (
                       <div className="form-group-social">
                         <div className="input-group">
-                          <div className="input-group-prepend"><span className="input-group-text"><i className="la fab fa-linkedin icon-lg"></i></span></div>
-                          <input value={data_detail.linkedin} onChange={this.handleInputChange} name="linkedin" type="text" className="form-control" placeholder="Linkedin" />
+                          <div className="input-group-prepend">
+                            <span className="input-group-text">
+                              <i className="la fab fa-linkedin icon-lg"></i>
+                            </span>
+                          </div>
+                          <input
+                            value={data_detail.linkedin}
+                            onChange={this.handleInputChange}
+                            name="linkedin"
+                            type="text"
+                            className="form-control"
+                            placeholder="Linkedin"
+                          />
                         </div>
                       </div>
-                    ) : ''}
+                    ) : (
+                      ""
+                    )}
 
                     {this.state.socialType.skype ? (
                       <div className="form-group-social">
                         <div className="input-group">
-                          <div className="input-group-prepend"><span className="input-group-text"><i className="la fab fa-skype icon-lg"></i></span></div>
-                          <input value={data_detail.skype} onChange={this.handleInputChange} name="skype" type="text" className="form-control" placeholder="Skype" />
+                          <div className="input-group-prepend">
+                            <span className="input-group-text">
+                              <i className="la fab fa-skype icon-lg"></i>
+                            </span>
+                          </div>
+                          <input
+                            value={data_detail.skype}
+                            onChange={this.handleInputChange}
+                            name="skype"
+                            type="text"
+                            className="form-control"
+                            placeholder="Skype"
+                          />
                         </div>
                       </div>
-                    ) : ''}
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
 
@@ -774,7 +820,9 @@ class DetailCard extends Component {
                     <label>Phone </label>
                     <span style={{ color: "red" }}>*</span>
                     <input
-                      disabled={this.props.role === roleName.DIRECTOR ? true : false}
+                      disabled={
+                        this.props.role === roleName.DIRECTOR ? true : false
+                      }
                       value={data_detail.phone}
                       type="text"
                       onChange={this.handleInputChange.bind(this)}
@@ -790,7 +838,9 @@ class DetailCard extends Component {
                   <div className="col-lg-6">
                     <label>Approach Date </label>
                     <input
-                      disabled={this.props.role === roleName.DIRECTOR ? true : false}
+                      disabled={
+                        this.props.role === roleName.DIRECTOR ? true : false
+                      }
                       value={data_detail.approachDate}
                       type="date"
                       onChange={this.handleInputChange.bind(this)}
@@ -804,7 +854,9 @@ class DetailCard extends Component {
                 <div className="form-group">
                   <label>Position </label>
                   <input
-                    disabled={this.props.role === roleName.DIRECTOR ? true : false}
+                    disabled={
+                      this.props.role === roleName.DIRECTOR ? true : false
+                    }
                     value={data_detail.position ? data_detail.position : ""}
                     type="text"
                     onChange={this.handleInputChange.bind(this)}
@@ -819,7 +871,9 @@ class DetailCard extends Component {
                   <div className="input-group">
                     <input
                       type="text"
-                      disabled={this.props.role === roleName.DIRECTOR ? true : false}
+                      disabled={
+                        this.props.role === roleName.DIRECTOR ? true : false
+                      }
                       value={data_detail.linkCv ? data_detail.linkCv : ""}
                       onChange={this.handleInputChange.bind(this)}
                       name="linkCv"
@@ -853,7 +907,9 @@ class DetailCard extends Component {
                   <label htmlFor="exampleTextarea">Approach Point </label>
                   <span style={{ color: "red" }}>*</span>
                   <textarea
-                    disabled={this.props.role === roleName.DIRECTOR ? true : false}
+                    disabled={
+                      this.props.role === roleName.DIRECTOR ? true : false
+                    }
                     value={
                       data_detail.noteApproach ? data_detail.noteApproach : ""
                     }
@@ -913,27 +969,23 @@ class DetailCard extends Component {
                         </div>
                         <ul className="pop-over-list">
                           {this.props.role === roleName.LEADER ? (
-                            this.props.userId !== user.id ? (
-                              <li>
-                                <a
-                                  onClick={() =>
-                                    this.removeUserCard(
-                                      this.props.data.id,
-                                      user.id,
-                                      index
-                                    )
-                                  }
-                                  className="js-remove-member"
-                                >
-                                  Remove from Card
-                                </a>
-                              </li>
-                            ) : (
-                                ""
-                              )
+                            <li>
+                              <a
+                                onClick={() =>
+                                  this.removeUserCard(
+                                    this.props.data.id,
+                                    user.id,
+                                    index
+                                  )
+                                }
+                                className="js-remove-member"
+                              >
+                                Remove from Card
+                              </a>
+                            </li>
                           ) : (
-                              ""
-                            )}
+                            ""
+                          )}
                         </ul>
                       </Popover.Content>
                     </Popover>
@@ -969,8 +1021,8 @@ class DetailCard extends Component {
                   users={this.props.users}
                 ></ModalAddMember>
               ) : (
-                  ""
-                )}
+                ""
+              )}
             </div>
           </div>
 
@@ -983,13 +1035,13 @@ class DetailCard extends Component {
                 {convertDateLocal(data_detail.interview.timeInterview)}
               </Button>
             ) : (
-                <Button
-                  variant="btn btn-success btn-interview"
-                  onClick={() => this.props.toggleDetailCardAndInterview()}
-                >
-                  Create Interview
-                </Button>
-              )}
+              <Button
+                variant="btn btn-success btn-interview"
+                onClick={() => this.props.toggleDetailCardAndInterview()}
+              >
+                Create Interview
+              </Button>
+            )}
 
             {data_detail.isRefinePdf ? (
               <Link
@@ -999,8 +1051,8 @@ class DetailCard extends Component {
                 Refined CV
               </Link>
             ) : (
-                ""
-              )}
+              ""
+            )}
             {data_detail.linkCv ? (
               <Button
                 variant="primary btn-interview"
@@ -1009,15 +1061,15 @@ class DetailCard extends Component {
                 Raw CV
               </Button>
             ) : (
-                ""
-              )}
+              ""
+            )}
             {this.props.role !== roleName.DIRECTOR ? (
               <Button variant="primary btn-interview" onClick={this.updateCard}>
                 Save
               </Button>
             ) : (
-                ""
-              )}
+              ""
+            )}
             <Button variant="light" onClick={this.hideModal}>
               Close
             </Button>
@@ -1033,21 +1085,20 @@ class DetailCard extends Component {
               className="btn btn-secondary btn-sm"
               onClick={this.showHistoryCard.bind(this)}
             >
-              {`${this.state.isShowHistory ? "Close" : "Show"
-                }`}
+              {`${this.state.isShowHistory ? "Close" : "Show"}`}
             </button>
           </div>
           <div
-            className={`wrap_row_history ${this.state.isShowHistory ? "active_history" : ""
-              }`}
+            className={`wrap_row_history ${
+              this.state.isShowHistory ? "active_history" : ""
+            }`}
           >
-            {this.state.isShowHistory ? (
-              this.state.history.map((e, index) => {
-                return this.renderRowActivity(e, index);
-
-              })
-            ) : null}
-            { }
+            {this.state.isShowHistory
+              ? this.state.history.map((e, index) => {
+                  return this.renderRowActivity(e, index);
+                })
+              : null}
+            {}
           </div>
           <div className="wrap-comment-card">
             <div className="wrap_icon_history">
@@ -1070,19 +1121,41 @@ class DetailCard extends Component {
                   />
                 </span>
               </div>
-              <div className={
-                this.state.openFormInputComment ? 'height-open-form-comment comment-box' : 'height-default-form-comment comment-box'
-              }>
-                <textarea onClick={(e) => {
-                  e.stopPropagation();
-                  this.openFormInputComment();
-                }} onChange={this.handleInputChange} value={this.state.content} name="content" placeholder="Write a comment ..." className="comment-box-input"></textarea>
+              <div
+                className={
+                  this.state.openFormInputComment
+                    ? "height-open-form-comment comment-box"
+                    : "height-default-form-comment comment-box"
+                }
+              >
+                <textarea
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    this.openFormInputComment();
+                  }}
+                  onChange={this.handleInputChange}
+                  value={this.state.content}
+                  name="content"
+                  placeholder="Write a comment ..."
+                  className="comment-box-input"
+                ></textarea>
                 <div className="action-comment">
-                  <button onClick={this.createComment} disabled={this.state.content === '' ? true : false} type="button" className={this.state.content === '' ? 'btn btn-light  button-save-comment' : 'btn btn-primary button-save-comment'}>Save</button>
+                  <button
+                    onClick={this.createComment}
+                    disabled={this.state.content === "" ? true : false}
+                    type="button"
+                    className={
+                      this.state.content === ""
+                        ? "btn btn-light  button-save-comment"
+                        : "btn btn-primary button-save-comment"
+                    }
+                  >
+                    Save
+                  </button>
                 </div>
               </div>
             </div>
-            {this.state.comments.map(comment => (
+            {this.state.comments.map((comment) => (
               <div className="comment-card-content">
                 <div className="content-item">
                   <div className="symbol symbol-50 symbol-light ">
@@ -1099,39 +1172,62 @@ class DetailCard extends Component {
                     </span>
                   </div>
                   <div className="name-comment">
-                    <span className="font-weight-name">{comment.User.name}</span>
-                    <span>{moment(comment.updatedAt).format('DD/MM/YYYY hh:mm')}</span>
+                    <span className="font-weight-name">
+                      {comment.User.name}
+                    </span>
+                    <span>
+                      {moment(comment.updatedAt).format("DD/MM/YYYY hh:mm")}
+                    </span>
                     <div className="name-comment-content">
                       {comment.content}
                     </div>
                     <div className="action-comment-content">
                       <span>
-                        <a onClick={() => {
-                          this.toggleFormEditContent(comment);
-                        }} id={`action-comment-item${comment.id}`} className="action-comment-item">Edit</a>
+                        <a
+                          onClick={() => {
+                            this.toggleFormEditContent(comment);
+                          }}
+                          id={`action-comment-item${comment.id}`}
+                          className="action-comment-item"
+                        >
+                          Edit
+                        </a>
                         {/* - <a onClick={() => {
                           this.removeComment(comment.id)
                         }} className="action-comment-item">Delete</a> */}
                       </span>
                     </div>
-                    <UncontrolledCollapse toggler={`#${`action-comment-item${comment.id}`}`}>
+                    <UncontrolledCollapse
+                      toggler={`#${`action-comment-item${comment.id}`}`}
+                    >
                       <div className="height-open-form-comment comment-box-edit">
-                        <textarea onChange={(e) => {
-                          this.handleInputChangeEditContent(e, comment)
-                        }} value={`${this.state[`contentEdit${comment.id}`]}`} defaultValue={comment.content} name="contentEdit" placeholder="Write a comment ..." className="comment-box-input"></textarea>
+                        <textarea
+                          onChange={(e) => {
+                            this.handleInputChangeEditContent(e, comment);
+                          }}
+                          value={`${this.state[`contentEdit${comment.id}`]}`}
+                          defaultValue={comment.content}
+                          name="contentEdit"
+                          placeholder="Write a comment ..."
+                          className="comment-box-input"
+                        ></textarea>
                         <div className="action-comment">
-                          <button onClick={() => {
-                            this.editComment(comment)
-                          }} type="button" className="btn btn-primary button-save-comment">Save</button>
+                          <button
+                            onClick={() => {
+                              this.editComment(comment);
+                            }}
+                            type="button"
+                            className="btn btn-primary button-save-comment"
+                          >
+                            Save
+                          </button>
                         </div>
                       </div>
                     </UncontrolledCollapse>
                   </div>
                 </div>
               </div>
-
             ))}
-
           </div>
         </div>
       </Modal>
