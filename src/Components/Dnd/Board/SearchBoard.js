@@ -21,6 +21,15 @@ class SearchBoard extends Component {
         })
     }
 
+    setDefaultState = () => {
+        this.setState({
+            showFormSeach: false,
+            search: '',
+            isLoadingMember: true,
+            cards: []
+        })
+    }
+
     handleChangeInput = (e) => {
         const name = e.target.name;
         const value = e.target.value;
@@ -90,7 +99,8 @@ class SearchBoard extends Component {
                         <div onClick={() => {
                             // this.setDefaultSearch();
                             this.toggleFormSearch();
-                            this.props.searchCardDetail(card)
+                            this.props.searchCardDetail(card);
+                            this.setDefaultState();
                         }} className="search-user" key={index}>
                             <div className="chay-ra-an-dam">
                                 <div className="card card-custom gutter-b bg-diagonal bg-diagonal-light-primary">
