@@ -87,9 +87,9 @@ class ListActiveJob extends Component {
             </div>
           </div>
           <div className="card-body pt-2 pb-0 body_card_dashboard">
-            <div className="mb-4" style={{display: 'none'}}>
+            <div className="mb-4" style={{ display: "none" }}>
               {this.props.role == "Member" ? null : (
-                <div className="row align-items-flex-end cs_filter_time d-flex" >
+                <div className="row align-items-flex-end cs_filter_time d-flex">
                   <DatetimePickerTrigger
                     moment={this.props.startDate}
                     onChange={(_moment) =>
@@ -167,15 +167,24 @@ class ListActiveJob extends Component {
                     <div>No result in this time!</div>
                   </div>
                 ) : (
-                  <div style={{display:'flex', justifyContent:'space-between',  flexDirection: 'column', height:'368px'}} className="table-responsive">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      flexDirection: "column",
+                      height: "368px",
+                    }}
+                    className="table-responsive"
+                  >
                     <table className="table table-borderless table-vertical-center">
                       <thead>
                         <tr>
                           <th className="p-0 min-w-140px" />
-                          <th className="p-0 min-w-120px" />
+                          <th className="p-0 min-w-70px" />
+                          <th className="p-0 min-w-100px" />
                           <th className="p-0 min-w-70px" />
                           <th className="p-0 min-w-70px" />
-                          <th className="p-0 min-w-50px" />
+                          {/* <th className="p-0 min-w-50px" /> */}
                         </tr>
                       </thead>
                       <tbody>
@@ -193,6 +202,14 @@ class ListActiveJob extends Component {
                                   </NavLink>
                                   <span className="text-muted font-weight-bold d-block">
                                     {job.type}{" "}
+                                  </span>
+                                </td>
+                                <td className="text-right" title={job.clientName}>
+                                  <span className="text-muted font-weight-bold d-block font-size-sm">
+                                    Client
+                                  </span>
+                                  <span className="text-dark-75 font-weight-bold d-block font-size-lg dot_client">
+                                    {job.clientName}
                                   </span>
                                 </td>
                                 <td className="text-right">
@@ -223,7 +240,7 @@ class ListActiveJob extends Component {
                                     {job.follower} follower
                                   </span>
                                 </td>
-                                <td className="text-right pr-0">
+                                {/* <td className="text-right pr-0">
                                   <NavLink
                                     to={`/job-detail/${job.id}`}
                                     className="btn btn-icon btn-light btn-sm"
@@ -264,7 +281,7 @@ class ListActiveJob extends Component {
                                       </svg>
                                     </span>
                                   </NavLink>
-                                </td>
+                                </td> */}
                               </tr>
                             );
                           })

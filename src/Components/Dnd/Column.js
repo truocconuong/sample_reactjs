@@ -5,7 +5,7 @@ import { Droppable } from "react-beautiful-dnd";
 import roleName from "../../utils/const";
 import { connect } from "react-redux";
 import Network from "../../Service/Network.js";
-import _ from 'lodash'
+import _ from "lodash";
 const api = new Network();
 
 const Container = styled.div`
@@ -45,27 +45,25 @@ class Column extends Component {
 
   getDataColumn = async (column) => {
     let url = `/api/admin/cards/${column.id}/lane?offset=${column.limit}`;
-    const search = this.props.search
+    const search = this.props.search;
     for (const key in search) {
-      if (!_.isNil(search[key]) && search[key] !== '') {
-        console.log(search[key])
-        const character = url.indexOf('?') === -1 ? '?' : '&'
-        url += `${character}${[key]}=${search[key]}`
-        // 
+      if (!_.isNil(search[key]) && search[key] !== "") {
+        console.log(search[key]);
+        const character = url.indexOf("?") === -1 ? "?" : "&";
+        url += `${character}${[key]}=${search[key]}`;
+        //
       }
     }
-    console.log('checker', url)
-    const response = await api.get(
-      url
-    );
+    console.log("checker", url);
+    const response = await api.get(url);
     if (response) {
       const data = response.data.list;
       this.props.updateColumn(data, column);
       this.setState({
         loadMore: false,
-        hasNextPage: response.data.list.length == 0 ? false : true
+        hasNextPage: response.data.list.length == 0 ? false : true,
       });
-      console.log(response.data.list.length)
+      console.log(response.data.list.length);
     }
   };
 
@@ -77,20 +75,21 @@ class Column extends Component {
   };
 
   // tracking scroll
-
-
   componentDidMount() {
     this.scrollCol = document.getElementById(this.props.column.id);
   }
 
-  componentWillUnmount() { }
+  componentWillUnmount() {}
 
   onScroll = (e) => {
     // offsetHeight chieu cao cua div TaskList
     // scrollHeight chieu cao thuc cua scroll div
-    const scrollTop = Number(e.target.scrollTop.toFixed(0))
+    const scrollTop = Number(e.target.scrollTop.toFixed(0));
     if (
-      this.scrollCol.scrollHeight - Math.floor(scrollTop + this.scrollCol.offsetHeight) <= 1 && this.state.hasNextPage
+      this.scrollCol.scrollHeight -
+        Math.floor(scrollTop + this.scrollCol.offsetHeight) <=
+        1 &&
+      this.state.hasNextPage
     ) {
       this.loadMoreLane(this.props.column);
     }
@@ -113,8 +112,8 @@ class Column extends Component {
               <img className="add_icon" src="/img/plus.png" />
             </div>
           ) : (
-              ""
-            )}
+            ""
+          )}
         </Title>
         <Droppable
           style={{ overflow: "hidden" }}
@@ -147,6 +146,7 @@ class Column extends Component {
                     background={this.props.column.background}
                     createLabel={this.props.createLabel}
                     removeLabel={this.props.removeLabel}
+                    labels={this.props.labels}
                   />
                 );
               })}

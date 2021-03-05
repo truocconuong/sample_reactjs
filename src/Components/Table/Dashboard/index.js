@@ -342,7 +342,7 @@ class Dashboard extends Component {
             totalRowTask: responseListWeeklyTask.data.total,
             dataWeeklyTask: responseListWeeklyTask.data.tasks,
           });
-          // console.log(responsePerformance)
+          console.log(responseJob)
           setTimeout(() => {
             self.setState({
               isLoading: false,

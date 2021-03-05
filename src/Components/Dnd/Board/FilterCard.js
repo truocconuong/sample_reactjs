@@ -170,7 +170,7 @@ class FilterCard extends Component {
             <SearchBoard
               searchCardDetail={this.props.searchCardDetail}
             />
-            {this.props.role === roleName.DIRECTOR ? (<div className="filter-board-item board-item-search">
+            {this.props.role !== roleName.MEMBER ? (<div className="filter-board-item board-item-search">
               <Select
                 className="select_user select_client"
                 classNamePrefix="select"

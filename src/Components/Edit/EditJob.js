@@ -50,6 +50,7 @@ class EditJob extends Component {
         descJob: "",
         interviewProcess: "",
         extraBenefit: "",
+        description : "",
         arr_skill: [],
         arr_skill_required: [],
         user: [],
@@ -304,6 +305,7 @@ class EditJob extends Component {
         descJob: data.descJob,
         interviewProcess: data.interviewProcess,
         extraBenefit: data.extraBenefit,
+        description : data.description
 
       };
       this.setState({ validated: false, isLoading: true });
@@ -609,6 +611,22 @@ class EditJob extends Component {
                               </div>
                             </div>
                           </div>
+                          <div className="form-group row">
+                          <div className="col-lg-12">
+                            <label>Description</label>
+                            <div>
+                              <Form.Control
+                                as="textarea"
+                                name="description"
+                                type="text"
+                                rows="4"
+                                value={data.description == null ? "" : data.description}
+                                onChange={this.handleChange}
+                                className="form-control-solid"
+                              />
+                            </div>
+                          </div>
+                        </div>
                         </div>
 
                         <div className="separator separator-dashed my-10" />

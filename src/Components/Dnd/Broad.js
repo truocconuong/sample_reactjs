@@ -79,6 +79,7 @@ class Broad extends Component {
       jobs: [],
       users: [],
       lanes: [],
+      labels : [],
       laneSelected: {},
       isLoading: true,
       columnSelectedId: "",
@@ -383,10 +384,29 @@ class Broad extends Component {
       console.log(error);
     }
   };
+
+  initDataLabels = async () => {
+    const response = await api.get(
+      `/api/v1/label`
+    );
+    if (response) {
+      const labels = response.data.list;
+      this.setState({
+        labels: labels.map((e) => {
+          return {
+            label: e.title,
+            background : e.background,
+            value: e.id,
+          };
+        }),
+      });
+    }
+  }
   componentDidMount() {
     this.initData();
     this.initJob();
     this.initUserTeam();
+    this.initDataLabels();
     this.offOverFlowY();
   }
 
@@ -838,6 +858,7 @@ class Broad extends Component {
         data: data
       })
     }
+    this.initDataLabels();
   }
 
   removeLabel = async (label) => {
@@ -1048,6 +1069,7 @@ class Broad extends Component {
                         search={this.state.search}
                         createLabel={this.createLabel}
                         removeLabel={this.removeLabel}
+                        labels = {this.state.labels}
                       />
                     );
                   })}
