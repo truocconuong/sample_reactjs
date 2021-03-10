@@ -13,3 +13,12 @@
     font-weight: 700;
     color: #212529;
 }
+
+.remove-skill-footer{
+    display: flex;
+    justify-content: space-around;
+}
+
+.btn-remove-skill{
+    width: 60px;
+}

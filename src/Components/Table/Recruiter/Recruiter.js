@@ -17,7 +17,8 @@ import { ToastContainer, toast, Zoom } from "react-toastify";
 import CustomToast from "../../common/CustomToast";
 import { convertDateLocal } from "../../../utils/common/convertDate";
 import RecruiterDetail from "./RecruiterDetail";
-
+import BtnActionRemove from "./BtnActionRemove";
+import {Form} from 'react-bootstrap'
 const api = new Network();
 
 class Recruiter extends Component {
@@ -285,6 +286,37 @@ class Recruiter extends Component {
       }
   }
 
+   destroyRecruiter = async(id)=>{
+   try {
+    const res = await api.delete(`/api/user/${id}`);
+    if(res){
+      this.fetchData();
+    }
+   } catch (error) {
+     
+   }
+  }
+  editStatusRecruiter =async (e,id) =>{
+    const statusEdit = e.target.value
+    const response = await api.patch(`/api/v1/user/${id}`,{isDelete : statusEdit})
+    if(response){
+      toast(<CustomToast title={"Update status recruiter successed !"}/>, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        autoClose: 3000,
+        className: "toast_login",
+        closeButton: false,
+        hideProgressBar: true,
+        newestOnTop: true,
+        closeOnClick: true,
+        rtl: false,
+        pauseOnFocusLoss: true,
+        draggable: true,
+        pauseOnHover: true,
+        transition: Zoom,
+      });
+      this.fetchData();
+    }
+  }
   render() {
     const data = this.state.data;
     return (
@@ -356,9 +388,6 @@ class Recruiter extends Component {
                     >
                       <thead className="datatable-head">
                         <tr className="datatable-row" style={{ left: "0px" }}>
-                          <th className="datatable-cell datatable-toggle-detail hide_desktop show_mb">
-                            <span></span>
-                          </th>
                           <th
                             data-field="OrderID"
                             className="datatable-cell datatable-cell-sort"
@@ -371,6 +400,13 @@ class Recruiter extends Component {
                             className="datatable-cell datatable-cell-sort hide_mb"
                           >
                             <span style={{ width: "137px" }}>Email</span>
+                          </th>
+
+                          <th
+                            data-field="OrderID"
+                            className="datatable-cell datatable-cell-sort hide_mb"
+                          >
+                            <span style={{ width: "137px" }}>Status</span>
                           </th>
                           <th
                             data-field="Actions"
@@ -391,17 +427,6 @@ class Recruiter extends Component {
                                 className="datatable-row datatable-row-even"
                                 style={{ left: "0px" }}
                               >
-                                <td className="datatable-cell datatable-toggle-detail hide_desktop show_mb">
-                                  <span
-                                    className="datatable-toggle-detail"
-                                    onClick={this.showDetail.bind(this, index)}
-                                  >
-                                    <i
-                                      className={this.state.classArr[index]}
-                                    ></i>
-                                  </span>
-                                </td>
-
                                 <td
                                   data-field="OrderID"
                                   aria-label="63868-257"
@@ -425,6 +450,25 @@ class Recruiter extends Component {
                                      }
                                   </span>
                                 </td>
+
+                                <td
+                                  data-field="OrderID"
+                                  aria-label="63868-257"
+                                  className="datatable-cell hide_mb"
+                                >
+                                 <span style={{ width: "137px" }}>
+                                 <Form.Control
+                                    value = {recruiter.isDelete ? 1 : 0}
+                                    onChange={(e)=>{
+                                      this.editStatusRecruiter(e,recruiter.id)
+                                    }}
+                                    name="status"
+                                    as="select" custom>
+                                    <option name="active"  value={0}>Active</option>
+                                    <option name="anactive" value={1}>An Active</option>
+                                  </Form.Control>
+                                  </span>
+                                </td>
                                 <td
                                   data-field="Actions"
                                   data-autohide-disabled="false"
@@ -438,7 +482,6 @@ class Recruiter extends Component {
                                       width: "125px",
                                     }}
                                   >
-                                   
                                     <a
                                       onClick={() =>{
                                           this.showDetailCandidateRecruiter(recruiter.id)
