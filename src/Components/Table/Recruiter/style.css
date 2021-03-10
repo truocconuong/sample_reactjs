@@ -1,0 +1,24 @@
+.recruiter-detail {
+    padding: 20px;
+}
+
+.detail-answers__header {
+    padding: .75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.header-email {
+    font-weight: 700;
+    color: #212529;
+}
+
+.remove-skill-footer{
+    display: flex;
+    justify-content: space-around;
+}
+
+.btn-remove-skill{
+    width: 60px;
+}

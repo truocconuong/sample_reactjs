@@ -305,7 +305,8 @@ class EditJob extends Component {
         descJob: data.descJob,
         interviewProcess: data.interviewProcess,
         extraBenefit: data.extraBenefit,
-        description : data.description
+        description : data.description,
+        externalRecruiter : data.externalRecruiter
 
       };
       this.setState({ validated: false, isLoading: true });
@@ -373,6 +374,7 @@ class EditJob extends Component {
         </option>
       );
     });
+    console.log(data.externalRecruiter)
 
     const optClient = listClient.map((item) => {
       return (
@@ -611,6 +613,31 @@ class EditJob extends Component {
                               </div>
                             </div>
                           </div>
+
+                          <div className="form-group row pt-3">
+                            <div className="col-lg-6">
+                              <label>
+                               Allow Share External Recruiter{" "}
+                              </label>
+                              <div>
+                                <div>
+                              <Form.Control
+                                    as="select"
+                                    required
+                                    name="externalRecruiter"
+                                    value={data.externalRecruiter ? '0' : '1'}
+                                    className="form-control"
+                                    onChange={this.handleChange}
+                                    className="form-control-solid"
+                                  >
+                                    <option value={'0'}>Open</option>
+                                    <option value={'1'}>Close</option>
+                                  </Form.Control>
+                            </div>
+                              </div>
+                            </div>
+                          </div>
+
                           <div className="form-group row">
                           <div className="col-lg-12">
                             <label>Description</label>
@@ -729,6 +756,9 @@ class EditJob extends Component {
                           </div>
                           </div>
                         </div>
+
+                        
+                        
 
                         <div className="separator separator-dashed my-10" />
                         <div className="my-5">
