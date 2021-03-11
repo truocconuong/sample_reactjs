@@ -465,7 +465,7 @@ class Recruiter extends Component {
                                     name="status"
                                     as="select" custom>
                                     <option name="active"  value={0}>Active</option>
-                                    <option name="anactive" value={1}>An Active</option>
+                                    <option name="anactive" value={1}>Deactivate</option>
                                   </Form.Control>
                                   </span>
                                 </td>
