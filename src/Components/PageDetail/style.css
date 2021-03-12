@@ -195,10 +195,10 @@
   display: none;
 }
 .title_job_detail {
-  width: 70%;
+  width: 40%;
 }
 .wrap_edit_job {
-  width: 30%;
+  width: 75%;
   display: flex;
   justify-content: flex-end;
 }
