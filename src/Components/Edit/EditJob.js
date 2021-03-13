@@ -7,7 +7,7 @@ import EditorCustomTwo from "./EditorCustomTwo";
 import { ToastContainer, toast } from "react-toastify";
 import CustomToast from "../common/CustomToast.js";
 import { connect } from "react-redux";
-import _ from 'lodash'
+import _ from "lodash";
 
 import "./style.css";
 const api = new Network();
@@ -218,7 +218,10 @@ class EditJob extends Component {
   handleChange = (event) => {
     const { data } = this.state;
     const name = event.target.name;
-    const value = event.target.value;
+    let value = event.target.value;
+    if(name ==='externalRecruiter'){
+      value = value === '0' ? true : false  
+    }
     data[name] = value;
     this.setState({
       data: data,
@@ -238,6 +241,7 @@ class EditJob extends Component {
   };
 
   handleSubmit = async (event) => {
+    console.log('chay vao day ak')
     const form = event.currentTarget;
     let currentTargetRect = event.target.getBoundingClientRect();
     const event_offsetY = -currentTargetRect.top;
@@ -391,7 +395,6 @@ class EditJob extends Component {
         </option>
       );
     });
-
     const optClient = listClient.map((item) => {
       return (
         <option key={item.id} value={item.id}>
