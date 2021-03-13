@@ -308,7 +308,7 @@ class EditJob extends Component {
         extraBenefit: data.extraBenefit,
         description: data.description,
       };
-      if (_.isString(externalRecruiter)) {
+      if (_.isString(data.externalRecruiter)) {
         dataJob.externalRecruiter =
           data.externalRecruiter === "0" ? true : false;
       } else {
