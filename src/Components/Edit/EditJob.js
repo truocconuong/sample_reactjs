@@ -7,6 +7,7 @@ import EditorCustomTwo from "./EditorCustomTwo";
 import { ToastContainer, toast } from "react-toastify";
 import CustomToast from "../common/CustomToast.js";
 import { connect } from "react-redux";
+import _ from 'lodash'
 
 import "./style.css";
 const api = new Network();
@@ -283,7 +284,7 @@ class EditJob extends Component {
     let self = this;
     try {
       const idJob = this.props.match.params.id;
-      const dataJob = {
+      let dataJob = {
         title: data.title,
         content: content,
         locationId: data.locationId,
@@ -306,8 +307,13 @@ class EditJob extends Component {
         interviewProcess: data.interviewProcess,
         extraBenefit: data.extraBenefit,
         description: data.description,
-        externalRecruiter: data.externalRecruiter === "0" ? true : false,
       };
+      if (_.isString(externalRecruiter)) {
+        dataJob.externalRecruiter =
+          data.externalRecruiter === "0" ? true : false;
+      } else {
+        dataJob.externalRecruiter = data.externalRecruiter;
+      }
       this.setState({ validated: false, isLoading: true });
       // console.log(dataJob);
       const response = await api.patch(`/api/admin/jobs/${idJob}`, dataJob);
