@@ -50,7 +50,7 @@ class EditJob extends Component {
         descJob: "",
         interviewProcess: "",
         extraBenefit: "",
-        description : "",
+        description: "",
         arr_skill: [],
         arr_skill_required: [],
         user: [],
@@ -248,7 +248,7 @@ class EditJob extends Component {
         left: 0,
         behavior: "smooth",
       });
-      if(this.state.data.client == null || this.state.data.client == "") {
+      if (this.state.data.client == null || this.state.data.client == "") {
         console.log(this.state.data.client);
         window.scrollTo({
           left: 0,
@@ -305,9 +305,8 @@ class EditJob extends Component {
         descJob: data.descJob,
         interviewProcess: data.interviewProcess,
         extraBenefit: data.extraBenefit,
-        description : data.description,
-        externalRecruiter : data.externalRecruiter
-
+        description: data.description,
+        externalRecruiter: data.externalRecruiter === "0" ? true : false,
       };
       this.setState({ validated: false, isLoading: true });
       // console.log(dataJob);
@@ -329,11 +328,38 @@ class EditJob extends Component {
             rtl: false,
             pauseOnFocusLoss: true,
             draggable: true,
-            pauseOnHover: true
+            pauseOnHover: true,
           });
         }, 800);
       } else {
-        toast(<CustomToast title={"Something went wrong please try again later!"} type="error" />, {
+        toast(
+          <CustomToast
+            title={"Something went wrong please try again later!"}
+            type="error"
+          />,
+          {
+            position: toast.POSITION.BOTTOM_RIGHT,
+            autoClose: 3000,
+            className: "toast_login",
+            closeButton: false,
+            hideProgressBar: true,
+            newestOnTop: true,
+            closeOnClick: true,
+            rtl: false,
+            pauseOnFocusLoss: true,
+            draggable: true,
+            pauseOnHover: true,
+          }
+        );
+      }
+    } catch (err) {
+      console.log(err);
+      toast(
+        <CustomToast
+          title={"Something went wrong please try again later!"}
+          type="error"
+        />,
+        {
           position: toast.POSITION.BOTTOM_RIGHT,
           autoClose: 3000,
           className: "toast_login",
@@ -345,23 +371,8 @@ class EditJob extends Component {
           pauseOnFocusLoss: true,
           draggable: true,
           pauseOnHover: true,
-        });
-      }
-    } catch (err) {
-      console.log(err);
-      toast(<CustomToast title={"Something went wrong please try again later!"} type="error" />, {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        autoClose: 3000,
-        className: "toast_login",
-        closeButton: false,
-        hideProgressBar: true,
-        newestOnTop: true,
-        closeOnClick: true,
-        rtl: false,
-        pauseOnFocusLoss: true,
-        draggable: true,
-        pauseOnHover: true,
-      });
+        }
+      );
     }
   };
 
@@ -374,7 +385,6 @@ class EditJob extends Component {
         </option>
       );
     });
-    console.log(data.externalRecruiter)
 
     const optClient = listClient.map((item) => {
       return (
@@ -385,7 +395,9 @@ class EditJob extends Component {
     });
 
     return (
-      <div className={`d-flex flex-column flex-row-fluid wrapper ${this.props.className_wrap_broad}`}>
+      <div
+        className={`d-flex flex-column flex-row-fluid wrapper ${this.props.className_wrap_broad}`}
+      >
         <div className="content d-flex flex-column flex-column-fluid p-0">
           <ToastContainer />
           <div
@@ -461,7 +473,6 @@ class EditJob extends Component {
                   </div>
 
                   <div className="card-body">
-
                     <div className="row">
                       <div className="col-xl-1" />
                       <div className="col-xl-10">
@@ -578,7 +589,9 @@ class EditJob extends Component {
                                   name="titlePage"
                                   required
                                   type="text"
-                                  value={data.titlePage == null ? "" : data.titlePage}
+                                  value={
+                                    data.titlePage == null ? "" : data.titlePage
+                                  }
                                   placeholder="Type title to show in job detail..."
                                   maxLength="100"
                                   onChange={this.handleChange}
@@ -600,7 +613,9 @@ class EditJob extends Component {
                                   name="metaJob"
                                   required
                                   type="text"
-                                  value={data.metaJob == null ? "" : data.metaJob}
+                                  value={
+                                    data.metaJob == null ? "" : data.metaJob
+                                  }
                                   placeholder="Type meta description content..."
                                   maxLength="100"
                                   onChange={this.handleChange}
@@ -616,49 +631,51 @@ class EditJob extends Component {
 
                           <div className="form-group row pt-3">
                             <div className="col-lg-6">
-                              <label>
-                               Allow Share External Recruiter{" "}
-                              </label>
+                              <label>Allow Share External Recruiter </label>
                               <div>
                                 <div>
-                              <Form.Control
+                                  <Form.Control
                                     as="select"
                                     required
                                     name="externalRecruiter"
-                                    value={data.externalRecruiter ? '0' : '1'}
+                                    value={data.externalRecruiter ? "0" : "1"}
                                     className="form-control"
                                     onChange={this.handleChange}
                                     className="form-control-solid"
                                   >
-                                    <option value={'0'}>Open</option>
-                                    <option value={'1'}>Close</option>
+                                    <option value={"0"}>Open</option>
+                                    <option value={"1"}>Close</option>
                                   </Form.Control>
-                            </div>
+                                </div>
                               </div>
                             </div>
                           </div>
 
                           <div className="form-group row">
-                          <div className="col-lg-12">
-                            <label>Description</label>
-                            <div>
-                              <Form.Control
-                                as="textarea"
-                                name="description"
-                                type="text"
-                                rows="4"
-                                value={data.description == null ? "" : data.description}
-                                onChange={this.handleChange}
-                                className="form-control-solid"
-                              />
+                            <div className="col-lg-12">
+                              <label>Description</label>
+                              <div>
+                                <Form.Control
+                                  as="textarea"
+                                  name="description"
+                                  type="text"
+                                  rows="4"
+                                  value={
+                                    data.description == null
+                                      ? ""
+                                      : data.description
+                                  }
+                                  onChange={this.handleChange}
+                                  className="form-control-solid"
+                                />
+                              </div>
                             </div>
                           </div>
-                        </div>
                         </div>
 
                         <div className="separator separator-dashed my-10" />
                         <h3 className=" text-dark font-weight-bold mb-10">
-                          Note from leader 
+                          Note from leader
                         </h3>
                         <div className="form-group row">
                           <div className="col-lg-6">
@@ -713,7 +730,11 @@ class EditJob extends Component {
                                 name="interviewProcess"
                                 type="text"
                                 rows="4"
-                                value={data.interviewProcess == null ? "" : data.interviewProcess}
+                                value={
+                                  data.interviewProcess == null
+                                    ? ""
+                                    : data.interviewProcess
+                                }
                                 onChange={this.handleChange}
                                 className="form-control-solid"
                               />
@@ -723,42 +744,43 @@ class EditJob extends Component {
 
                         <div className="form-group row">
                           <div className="col-lg-6">
-                          <label>Extra benefit</label>
-                          <div>
-                            <Form.Control
-                              as="textarea"
-                              name="extraBenefit"
-                              type="text"
-                              rows="4"
-                              value={data.extraBenefit == null ? "" : data.extraBenefit }
-                              onChange={this.handleChange}
-                              className="form-control-solid"
-                            />
-                          </div>
+                            <label>Extra benefit</label>
+                            <div>
+                              <Form.Control
+                                as="textarea"
+                                name="extraBenefit"
+                                type="text"
+                                rows="4"
+                                value={
+                                  data.extraBenefit == null
+                                    ? ""
+                                    : data.extraBenefit
+                                }
+                                onChange={this.handleChange}
+                                className="form-control-solid"
+                              />
+                            </div>
                           </div>
                           <div className="col-lg-6 padding-input-kitin">
-                          <label>Status</label>
-                          <div>
-                            <Form.Control
-                                  as="select"
-                                  required
-                                  name="jobStatus"
-                                  value={data.jobStatus}
-                                  className="form-control"
-                                  onChange={this.handleChange}
-                                  className="form-control-solid"
-                                >
-                                  <option value="Active">Active</option>
-                                  <option value="Pending">Pending</option>
-                                  <option value="Close">Close</option>
-                                  <option value="Archive">Archive</option>
-                                </Form.Control>
-                          </div>
+                            <label>Status</label>
+                            <div>
+                              <Form.Control
+                                as="select"
+                                required
+                                name="jobStatus"
+                                value={data.jobStatus}
+                                className="form-control"
+                                onChange={this.handleChange}
+                                className="form-control-solid"
+                              >
+                                <option value="Active">Active</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Close">Close</option>
+                                <option value="Archive">Archive</option>
+                              </Form.Control>
+                            </div>
                           </div>
                         </div>
-
-                        
-                        
 
                         <div className="separator separator-dashed my-10" />
                         <div className="my-5">
@@ -772,7 +794,10 @@ class EditJob extends Component {
                               <EditorCustom key={1} ref={this.editorOne} />
                             </div>
                           </div>
-                          <div className="form-group row" ref={this.scrollClient}>
+                          <div
+                            className="form-group row"
+                            ref={this.scrollClient}
+                          >
                             <label className="col-md-2">
                               Client <span style={{ color: "red" }}>*</span>
                             </label>
