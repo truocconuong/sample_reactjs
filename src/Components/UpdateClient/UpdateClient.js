@@ -12,8 +12,9 @@ import { rulesAddAndUpdateClient } from '../../utils/rule';
 import Validator from '../../utils/validator';
 import { ToastContainer, toast, Zoom } from "react-toastify";
 import CustomToast from "../common/CustomToast";
-import { SketchPicker ,ChromePicker } from 'react-color'
-import reactCSS from 'reactcss'
+import { SketchPicker, ChromePicker } from 'react-color'
+import reactCSS from 'reactcss';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const api = new Network();
 
@@ -26,7 +27,7 @@ class UpdateClient extends Component {
       name: '',
       website: '',
       about: '',
-      background : '',
+      background: '',
       editorAbout: EditorState.createEmpty(),
       redirectToClient: false,
       errors: {}
@@ -79,14 +80,14 @@ class UpdateClient extends Component {
     });
 
     if (this.isEmpty(errors)) {
-      const { name, website, about ,background } = this.state
+      const { name, website, about, background } = this.state
       const data = {
-        name, website, about , background
+        name, website, about, background
       }
       try {
         const response = await api.patch(`/api/admin/client/${this.props.id}`, data);
         if (response) {
-            toast(<CustomToast title={"Update client successed !"} />, {
+          toast(<CustomToast title={"Update client successed !"} />, {
             position: toast.POSITION.BOTTOM_RIGHT,
             autoClose: 3000,
             className: "toast_login",
@@ -119,7 +120,7 @@ class UpdateClient extends Component {
     const response = await api.get(`/api/client/${id}`)
     if (response) {
       const data = response.data.client;
-      if(!data.background){
+      if (!data.background) {
         data.background = '#ffff'
       }
       const blocksFromHTML = convertFromHTML(data.about);
@@ -130,6 +131,7 @@ class UpdateClient extends Component {
       data.editorAbout = EditorState.createWithContent(content)
       const dataUpdate = _.assign(this.state, data);
       this.setState(dataUpdate)
+      this.copyLinkWatchCandidate();
     }
 
 
@@ -154,9 +156,63 @@ class UpdateClient extends Component {
     return Object.keys(obj).length === 0 && obj.constructor === Object;
   }
 
+  shortAndCopyLink = async (string) => {
+    try {
+      const dataSend = {
+        link: string
+      }
+      const linkShort = await api.post(`/api/v1/short-link`, dataSend);
+      if (linkShort) {
+        this.setState({
+          linkShort: linkShort.data.url
+        })
+      }
+    } catch (error) {
+
+    }
+  }
+
+  successCopy = () => {
+    toast(<CustomToast title={"Copy link successed !"} />, {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 3000,
+      className: "toast_login",
+      closeButton: false,
+      hideProgressBar: true,
+      newestOnTop: true,
+      closeOnClick: true,
+      rtl: false,
+      pauseOnFocusLoss: true,
+      draggable: true,
+      pauseOnHover: true,
+      transition: Zoom,
+    });
+  }
+
+  copyLinkWatchCandidate = async () => {
+    const { id } = this.props;
+    const { token } = this.state;
+    let link = '';
+    if (token) {
+      link = token;
+    } else {
+      try {
+        const response = await api.patch(`/api/v1/generate-token/client/${id}`);
+        if (response) {
+          link = response.token
+          this.getData();
+        }
+
+      } catch (error) {
+      }
+    }
+    this.shortAndCopyLink(link)
+  }
+
   render() {
     const self = this;
     const { editorAbout, errors } = this.state
+    console.log(this.state)
 
     const styles = reactCSS({
       'default': {
@@ -203,17 +259,17 @@ class UpdateClient extends Component {
             id="kt_subheader"
           >
             <div className="container d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
-             
+
               <div className="d-flex align-items-center mr-1">
-             
+
                 <div className="d-flex align-items-baseline flex-wrap mr-5">
-                
+
                 </div>
-               
+
               </div>
-           
+
               <div className="d-flex align-items-center flex-wrap"></div>
-             
+
             </div>
           </div>
           <div className="d-flex flex-column-fluid">
@@ -223,13 +279,17 @@ class UpdateClient extends Component {
                   <div className="card-title">
                     <h3 className="card-label">
                       Update client
-                    
                     </h3>
                   </div>
-                  <div className="card-toolbar">
-                    <div className="dropdown dropdown-inline mr-2">
-                    
-                    </div>
+                  <div className="form-token">
+                    <CopyToClipboard
+                      text={
+                        this.state.linkShort
+                      }
+                      onCopy={this.successCopy}
+                    >
+                    <button type="button" className="btn btn-primary">Copy Link watch candidate</button>
+                    </CopyToClipboard>
                   </div>
                 </div>
                 <div className="card-body">
@@ -254,17 +314,17 @@ class UpdateClient extends Component {
                         </div>
                       </div>
                       <div className="form-group row">
-                  <div className="col-lg-12 style-make-color">
-                    <label>Color:</label>
-                    <div className="color-style" style={styles.swatch} onClick={this.handleClick}>
-                      <div style={styles.color} />
-                    </div>
-                    {this.state.displayColorPicker ? <div style={styles.popover}>
-                      <div style={styles.cover} onClick={this.handleClose} />
-                      <ChromePicker color={this.state.background} onChange={this.handleChange} />
-                    </div> : null}
-                  </div>
-                </div>
+                        <div className="col-lg-12 style-make-color">
+                          <label>Color:</label>
+                          <div className="color-style" style={styles.swatch} onClick={this.handleClick}>
+                            <div style={styles.color} />
+                          </div>
+                          {this.state.displayColorPicker ? <div style={styles.popover}>
+                            <div style={styles.cover} onClick={this.handleClose} />
+                            <ChromePicker color={this.state.background} onChange={this.handleChange} />
+                          </div> : null}
+                        </div>
+                      </div>
                       <div className="form-group row">
                         <div className="col-lg-12">
                           <label>About:</label>
@@ -276,12 +336,14 @@ class UpdateClient extends Component {
                               onEditorStateChange={this.onEditorStateChange}
                               editorStyle={{ border: "1px solid #F1F1F1", height: "250px" }}
                               toolbar={{
-                                colorPicker: { colors: ['rgb(21, 188, 197)', 'rgb(33, 37, 41)' , 'rgb(97,189,109)', 'rgb(26,188,156)', 'rgb(84,172,210)', 'rgb(44,130,201)',
-                                'rgb(147,101,184)', 'rgb(71,85,119)', 'rgb(204,204,204)', 'rgb(65,168,95)', 'rgb(0,168,133)',
-                                'rgb(61,142,185)', 'rgb(41,105,176)', 'rgb(85,57,130)', 'rgb(40,50,78)', 'rgb(0,0,0)',
-                                'rgb(247,218,100)', 'rgb(251,160,38)', 'rgb(235,107,86)', 'rgb(226,80,65)', 'rgb(163,143,132)',
-                                'rgb(239,239,239)', 'rgb(255,255,255)', 'rgb(250,197,28)', 'rgb(243,121,52)', 'rgb(209,72,65)',
-                                'rgb(184,49,47)', 'rgb(124,112,107)', 'rgb(209,213,216)'], },
+                                colorPicker: {
+                                  colors: ['rgb(21, 188, 197)', 'rgb(33, 37, 41)', 'rgb(97,189,109)', 'rgb(26,188,156)', 'rgb(84,172,210)', 'rgb(44,130,201)',
+                                    'rgb(147,101,184)', 'rgb(71,85,119)', 'rgb(204,204,204)', 'rgb(65,168,95)', 'rgb(0,168,133)',
+                                    'rgb(61,142,185)', 'rgb(41,105,176)', 'rgb(85,57,130)', 'rgb(40,50,78)', 'rgb(0,0,0)',
+                                    'rgb(247,218,100)', 'rgb(251,160,38)', 'rgb(235,107,86)', 'rgb(226,80,65)', 'rgb(163,143,132)',
+                                    'rgb(239,239,239)', 'rgb(255,255,255)', 'rgb(250,197,28)', 'rgb(243,121,52)', 'rgb(209,72,65)',
+                                    'rgb(184,49,47)', 'rgb(124,112,107)', 'rgb(209,213,216)'],
+                                },
                                 fontFamily: {
                                   options: ['Muli', 'sans-serif', 'Arial', 'Georgia', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
                                 }
