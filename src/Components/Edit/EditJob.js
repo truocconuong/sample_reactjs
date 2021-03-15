@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import CustomToast from "../common/CustomToast.js";
 import { connect } from "react-redux";
 import _ from "lodash";
-
+import Select from 'react-select';
 import "./style.css";
 const api = new Network();
 var timer = null;
@@ -55,6 +55,7 @@ class EditJob extends Component {
         arr_skill: [],
         arr_skill_required: [],
         user: [],
+        tags: [],
       },
       val: "",
       valTwo: "",
@@ -63,7 +64,9 @@ class EditJob extends Component {
       listSkill: [],
       listLocation: [],
       listClient: [],
+      listTag: [],
       validated: false,
+
     };
   }
 
@@ -98,19 +101,29 @@ class EditJob extends Component {
       let getListLocation = api.get(`/api/location`);
       let getListClient = api.get(`/api/all/client`);
       let getListSkill = api.get(`/api/all/skill`);
-      let [dataJob, dataLocation, dataClient, dataSkill] = await Promise.all([
+      let getListTag = api.get('/api/v1/tags')
+
+      let [dataJob, dataLocation, dataClient, dataSkill, dataTags] = await Promise.all([
         getJob,
         getListLocation,
         getListClient,
         getListSkill,
+        getListTag
       ]);
-      if (dataJob && dataLocation && dataClient && dataSkill) {
+      if (dataJob && dataLocation && dataClient && dataSkill && dataTags) {
         if (this._isMounted) {
+          dataTags = _.map(dataTags.data.tags, tag => {
+            return {
+              value: tag.id,
+              label: tag.title
+            }
+          })
           await this.setState({
             data: dataJob.data,
             listLocation: dataLocation.data.location,
             listClient: dataClient.data.clients,
             listSkill: dataSkill.data.skills,
+            listTag: dataTags
           });
           this.editorOne.current.setContent(this.state.data.aboutFetch);
           this.editorThree.current.setContent(this.state.data.responsibilities);
@@ -219,8 +232,8 @@ class EditJob extends Component {
     const { data } = this.state;
     const name = event.target.name;
     let value = event.target.value;
-    if(name ==='externalRecruiter'){
-      value = value === '0' ? true : false  
+    if (name === 'externalRecruiter') {
+      value = value === '0' ? true : false
     }
     data[name] = value;
     this.setState({
@@ -277,6 +290,11 @@ class EditJob extends Component {
         arrSkill.push({ id: item.id, isRequired: false });
       });
     }
+
+    let listTag = _.map(data.tags, tag => {
+      return tag.value
+    })
+
     let location = listLocation.find((item) => item.id === data.locationId);
     let content = `${location.descLocation}<p><span style="color: rgb(136, 136, 136);">${data.type}</span></p>`;
     const valueOne = this.editorOne.current.getContent();
@@ -311,6 +329,7 @@ class EditJob extends Component {
         interviewProcess: data.interviewProcess,
         extraBenefit: data.extraBenefit,
         description: data.description,
+        tags: listTag
       };
       if (_.isString(data.externalRecruiter)) {
         dataJob.externalRecruiter =
@@ -385,9 +404,22 @@ class EditJob extends Component {
       );
     }
   };
+  onSelectedTag = (event) => {
+    const { data } = this.state;
+    const tagUpdate = [];
+    if (event) {
+      tagUpdate.push(...event);
+    }
+    data['tags'] = tagUpdate;
+    this.setState({
+      data
+    })
+
+
+  }
 
   render() {
-    const { data, listLocation, listClient, validated } = this.state;
+    const { data, listLocation, listClient, validated, listTag } = this.state;
     const optLocation = listLocation.map((item) => {
       return (
         <option key={item.id} value={item.id}>
@@ -655,6 +687,22 @@ class EditJob extends Component {
                                     <option value={"0"}>Open</option>
                                     <option value={"1"}>Close</option>
                                   </Form.Control>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-lg-6">
+                              <label>Tags</label>
+                              <div>
+                                <div>
+                                  <Select
+                                    isMulti
+                                    name="tags"
+                                    onChange={this.onSelectedTag}
+                                    value={data.tags}
+                                    options={listTag}
+                                    className="multi-select-tag"
+                                    classNamePrefix="select"
+                                  />
                                 </div>
                               </div>
                             </div>

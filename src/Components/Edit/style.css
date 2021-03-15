@@ -1,21 +1,23 @@
 .style-header-job {
-    z-index: 9;
-    top: -1px;
-    -webkit-transition: left 0.3s, right 0.3s, height 0.3s;
-    transition: left 0.3s, right 0.3s, height 0.3s, position 0.3s;
-    position: sticky;
-    -webkit-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.1);
-    box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.1);
-    background-color: #ffffff !important;
+	z-index: 9;
+	top: -1px;
+	-webkit-transition: left 0.3s, right 0.3s, height 0.3s;
+	transition: left 0.3s, right 0.3s, height 0.3s, position 0.3s;
+	position: sticky;
+	-webkit-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.1);
+	box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.1);
+	background-color: #ffffff !important;
 }
+
 .style-btn-kitin {
-    border-bottom-right-radius: 0.4rem !important;
-    border-top-right-radius: 0.4rem !important;
+	border-bottom-right-radius: 0.4rem !important;
+	border-top-right-radius: 0.4rem !important;
 }
 
 .form-group-nam {
 	margin-bottom: 0;
 }
+
 .kitin-input-tag {
 	width: 100%;
 	border: 1px solid #E4E6EF;
@@ -24,20 +26,23 @@
 	padding-left: 10px;
 	margin-top: 4px;
 }
+
 .kitin-input-tag:focus {
-    color: #3F4254;
-    background-color: #ffffff;
-    border-color: #30e3da;
-    outline: 0;
+	color: #3F4254;
+	background-color: #ffffff;
+	border-color: #30e3da;
+	outline: 0;
 }
 
 .user-invite-container {
 	margin-bottom: 20px;
 }
+
 .user-invite-container .input-label {
 	font-weight: 500;
 	margin-top: 10px;
 }
+
 .user-invite-container .rule-choose .rules {
 	width: 100%;
 	border: 1px solid #dddddd;
@@ -45,6 +50,7 @@
 	background: #ffffff;
 	height: 40px;
 }
+
 .user-invite-container .input-date-picker input {
 	width: 100%;
 	border: 1px solid #dddddd;
@@ -53,6 +59,7 @@
 	height: 40px;
 	padding: 15px;
 }
+
 .user-invite-container .list-suggess {
 	position: absolute;
 	width: 100%;
@@ -64,9 +71,11 @@
 	overflow-y: scroll;
 	height: 200px;
 }
+
 .user-invite-container .list-suggess.hide {
 	display: none;
 }
+
 .user-invite-container .list-suggess ul {
 	list-style: none;
 	padding: 0;
@@ -78,18 +87,22 @@
 	padding: 5px;
 	cursor: pointer;
 }
+
 .user-invite-container .list-suggess li:hover {
 	background: #f3f3f3;
 	border-bottom: 1px solid #dddddd;
 	border-left: 1px solid #dddddd;
 }
+
 .user-invite-container .list-suggess li .fullname {
 	font-weight: 500;
 }
+
 .user-invite-container .list-suggess li .user {
 	font-size: 12px;
 	margin-top: -10px;
 }
+
 .user-invite-container .invite-button {
 	background: #bbcee0;
 	border: none;
@@ -99,33 +112,40 @@
 	border-radius: 5px;
 	font-size: 500;
 }
+
 .tags-input-list {
 	min-height: 40px;
 	line-height: 29px;
 	/* padding: 5px; */
 	padding: 0;
 }
+
 .tags-input-list .tag-item {
 	margin-right: 5px;
 }
+
 .kynang .tag-item .badge-ivtx {
 	background: rgba(27, 197, 189, 0.12);
-    padding: 4px 4px;
-    border-radius: 0.42rem;
-    line-height: 29px;
-    margin-right: 4px;
-    color: #1BC5BD;
+	padding: 4px 4px;
+	border-radius: 0.42rem;
+	line-height: 29px;
+	margin-right: 4px;
+	color: #1BC5BD;
 }
+
 .tags-input-list .rm-tag {
 	margin-left: 5px;
 	cursor: pointer;
 }
+
 .tags-input-list .rm-tag:hover {
 	color: #dc3545;
 }
+
 .tags-input-list {
 	position: relative;
 }
+
 .rm-tag i {
 	cursor: pointer;
 	padding-left: 6px;
@@ -134,20 +154,32 @@
 
 .content-job img {
 	width: 100%;
-} 
+}
+
 .add-skill-here {
 	color: #1BC5BD;
 	cursor: pointer;
 }
+
 .input-skill-hk {
 	width: 60%;
 	padding-bottom: 10px;
 	margin-right: 15px;
 }
+
 .contain-new-skill {
 	display: flex;
 }
+
 .hidden-create-skill {
 	display: none;
 	transition: transform 1.35s ease-in-out;
+}
+
+.multi-select-tag .select__multi-value {
+	background-color: rgb(21, 188, 197);
+}
+
+.multi-select-tag .select__multi-value__label ,.select__multi-value__remove{
+	color: #ffffff;
 }
