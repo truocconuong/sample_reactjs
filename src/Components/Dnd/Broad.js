@@ -48,6 +48,7 @@ class Broad extends Component {
           nameJob: "",
           idJob: "",
           noteApproach: "",
+          expectedDate: "",
           user: [],
           jobSelected: {},
           laneSelected: {},
@@ -68,6 +69,7 @@ class Broad extends Component {
           idJob: "",
           noteApproach: "",
           isRefinePdf: "",
+          expectedDate: "",
           user: [],
           jobSelected: {},
           laneSelected: {},
@@ -79,7 +81,7 @@ class Broad extends Component {
       jobs: [],
       users: [],
       lanes: [],
-      labels : [],
+      labels: [],
       laneSelected: {},
       isLoading: true,
       columnSelectedId: "",
@@ -196,6 +198,7 @@ class Broad extends Component {
 
   updateCard = async (card) => {
     const { card_data_detail } = this.state;
+    console.log(card_data_detail)
     const idCard = card_data_detail.id;
     this.setState({
       isLoading: true
@@ -226,7 +229,7 @@ class Broad extends Component {
       }
     } catch (error) {
       this.setState({
-        isLoading : false
+        isLoading: false
       })
       if (error.error) {
         if (error.error.data) {
@@ -395,7 +398,7 @@ class Broad extends Component {
         labels: labels.map((e) => {
           return {
             label: e.title,
-            background : e.background,
+            background: e.background,
             value: e.id,
           };
         }),
@@ -474,6 +477,7 @@ class Broad extends Component {
               skype: card.Candidate.skype || '',
               location: card.Job.Location.name,
               approachDate: card.approachDate,
+              expectedDate: card.expectedDate,
               linkCv: card.cv,
               nameJob: card.Job.title,
               noteApproach: card.noteApproach || "",
@@ -709,6 +713,7 @@ class Broad extends Component {
           skype: card.Candidate.skype || '',
           location: card.Job.Location.name,
           approachDate: card.approachDate,
+          expectedDate : card.expectedDate,
           linkCv: card.cv,
           nameJob: card.Job.title,
           noteApproach: card.noteApproach || "",
@@ -925,6 +930,7 @@ class Broad extends Component {
         email: card.Candidate.email,
         location: card.Job.Location.name,
         approachDate: card.approachDate,
+        expectedDate : card.expectedDate,
         linkCv: card.cv,
         nameJob: card.Job.title,
         noteApproach: card.noteApproach || "",
@@ -1020,8 +1026,8 @@ class Broad extends Component {
             onHide={this.openPreviewPdfAndCloseCardTrello.bind(this)}
           />
         ) : (
-            ""
-          )}
+          ""
+        )}
         <div
           className="subheader py-3 subheader-transparent  subheader-board"
           id="kt_subheader"
@@ -1069,15 +1075,15 @@ class Broad extends Component {
                         search={this.state.search}
                         createLabel={this.createLabel}
                         removeLabel={this.removeLabel}
-                        labels = {this.state.labels}
+                        labels={this.state.labels}
                       />
                     );
                   })}
                 </Container>
               </DragDropContext>
             ) : (
-                ""
-              )}
+              ""
+            )}
           </div>
         </div>
 
@@ -1090,8 +1096,8 @@ class Broad extends Component {
             <span className="card-vip__plus">+</span>
           </button>
         ) : (
-            ""
-          )}
+          ""
+        )}
       </div>
     );
   }
