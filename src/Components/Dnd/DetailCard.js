@@ -57,6 +57,7 @@ class DetailCard extends Component {
       facebook: "",
       linkedin: "",
       skype: "",
+      expectedDate : "",
       socialType: {
         facebook: true,
         linkedin: true,
@@ -170,6 +171,7 @@ class DetailCard extends Component {
   handleInputChange(e) {
     const name = e.target.name;
     const value = e.target.value;
+    console.log(e.target.value , e.target.name)
     this.setState({
       [name]: value,
     });
@@ -346,6 +348,7 @@ class DetailCard extends Component {
         email: content.email,
         location: content.location,
         approachDate: content.approachDate,
+        expectedDate: content.expectedDate,
         cv: content.linkCv,
         nameJob: content.nameJob,
         noteApproach: content.noteApproach,
@@ -515,7 +518,6 @@ class DetailCard extends Component {
   };
 
   render() {
-    console.log("da render")
     const errors = this.state.errors;
     const users = [];
     let usersTeam = [];
@@ -523,7 +525,6 @@ class DetailCard extends Component {
     if (this.props.show) {
       users.push(...this.props.data.content.user);
     }
-    console.log(this.props.data.content.user)
     if (!_.isEmpty(this.props.users)) {
       usersTeam.push(...this.props.users);
     }
@@ -531,6 +532,9 @@ class DetailCard extends Component {
       "YYYY-MM-DD"
     );
 
+    data_detail.expectedDate = moment(data_detail.expectedDate).format(
+      "YYYY-MM-DD"
+    );
     return (
       <Modal size="lg" show={this.props.show} onHide={this.hideModal} centered>
         <Modal.Header closeButton>
@@ -847,6 +851,23 @@ class DetailCard extends Component {
                       name="approachDate"
                       className="form-control"
                       placeholder="Enter approachDate"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group row">
+                  <div className="col-lg-6">
+                    <label>Expected Date</label>
+                    <input
+                      disabled={
+                        this.props.role === roleName.DIRECTOR ? true : false
+                      }
+                      value={data_detail.expectedDate}
+                      type="date"
+                      onChange={this.handleInputChange.bind(this)}
+                      name="expectedDate"
+                      className="form-control"
+                      placeholder="Enter expectedDate"
                     />
                   </div>
                 </div>
