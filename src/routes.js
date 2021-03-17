@@ -22,6 +22,7 @@ import ListBlog from './Components/blog/Listblog.js';
 import NewBlog from './Components/blog/NewBlog.js';
 import EditBlog from './Components/blog/Editblog.js';
 import Recruiter from './Components/Table/Recruiter/Recruiter';
+import RecruiterDetail from './Components/Table/Recruiter/RecruiterDetail';
 
 
 const routes = [
@@ -146,6 +147,11 @@ const routes = [
     path: "/recruiter",
     exact: true,
     main: (props) => < Recruiter {...props} />
+  },
+  {
+    path: "/recruiter/:id",
+    exact: true,
+    main: (props) => < RecruiterDetail {...props} />
   },
 ];
 

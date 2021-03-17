@@ -16,7 +16,6 @@ import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 import { ToastContainer, toast, Zoom } from "react-toastify";
 import CustomToast from "../../common/CustomToast";
 import { convertDateLocal } from "../../../utils/common/convertDate";
-import RecruiterDetail from "./RecruiterDetail";
 import BtnActionRemove from "./BtnActionRemove";
 import {Form} from 'react-bootstrap'
 const api = new Network();
@@ -324,12 +323,6 @@ class Recruiter extends Component {
         className={`d-flex flex-column flex-row-fluid wrapper ${this.props.className_wrap_broad}`}
       >
           <ToastContainer closeOnClick autoClose={1000} rtl={false} />
-          <RecruiterDetail
-          show = {this.state.popupDetailCandidate}
-          onHide = {this.togglePopupDetailCandidate}
-          data = {this.state.candidates}
-          />
-
         <div className="content d-flex flex-column flex-column-fluid">
           {this.state.isLoading ? <Fbloader /> : null}
 
@@ -482,10 +475,8 @@ class Recruiter extends Component {
                                       width: "125px",
                                     }}
                                   >
+                                    <Link to={`recruiter/${recruiter.id}`}>
                                     <a
-                                      onClick={() =>{
-                                          this.showDetailCandidateRecruiter(recruiter.id)
-                                      }}
                                       className="btn btn-sm btn-clean btn-icon"
                                       title="Delete"
                                       style={this.props.role == "Member" ? { display: "none" } : null}
@@ -494,6 +485,7 @@ class Recruiter extends Component {
                                         <i className="fas fa-eye"></i>
                                       </span>
                                     </a>
+                                    </Link>
                                   </span>
                                 </td>
                               </tr>
