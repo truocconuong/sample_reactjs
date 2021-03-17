@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash'
+import { defaultAva, domainServer } from "../../../../utils/config.js";
 class ProfileDetail extends Component {
     render() {
         const { profile } = this.props;
@@ -46,7 +47,7 @@ class ProfileDetail extends Component {
                                     <label className="col-xl-3 col-lg-3 col-form-label text-right">Bank Number</label>
                                     <div className="col-lg-9 col-xl-6">
                                         <div className="input-group input-group-lg input-group-solid">
-                                            <input  value={profile.bank.bankNumber || ''} disabled  type="text" className="form-control form-control-lg form-control-solid" />
+                                            <input value={profile.bank.bankNumber || ''} disabled type="text" className="form-control form-control-lg form-control-solid" />
                                         </div>
                                     </div>
                                 </div>
@@ -54,7 +55,20 @@ class ProfileDetail extends Component {
                                     <label className="col-xl-3 col-lg-3 col-form-label text-right">Bank Name</label>
                                     <div className="col-lg-9 col-xl-6">
                                         <div className="input-group input-group-lg input-group-solid">
-                                            <input  value={profile.bank.bankName || ''} disabled  type="text" className="form-control form-control-lg form-control-solid" />
+                                            <input value={profile.bank.bankName || ''} disabled type="text" className="form-control form-control-lg form-control-solid" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="form-group row">
+                                    <label className="col-xl-3 col-lg-3 col-form-label text-right">People ID</label>
+                                    <div className="col-lg-9 col-xl-6">
+                                        <div className="cmnd">
+                                            <div className="image-cmnd">
+                                                <img src={`${domainServer}/${profile.bank.urlFrontImageIdCard}`}></img>
+                                            </div>
+                                            <div className="image-cmnd">
+                                                <img src={`${domainServer}/${profile.bank.urlBehindImageIdCard}`}></img>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

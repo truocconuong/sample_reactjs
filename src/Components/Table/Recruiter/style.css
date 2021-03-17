@@ -35,3 +35,14 @@
 .text-white{
     color: #ffff;
 }
+.cmnd {
+    display: flex;
+}
+.image-cmnd{
+    width: 100%;
+    height: 200px;
+    margin: 4px;
+}
+.image-cmnd >img {
+    width: 100%;
+}
