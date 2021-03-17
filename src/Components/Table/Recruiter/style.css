@@ -22,3 +22,16 @@
 .btn-remove-skill{
     width: 60px;
 }
+.bonus-total{
+    display: flex;
+    justify-content: flex-end;
+    align-items: baseline;
+}
+.bonus-total__title{
+    font-size: 16px;
+    padding-right: 4px;
+    font-weight: bold;
+}
+.text-white{
+    color: #ffff;
+}
