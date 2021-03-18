@@ -254,7 +254,6 @@ class EditJob extends Component {
   };
 
   handleSubmit = async (event) => {
-    console.log('chay vao day ak')
     const form = event.currentTarget;
     let currentTargetRect = event.target.getBoundingClientRect();
     const event_offsetY = -currentTargetRect.top;
@@ -416,6 +415,14 @@ class EditJob extends Component {
     })
 
 
+  }
+
+  toggleAllowShare = (event) => {
+    const { data } = this.state;
+    data['externalRecruiter'] = !data.externalRecruiter
+    this.setState({
+      data: data
+    })
   }
 
   render() {
@@ -674,7 +681,13 @@ class EditJob extends Component {
                             <div className="col-lg-6">
                               <label>Allow Share External Recruiter </label>
                               <div>
-                                <div>
+                                <span className="switch switch-primary">
+                                  <label>
+                                    <input onChange={this.toggleAllowShare} type="checkbox" checked={data.externalRecruiter} name="externalRecruiter" />
+                                    <span></span>
+                                  </label>
+                                </span>
+                                {/* <div>
                                   <Form.Control
                                     as="select"
                                     required
@@ -687,7 +700,7 @@ class EditJob extends Component {
                                     <option value={"0"}>Open</option>
                                     <option value={"1"}>Close</option>
                                   </Form.Control>
-                                </div>
+                                </div> */}
                               </div>
                             </div>
                             <div className="col-lg-6">
