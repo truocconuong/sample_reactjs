@@ -532,9 +532,11 @@ class DetailCard extends Component {
       "YYYY-MM-DD"
     );
 
-    data_detail.expectedDate = moment(data_detail.expectedDate).format(
-      "YYYY-MM-DD"
-    );
+    if(data_detail.expectedDate){
+      data_detail.expectedDate = moment(data_detail.expectedDate).format(
+        "YYYY-MM-DD"
+      );
+    }
     return (
       <Modal size="lg" show={this.props.show} onHide={this.hideModal} centered>
         <Modal.Header closeButton>
