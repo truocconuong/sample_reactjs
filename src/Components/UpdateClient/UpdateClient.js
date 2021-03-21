@@ -288,7 +288,7 @@ class UpdateClient extends Component {
                       }
                       onCopy={this.successCopy}
                     >
-                    <button type="button" className="btn btn-primary">Copy Link watch candidate</button>
+                    <a className="link-short">{this.state.linkShort}</a>
                     </CopyToClipboard>
                   </div>
                 </div>
