@@ -307,7 +307,7 @@ export default class AddCard extends Component {
       try {
         let file_size = event.target.files[0].size;
         // console.log(file_size)
-        if (file_size > 3145728) {
+        if (file_size > 5145728) {
           toast.error("Image file size too big!", {
             position: toast.POSITION.BOTTOM_RIGHT,
           });

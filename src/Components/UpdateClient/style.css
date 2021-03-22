@@ -46,3 +46,7 @@
 .style-no-result img{
     width: 80%;
 }
+
+.link-short{
+    cursor: pointer;
+}

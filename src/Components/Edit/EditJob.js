@@ -7,7 +7,8 @@ import EditorCustomTwo from "./EditorCustomTwo";
 import { ToastContainer, toast } from "react-toastify";
 import CustomToast from "../common/CustomToast.js";
 import { connect } from "react-redux";
-
+import _ from "lodash";
+import Select from 'react-select';
 import "./style.css";
 const api = new Network();
 var timer = null;
@@ -50,10 +51,11 @@ class EditJob extends Component {
         descJob: "",
         interviewProcess: "",
         extraBenefit: "",
-        description : "",
+        description: "",
         arr_skill: [],
         arr_skill_required: [],
         user: [],
+        tags: [],
       },
       val: "",
       valTwo: "",
@@ -62,7 +64,9 @@ class EditJob extends Component {
       listSkill: [],
       listLocation: [],
       listClient: [],
+      listTag: [],
       validated: false,
+
     };
   }
 
@@ -97,19 +101,29 @@ class EditJob extends Component {
       let getListLocation = api.get(`/api/location`);
       let getListClient = api.get(`/api/all/client`);
       let getListSkill = api.get(`/api/all/skill`);
-      let [dataJob, dataLocation, dataClient, dataSkill] = await Promise.all([
+      let getListTag = api.get('/api/v1/tags')
+
+      let [dataJob, dataLocation, dataClient, dataSkill, dataTags] = await Promise.all([
         getJob,
         getListLocation,
         getListClient,
         getListSkill,
+        getListTag
       ]);
-      if (dataJob && dataLocation && dataClient && dataSkill) {
+      if (dataJob && dataLocation && dataClient && dataSkill && dataTags) {
         if (this._isMounted) {
+          dataTags = _.map(dataTags.data.tags, tag => {
+            return {
+              value: tag.id,
+              label: tag.title
+            }
+          })
           await this.setState({
             data: dataJob.data,
             listLocation: dataLocation.data.location,
             listClient: dataClient.data.clients,
             listSkill: dataSkill.data.skills,
+            listTag: dataTags
           });
           this.editorOne.current.setContent(this.state.data.aboutFetch);
           this.editorThree.current.setContent(this.state.data.responsibilities);
@@ -217,7 +231,10 @@ class EditJob extends Component {
   handleChange = (event) => {
     const { data } = this.state;
     const name = event.target.name;
-    const value = event.target.value;
+    let value = event.target.value;
+    if (name === 'externalRecruiter') {
+      value = value === '0' ? true : false
+    }
     data[name] = value;
     this.setState({
       data: data,
@@ -248,7 +265,7 @@ class EditJob extends Component {
         left: 0,
         behavior: "smooth",
       });
-      if(this.state.data.client == null || this.state.data.client == "") {
+      if (this.state.data.client == null || this.state.data.client == "") {
         console.log(this.state.data.client);
         window.scrollTo({
           left: 0,
@@ -272,6 +289,11 @@ class EditJob extends Component {
         arrSkill.push({ id: item.id, isRequired: false });
       });
     }
+
+    let listTag = _.map(data.tags, tag => {
+      return tag.value
+    })
+
     let location = listLocation.find((item) => item.id === data.locationId);
     let content = `${location.descLocation}<p><span style="color: rgb(136, 136, 136);">${data.type}</span></p>`;
     const valueOne = this.editorOne.current.getContent();
@@ -283,7 +305,7 @@ class EditJob extends Component {
     let self = this;
     try {
       const idJob = this.props.match.params.id;
-      const dataJob = {
+      let dataJob = {
         title: data.title,
         content: content,
         locationId: data.locationId,
@@ -305,9 +327,15 @@ class EditJob extends Component {
         descJob: data.descJob,
         interviewProcess: data.interviewProcess,
         extraBenefit: data.extraBenefit,
-        description : data.description
-
+        description: data.description,
+        tags: listTag
       };
+      if (_.isString(data.externalRecruiter)) {
+        dataJob.externalRecruiter =
+          data.externalRecruiter === "0" ? true : false;
+      } else {
+        dataJob.externalRecruiter = data.externalRecruiter;
+      }
       this.setState({ validated: false, isLoading: true });
       // console.log(dataJob);
       const response = await api.patch(`/api/admin/jobs/${idJob}`, dataJob);
@@ -328,11 +356,38 @@ class EditJob extends Component {
             rtl: false,
             pauseOnFocusLoss: true,
             draggable: true,
-            pauseOnHover: true
+            pauseOnHover: true,
           });
         }, 800);
       } else {
-        toast(<CustomToast title={"Something went wrong please try again later!"} type="error" />, {
+        toast(
+          <CustomToast
+            title={"Something went wrong please try again later!"}
+            type="error"
+          />,
+          {
+            position: toast.POSITION.BOTTOM_RIGHT,
+            autoClose: 3000,
+            className: "toast_login",
+            closeButton: false,
+            hideProgressBar: true,
+            newestOnTop: true,
+            closeOnClick: true,
+            rtl: false,
+            pauseOnFocusLoss: true,
+            draggable: true,
+            pauseOnHover: true,
+          }
+        );
+      }
+    } catch (err) {
+      console.log(err);
+      toast(
+        <CustomToast
+          title={"Something went wrong please try again later!"}
+          type="error"
+        />,
+        {
           position: toast.POSITION.BOTTOM_RIGHT,
           autoClose: 3000,
           className: "toast_login",
@@ -344,28 +399,34 @@ class EditJob extends Component {
           pauseOnFocusLoss: true,
           draggable: true,
           pauseOnHover: true,
-        });
-      }
-    } catch (err) {
-      console.log(err);
-      toast(<CustomToast title={"Something went wrong please try again later!"} type="error" />, {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        autoClose: 3000,
-        className: "toast_login",
-        closeButton: false,
-        hideProgressBar: true,
-        newestOnTop: true,
-        closeOnClick: true,
-        rtl: false,
-        pauseOnFocusLoss: true,
-        draggable: true,
-        pauseOnHover: true,
-      });
+        }
+      );
     }
   };
+  onSelectedTag = (event) => {
+    const { data } = this.state;
+    const tagUpdate = [];
+    if (event) {
+      tagUpdate.push(...event);
+    }
+    data['tags'] = tagUpdate;
+    this.setState({
+      data
+    })
+
+
+  }
+
+  toggleAllowShare = (event) => {
+    const { data } = this.state;
+    data['externalRecruiter'] = !data.externalRecruiter
+    this.setState({
+      data: data
+    })
+  }
 
   render() {
-    const { data, listLocation, listClient, validated } = this.state;
+    const { data, listLocation, listClient, validated, listTag } = this.state;
     const optLocation = listLocation.map((item) => {
       return (
         <option key={item.id} value={item.id}>
@@ -373,7 +434,6 @@ class EditJob extends Component {
         </option>
       );
     });
-
     const optClient = listClient.map((item) => {
       return (
         <option key={item.id} value={item.id}>
@@ -383,7 +443,9 @@ class EditJob extends Component {
     });
 
     return (
-      <div className={`d-flex flex-column flex-row-fluid wrapper ${this.props.className_wrap_broad}`}>
+      <div
+        className={`d-flex flex-column flex-row-fluid wrapper ${this.props.className_wrap_broad}`}
+      >
         <div className="content d-flex flex-column flex-column-fluid p-0">
           <ToastContainer />
           <div
@@ -459,7 +521,6 @@ class EditJob extends Component {
                   </div>
 
                   <div className="card-body">
-
                     <div className="row">
                       <div className="col-xl-1" />
                       <div className="col-xl-10">
@@ -576,7 +637,9 @@ class EditJob extends Component {
                                   name="titlePage"
                                   required
                                   type="text"
-                                  value={data.titlePage == null ? "" : data.titlePage}
+                                  value={
+                                    data.titlePage == null ? "" : data.titlePage
+                                  }
                                   placeholder="Type title to show in job detail..."
                                   maxLength="100"
                                   onChange={this.handleChange}
@@ -598,7 +661,9 @@ class EditJob extends Component {
                                   name="metaJob"
                                   required
                                   type="text"
-                                  value={data.metaJob == null ? "" : data.metaJob}
+                                  value={
+                                    data.metaJob == null ? "" : data.metaJob
+                                  }
                                   placeholder="Type meta description content..."
                                   maxLength="100"
                                   onChange={this.handleChange}
@@ -611,27 +676,76 @@ class EditJob extends Component {
                               </div>
                             </div>
                           </div>
-                          <div className="form-group row">
-                          <div className="col-lg-12">
-                            <label>Description</label>
-                            <div>
-                              <Form.Control
-                                as="textarea"
-                                name="description"
-                                type="text"
-                                rows="4"
-                                value={data.description == null ? "" : data.description}
-                                onChange={this.handleChange}
-                                className="form-control-solid"
-                              />
+
+                          <div className="form-group row pt-3">
+                            <div className="col-lg-6">
+                              <label>Allow Share External Recruiter </label>
+                              <div>
+                                <span className="switch switch-primary">
+                                  <label>
+                                    <input onChange={this.toggleAllowShare} type="checkbox" checked={data.externalRecruiter} name="externalRecruiter" />
+                                    <span></span>
+                                  </label>
+                                </span>
+                                {/* <div>
+                                  <Form.Control
+                                    as="select"
+                                    required
+                                    name="externalRecruiter"
+                                    value={data.externalRecruiter ? "0" : "1"}
+                                    className="form-control"
+                                    onChange={this.handleChange}
+                                    className="form-control-solid"
+                                  >
+                                    <option value={"0"}>Open</option>
+                                    <option value={"1"}>Close</option>
+                                  </Form.Control>
+                                </div> */}
+                              </div>
+                            </div>
+                            <div className="col-lg-6">
+                              <label>Tags</label>
+                              <div>
+                                <div>
+                                  <Select
+                                    isMulti
+                                    name="tags"
+                                    onChange={this.onSelectedTag}
+                                    value={data.tags}
+                                    options={listTag}
+                                    className="multi-select-tag"
+                                    classNamePrefix="select"
+                                  />
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
+
+                          <div className="form-group row">
+                            <div className="col-lg-12">
+                              <label>Description</label>
+                              <div>
+                                <Form.Control
+                                  as="textarea"
+                                  name="description"
+                                  type="text"
+                                  rows="4"
+                                  value={
+                                    data.description == null
+                                      ? ""
+                                      : data.description
+                                  }
+                                  onChange={this.handleChange}
+                                  className="form-control-solid"
+                                />
+                              </div>
+                            </div>
+                          </div>
                         </div>
 
                         <div className="separator separator-dashed my-10" />
                         <h3 className=" text-dark font-weight-bold mb-10">
-                          Note from leader 
+                          Note from leader
                         </h3>
                         <div className="form-group row">
                           <div className="col-lg-6">
@@ -686,7 +800,11 @@ class EditJob extends Component {
                                 name="interviewProcess"
                                 type="text"
                                 rows="4"
-                                value={data.interviewProcess == null ? "" : data.interviewProcess}
+                                value={
+                                  data.interviewProcess == null
+                                    ? ""
+                                    : data.interviewProcess
+                                }
                                 onChange={this.handleChange}
                                 className="form-control-solid"
                               />
@@ -696,37 +814,41 @@ class EditJob extends Component {
 
                         <div className="form-group row">
                           <div className="col-lg-6">
-                          <label>Extra benefit</label>
-                          <div>
-                            <Form.Control
-                              as="textarea"
-                              name="extraBenefit"
-                              type="text"
-                              rows="4"
-                              value={data.extraBenefit == null ? "" : data.extraBenefit }
-                              onChange={this.handleChange}
-                              className="form-control-solid"
-                            />
-                          </div>
+                            <label>Extra benefit</label>
+                            <div>
+                              <Form.Control
+                                as="textarea"
+                                name="extraBenefit"
+                                type="text"
+                                rows="4"
+                                value={
+                                  data.extraBenefit == null
+                                    ? ""
+                                    : data.extraBenefit
+                                }
+                                onChange={this.handleChange}
+                                className="form-control-solid"
+                              />
+                            </div>
                           </div>
                           <div className="col-lg-6 padding-input-kitin">
-                          <label>Status</label>
-                          <div>
-                            <Form.Control
-                                  as="select"
-                                  required
-                                  name="jobStatus"
-                                  value={data.jobStatus}
-                                  className="form-control"
-                                  onChange={this.handleChange}
-                                  className="form-control-solid"
-                                >
-                                  <option value="Active">Active</option>
-                                  <option value="Pending">Pending</option>
-                                  <option value="Close">Close</option>
-                                  <option value="Archive">Archive</option>
-                                </Form.Control>
-                          </div>
+                            <label>Status</label>
+                            <div>
+                              <Form.Control
+                                as="select"
+                                required
+                                name="jobStatus"
+                                value={data.jobStatus}
+                                className="form-control"
+                                onChange={this.handleChange}
+                                className="form-control-solid"
+                              >
+                                <option value="Active">Active</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Close">Close</option>
+                                <option value="Archive">Archive</option>
+                              </Form.Control>
+                            </div>
                           </div>
                         </div>
 
@@ -742,7 +864,10 @@ class EditJob extends Component {
                               <EditorCustom key={1} ref={this.editorOne} />
                             </div>
                           </div>
-                          <div className="form-group row" ref={this.scrollClient}>
+                          <div
+                            className="form-group row"
+                            ref={this.scrollClient}
+                          >
                             <label className="col-md-2">
                               Client <span style={{ color: "red" }}>*</span>
                             </label>

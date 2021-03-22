@@ -231,10 +231,31 @@ class JobDetail extends Component {
             };
           }),
         });
-        console.log(this.state.users);
+        if (dataJob.data.token) {
+          let urlNew = `${dataJob.data.token}?jobId=${idJob}`;
+          this.shortAndCopyLink(urlNew)
+        }
       }
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  shortAndCopyLink = async (string) => {
+    console.log(string)
+    try {
+      const dataSend = {
+        link: string
+      }
+      const linkShort = await api.post(`/api/v1/short-link`, dataSend);
+      if (linkShort) {
+        console.log(linkShort)
+        this.setState({
+          linkShort: linkShort.data.url
+        })
+      }
+    } catch (error) {
+
     }
   }
 
@@ -629,6 +650,7 @@ class JobDetail extends Component {
     }
   }
 
+
   render() {
     const {
       data,
@@ -696,8 +718,8 @@ class JobDetail extends Component {
           )}
           base64={this.state.base64}
           users={this.state.users}
-        // previewPdf={this.previewPdf.bind(this)}
-        isLoadingPdf={this.state.isLoadingPdf}
+          // previewPdf={this.previewPdf.bind(this)}
+          isLoadingPdf={this.state.isLoadingPdf}
         />
 
         <CardTrello
@@ -728,8 +750,8 @@ class JobDetail extends Component {
             onHide={this.openPreviewPdfAndCloseCardTrello.bind(this)}
           />
         ) : (
-            ""
-          )}
+          ""
+        )}
 
         <div className="content d-flex flex-column flex-column-fluid p-0">
           {this.state.isLoading ? <Fbloader /> : null}
@@ -779,9 +801,23 @@ class JobDetail extends Component {
                             <div className="contain-title-job dr_col">
                               <div className="title_job_detail">
                                 <h3 className="m-0 ">{data.title}</h3>
-                                <div className="text-muted font-weight-bold client_name">{data.client? data.client.name: null}</div>
+                                <div className="text-muted font-weight-bold client_name">{data.client ? data.client.name : null}</div>
                               </div>
                               <div className="wrap_edit_job">
+                                {
+                                  data.token ? (
+                                    <div className="mr-2">
+                                      <CopyToClipboard
+                                        text={
+                                          this.state.linkShort
+                                        }
+                                        onCopy={this.successCopy}
+                                      >
+                                        <a className="link-short">{this.state.linkShort}</a>
+                                      </CopyToClipboard>
+                                    </div>
+                                  ) : ''
+                                }
                                 <div className="mr-2">
                                   {this.props.role !== "Member" ? (
                                     <NavLink
@@ -954,12 +990,12 @@ class JobDetail extends Component {
                                       alt=""
                                     />
                                   ) : (
-                                      <img
-                                        src={defaultAva}
-                                        className="h-100 align-self-end"
-                                        alt=""
-                                      />
-                                    )}
+                                    <img
+                                      src={defaultAva}
+                                      className="h-100 align-self-end"
+                                      alt=""
+                                    />
+                                  )}
                                 </div>
                               );
                             })}
@@ -989,11 +1025,11 @@ class JobDetail extends Component {
                                     isDisabled
                                   />
                                 ) : (
-                                    <Select
-                                      options={optUser}
-                                      onChange={this.handleOnchange}
-                                    />
-                                  )}
+                                  <Select
+                                    options={optUser}
+                                    onChange={this.handleOnchange}
+                                  />
+                                )}
                               </PopoverBody>
                             </PopoverPop>
 
@@ -1019,55 +1055,55 @@ class JobDetail extends Component {
                       </div>
                     </div>
                   ) : (
-                      <div className="col-xl-7 pl-0 prm_0">
-                        <div className="card card-custom style-card-kitin">
-                          <div className="card-header flex-wrap border-0 pt-6 pb-0">
-                            <div className="card-title style-title-job">
-                              <div className="contain-title-job dr_col">
-                                <div style={{ width: "80%" }}>
-                                  <h3 className="m-0 pt-2">
-                                    <Skeleton height={24} />
-                                  </h3>
-                                </div>
-                                <div
-                                  style={{
-                                    width: "20%",
-                                    display: "flex",
-                                    justifyContent: "flex-end",
-                                  }}
-                                >
-                                  <div>
-                                    <Skeleton height={24} />
-                                  </div>
-                                </div>
+                    <div className="col-xl-7 pl-0 prm_0">
+                      <div className="card card-custom style-card-kitin">
+                        <div className="card-header flex-wrap border-0 pt-6 pb-0">
+                          <div className="card-title style-title-job">
+                            <div className="contain-title-job dr_col">
+                              <div style={{ width: "80%" }}>
+                                <h3 className="m-0 pt-2">
+                                  <Skeleton height={24} />
+                                </h3>
                               </div>
-                              <div className="style-info-job">
-                                <div className="style-job-detail dorlar-job-detail pr-3">
-                                  <Skeleton height={22} />
-                                </div>
-                                <div className="style-job-detail location-job-detail pr-3">
-                                  <Skeleton height={22} />
-                                </div>
-                                <div className="style-job-detail calendar-job-detail pr-3">
-                                  <Skeleton height={22} />
+                              <div
+                                style={{
+                                  width: "20%",
+                                  display: "flex",
+                                  justifyContent: "flex-end",
+                                }}
+                              >
+                                <div>
+                                  <Skeleton height={24} />
                                 </div>
                               </div>
                             </div>
-                          </div>
-                          <div className="card card-custom style-card-job">
-                            <div className="card-header flex-wrap border-0 pt-5 pb-0">
-                              {arrLoadingTwo.map((item, index) => {
-                                return (
-                                  <div className="content-job" key={index}>
-                                    <Skeleton height={20} />
-                                  </div>
-                                );
-                              })}
+                            <div className="style-info-job">
+                              <div className="style-job-detail dorlar-job-detail pr-3">
+                                <Skeleton height={22} />
+                              </div>
+                              <div className="style-job-detail location-job-detail pr-3">
+                                <Skeleton height={22} />
+                              </div>
+                              <div className="style-job-detail calendar-job-detail pr-3">
+                                <Skeleton height={22} />
+                              </div>
                             </div>
                           </div>
                         </div>
+                        <div className="card card-custom style-card-job">
+                          <div className="card-header flex-wrap border-0 pt-5 pb-0">
+                            {arrLoadingTwo.map((item, index) => {
+                              return (
+                                <div className="content-job" key={index}>
+                                  <Skeleton height={20} />
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
                       </div>
-                    )}
+                    </div>
+                  )}
 
                   <div className="col-xl-5 p-0">
                     <div className="card card-custom">
@@ -1299,111 +1335,111 @@ class JobDetail extends Component {
                           </div>
                         </div>
                       ) : (
-                          <div
-                            className="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
-                            id="kt_datatable"
-                            style={{
-                              position: "static",
-                              zoom: 1,
-                              marginLeft: "12px",
-                            }}
+                        <div
+                          className="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
+                          id="kt_datatable"
+                          style={{
+                            position: "static",
+                            zoom: 1,
+                            marginLeft: "12px",
+                          }}
+                        >
+                          <table
+                            className="datatable-table"
+                            style={{ display: "block" }}
                           >
-                            <table
-                              className="datatable-table"
-                              style={{ display: "block" }}
-                            >
-                              <thead className="datatable-head">
-                                <tr
-                                  className="datatable-row"
-                                  style={{ left: "0px" }}
+                            <thead className="datatable-head">
+                              <tr
+                                className="datatable-row"
+                                style={{ left: "0px" }}
+                              >
+                                <th
+                                  data-field="OrderID"
+                                  className="datatable-cell datatable-cell-sort"
                                 >
-                                  <th
-                                    data-field="OrderID"
-                                    className="datatable-cell datatable-cell-sort"
-                                  >
-                                    <span style={{ width: "160px" }}>Name</span>
-                                  </th>
+                                  <span style={{ width: "160px" }}>Name</span>
+                                </th>
 
-                                  <th
-                                    data-field="ShipDate"
-                                    className="datatable-cell datatable-cell-sort"
-                                  >
-                                    <span style={{ width: "130px" }}>
-                                      Follower
+                                <th
+                                  data-field="ShipDate"
+                                  className="datatable-cell datatable-cell-sort"
+                                >
+                                  <span style={{ width: "130px" }}>
+                                    Follower
                                   </span>
-                                  </th>
-                                  <th
-                                    data-field="Actions"
-                                    data-autohide-disabled="false"
-                                    className="datatable-cell datatable-cell-sort"
+                                </th>
+                                <th
+                                  data-field="Actions"
+                                  data-autohide-disabled="false"
+                                  className="datatable-cell datatable-cell-sort"
+                                >
+                                  <span
+                                    style={{
+                                      width: "120px",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                    }}
                                   >
-                                    <span
-                                      style={{
-                                        width: "120px",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                      }}
-                                    >
-                                      Actions
+                                    Actions
                                   </span>
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody className="datatable-body">
-                                {arrLoading.map((item, index) => {
-                                  return (
-                                    <tr
-                                      key={index}
-                                      data-row={1}
-                                      className="datatable-row datatable-row-even"
-                                      style={{ left: "0px" }}
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody className="datatable-body">
+                              {arrLoading.map((item, index) => {
+                                return (
+                                  <tr
+                                    key={index}
+                                    data-row={1}
+                                    className="datatable-row datatable-row-even"
+                                    style={{ left: "0px" }}
+                                  >
+                                    <td
+                                      data-field="OrderID"
+                                      aria-label="63868-257"
+                                      className="datatable-cell"
                                     >
-                                      <td
-                                        data-field="OrderID"
-                                        aria-label="63868-257"
-                                        className="datatable-cell"
-                                      >
-                                        <span style={{ width: "160px" }}>
-                                          <Skeleton height={24} />
-                                        </span>
-                                      </td>
+                                      <span style={{ width: "160px" }}>
+                                        <Skeleton height={24} />
+                                      </span>
+                                    </td>
 
-                                      <td
-                                        data-field="ShipDate"
-                                        aria-label="9/3/2017"
-                                        className="datatable-cell"
-                                      >
-                                        <span style={{ width: "130px" }}>
-                                          <Skeleton height={24} />
-                                        </span>
-                                      </td>
-                                      <td
-                                        data-field="ShipDate"
-                                        aria-label="9/3/2017"
-                                        className="datatable-cell"
-                                      >
-                                        <span style={{ width: "120px" }}>
-                                          <Skeleton height={24} />
-                                        </span>
-                                      </td>
-                                    </tr>
-                                  );
-                                })}
-                              </tbody>
-                            </table>
-                            <div className="datatable-pager datatable-paging-loaded fl_end mb-4 mr-2">
-                              <Pagination
-                                defaultPageSize={this.state.numberInPage}
-                                current={this.state.pageNumber}
-                                hideOnSinglePage={true}
-                                showTitle={false}
-                                onChange={this.handlePagination}
-                                total={this.state.totalRow}
-                                showLessItems={true}
-                              />
-                            </div>
+                                    <td
+                                      data-field="ShipDate"
+                                      aria-label="9/3/2017"
+                                      className="datatable-cell"
+                                    >
+                                      <span style={{ width: "130px" }}>
+                                        <Skeleton height={24} />
+                                      </span>
+                                    </td>
+                                    <td
+                                      data-field="ShipDate"
+                                      aria-label="9/3/2017"
+                                      className="datatable-cell"
+                                    >
+                                      <span style={{ width: "120px" }}>
+                                        <Skeleton height={24} />
+                                      </span>
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                          <div className="datatable-pager datatable-paging-loaded fl_end mb-4 mr-2">
+                            <Pagination
+                              defaultPageSize={this.state.numberInPage}
+                              current={this.state.pageNumber}
+                              hideOnSinglePage={true}
+                              showTitle={false}
+                              onChange={this.handlePagination}
+                              total={this.state.totalRow}
+                              showLessItems={true}
+                            />
                           </div>
-                        )}
+                        </div>
+                      )}
                       {this.state.isDisplay ? (
                         <div className="d-flex flex-column style-no-result">
                           <img src="/img/no-result.png" alt="" />
@@ -1495,95 +1531,95 @@ class JobDetail extends Component {
                         </div>
                       </div>
                     ) : (
-                        <div className="container p-0 mt-4">
-                          <div className="card card-custom card-stretch gutter-b">
-                            <div className="card-header border-0 justify-content-center">
-                              <h3 className="card-title text-dark">Followers</h3>
-                            </div>
-                            <div className="card-body pt-0">
-                              <div className="table-responsive mt-3">
-                                <table className="table table-borderless table-vertical-center">
-                                  <thead>
-                                    <tr className="d-flex">
-                                      <th
-                                        className="p-0"
-                                        style={{ width: "40px" }}
-                                      />
-                                      <th
-                                        className="p-0"
-                                        style={{ minWidth: "60px" }}
-                                      />
-                                      <th
-                                        className="p-0"
-                                        style={{ minWidth: "60px" }}
-                                      />
-                                    </tr>
-                                  </thead>
+                      <div className="container p-0 mt-4">
+                        <div className="card card-custom card-stretch gutter-b">
+                          <div className="card-header border-0 justify-content-center">
+                            <h3 className="card-title text-dark">Followers</h3>
+                          </div>
+                          <div className="card-body pt-0">
+                            <div className="table-responsive mt-3">
+                              <table className="table table-borderless table-vertical-center">
+                                <thead>
+                                  <tr className="d-flex">
+                                    <th
+                                      className="p-0"
+                                      style={{ width: "40px" }}
+                                    />
+                                    <th
+                                      className="p-0"
+                                      style={{ minWidth: "60px" }}
+                                    />
+                                    <th
+                                      className="p-0"
+                                      style={{ minWidth: "60px" }}
+                                    />
+                                  </tr>
+                                </thead>
 
-                                  <tbody>
-                                    {dataUserAssignJob.map((user, index) => {
-                                      if (user.urlShort) {
-                                        return (
-                                          <tr key={user.id}>
-                                            <td className="pl-0">
-                                              <span className="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">
-                                                {user.User.name}
-                                              </span>
-                                              <span className="text-muted font-weight-bold d-block pt-3">
-                                                <OverlayTrigger
-                                                  key={`bottom-${index}`}
-                                                  placement={"top"}
-                                                  overlay={
-                                                    <Tooltip id={`tooltip-top`}>
-                                                      Click to copy
+                                <tbody>
+                                  {dataUserAssignJob.map((user, index) => {
+                                    if (user.urlShort) {
+                                      return (
+                                        <tr key={user.id}>
+                                          <td className="pl-0">
+                                            <span className="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">
+                                              {user.User.name}
+                                            </span>
+                                            <span className="text-muted font-weight-bold d-block pt-3">
+                                              <OverlayTrigger
+                                                key={`bottom-${index}`}
+                                                placement={"top"}
+                                                overlay={
+                                                  <Tooltip id={`tooltip-top`}>
+                                                    Click to copy
                                                   </Tooltip>
-                                                  }
-                                                  popperConfig={{
-                                                    modifiers: {
-                                                      preventOverflow: {
-                                                        enabled: false,
-                                                      },
+                                                }
+                                                popperConfig={{
+                                                  modifiers: {
+                                                    preventOverflow: {
+                                                      enabled: false,
                                                     },
-                                                  }}
+                                                  },
+                                                }}
+                                              >
+                                                <CopyToClipboard
+                                                  text={user.urlShort}
+                                                  onCopy={this.successCopy}
                                                 >
-                                                  <CopyToClipboard
-                                                    text={user.urlShort}
-                                                    onCopy={this.successCopy}
-                                                  >
-                                                    <span className="linkbitly-css">
-                                                      {user.urlShort}
-                                                    </span>
-                                                  </CopyToClipboard>
-                                                </OverlayTrigger>
-                                              </span>
-                                            </td>
-                                            <td className="pl-0">
-                                              <span className="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">
-                                                Click
+                                                  <span className="linkbitly-css">
+                                                    {user.urlShort}
+                                                  </span>
+                                                </CopyToClipboard>
+                                              </OverlayTrigger>
                                             </span>
-                                              <span className="text-muted font-weight-bold d-block pt-3">
-                                                {user.totalClick}
-                                              </span>
-                                            </td>
-                                            <td className="pl-0">
-                                              <span className="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">
-                                                Candidate
+                                          </td>
+                                          <td className="pl-0">
+                                            <span className="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">
+                                              Click
                                             </span>
-                                              <span className="text-muted font-weight-bold d-block pt-3">
-                                                {user.numberCandidate}
-                                              </span>
-                                            </td>
-                                          </tr>
-                                        );
-                                      }
-                                    })}
-                                  </tbody>
-                                </table>
-                              </div>
+                                            <span className="text-muted font-weight-bold d-block pt-3">
+                                              {user.totalClick}
+                                            </span>
+                                          </td>
+                                          <td className="pl-0">
+                                            <span className="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">
+                                              Candidate
+                                            </span>
+                                            <span className="text-muted font-weight-bold d-block pt-3">
+                                              {user.numberCandidate}
+                                            </span>
+                                          </td>
+                                        </tr>
+                                      );
+                                    }
+                                  })}
+                                </tbody>
+                              </table>
                             </div>
                           </div>
                         </div>
-                      )}
+                      </div>
+                    )}
 
                     <div className="container p-0 mt-4">
                       <div className="card card-custom card-stretch gutter-b">

@@ -467,6 +467,20 @@ class MenuLeft extends Component {
               </div>
               <div className="content_menu">Caculator</div>
             </NavLink>
+            <NavLink
+              exact
+              activeClassName="selected"
+              to="/recruiter"
+              onClick={
+                this.props.isMobile
+                  ? (e) => this.handleOnClick(e, "/recruiter")
+                  : () => null
+              }
+            >
+              <div className="wrap_icon_menu">
+                <i className="fas fa-hands-helping hover_icon"></i>
+              </div>
+            </NavLink>
             {/* <NavLink
               exact
               activeClassName="selected"
@@ -516,6 +530,7 @@ class MenuLeft extends Component {
                 </div>
                 <div className="content_menu">Setting</div>
               </NavLink>
+
             ) : null}
             <PwaInstall />
           </div>
