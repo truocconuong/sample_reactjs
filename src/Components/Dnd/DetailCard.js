@@ -58,6 +58,7 @@ class DetailCard extends Component {
       linkedin: "",
       skype: "",
       expectedDate : "",
+      dueDate : "",
       socialType: {
         facebook: true,
         linkedin: true,
@@ -349,6 +350,7 @@ class DetailCard extends Component {
         location: content.location,
         approachDate: content.approachDate,
         expectedDate: content.expectedDate,
+        dueDate: content.dueDate,
         cv: content.linkCv,
         nameJob: content.nameJob,
         noteApproach: content.noteApproach,
@@ -534,6 +536,11 @@ class DetailCard extends Component {
 
     if(data_detail.expectedDate){
       data_detail.expectedDate = moment(data_detail.expectedDate).format(
+        "YYYY-MM-DD"
+      );
+    }
+    if(data_detail.dueDate){
+      data_detail.dueDate = moment(data_detail.dueDate).format(
         "YYYY-MM-DD"
       );
     }
@@ -870,6 +877,20 @@ class DetailCard extends Component {
                       name="expectedDate"
                       className="form-control"
                       placeholder="Enter expectedDate"
+                    />
+                  </div>
+                  <div className="col-lg-6">
+                    <label>Due Date</label>
+                    <input
+                      disabled={
+                        this.props.role === roleName.DIRECTOR ? true : false
+                      }
+                      value={data_detail.dueDate}
+                      type="date"
+                      onChange={this.handleInputChange.bind(this)}
+                      name="dueDate"
+                      className="form-control"
+                      placeholder="Enter dueDate"
                     />
                   </div>
                 </div>
