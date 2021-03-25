@@ -186,13 +186,13 @@
 
 /* tranvanquang */
 .editor_custom_three {
-	height: 120px;
-	overflow: hidden !important;
+	height:fit-content;
+
 }
 
 .editor_custom_three .editor_three_editor {
+
 	height: 100px;
-	overflow: hidden;
 }
 
 .editor_custom_three .editor_three_wrapper {
@@ -201,5 +201,4 @@
 	height: 100%;
 	border-radius: 10px !important;
 	padding-left: 1rem;
-	padding-right: 1rem;
 }
