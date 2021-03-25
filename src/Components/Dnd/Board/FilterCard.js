@@ -90,7 +90,6 @@ class FilterCard extends Component {
       `/api/search/board/members?search=${this.state.searchMember}`
     );
     if (response) {
-      console.log('o lag ak', response);
       const users = response.data.list;
       this.setState({
         members: users.map((e) => {
@@ -99,7 +98,6 @@ class FilterCard extends Component {
             value: e.id,
           };
         }, () => {
-          console.log(this.state)
         }),
       });
     }
