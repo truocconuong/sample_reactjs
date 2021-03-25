@@ -10,6 +10,8 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import Select from 'react-select';
 import "./style.css";
+import EditorCustomThree from "./EditorCustomThree";
+
 const api = new Network();
 var timer = null;
 var timerTwo = null;
@@ -22,6 +24,7 @@ class EditJob extends Component {
     this.editorFour = React.createRef();
     this.editorFive = React.createRef();
     this.editorSix = React.createRef();
+    this.editorSeven = React.createRef();
 
     this.scrollClient = React.createRef();
 
@@ -95,7 +98,7 @@ class EditJob extends Component {
   };
 
   getInitData = async () => {
-    try {
+    try {      
       const id_job = this.props.match.params.id;
       let getJob = api.get(`/api/admin/jobs/${id_job}`);
       let getListLocation = api.get(`/api/location`);
@@ -130,6 +133,7 @@ class EditJob extends Component {
           this.editorFour.current.setContent(this.state.data.requirement);
           this.editorFive.current.setContent(this.state.data.niceToHave);
           this.editorSix.current.setContent(this.state.data.benefit);
+          this.editorSeven.current.setContent(this.state.data.description);
         }
       }
     } catch (error) {
@@ -301,6 +305,7 @@ class EditJob extends Component {
     const valueFour = this.editorFour.current.getContent();
     const valueFive = this.editorFive.current.getContent();
     const valueSix = this.editorSix.current.getContent();
+    const valueSeven = this.editorSeven.current.getContent();
 
     let self = this;
     try {
@@ -327,7 +332,7 @@ class EditJob extends Component {
         descJob: data.descJob,
         interviewProcess: data.interviewProcess,
         extraBenefit: data.extraBenefit,
-        description: data.description,
+        description: valueSeven,
         tags: listTag
       };
       if (_.isString(data.externalRecruiter)) {
@@ -725,19 +730,7 @@ class EditJob extends Component {
                             <div className="col-lg-12">
                               <label>Description</label>
                               <div>
-                                <Form.Control
-                                  as="textarea"
-                                  name="description"
-                                  type="text"
-                                  rows="4"
-                                  value={
-                                    data.description == null
-                                      ? ""
-                                      : data.description
-                                  }
-                                  onChange={this.handleChange}
-                                  className="form-control-solid"
-                                />
+                                <EditorCustomThree key={7} ref={this.editorSeven}/>
                               </div>
                             </div>
                           </div>
