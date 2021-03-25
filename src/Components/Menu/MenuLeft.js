@@ -476,10 +476,12 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/recruiter")
                   : () => null
               }
+              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
             >
               <div className="wrap_icon_menu">
                 <i className="fas fa-hands-helping hover_icon"></i>
               </div>
+              <div className="content_menu">External Recruiter</div>
             </NavLink>
             {/* <NavLink
               exact

@@ -62,6 +62,7 @@ class CandidateDetail extends Component {
                                         <th style={{ minWidth: '120px' }}>Status</th>
                                         <th style={{ minWidth: '120px' }}>Bonus</th>
                                         <th style={{ minWidth: '120px' }}>Refer Date</th>
+                                        <th style={{ minWidth: '120px' }}>Job</th>
                                         <th className="pr-0 text-right" style={{ minWidth: '160px' }}>Action</th>
                                     </tr>
                                 </thead>
@@ -81,6 +82,9 @@ class CandidateDetail extends Component {
                                                     </td>
                                                     <td>
                                                         <span className="text-dark-75 font-weight-bolder d-block font-size-lg">{moment(canJob.createdAt).format('DD/MM/YYYY')}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span className="text-dark-75 font-weight-bolder d-block font-size-lg">{canJob.Job.title}</span>
                                                     </td>
                                                     <td className="pr-0 text-right">
                                                         <a onClick={() => {

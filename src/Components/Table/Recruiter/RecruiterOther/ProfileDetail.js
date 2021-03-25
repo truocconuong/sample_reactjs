@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash'
-import { defaultAva, domainServer } from "../../../../utils/config.js";
+import { defaultCmnd, domainServer } from "../../../../utils/config.js";
 class ProfileDetail extends Component {
     render() {
         const { profile } = this.props;
@@ -64,10 +64,10 @@ class ProfileDetail extends Component {
                                     <div className="col-lg-9 col-xl-6">
                                         <div className="cmnd">
                                             <div className="image-cmnd">
-                                                <img src={`${domainServer}/${profile.bank.urlFrontImageIdCard}`}></img>
+                                                <img src={profile.bank.urlFrontImageIdCard ?`${domainServer}/${profile.bank.urlFrontImageIdCard}` : defaultCmnd}></img>
                                             </div>
                                             <div className="image-cmnd">
-                                                <img src={`${domainServer}/${profile.bank.urlBehindImageIdCard}`}></img>
+                                                <img src={profile.bank.urlBehindImageIdCard ? `${domainServer}/${profile.bank.urlBehindImageIdCard}` : defaultCmnd}></img>
                                             </div>
                                         </div>
                                     </div>

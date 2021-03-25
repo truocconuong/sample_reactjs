@@ -46,3 +46,9 @@
 .image-cmnd >img {
     width: 100%;
 }
+.header-recruiter-detail{
+    width: 100%;
+    align-items: baseline;
+    justify-content: space-between;
+    display: flex;
+}
