@@ -681,7 +681,7 @@ class EditJob extends Component {
                             <div className="col-lg-6">
                               <label>Allow Share External Recruiter </label>
                               <div>
-                                <span className="switch switch-primary">
+                                <span class="switch switch-icon">
                                   <label>
                                     <input onChange={this.toggleAllowShare} type="checkbox" checked={data.externalRecruiter} name="externalRecruiter" />
                                     <span></span>

@@ -45,6 +45,7 @@ class Broad extends Component {
           location: "",
           approachDate: "",
           linkCv: "",
+          refineCv: "",
           nameJob: "",
           idJob: "",
           noteApproach: "",
@@ -66,6 +67,7 @@ class Broad extends Component {
           location: "",
           approachDate: "",
           linkCv: "",
+          refineCv: "",
           nameJob: "",
           idJob: "",
           noteApproach: "",
@@ -200,7 +202,6 @@ class Broad extends Component {
 
   updateCard = async (card) => {
     const { card_data_detail } = this.state;
-    console.log(card_data_detail)
     const idCard = card_data_detail.id;
     this.setState({
       isLoading: true
@@ -482,6 +483,7 @@ class Broad extends Component {
               expectedDate: card.expectedDate,
               dueDate: card.dueDate,
               linkCv: card.cv,
+              refineCv: card.refineCv,
               nameJob: card.Job.title,
               noteApproach: card.noteApproach || "",
               interview: card.Interview,
@@ -716,9 +718,10 @@ class Broad extends Component {
           skype: card.Candidate.skype || '',
           location: card.Job.Location.name,
           approachDate: card.approachDate,
-          expectedDate : card.expectedDate,
-          dueDate : card.dueDate,
+          expectedDate: card.expectedDate,
+          dueDate: card.dueDate,
           linkCv: card.cv,
+          refineCv: card.refineCv,
           nameJob: card.Job.title,
           noteApproach: card.noteApproach || "",
           interview: card.Interview,
@@ -934,9 +937,10 @@ class Broad extends Component {
         email: card.Candidate.email,
         location: card.Job.Location.name,
         approachDate: card.approachDate,
-        expectedDate : card.expectedDate,
-        dueDate : card.dueDate,
+        expectedDate: card.expectedDate,
+        dueDate: card.dueDate,
         linkCv: card.cv,
+        refineCv: card.refineCv,
         nameJob: card.Job.title,
         noteApproach: card.noteApproach || "",
         interview: card.Interview,

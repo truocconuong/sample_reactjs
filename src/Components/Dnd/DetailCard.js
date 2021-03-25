@@ -48,6 +48,7 @@ class DetailCard extends Component {
       location: "",
       approachDate: "",
       cv: "",
+      refineCv: "",
       nameJob: "",
       noteApproach: "",
       idJob: "",
@@ -57,8 +58,8 @@ class DetailCard extends Component {
       facebook: "",
       linkedin: "",
       skype: "",
-      expectedDate : "",
-      dueDate : "",
+      expectedDate: "",
+      dueDate: "",
       socialType: {
         facebook: true,
         linkedin: true,
@@ -172,7 +173,6 @@ class DetailCard extends Component {
   handleInputChange(e) {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(e.target.value , e.target.name)
     this.setState({
       [name]: value,
     });
@@ -182,7 +182,7 @@ class DetailCard extends Component {
   removeUserCard = async (card_id, user_id, index) => {
     await this.props.removeMemberToCard(card_id, user_id);
     await this.toggleDeleteUserPop(index);
-    
+
   };
 
   addMemberToCard = (card_id, user) => {
@@ -239,7 +239,8 @@ class DetailCard extends Component {
     this.toggleAddMember();
   };
 
-  async onChangeUploadHandler(event) {
+  async onChangeUploadHandler(event, nameLink) {
+    console.log('-----', event, nameLink)
     const card = this.props.data_detail.content;
     if (card.name === "" || card.nameJob === "") {
       toastr.error(
@@ -276,7 +277,7 @@ class DetailCard extends Component {
           .then((res) => {
             if (res) {
               const fileName = `${res.data.fileName}`;
-              this.updatePropsLinkCv(fileName);
+              this.updatePropsLinkCv(fileName, nameLink);
             } else {
               toast.error("Something went wrong please try again later!", {
                 position: toast.POSITION.BOTTOM_RIGHT,
@@ -295,17 +296,11 @@ class DetailCard extends Component {
     }
   }
 
-  updatePropsLinkCv = (value) => {
+  updatePropsLinkCv = (value, name) => {
+    console.log(value, name)
     this.setState({
-      linkCv: value,
+      [name]: value,
     });
-    // const data = {
-    //   target: {
-    //     name: "linkCv",
-    //     value: value,
-    //   },
-    // };
-    // this.props.update(data);
   };
 
   isEmpty(obj) {
@@ -352,6 +347,7 @@ class DetailCard extends Component {
         expectedDate: content.expectedDate,
         dueDate: content.dueDate,
         cv: content.linkCv,
+        refineCv: content.refineCv,
         nameJob: content.nameJob,
         noteApproach: content.noteApproach,
         idJob: content.idJob,
@@ -534,12 +530,12 @@ class DetailCard extends Component {
       "YYYY-MM-DD"
     );
 
-    if(data_detail.expectedDate){
+    if (data_detail.expectedDate) {
       data_detail.expectedDate = moment(data_detail.expectedDate).format(
         "YYYY-MM-DD"
       );
     }
-    if(data_detail.dueDate){
+    if (data_detail.dueDate) {
       data_detail.dueDate = moment(data_detail.dueDate).format(
         "YYYY-MM-DD"
       );
@@ -928,12 +924,49 @@ class DetailCard extends Component {
                       }
                       placeholder="Import CV"
                     />
+                    <label htmlFor="uploadRefineCv" className="custom-label-upload">
+                      <div className="input-group-append custom-div-upload">
+                        <span className="input-group-text">
+                          <i className="fas fa-upload"></i>
+                          <input
+                            onChange={(e) => {
+                              this.onChangeUploadHandler(e, 'linkCv')
+                            }}
+                            id="uploadRefineCv"
+                            type="file"
+                            accept="application/pdf"
+                            className="form-control mb-2 mr-sm-2"
+                            style={{ display: "none" }}
+                            placeholder="Jane Doe"
+                          />
+                        </span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Link refine cv </label>
+                  <div className="input-group">
+                    <input
+                      type="text"
+                      disabled={
+                        this.props.role === roleName.DIRECTOR ? true : false
+                      }
+                      value={data_detail.refineCv ? data_detail.refineCv : ""}
+                      onChange={this.handleInputChange.bind(this)}
+                      name="refineCv"
+                      className="form-control"
+                      placeholder="Import refine CV"
+                    />
                     <label htmlFor="uploadCV" className="custom-label-upload">
                       <div className="input-group-append custom-div-upload">
                         <span className="input-group-text">
                           <i className="fas fa-upload"></i>
                           <input
-                            onChange={this.onChangeUploadHandler}
+                            onChange={(e) => {
+                              this.onChangeUploadHandler(e, 'refineCv')
+                            }}
                             id="uploadCV"
                             type="file"
                             accept="application/pdf"
@@ -946,6 +979,7 @@ class DetailCard extends Component {
                     </label>
                   </div>
                 </div>
+
 
                 <div className="form-group">
                   <label htmlFor="exampleTextarea">Approach Point </label>
@@ -1133,16 +1167,15 @@ class DetailCard extends Component {
             </button>
           </div>
           <div
-            className={`wrap_row_history ${
-              this.state.isShowHistory ? "active_history" : ""
-            }`}
+            className={`wrap_row_history ${this.state.isShowHistory ? "active_history" : ""
+              }`}
           >
             {this.state.isShowHistory
               ? this.state.history.map((e, index) => {
-                  return this.renderRowActivity(e, index);
-                })
+                return this.renderRowActivity(e, index);
+              })
               : null}
-            {}
+            { }
           </div>
           <div className="wrap-comment-card">
             <div className="wrap_icon_history">
