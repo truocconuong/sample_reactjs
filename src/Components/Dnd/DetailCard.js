@@ -87,7 +87,6 @@ class DetailCard extends Component {
   };
 
   setDefaultCommentBox = () => {
-    console.log("Da vao dayyyy")
     this.setState({
       openFormInputComment: false,
     });
@@ -137,7 +136,6 @@ class DetailCard extends Component {
   };
 
   toggleDeleteUserPop(index) {
-    console.log("da vao ham xoa")
     let self = this;
     const isShow = this.state.isOpenDeleteUserPop[index];
     let currentIsOpenDeleteUserPop = new Array(10).fill(false);
@@ -240,7 +238,6 @@ class DetailCard extends Component {
   };
 
   async onChangeUploadHandler(event, nameLink) {
-    console.log('-----', event, nameLink)
     const card = this.props.data_detail.content;
     if (card.name === "" || card.nameJob === "") {
       toastr.error(
@@ -297,7 +294,6 @@ class DetailCard extends Component {
   }
 
   updatePropsLinkCv = (value, name) => {
-    console.log(value, name)
     this.setState({
       [name]: value,
     });
@@ -394,7 +390,6 @@ class DetailCard extends Component {
     // console.log(e.content)
     if (e.type == "update_card") {
       let content = JSON.parse(e.content);
-      console.log(content);
       return (
         <div className="row_history" key={index}>
           <div className="symbol symbol-50 symbol-light ">

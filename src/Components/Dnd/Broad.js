@@ -20,7 +20,8 @@ import PreviewPdf from "../Modal/PreviewPdf/PreviewPdf.js";
 import SearchBoard from "./Board/SearchBoard.js";
 import FilterMember from "./Board/FilterMember.js";
 import FilterCard from "./Board/FilterCard.js";
-
+import queryString from "query-string";
+import { withRouter } from 'react-router-dom'
 
 const api = new Network();
 
@@ -408,12 +409,28 @@ class Broad extends Component {
       });
     }
   }
+  // chuhuumanh searchCardDetail
   componentDidMount() {
     this.initData();
     this.initJob();
     this.initUserTeam();
     this.initDataLabels();
     this.offOverFlowY();
+    this.showCardSearch();
+  }
+
+  showCardSearch = async () => {
+    const query = queryString.parse(this.props.location.search)
+    const cardId = query.cardId;
+    if (cardId) {
+      const res = await api.get(`/api/cards/${cardId}`) ;
+      if(res){
+        const card = res.data.card;
+        if(card){
+          this.searchCardDetail(card)
+        }
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -1122,4 +1139,4 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps)(Broad);
+export default withRouter(connect(mapStateToProps)(Broad));
