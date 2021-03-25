@@ -61,7 +61,7 @@ class Notification extends Component {
   }
 
   showDetailNotification = (id, type) => {
-    let url = urlPortal;
+    let url = '';
     if (type === "jobOverTime" || type === "assignJob") {
       url += `/job-detail/${id}`;
     } else if (type === "assignCard") {
