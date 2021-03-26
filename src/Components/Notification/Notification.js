@@ -51,6 +51,8 @@ class Notification extends Component {
       classArr: new Array(10).fill("fa fa-caret-down"),
       selectUser: "",
       selectType: "",
+      timeStart: '',
+      timeEnd: ''
     };
     this.handlePagination = this.handlePagination.bind(this);
     this.getDataClient = this.getDataClient.bind(this);
@@ -60,11 +62,12 @@ class Notification extends Component {
     this.showDetail = this.showDetail.bind(this);
   }
 
-  showDetailNotification = (id, type) => {
+  showDetailNotification = (id, type,) => {
     let url = '';
     if (type === "jobOverTime" || type === "assignJob") {
       url += `/job-detail/${id}`;
     } else if (type === "assignCard") {
+
       url += `/board?cardId=${id}`;
     }
     window.open(url, "_blank");
@@ -201,6 +204,9 @@ class Notification extends Component {
       if (this.state.selectType !== "") {
         url += `&type=${this.state.selectType}`;
       }
+      if (this.state.timeStart !== "" && this.state.timeEnd !== "") {
+        url += `&timeStart=${this.state.timeStart}&timeEnd=${this.state.timeEnd}`;
+      }
       const response = await api.get(url);
 
       if (response) {
@@ -253,6 +259,22 @@ class Notification extends Component {
       this.getDataClient();
       this.close();
     }
+  };
+
+  handleChangeInput = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    this.setState({
+      [name]: value,
+    }, () => {
+      if (this.state.timeStart !== '' && this.state.timeEnd !== '') {
+        this.setState({
+          pageNumber: 1
+        }, () => {
+          this.getDataClient();
+        })
+      }
+    })
   };
   render() {
     const data = this.state.data;
@@ -324,7 +346,7 @@ class Notification extends Component {
                       <div className="choose-name">
                         <Select
                           options={this.state.user}
-                          placeholder="Choose name..."
+                          placeholder="Choose members..."
                           onChange={this.getUserSelect}
                           isClearable
                         />
@@ -336,6 +358,14 @@ class Notification extends Component {
                           onChange={this.getTypeSelect}
                           isClearable
                         />
+                      </div>
+                    </div>
+                    <div className="filter-date-row">
+                      <div className="filter-board-item">
+                        <input onChange={this.handleChangeInput} type="date" name="timeStart" className="form-control" placeholder="Enter your start card" />
+                      </div>
+                      <div className="filter-board-item">
+                        <input type="date" onChange={this.handleChangeInput} name="timeEnd" className="form-control" placeholder="Enter your end card" />
                       </div>
                     </div>
                   </div>
@@ -366,13 +396,6 @@ class Notification extends Component {
                             className="datatable-cell datatable-cell-sort hide_mb"
                           >
                             <span style={{ width: "170px" }}>Message</span>
-                          </th>
-
-                          <th
-                            data-field="Type"
-                            className="datatable-cell datatable-cell-sort"
-                          >
-                            <span style={{ width: "100px" }}>Type</span>
                           </th>
 
                           <th
@@ -419,7 +442,7 @@ class Notification extends Component {
                                     onClick={() =>
                                       this.showDetailNotification(
                                         client.content.id,
-                                        client.type
+                                        client.type,
                                       )
                                     }
                                     className="text-hover-primary"
@@ -451,28 +474,7 @@ class Notification extends Component {
                                       )
                                     }
                                   >
-                                    {client.content.message}
-                                  </span>
-                                </td>
-                                <td
-                                  data-field="Type"
-                                  aria-label="63868-257"
-                                  className="datatable-cell"
-                                >
-                                  <span
-                                    onClick={() =>
-                                      this.showDetailNotification(
-                                        client.content.id,
-                                        client.type
-                                      )
-                                    }
-                                    className="text-hover-primary"
-                                    style={{
-                                      width: "100px",
-                                      cursor: "pointer",
-                                    }}
-                                  >
-                                    {client.type}
+                                    {client.content.message} <strong>{client.content.title}</strong>
                                   </span>
                                 </td>
 
