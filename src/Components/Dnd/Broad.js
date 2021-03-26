@@ -20,7 +20,8 @@ import PreviewPdf from "../Modal/PreviewPdf/PreviewPdf.js";
 import SearchBoard from "./Board/SearchBoard.js";
 import FilterMember from "./Board/FilterMember.js";
 import FilterCard from "./Board/FilterCard.js";
-
+import queryString from "query-string";
+import { withRouter } from "react-router-dom";
 
 const api = new Network();
 
@@ -45,10 +46,12 @@ class Broad extends Component {
           location: "",
           approachDate: "",
           linkCv: "",
+          refineCv: "",
           nameJob: "",
           idJob: "",
           noteApproach: "",
           expectedDate: "",
+          dueDate: "",
           user: [],
           jobSelected: {},
           laneSelected: {},
@@ -65,11 +68,13 @@ class Broad extends Component {
           location: "",
           approachDate: "",
           linkCv: "",
+          refineCv: "",
           nameJob: "",
           idJob: "",
           noteApproach: "",
           isRefinePdf: "",
           expectedDate: "",
+          dueDate: "",
           user: [],
           jobSelected: {},
           laneSelected: {},
@@ -187,7 +192,7 @@ class Broad extends Component {
 
   updateLane = async (cardId, laneId) => {
     const laneIdUpdate = {
-      laneId: laneId
+      laneId: laneId,
     };
     try {
       await api.patch(`/api/cards/${cardId}`, laneIdUpdate);
@@ -198,15 +203,14 @@ class Broad extends Component {
 
   updateCard = async (card) => {
     const { card_data_detail } = this.state;
-    console.log(card_data_detail)
     const idCard = card_data_detail.id;
     this.setState({
-      isLoading: true
-    })
+      isLoading: true,
+    });
     try {
       if (card.laneId) {
         await this.updateLane(idCard, card.laneId);
-        delete card['laneId']
+        delete card["laneId"];
       }
       const response = await api.patch(`/api/cards/${idCard}`, card);
       if (response) {
@@ -229,8 +233,8 @@ class Broad extends Component {
       }
     } catch (error) {
       this.setState({
-        isLoading: false
-      })
+        isLoading: false,
+      });
       if (error.error) {
         if (error.error.data) {
           if (error.error.data.error === "Cannot update candidate") {
@@ -389,9 +393,7 @@ class Broad extends Component {
   };
 
   initDataLabels = async () => {
-    const response = await api.get(
-      `/api/v1/label`
-    );
+    const response = await api.get(`/api/v1/label`);
     if (response) {
       const labels = response.data.list;
       this.setState({
@@ -404,7 +406,8 @@ class Broad extends Component {
         }),
       });
     }
-  }
+  };
+  // chuhuumanh searchCardDetail
   componentDidMount() {
     this.initData();
     this.initJob();
@@ -412,6 +415,20 @@ class Broad extends Component {
     this.initDataLabels();
     this.offOverFlowY();
   }
+
+  showCardSearch = async () => {
+    const query = queryString.parse(this.props.location.search);
+    const cardId = query.cardId;
+    if (cardId) {
+      const res = await api.get(`/api/cards/${cardId}`);
+      if (res) {
+        const card = res.data.card;
+        if (card) {
+          this.searchCardDetail(card);
+        }
+      }
+    }
+  };
 
   componentWillUnmount() {
     this.onOverFlowY();
@@ -434,18 +451,16 @@ class Broad extends Component {
     const { search } = this.state;
     let url = `/api/v1/cards`;
 
-    // filter card 
+    // filter card
     for (const key in search) {
-      if (!_.isNil(search[key]) && search[key] !== '') {
-        const character = url.indexOf('?') === -1 ? '?' : '&'
-        url += `${character}${[key]}=${search[key]}`
-        // 
+      if (!_.isNil(search[key]) && search[key] !== "") {
+        const character = url.indexOf("?") === -1 ? "?" : "&";
+        url += `${character}${[key]}=${search[key]}`;
+        //
       }
     }
     try {
-      const lanes = await api.get(
-        url
-      );
+      const lanes = await api.get(url);
       const columns = lanes.data.list;
       for (const column of columns) {
         data.columns[`${column.id}`] = {
@@ -472,13 +487,19 @@ class Broad extends Component {
                 : "",
               phone: card.Candidate.phone,
               email: card.Candidate.email,
-              facebook: card.Candidate.facebook ? `https://www.facebook.com/profile.php?id=${card.Candidate.facebook}` : '',
-              linkedin: card.Candidate.linkedin ? `https://www.linkedin.com/in/${card.Candidate.linkedin}/` : '',
-              skype: card.Candidate.skype || '',
+              facebook: card.Candidate.facebook
+                ? `https://www.facebook.com/profile.php?id=${card.Candidate.facebook}`
+                : "",
+              linkedin: card.Candidate.linkedin
+                ? `https://www.linkedin.com/in/${card.Candidate.linkedin}/`
+                : "",
+              skype: card.Candidate.skype || "",
               location: card.Job.Location.name,
               approachDate: card.approachDate,
               expectedDate: card.expectedDate,
+              dueDate: card.dueDate,
               linkCv: card.cv,
+              refineCv: card.refineCv,
               nameJob: card.Job.title,
               noteApproach: card.noteApproach || "",
               interview: card.Interview,
@@ -500,7 +521,7 @@ class Broad extends Component {
                   linkAvatar: user.linkAvatar,
                 };
               }),
-              labels: card.Labels
+              labels: card.Labels,
             },
           };
         }
@@ -522,6 +543,7 @@ class Broad extends Component {
     this.setState({
       isLoading: false,
     });
+    this.showCardSearch();
   }
 
   async initJob() {
@@ -542,7 +564,7 @@ class Broad extends Component {
         });
         this.setState({ jobs: jobs });
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   initUserTeam = async () => {
@@ -562,7 +584,7 @@ class Broad extends Component {
           users: users,
         });
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   createCardToLane = async (item) => {
@@ -635,12 +657,15 @@ class Broad extends Component {
   };
 
   initDataAgain = () => {
-    this.setState({
-      isLoading: true,
-      userId: "",
-    }, () => {
-      this.initData();
-    });
+    this.setState(
+      {
+        isLoading: true,
+        userId: "",
+      },
+      () => {
+        this.initData();
+      }
+    );
   };
 
   removeMemberToCard = async (card_id, user_id) => {
@@ -708,13 +733,19 @@ class Broad extends Component {
             : "",
           phone: card.Candidate.phone,
           email: card.Candidate.email,
-          facebook: card.Candidate.facebook ? `https://www.facebook.com/profile.php?id=${card.Candidate.facebook}` : '',
-          linkedin: card.Candidate.linkedin ? `https://www.linkedin.com/in/${card.Candidate.linkedin}/` : '',
-          skype: card.Candidate.skype || '',
+          facebook: card.Candidate.facebook
+            ? `https://www.facebook.com/profile.php?id=${card.Candidate.facebook}`
+            : "",
+          linkedin: card.Candidate.linkedin
+            ? `https://www.linkedin.com/in/${card.Candidate.linkedin}/`
+            : "",
+          skype: card.Candidate.skype || "",
           location: card.Job.Location.name,
           approachDate: card.approachDate,
-          expectedDate : card.expectedDate,
+          expectedDate: card.expectedDate,
+          dueDate: card.dueDate,
           linkCv: card.cv,
+          refineCv: card.refineCv,
           nameJob: card.Job.title,
           noteApproach: card.noteApproach || "",
           interview: card.Interview,
@@ -737,7 +768,7 @@ class Broad extends Component {
               linkAvatar: user.linkAvatar,
             };
           }),
-          labels: card.Labels
+          labels: card.Labels,
         },
       };
     }
@@ -851,32 +882,34 @@ class Broad extends Component {
     }
   };
 
-
   createLabel = async (label) => {
     const { data } = this.state;
     const cardId = label.candidateJobId;
     const response = await api.post(`/api/v1/card/label`, label);
     if (response) {
-      const labelItem = response.data.label
+      const labelItem = response.data.label;
       data.cards[cardId].content.labels.push(labelItem);
       this.setState({
-        data: data
-      })
+        data: data,
+      });
     }
     this.initDataLabels();
-  }
+  };
 
   removeLabel = async (label) => {
     const { data } = this.state;
     const { id, candidateJobId } = label;
     const response = await api.delete(`/api/v1/card/${id}/label`);
     if (response) {
-      data.cards[candidateJobId].content.labels = _.filter(data.cards[candidateJobId].content.labels, label => label.id !== id);
+      data.cards[candidateJobId].content.labels = _.filter(
+        data.cards[candidateJobId].content.labels,
+        (label) => label.id !== id
+      );
       this.setState({
-        data: data
-      })
+        data: data,
+      });
     }
-  }
+  };
 
   storageCard = async (card) => {
     const data = this.state.data;
@@ -902,12 +935,12 @@ class Broad extends Component {
 
   searchCardByUserId = (userId) => {
     const filterUser = {
-      userId: userId
-    }
+      userId: userId,
+    };
 
     this.setState(
       {
-        search: filterUser
+        search: filterUser,
       },
       () => {
         this.initData();
@@ -930,8 +963,10 @@ class Broad extends Component {
         email: card.Candidate.email,
         location: card.Job.Location.name,
         approachDate: card.approachDate,
-        expectedDate : card.expectedDate,
+        expectedDate: card.expectedDate,
+        dueDate: card.dueDate,
         linkCv: card.cv,
+        refineCv: card.refineCv,
         nameJob: card.Job.title,
         noteApproach: card.noteApproach || "",
         interview: card.Interview,
@@ -960,16 +995,19 @@ class Broad extends Component {
       card_selected: _.cloneDeep(dataCard),
       card_data_detail: _.cloneDeep(dataCard),
     });
-  }
+  };
 
   callSearchCard = (item) => {
-    this.setState({
-      isLoading: true,
-      search: { ...this.state.search, ...item }
-    }, () => {
-      this.initData();
-    })
-  }
+    this.setState(
+      {
+        isLoading: true,
+        search: { ...this.state.search, ...item },
+      },
+      () => {
+        this.initData();
+      }
+    );
+  };
 
   render() {
     return (
@@ -1042,7 +1080,6 @@ class Broad extends Component {
           </div>
         </div>
 
-
         <div className="d-flex flex-column-fluid trello-main">
           <div className="container_trello">
             {this.state.data.columnOrder ? (
@@ -1113,4 +1150,4 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps)(Broad);
+export default withRouter(connect(mapStateToProps)(Broad));

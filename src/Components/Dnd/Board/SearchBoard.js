@@ -97,6 +97,8 @@ class SearchBoard extends Component {
                 {this.state.isLoadingMember ? this.elmIsLoading() : (
                     this.state.cards.map((card, index) => (
                         <div onClick={() => {
+                        console.log(card)
+
                             // this.setDefaultSearch();
                             this.toggleFormSearch();
                             this.props.searchCardDetail(card);

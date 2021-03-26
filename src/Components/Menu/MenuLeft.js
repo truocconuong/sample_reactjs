@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import "./style.css";
-import { addPaddingBroad, removePaddingBroad, setAvatarUser } from "../../redux/actions";
+import {
+  addPaddingBroad,
+  removePaddingBroad,
+  setAvatarUser,
+} from "../../redux/actions";
 import { connect } from "react-redux";
 import AuthService from "../../Service/AuthService.js";
 import Network from "../../Service/Network.js";
@@ -179,10 +183,10 @@ class MenuLeft extends Component {
               ? responseProfile.data.user.countNotificationNotSeen
               : 0,
           },
-          function () { }
+          function () {}
         );
-        const linkAvatar = responseProfile.data.user.linkAvatar
-       await this.props.setAvatarUser(linkAvatar)
+        const linkAvatar = responseProfile.data.user.linkAvatar;
+        await this.props.setAvatarUser(linkAvatar);
       }
     } catch (error) {
       console.log("err while get profile user: ", error);
@@ -209,7 +213,6 @@ class MenuLeft extends Component {
     if (this.state.countUnreadNoti != 0 && !open) {
       await this.markAllNotiRead();
     } else {
-
     }
     this.setState({ isOpenDrawer: open });
   }
@@ -282,8 +285,8 @@ class MenuLeft extends Component {
                     alt="ava"
                   />
                 ) : (
-                    <img className="ava_img" src={defaultAva} alt="ava" />
-                  )}
+                  <img className="ava_img" src={defaultAva} alt="ava" />
+                )}
                 {this.state.countUnreadNoti != 0 ? (
                   <span className="label label-sm  label-danger font-weight-bolder position-absolute noti_count mt-1 mr-1">
                     {this.state.countUnreadNoti}
@@ -303,7 +306,9 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/")
                   : () => null
               }
-              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
+              className={`row_icon ${
+                this.props.role === "Bloger" ? "hide_bloger" : ""
+              }`}
             >
               <div className="wrap_icon_menu">
                 <svg
@@ -333,7 +338,24 @@ class MenuLeft extends Component {
               </div>
               <div className="content_menu">Dashboard</div>
             </NavLink>
-
+            <NavLink
+              exact
+              activeClassName="selected"
+              to="/notification"
+              onClick={
+                this.props.isMobile
+                  ? (e) => this.handleOnClick(e, "/notification")
+                  : () => null
+              }
+              className={`row_icon ${
+                this.props.role === "Bloger" ? "hide_bloger" : ""
+              }`}
+            >
+              <div className="wrap_icon_menu">
+                <i className="fas far fa-bell hover_icon"></i>
+              </div>
+              <div className="content_menu">Notification</div>
+            </NavLink>
             <NavLink
               exact
               activeClassName="selected"
@@ -343,7 +365,9 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/job")
                   : () => null
               }
-              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
+              className={`row_icon ${
+                this.props.role === "Bloger" ? "hide_bloger" : ""
+              }`}
               style={this.props.role == "Member" ? { display: "none" } : null}
             >
               <div className="wrap_icon_menu">
@@ -360,7 +384,9 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/client")
                   : () => null
               }
-              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
+              className={`row_icon ${
+                this.props.role === "Bloger" ? "hide_bloger" : ""
+              }`}
               style={this.props.role == "Member" ? { display: "none" } : null}
             >
               <div className="wrap_icon_menu">
@@ -377,7 +403,9 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/candidate")
                   : () => null
               }
-              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
+              className={`row_icon ${
+                this.props.role === "Bloger" ? "hide_bloger" : ""
+              }`}
               style={this.props.role == "Member" ? { display: "none" } : null}
             >
               <div className="wrap_icon_menu">
@@ -395,7 +423,9 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/users")
                   : () => null
               }
-              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
+              className={`row_icon ${
+                this.props.role === "Bloger" ? "hide_bloger" : ""
+              }`}
               style={this.props.role == "Member" ? { display: "none" } : null}
             >
               <div className="wrap_icon_menu">
@@ -412,7 +442,9 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/search")
                   : () => null
               }
-              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
+              className={`row_icon ${
+                this.props.role === "Bloger" ? "hide_bloger" : ""
+              }`}
             >
               <div className="wrap_icon_menu">
                 <i className="fa fa-search hover_icon"></i>
@@ -428,7 +460,9 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/interview")
                   : () => null
               }
-              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
+              className={`row_icon ${
+                this.props.role === "Bloger" ? "hide_bloger" : ""
+              }`}
             >
               <div className="wrap_icon_menu">
                 <i className="far fa-handshake hover_icon"></i>
@@ -444,7 +478,9 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/board")
                   : () => null
               }
-              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
+              className={`row_icon ${
+                this.props.role === "Bloger" ? "hide_bloger" : ""
+              }`}
             >
               <div className="wrap_icon_menu">
                 <i className="fab fa-trello hover_icon"></i>
@@ -460,7 +496,9 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/caculator-salary")
                   : () => null
               }
-              className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
+              className={`row_icon ${
+                this.props.role === "Bloger" ? "hide_bloger" : ""
+              }`}
             >
               <div className="wrap_icon_menu">
                 <i className="far fa-money-bill-alt hover_icon"></i>
@@ -476,10 +514,14 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/recruiter")
                   : () => null
               }
+              className={`row_icon ${
+                this.props.role === "Bloger" ? "hide_bloger" : ""
+              }`}
             >
               <div className="wrap_icon_menu">
                 <i className="fas fa-hands-helping hover_icon"></i>
               </div>
+              <div className="content_menu">External Recruiter</div>
             </NavLink>
             {/* <NavLink
               exact
@@ -523,14 +565,15 @@ class MenuLeft extends Component {
                     ? (e) => this.handleOnClick(e, "/setting")
                     : () => null
                 }
-                className = {`row_icon ${this.props.role==="Bloger"? 'hide_bloger': ''}`}
+                className={`row_icon ${
+                  this.props.role === "Bloger" ? "hide_bloger" : ""
+                }`}
               >
                 <div className="wrap_icon_menu">
                   <i className="fa fa-cog hover_icon"></i>
                 </div>
                 <div className="content_menu">Setting</div>
               </NavLink>
-
             ) : null}
             <PwaInstall />
           </div>

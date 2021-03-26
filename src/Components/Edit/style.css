@@ -183,3 +183,22 @@
 .multi-select-tag .select__multi-value__label ,.select__multi-value__remove{
 	color: #ffffff;
 }
+
+/* tranvanquang */
+.editor_custom_three {
+	height:fit-content;
+
+}
+
+.editor_custom_three .editor_three_editor {
+
+	height: 100px;
+}
+
+.editor_custom_three .editor_three_wrapper {
+	background-color: #F3F6F9;
+    border-color: #F3F6F9;
+	height: 100%;
+	border-radius: 10px !important;
+	padding-left: 1rem;
+}

@@ -242,8 +242,8 @@ table td.pd_cs {
 }
 
 /* .accordion-panel:hover{
-  background-color: #f3f6f9;
-} */
+    background-color: #f3f6f9;
+  } */
 
 .accordion-panel:after {
   clear: both;
@@ -427,8 +427,8 @@ table td.pd_cs {
 
 .body_card_dashboard {
   /* max-height: 420px;
-  min-height: 420px;
-  overflow: hidden; */
+    min-height: 420px;
+    overflow: hidden; */
   min-height: 412px;
 }
 
@@ -451,11 +451,11 @@ table td.pd_cs {
 .custom_date_pickeer {
   width: 36%;
 }
-.custom_date_pickeer_job{
+.custom_date_pickeer_job {
   width: 16%;
   margin-right: 10px;
 }
-.align-items-flex-end{
+.align-items-flex-end {
   align-items: flex-end;
 }
 .fl_col {
@@ -483,20 +483,20 @@ table td.pd_cs {
   border-radius: 0.42rem;
 }
 
-.cus-datatable{
+.cus-datatable {
   word-break: break-all;
 }
 /* css select */
 
-.kynang-search{
+.kynang-search {
   padding-bottom: 10px;
 }
 
-.search-candidate{
+.search-candidate {
   text-align: right;
 }
 
-.preview{
+.preview {
   text-align: center;
 }
 .preview-pdf {
@@ -504,14 +504,30 @@ table td.pd_cs {
   height: 900px;
 }
 
-.cursor-open{
+.cursor-open {
   cursor: pointer;
 }
 
-.card-body-refine-pdf{
+.card-body-refine-pdf {
   padding-left: 10% !important;
   padding-right: 10% !important;
 }
-.title-form-editor{
+.title-form-editor {
   text-transform: uppercase;
+}
+
+.choose-name,
+.choose-type {
+  width: 200px;
+  margin: 10px;
+}
+
+.select-notification {
+  display: flex;
+}
+
+@media (max-width: 767px) {
+  .select-notification {
+    display: block;
+  }
 }

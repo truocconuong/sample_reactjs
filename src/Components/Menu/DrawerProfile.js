@@ -90,7 +90,8 @@ class DrawerProfile extends Component {
       this.props.history.push(`/job-detail/${id}`);
     } else if (type == "assignCard") {
       this.props.onHide();
-      this.props.history.push(`/board`);
+      this.props.history.push(`/board?cardId=${id}`);
+      window.open(`/board?cardId=${id}`, "_blank");
     } else if (type == "assignTask") {
       this.props.onHide();
       this.props.history.push(`/`);

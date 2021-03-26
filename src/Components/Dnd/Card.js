@@ -684,7 +684,7 @@ class Card extends Component {
                               </div>
                             </div>
                             <span className="text-muted font-weight-bold">
-                              {moment(card.approachDate).format("DD/MM/YYYY")}
+                              {card.dueDate ? moment(card.dueDate).format("DD/MM/YYYY") : ''}
                             </span>
                           </div>
                         </div>
