@@ -253,9 +253,14 @@ class DetailCard extends Component {
           });
           return false;
         }
+        let nameFile = `${card.name} ${card.nameJob}`;
+        if (nameLink === 'refineCv') {
+          const getIndex = event.target.files[0].name.indexOf('.')
+          nameFile = event.target.files[0].name.slice(0, getIndex);
+        }
         var formData = new FormData();
         formData.append("file", event.target.files[0]);
-        formData.append("nameFile", `${card.name} ${card.nameJob}`);
+        formData.append("nameFile", nameFile);
         formData.append("idJob", `${card.idJob}`);
 
         const request_header = api.getHeaderUpload();
@@ -870,7 +875,7 @@ class DetailCard extends Component {
                       placeholder="Enter expectedDate"
                     />
                   </div>
-                  <div className="col-lg-6">
+                  {/* <div className="col-lg-6">
                     <label>Due Date</label>
                     <input
                       disabled={
@@ -883,7 +888,7 @@ class DetailCard extends Component {
                       className="form-control"
                       placeholder="Enter dueDate"
                     />
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="form-group">
