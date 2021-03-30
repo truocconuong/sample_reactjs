@@ -244,11 +244,26 @@ class Interview extends Component {
   }
 
   showInterviewCandidate = (candidate) => {
-    console.log("candidate", candidate);
-    this.setState({
-      showReview: true,
-      dataCandidate: candidate,
-    });
+    // console.log("candidte", candidate);
+    if (candidate.viewer === null) {
+      toast.error(
+        "This Candidate has not been set up interview. Please contact admin.",
+        {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      );
+    } else {
+      this.setState({
+        showReview: true,
+        dataCandidate: candidate,
+      });
+    }
   };
 
   hideInterviewCandidate = () => {

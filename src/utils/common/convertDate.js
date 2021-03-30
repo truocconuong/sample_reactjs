@@ -1,13 +1,16 @@
-import moment from 'moment';
+import moment from "moment";
 
 export function convertDateLocal(time) {
-    return moment(time).utc().add(7, 'hour').format("DD/MM/YYYY HH:mm");
+  if (time === "") {
+    return "";
+  }
+  return moment(time).utc().add(7, "hour").format("DD/MM/YYYY HH:mm");
 }
 
 export function convertDateLocalHour(time) {
-    return moment(time).utc().add(7, 'hour').format("HH:mm");
+  return moment(time).utc().add(7, "hour").format("HH:mm");
 }
 
 export function dynamicDateServer(time) {
-    return moment(time).utc("00:00")
+  return moment(time).utc("00:00");
 }
