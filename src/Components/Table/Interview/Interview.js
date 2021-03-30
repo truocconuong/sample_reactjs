@@ -5,17 +5,18 @@ import "rc-pagination/assets/index.css";
 import "./../style.css";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
-import moment from 'moment'
-import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import moment from "moment";
+import Modal, { ModalTransition } from "@atlaskit/modal-dialog";
 import Create from "../../Modal/Interview/Create";
-import _ from 'lodash'
+import _ from "lodash";
 import Fbloader from "../../libs/PageLoader/fbloader";
 import Network from "../../../Service/Network";
-import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+import { Button, Popover, PopoverHeader, PopoverBody } from "reactstrap";
 import { ToastContainer, toast, Zoom } from "react-toastify";
 import CustomToast from "../../common/CustomToast";
 import { convertDateLocal } from "../../../utils/common/convertDate";
+import InterviewAssessment from "./InterviewAssessment";
 
 const api = new Network();
 
@@ -37,6 +38,8 @@ class Interview extends Component {
       arrayBooleanPopover: [],
       classToggleDetail: new Array(10).fill("hide_mb"),
       classArr: new Array(10).fill("fa fa-caret-right"),
+      showReview: false,
+      dataCandidate: {},
     };
     this.handlePagination = this.handlePagination.bind(this);
     this.getDataInterview = this.getDataInterview.bind(this);
@@ -45,10 +48,9 @@ class Interview extends Component {
     this.fetchData = this.fetchData.bind(this);
     this.getDataCandidateById = this.getDataCandidateById.bind(this);
     this.deleteInterview = this.deleteInterview.bind(this);
-    this.createInterview = this.createInterview.bind(this)
-    this.togglePopover = this.togglePopover.bind(this)
-    this.offPopoverDelete = this.offPopoverDelete.bind(this)
-
+    this.createInterview = this.createInterview.bind(this);
+    this.togglePopover = this.togglePopover.bind(this);
+    this.offPopoverDelete = this.offPopoverDelete.bind(this);
   }
 
   showDetail(index) {
@@ -75,38 +77,36 @@ class Interview extends Component {
     const arrayFalse = _.cloneDeep(this.arrayBoolean());
     this.setState({
       arrayBooleanPopover: arrayFalse,
-    })
+    });
   }
 
   handleOnChangeJob(e) {
     this.setState({
       jobSelected: e,
-    })
+    });
   }
-
 
   async getDataCandidateById(id) {
     const response = await api.get(`/api/candidate/interview/${id}`);
     if (response) {
-      const candidates = _.map(response.data.candidate, candidate => {
+      const candidates = _.map(response.data.candidate, (candidate) => {
         return {
           ...candidate,
           value: candidate.id,
-          label: `${candidate.email} (${candidate.phone}) `
-        }
+          label: `${candidate.email} (${candidate.phone}) `,
+        };
       });
       this.setState({
-        candidates: candidates
-      })
+        candidates: candidates,
+      });
     }
   }
 
   toggleFormCreateInterview() {
     this.setState({
-      formCreateInterview: !this.state.formCreateInterview
-    })
+      formCreateInterview: !this.state.formCreateInterview,
+    });
   }
-
 
   async handlePagination(page) {
     await this.setState({
@@ -120,27 +120,23 @@ class Interview extends Component {
   }
 
   fetchData() {
-    return Promise.all([this.getDataInterview(), this.getDataJob()])
+    return Promise.all([this.getDataInterview(), this.getDataJob()]);
   }
-
-
 
   async getDataJob() {
     try {
       const response = await api.get(`/api/jobs`);
       if (response) {
         this.setState({
-          jobs: _.map(response.data.list, job => {
+          jobs: _.map(response.data.list, (job) => {
             return {
               value: job.id,
-              label: job.title
-            }
-          })
-        })
+              label: job.title,
+            };
+          }),
+        });
       }
-    } catch (error) {
-
-    }
+    } catch (error) {}
   }
 
   async getDataInterview() {
@@ -158,7 +154,9 @@ class Interview extends Component {
         setTimeout(() => {
           self.setState({
             // isLoading: false,
-            arrayBooleanPopover: new Array(response.data.list.length).fill(false),
+            arrayBooleanPopover: new Array(response.data.list.length).fill(
+              false
+            ),
             data: response.data.list,
             totalRow: response.data.total,
             start: start,
@@ -195,7 +193,7 @@ class Interview extends Component {
     try {
       const response = await api.post(`/api/admin/interview`, data);
       if (response) {
-        toast(<CustomToast title={"Create interview successed !"}/>, {
+        toast(<CustomToast title={"Create interview successed !"} />, {
           position: toast.POSITION.BOTTOM_RIGHT,
           autoClose: 3000,
           className: "toast_login",
@@ -213,38 +211,56 @@ class Interview extends Component {
         this.getDataInterview();
       }
     } catch (error) {
-      toast(<CustomToast title={"Interview time is overlapped !"} type={"error"}/>, {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 3000,
-        className: "toast_login",
-        closeButton: false,
-        hideProgressBar: true,
-        newestOnTop: true,
-        closeOnClick: true,
-        rtl: false,
-        pauseOnFocusLoss: true,
-        draggable: true,
-        pauseOnHover: true,
-        transition: Zoom,
-      });
+      toast(
+        <CustomToast title={"Interview time is overlapped !"} type={"error"} />,
+        {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+          className: "toast_login",
+          closeButton: false,
+          hideProgressBar: true,
+          newestOnTop: true,
+          closeOnClick: true,
+          rtl: false,
+          pauseOnFocusLoss: true,
+          draggable: true,
+          pauseOnHover: true,
+          transition: Zoom,
+        }
+      );
     }
   }
 
   arrayBoolean = () => {
     return new Array(this.state.arrayBooleanPopover.length).fill(false);
-  }
-
+  };
 
   togglePopover(index, boolean) {
     const arrayBooleanPopover = this.arrayBoolean();
     arrayBooleanPopover[index] = !boolean;
     this.setState({
-      arrayBooleanPopover: arrayBooleanPopover
-    })
-
+      arrayBooleanPopover: arrayBooleanPopover,
+    });
   }
 
+  showInterviewCandidate = (candidate) => {
+    console.log("candidate", candidate);
+    this.setState({
+      showReview: true,
+      dataCandidate: candidate,
+    });
+  };
 
+  hideInterviewCandidate = () => {
+    this.setState({
+      showReview: false,
+      dataCandidate: {},
+    });
+  };
+
+  submitInterviewCandidate = () => {
+    this.fetchData();
+  };
 
   render() {
     const data = this.state.data;
@@ -252,7 +268,7 @@ class Interview extends Component {
       <div
         className={`d-flex flex-column flex-row-fluid wrapper ${this.props.className_wrap_broad}`}
       >
-          <ToastContainer closeOnClick autoClose={1000} rtl={false} />
+        <ToastContainer closeOnClick autoClose={1000} rtl={false} />
         <Create
           show={this.state.formCreateInterview}
           onHide={this.toggleFormCreateInterview}
@@ -260,8 +276,13 @@ class Interview extends Component {
           getDataCandidateById={this.getDataCandidateById}
           candidates={this.state.candidates}
           createInterview={this.createInterview}
-        >
-        </Create>
+        ></Create>
+
+        <InterviewAssessment
+          show={this.state.showReview}
+          hide={this.hideInterviewCandidate}
+          data={this.state.dataCandidate}
+        />
 
         <div className="content d-flex flex-column flex-column-fluid">
           {this.state.isLoading ? <Fbloader /> : null}
@@ -285,60 +306,54 @@ class Interview extends Component {
                       </a>
                     </li>
                   </ul>
-                  
                 </div>
-               
               </div>
-             
+
               <div className="d-flex align-items-center flex-wrap"></div>
             </div>
           </div>
           <div className="d-flex flex-column-fluid">
             <div className="container">
-            
               <div className="card card-custom">
                 <div className="card-header flex-wrap border-0 pt-6 pb-0">
                   <div className="card-title">
-                    <h3 className="card-label">
-                      List interview
-                     
-                    </h3>
+                    <h3 className="card-label">List interview</h3>
                   </div>
                   <div className="card-toolbar">
-                    
-                    <div className="dropdown dropdown-inline mr-2">
-                     
-                    </div>
-                   
-                    <a onClick={this.toggleFormCreateInterview} href="#" className="btn btn-primary font-weight-bolder">
-                        <span className="svg-icon svg-icon-md">
-                         
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            xmlnsXlink="http://www.w3.org/1999/xlink"
-                            width="24px"
-                            height="24px"
-                            viewBox="0 0 24 24"
-                            version="1.1"
+                    <div className="dropdown dropdown-inline mr-2"></div>
+
+                    <a
+                      onClick={this.toggleFormCreateInterview}
+                      href="#"
+                      className="btn btn-primary font-weight-bolder"
+                    >
+                      <span className="svg-icon svg-icon-md">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          xmlnsXlink="http://www.w3.org/1999/xlink"
+                          width="24px"
+                          height="24px"
+                          viewBox="0 0 24 24"
+                          version="1.1"
+                        >
+                          <g
+                            stroke="none"
+                            strokeWidth={1}
+                            fill="none"
+                            fillRule="evenodd"
                           >
-                            <g
-                              stroke="none"
-                              strokeWidth={1}
-                              fill="none"
-                              fillRule="evenodd"
-                            >
-                              <rect x={0} y={0} width={24} height={24} />
-                              <circle fill="#000000" cx={9} cy={15} r={6} />
-                              <path
-                                d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z"
-                                fill="#000000"
-                                opacity="0.3"
-                              />
-                            </g>
-                          </svg>
-                        </span>
-                        New Interview
-                      </a>
+                            <rect x={0} y={0} width={24} height={24} />
+                            <circle fill="#000000" cx={9} cy={15} r={6} />
+                            <path
+                              d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z"
+                              fill="#000000"
+                              opacity="0.3"
+                            />
+                          </g>
+                        </svg>
+                      </span>
+                      New Interview
+                    </a>
                   </div>
                 </div>
                 <div className="card-body">
@@ -380,7 +395,9 @@ class Interview extends Component {
                             data-field="Status"
                             className="datatable-cell datatable-cell-sort hide_mb"
                           >
-                            <span style={{ width: "137px" }}>Time Interview</span>
+                            <span style={{ width: "137px" }}>
+                              Time Interview
+                            </span>
                           </th>
 
                           <th
@@ -465,7 +482,9 @@ class Interview extends Component {
                                   className="datatable-cell hide_mb"
                                 >
                                   <span style={{ width: "137px" }}>
-                                  {convertDateLocal(interview.timeInterviewEnd)}
+                                    {convertDateLocal(
+                                      interview.timeInterviewEnd
+                                    )}
                                   </span>
                                 </td>
                                 <td
@@ -481,6 +500,18 @@ class Interview extends Component {
                                       width: "125px",
                                     }}
                                   >
+                                    <span
+                                      className="btn btn-sm btn-clean btn-icon mr-2"
+                                      title="Review Candidate"
+                                    >
+                                      <i
+                                        onClick={() =>
+                                          this.showInterviewCandidate(interview)
+                                        }
+                                        className="fas fa-user-edit"
+                                      ></i>
+                                    </span>
+
                                     <Link
                                       to={`/interview/${interview.id}`}
                                       className="btn btn-sm btn-clean btn-icon mr-2"
@@ -528,34 +559,52 @@ class Interview extends Component {
                                     </Link>
                                     <a
                                       id={`Popover-${interview.id}`}
-                                      onClick={() => this.togglePopover(index, this.state.arrayBooleanPopover[index])}
+                                      onClick={() =>
+                                        this.togglePopover(
+                                          index,
+                                          this.state.arrayBooleanPopover[index]
+                                        )
+                                      }
                                       className="btn btn-sm btn-clean btn-icon"
                                       title="Delete"
-                                      style={this.props.role == "Member" ? { display: "none" } : null}
+                                      style={
+                                        this.props.role == "Member"
+                                          ? { display: "none" }
+                                          : null
+                                      }
                                     >
                                       <Popover
-                                        isOpen={this.state.arrayBooleanPopover[index]}
+                                        isOpen={
+                                          this.state.arrayBooleanPopover[index]
+                                        }
                                         target={`Popover-${interview.id}`}
                                         trigger="legacy"
                                         placement="bottom"
                                         toggle={this.offPopoverDelete}
                                       >
-                                        <PopoverHeader>Confirm Delete Interview</PopoverHeader>
+                                        <PopoverHeader>
+                                          Confirm Delete Interview
+                                        </PopoverHeader>
                                         <PopoverBody>
                                           <div className="text-center">
                                             <button
-                                              onClick={() => this.deleteInterview(interview.id)}
+                                              onClick={() =>
+                                                this.deleteInterview(
+                                                  interview.id
+                                                )
+                                              }
                                               type="button"
                                               className="btn btn-outline-danger btn-sm btn-sm-cs mr-2"
                                             >
                                               Delete
-                                        </button>
-                                            <button onClick={this.offPopoverDelete}
+                                            </button>
+                                            <button
+                                              onClick={this.offPopoverDelete}
                                               type="button"
                                               className="btn btn-outline-secondary btn-sm btn-sm-cs"
                                             >
                                               Cancel
-                                        </button>
+                                            </button>
                                           </div>
                                         </PopoverBody>
                                       </Popover>
@@ -601,7 +650,10 @@ class Interview extends Component {
                               <tr
                                 className={`datatable-row-detail hide_desktop ${this.state.classToggleDetail[index]}`}
                               >
-                                <td className="datatable-detail cus-datatable" colSpan="9">
+                                <td
+                                  className="datatable-detail cus-datatable"
+                                  colSpan="9"
+                                >
                                   <table>
                                     <tbody>
                                       <tr className="datatable-row">
@@ -615,7 +667,10 @@ class Interview extends Component {
                                           style={{}}
                                         >
                                           <span style={{ width: 110 }}>
-                                            {interview.CandidateJob.Candidate.email}
+                                            {
+                                              interview.CandidateJob.Candidate
+                                                .email
+                                            }
                                           </span>
                                         </td>
                                       </tr>
@@ -631,7 +686,10 @@ class Interview extends Component {
                                           style={{}}
                                         >
                                           <span style={{ width: 110 }}>
-                                            {interview.CandidateJob.Candidate.phone}
+                                            {
+                                              interview.CandidateJob.Candidate
+                                                .phone
+                                            }
                                           </span>
                                         </td>
                                       </tr>
@@ -651,7 +709,6 @@ class Interview extends Component {
                                           </span> */}
                                         </td>
                                       </tr>
-
                                     </tbody>
                                   </table>
                                 </td>
@@ -686,7 +743,7 @@ class Interview extends Component {
             </div>
           </div>
         </div>
-      </div >
+      </div>
     );
   }
 }
