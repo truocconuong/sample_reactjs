@@ -11,7 +11,6 @@ class InterviewAssessment extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      viewer: "",
       professionalKnowledge: "",
       workExperience: "",
       languageAbility: "",
@@ -43,9 +42,6 @@ class InterviewAssessment extends Component {
       review: this.state,
     };
 
-    const viewer = this.state.viewer;
-
-    delete dataSubmit["review"].viewer;
     try {
       const response = await api.patch(
         `/api/v1/review/interview/${this.props.data.id}`,
@@ -61,7 +57,7 @@ class InterviewAssessment extends Component {
         draggable: true,
         progress: undefined,
       });
-      this.props.submitInterviewCandidate(this.props.data.id, viewer);
+      this.props.submitInterviewCandidate();
     } catch (error) {
       console.log("ERROR review ==========>", error.message);
     }
@@ -84,7 +80,6 @@ class InterviewAssessment extends Component {
       } else {
         this.setState({
           ...nextProps.data.review,
-          viewer: nextProps.data.viewer,
         });
       }
     }
@@ -92,7 +87,6 @@ class InterviewAssessment extends Component {
 
   render() {
     const {
-      viewer,
       professionalKnowledge,
       workExperience,
       languageAbility,
@@ -124,16 +118,7 @@ class InterviewAssessment extends Component {
               </tr>
               <tr>
                 <td>{data.CandidateJob && data.CandidateJob.Candidate.name}</td>
-                <td>
-                  <textarea
-                    value={viewer}
-                    name="viewer"
-                    style={{ resize: "none" }}
-                    className="input-interview"
-                    placeholder="Enter here..."
-                    onChange={this.handleChangeInput}
-                  />
-                </td>
+                <td>{data && data.viewer}</td>
               </tr>
               <tr>
                 <td className="information-title">Interview Date</td>

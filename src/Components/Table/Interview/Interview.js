@@ -258,21 +258,7 @@ class Interview extends Component {
     });
   };
 
-  submitInterviewCandidate = async (id, viewer) => {
-    let candidate = this.state.data.find((item) => item.id === id);
-
-    if (candidate.viewer !== viewer) {
-      candidate["viewer"] = viewer;
-      try {
-        const response = await api.patch(
-          `/api/admin/interview/${id}`,
-          candidate
-        );
-      } catch (error) {
-        console.log("ERROR update interview ====>", error.message);
-      }
-    }
-
+  submitInterviewCandidate = async () => {
     this.fetchData();
   };
 
