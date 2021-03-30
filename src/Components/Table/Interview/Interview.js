@@ -258,7 +258,21 @@ class Interview extends Component {
     });
   };
 
-  submitInterviewCandidate = () => {
+  submitInterviewCandidate = async (id, viewer) => {
+    let candidate = this.state.data.find((item) => item.id === id);
+
+    if (candidate.viewer !== viewer) {
+      candidate["viewer"] = viewer;
+      try {
+        const response = await api.patch(
+          `/api/admin/interview/${id}`,
+          candidate
+        );
+      } catch (error) {
+        console.log("ERROR update interview ====>", error.message);
+      }
+    }
+
     this.fetchData();
   };
 
@@ -282,6 +296,7 @@ class Interview extends Component {
           show={this.state.showReview}
           hide={this.hideInterviewCandidate}
           data={this.state.dataCandidate}
+          submitInterviewCandidate={this.submitInterviewCandidate}
         />
 
         <div className="content d-flex flex-column flex-column-fluid">
