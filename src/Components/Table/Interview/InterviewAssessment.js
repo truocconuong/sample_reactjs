@@ -130,7 +130,7 @@ class InterviewAssessment extends Component {
               </tr>
               <tr>
                 <td>
-                  {/* {data.CandidateJob && data.CandidateJob.job.title} */}
+                  {data.CandidateJob && data.CandidateJob.Job.title}
                 </td>
                 <td>
                   <textarea
