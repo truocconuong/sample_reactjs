@@ -10,6 +10,7 @@ import Validator from "../../utils/validator";
 import { rulesAddTask } from "../../utils/rule";
 import _ from "lodash";
 import moment from "moment";
+import Fbloader from "../libs/PageLoader/fbloader";
 
 const api = new Network();
 
@@ -39,6 +40,7 @@ class Task extends Component {
         tag: null,
       },
       errors: {},
+      isLoading: false,
     };
     this.validator = new Validator(rulesAddTask);
   }
@@ -114,6 +116,7 @@ class Task extends Component {
     }
     this.setState({
       errors,
+      isLoading: true,
     });
     if (_.isEmpty(errors)) {
       let submitAddTask = this.state.addTask;
@@ -136,8 +139,8 @@ class Task extends Component {
         });
         this.setState({
           showModal: false,
+          isLoading: false,
         });
-        window.location.reload();
       } catch (e) {
         console.log("ERROR ADD TASK =====> ", e.message);
       }
@@ -145,13 +148,15 @@ class Task extends Component {
   };
 
   render() {
-    const { showModal, addTask, errors } = this.state;
+    const { showModal, addTask, errors, isLoading } = this.state;
 
     return (
       <>
         <div style={{ width: "100%" }}>
           <div className={`d-flex flex-column flex-row-fluid wrapper pl_100`}>
             <div className="content d-flex flex-column flex-column-fluid">
+              {isLoading ? <Fbloader /> : null}
+
               <div className="d-flex flex-column-fluid">
                 <div className="container">
                   <div className="card card-custom">
@@ -197,7 +202,7 @@ class Task extends Component {
                       </div>
                     </div>
                     <div className="card-body">
-                      <TaskList />
+                      <TaskList isLoading={isLoading} />
                     </div>
                   </div>
                 </div>
