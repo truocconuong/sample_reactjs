@@ -879,7 +879,7 @@ class DetailCard extends Component {
                       className="custom-date-picker-interview"
                     >
                       <div className="custom-date-picker-interview__wrap">
-                        <input readOnly name="expectedDate" value={data_detail.expectedDate ? moment(data_detail.expectedDate).add(7,'hours').format('YYYY-MM-DD HH:mm') : null} className={'form-control'}
+                        <input readOnly name="expectedDate" value={data_detail.expectedDate ? convertDateLocal(data_detail.expectedDate) : null} className={'form-control'}
                           placeholder="Enter Time Expected Date" />
                         <div className="input-group-append">
                           <span className="input-group-text">
