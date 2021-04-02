@@ -4,6 +4,7 @@ import { withRouter } from "react-router";
 import SubTask from "./EditTask";
 import Network from "../../Service/Network";
 import { toast, ToastContainer } from "react-toastify";
+import Fbloader from "../libs/PageLoader/fbloader";
 
 const api = new Network();
 
@@ -54,7 +55,9 @@ class TaskList extends Component {
 
   handleDeleteTask = async (id) => {
     try {
-      //   console.log("delete task");
+      this.setState({
+        isLoading: true,
+      });
       const response = await api.delete(`/api/v1/list-task/${id}`);
       console.log("aaa", response);
       toast.error("Delete task successful!", {
@@ -66,6 +69,10 @@ class TaskList extends Component {
         draggable: true,
         progress: undefined,
       });
+      this.setState({
+        isLoading: false,
+      });
+      this.getInitData();
     } catch (error) {
       console.log("ERROR delete task =====>", error.message);
     }
@@ -75,10 +82,18 @@ class TaskList extends Component {
     this.getInitData();
   }
 
+  componentWillReceiveProps(prevProps) {
+    if (prevProps.isLoading !== this.props.isLoading) {
+      this.getInitData();
+    }
+  }
+
   render() {
-    const { data, dataSubtask, showModal } = this.state;
+    const { data, dataSubtask, showModal, isLoading } = this.state;
     return (
       <div>
+        {isLoading ? <Fbloader /> : null}
+
         <div
           className="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
           id="kt_datatable"
