@@ -55,13 +55,15 @@ class EditTask extends Component {
       </div>
     );
   }
-  calcTotal(arr, type){
-    if(type=="percent"){
-      const reducer = (accumulator, currentValue) => accumulator + Number(currentValue.percent);
-      return arr.reduce(reducer, 0)
-    }else{
-      const reducer = (accumulator, currentValue) => accumulator + Number(currentValue.target);
-      return arr.reduce(reducer, 0)
+  calcTotal(arr, type) {
+    if (type == "percent") {
+      const reducer = (accumulator, currentValue) =>
+        accumulator + Number(currentValue.percent);
+      return arr.reduce(reducer, 0);
+    } else {
+      const reducer = (accumulator, currentValue) =>
+        accumulator + Number(currentValue.target);
+      return arr.reduce(reducer, 0);
     }
   }
   renderFooter(self) {
@@ -69,10 +71,16 @@ class EditTask extends Component {
       <div className="wrap_footer">
         <div>
           <div>
-            {`Total target: ${this.calcTotal(this.props.contentTask, "target")}%`}
+            {`Total target: ${this.calcTotal(
+              this.props.contentTask,
+              "target"
+            )}%`}
           </div>
           <div>
-            {`Total achievement: ${this.calcTotal(this.props.contentTask, "percent")}%`}
+            {`Total achievement: ${this.calcTotal(
+              this.props.contentTask,
+              "percent"
+            )}%`}
           </div>
         </div>
         <div className="modal-cus__right text-right">
@@ -90,6 +98,8 @@ class EditTask extends Component {
     let self = this;
     const errors = this.state.errors;
     const props = this.props;
+
+    console.log("date", this.props.startDate);
     return (
       <ModalTransition>
         {this.props.show && (

@@ -39,6 +39,39 @@ const rulesAddUser = [
   },
 ];
 
+const rulesAddTask = [
+  {
+    field: "title",
+    method: "isEmpty",
+    validWhen: false,
+    message: "Title is required.",
+  },
+  {
+    field: "content",
+    method: "isEmpty",
+    validWhen: false,
+    message: "Content is required.",
+  },
+  {
+    field: "startDate",
+    method: "isEmpty",
+    validWhen: false,
+    message: "Start Date is required.",
+  },
+  {
+    field: "dueDate",
+    method: "isEmpty",
+    validWhen: false,
+    message: "Due Date is required.",
+  },
+  {
+    field: "status",
+    method: "isEmpty",
+    validWhen: false,
+    message: "Status is required.",
+  },
+];
+
 const rulesAddUserNotDirector = [
   {
     field: "emailUser",
@@ -157,7 +190,6 @@ const rulesEditUserNotDirector = [
     validWhen: false,
     message: "Role is required.",
   },
-
 ];
 
 const rulesAddAndUpdateClient = [
@@ -253,7 +285,7 @@ const rulesCreateNewCard = [
     validWhen: false,
     message: "laneId is required.",
   },
-]
+];
 
 const rulesCreateInterview = [
   {
@@ -280,7 +312,7 @@ const rulesCreateInterview = [
     option: { max: 10 },
     validWhen: true,
     message: "candidate name is required.",
-  }
+  },
 ];
 
 const rulesUpdateInterview = [
@@ -308,7 +340,7 @@ const rulesUpdateInterview = [
     option: { max: 10 },
     validWhen: true,
     message: "candidate name is required.",
-  }
+  },
 ];
 
 const rulesCreateCardInterview = [
@@ -395,7 +427,7 @@ const rulesCaculatorSalary = [
     validWhen: false,
     message: "insuraneMoney is required.",
   },
-]
+];
 export {
   rulesAddUser,
   rulesEditUser,
@@ -410,6 +442,6 @@ export {
   rulesCreateCardInterview,
   rulesEditUserNotDirector,
   rulesUpdateConfig,
-  rulesCaculatorSalary
+  rulesCaculatorSalary,
+  rulesAddTask,
 };
-

@@ -359,6 +359,25 @@ class MenuLeft extends Component {
             <NavLink
               exact
               activeClassName="selected"
+              to="/task"
+              onClick={
+                this.props.isMobile
+                  ? (e) => this.handleOnClick(e, "/task")
+                  : () => null
+              }
+              // role
+              className={`row_icon ${
+                this.props.role === "Bloger" ? "hide_bloger" : ""
+              }`}
+            >
+              <div className="wrap_icon_menu">
+                <i className="fas fa-tasks hover_icon"></i>
+              </div>
+              <div className="content_menu">Task</div>
+            </NavLink>
+            <NavLink
+              exact
+              activeClassName="selected"
               to="/job"
               onClick={
                 this.props.isMobile
