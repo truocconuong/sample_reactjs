@@ -472,7 +472,7 @@ class Broad extends Component {
           cardIds: _.map(column.CandidateJobs, (candidate) => candidate.id),
         };
         const cards = column.CandidateJobs;
-        for (const card of cards) {
+        _.map(cards, card => {
           const cardId = `${card.id}`;
           data.cards[cardId] = {
             id: cardId,
@@ -502,10 +502,10 @@ class Broad extends Component {
               refineCv: card.refineCv,
               nameJob: card.Job.title,
               noteApproach: card.noteApproach || "",
-              noteRecruiter : card.noteRecruiter,
+              noteRecruiter: card.noteRecruiter,
               interview: card.Interview,
               idJob: card.jobId,
-              referalId : card.referalId,
+              referalId: card.referalId,
               isRefinePdf: card.isRefinePdf,
               jobSelected: {
                 value: card.Job.title,
@@ -526,7 +526,8 @@ class Broad extends Component {
               labels: card.Labels,
             },
           };
-        }
+          return card;
+        })
       }
       data.columnOrder = _.map(columns, (column) => `${column.id}`);
       this.setState({
@@ -566,7 +567,7 @@ class Broad extends Component {
         });
         this.setState({ jobs: jobs });
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   initUserTeam = async () => {
@@ -586,7 +587,7 @@ class Broad extends Component {
           users: users,
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   createCardToLane = async (item) => {
@@ -718,7 +719,7 @@ class Broad extends Component {
     const idCards = _.map(cards, (card) => card.id);
     data.columns[column.id].cardIds.push(...idCards);
     data.columns[column.id].limit = column.limit + 5;
-    if (_.isEmpty(cards)|| cards.length<5) {
+    if (_.isEmpty(cards) || cards.length < 5) {
       data.columns[column.id].maximum = true;
     }
     for (const card of cards) {
@@ -750,12 +751,12 @@ class Broad extends Component {
           refineCv: card.refineCv,
           nameJob: card.Job.title,
           noteApproach: card.noteApproach || "",
-          noteRecruiter : card.noteRecruiter,
+          noteRecruiter: card.noteRecruiter,
           interview: card.Interview,
           idJob: card.jobId,
           laneId: card.laneId,
           isRefinePdf: card.isRefinePdf,
-          referalId : card.referalId,
+          referalId: card.referalId,
           jobSelected: {
             value: card.Job.title,
             label: card.Job.title,
@@ -973,11 +974,11 @@ class Broad extends Component {
         refineCv: card.refineCv,
         nameJob: card.Job.title,
         noteApproach: card.noteApproach || "",
-        noteRecruiter : card.noteRecruiter,
+        noteRecruiter: card.noteRecruiter,
         interview: card.Interview,
         idJob: card.jobId,
         isRefinePdf: card.isRefinePdf,
-        referalId : card.referalId,
+        referalId: card.referalId,
         jobSelected: {
           value: card.Job.title,
           label: card.Job.title,
