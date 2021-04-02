@@ -871,7 +871,7 @@ class DetailCard extends Component {
                   <div className="col-md-6">
                     <label> Expected Date:</label>
                     <DatetimePickerTrigger
-                      moment={data_detail.expectedDate ? moment(data_detail.expectedDate).add(7,'hours') : null}
+                      moment={data_detail.expectedDate ? moment(data_detail.expectedDate) : null}
                       onChange={(_moment) =>
                         this.handleChangeDatePicker(_moment, "expectedDate")
                       }
