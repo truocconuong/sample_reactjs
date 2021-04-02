@@ -11,6 +11,7 @@ import { rulesAddTask } from "../../utils/rule";
 import _ from "lodash";
 import moment from "moment";
 import Fbloader from "../libs/PageLoader/fbloader";
+import InterviewList from "./InterviewList";
 
 const api = new Network();
 
@@ -108,7 +109,7 @@ class Task extends Component {
         "Due date needs to be greater than or equal to the current date.";
     } else if (
       moment(addTask.dueDate).localeData -
-        moment(addTask.startDate).localeData <
+      moment(addTask.startDate).localeData <
       0
     ) {
       errors.dueDate =
@@ -204,7 +205,12 @@ class Task extends Component {
                     <div className="card-body">
                       <TaskList isLoading={isLoading} />
                     </div>
+
                   </div>
+                      <div className="d-flex w_100 dr_col justify-content-center">
+                        <InterviewList nameColumn="Onboarding" />
+                        <InterviewList nameColumn="Interview F2F" />
+                    </div>
                 </div>
               </div>
             </div>

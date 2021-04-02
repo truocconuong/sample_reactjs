@@ -5,6 +5,8 @@ import SubTask from "./EditTask";
 import Network from "../../Service/Network";
 import { toast, ToastContainer } from "react-toastify";
 import Fbloader from "../libs/PageLoader/fbloader";
+import Pagination from "rc-pagination";
+import "rc-pagination/assets/index.css";
 
 const api = new Network();
 
@@ -12,23 +14,66 @@ class TaskList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      pageNumber: 1,
+      pageSize: 5,
+      realSize: 0,
+      totalRow: 0,
+      start: 0,
       data: [],
       classArr: new Array(10).fill("fa fa-caret-down"),
       classToggleDetail: new Array(10).fill("show_mb"),
     };
   }
 
+  handlePagination = async (page) => {
+    await this.setState({
+      pageNumber: page,
+      loading: true,
+    });
+    this.getInitData();
+  }
+
+
   getInitData = async () => {
     try {
-      const response = await api.get(
-        "/api/v1/list-task?pageSize=50&pageNumber=1"
-      );
-      //   console.log("response", response.data.data);
+      let self = this;
       this.setState({
-        data: response.data.data,
+        isLoading: true,
       });
-    } catch (error) {
-      console.log("ERROR get list task ======>", error.message);
+      let start = this.state.pageSize * (this.state.pageNumber - 1) + 1;
+      const response = await api.get(
+        `/api/v1/list-task?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber}`
+      );
+
+      if (response) {
+        setTimeout(() => {
+          console.log(response)
+          self.setState({
+            // isLoading: false,
+            arrayBooleanPopover: new Array(response.data.data.list.length).fill(
+              false
+            ),
+            data: response.data.data.list,
+            totalRow: response.data.data.total,
+            start: start,
+            realSize: response.data.data.list.length,
+          });
+        }, 300);
+        setTimeout(() => {
+          self.setState({
+            isLoading: false,
+          });
+        }, 1200);
+      } else {
+        this.setState({
+          isLoading: false,
+        });
+      }
+    } catch (err) {
+      this.setState({
+        isLoading: false,
+      });
+      console.log("Err in list job: ", err.response);
     }
   };
 
@@ -312,6 +357,27 @@ class TaskList extends Component {
               })}
             </tbody>
           </table>
+          <div className="datatable-pager datatable-paging-loaded fl_end">
+
+
+            <Pagination
+              defaultPageSize={this.state.pageSize}
+              current={this.state.pageNumber}
+              hideOnSinglePage={true}
+              showTitle={false}
+              onChange={this.handlePagination}
+              total={this.state.totalRow}
+              showLessItems={true}
+            />
+
+            <div className="datatable-pager-info my-2 mb-sm-0">
+              <span className="datatable-pager-detail">
+                Showing {this.state.start} -{" "}
+                {this.state.start + this.state.realSize - 1} of{" "}
+                {this.state.totalRow}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     );
