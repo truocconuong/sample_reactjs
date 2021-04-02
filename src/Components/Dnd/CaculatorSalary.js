@@ -275,33 +275,36 @@ class CaculatorSalary extends Component {
                                         ? "form-control is-invalid" :
                                         'form-control'
                                     }
-                                    type="text" /><span className="sub-input-caculator">(VND)</span>
+                                    type="text" />
                                 </div>
                               </div>
                             </div>
                           </div>
                           <div className="caculator-item">
-                            <label className="radio">SGD:</label>
-                            <div>
-                              <div className="div-input-caculator">
-                                <input value={this.state.sgd} name="sgd" onChange={this.onChangeInputSGD}
-                                  className={
-                                    'form-control custom-input-usd'
-                                  }
-                                  type="text" />
+                            <div className="row row-caculator-hi">
+                              <label className="radio col-4 ">SGD:</label>
+                              <div className="col-8">
+                                <div className="div-input-caculator">
+                                  <input value={this.state.sgd} name="sgd" onChange={this.onChangeInputSGD}
+                                    className={
+                                      'form-control custom-input-usd'
+                                    }
+                                    type="text" />
+                                </div>
                               </div>
                             </div>
                           </div>
-
                           <div className="caculator-item">
-                            <label className="radio">Exchange rate :</label>
-                            <div>
-                              <div className="div-input-caculator">
-                                <input value={this.state.tigia} name="tigia" onChange={this.onChangeInputTiGia}
-                                  className={
-                                    'form-control'
-                                  }
-                                  type="text" />
+                            <div className="row row-caculator-hi">
+                              <label className="radio col-4">Exchange rate :</label>
+                              <div className="col-8">
+                                <div className="div-input-caculator">
+                                  <input value={this.state.tigia} name="tigia" onChange={this.onChangeInputTiGia}
+                                    className={
+                                      'form-control'
+                                    }
+                                    type="text" />
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -310,43 +313,60 @@ class CaculatorSalary extends Component {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-1 col-form-label form-label-title-caculator">Insurance:</label>
-                      <div className="col-11 div-input-caculator">
+                      <label className="col-12 col-md-1 col-form-label form-label-title-caculator">Insurance:</label>
+                      <div className="col-12 col-md-11 div-input-caculator">
                         <div className="div-input-caculator">
                           <div className="radio-inline salary-chinhthuc">
                             <label className="radio">
                               <input onClick={this.toggleSocialInsurance} defaultChecked={this.state.isSocialInsurance} type="radio" name="radios2" />
                               <span></span>
                               Full wage
-                      </label>
+                        </label>
                           </div>
-                          <div className="radio-inline">
-                            <label className="radio">
-                              <input onClick={this.toggleSocialInsuranceOther} type="radio" defaultChecked={this.state.isSocialInsuranceOther} name="radios2" />
-                              <span></span>
-                         Other
-                      </label>
+                          <div className="insurance-group">
+                            <div className="radio-inline">
+                              <label className="radio">
+                                <input onClick={this.toggleSocialInsuranceOther} type="radio" defaultChecked={this.state.isSocialInsuranceOther} name="radios2" />
+                                <span></span>
+                               Other
+                            </label>
+                            </div>
+                            <input name="insuraneMoney" value={this.state.bhxhShow} onChange={this.onChangeInput} disabled={checkDisableInputBHXH}
+                              className={
+                                errors.insuraneMoney
+                                  ? "form-control custom-input-bhxh is-invalid" :
+                                  'form-control custom-input-bhxh'
+                              } type="text" /><span className="sub-input-caculator">(VND)</span>
                           </div>
-                          <input name="insuraneMoney" value={this.state.bhxhShow} onChange={this.onChangeInput} disabled={checkDisableInputBHXH}
-                            className={
-                              errors.insuraneMoney
-                                ? "form-control custom-input-bhxh is-invalid" :
-                                'form-control custom-input-bhxh'
-                            } type="text" /><span className="sub-input-caculator">(VND)</span>
                         </div>
                       </div>
                     </div>
+
+                    {/* maintain */}
+
+
                     <div className="group-row">
-                      <div className="group-row-item">
-                        <label className="col-form-label form-label-title-caculator group-row-label">PVI:</label>
-                        <div className="div-input-caculator">
-                          <input name="pvi" value={this.state.pvi} onChange={this.onChangeInput} className="form-control" type="number" />
+
+
+                      <div className="caculator-item">
+                        <div className="row row-caculator-hi">
+                          <label className="radio col-4">PVI:</label>
+                          <div className="col-8">
+                            <div className="div-input-caculator">
+                              <input name="pvi" value={this.state.pvi} onChange={this.onChangeInput} className="form-control" type="number" />
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div className="group-row-item">
-                        <label className="col-form-label form-label-title-caculator group-row-label-long">Reduction based on family circumstances:</label>
-                        <div className="div-input-caculator">
-                          <input name="peopleDependent" onChange={this.onChangeInput} className="form-control" type="number" /><span className="sub-input-caculator">(people)</span>
+
+                      <div className="caculator-item">
+                        <div className="row row-caculator-hi">
+                          <label className="radio col-4">Circumstances:</label>
+                          <div className="col-8">
+                            <div className="div-input-caculator cirum-people">
+                              <input name="peopleDependent" onChange={this.onChangeInput} className="form-control" type="number" /><span className="sub-input-caculator">(people)</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>

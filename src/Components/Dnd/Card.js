@@ -684,7 +684,7 @@ class Card extends Component {
                               </div>
                             </div>
                             <span className="text-muted font-weight-bold">
-                              {card.dueDate ? moment(card.dueDate).format("DD/MM/YYYY") : ''}
+                              {card.expectedDate ? moment(card.expectedDate).add(7,'hours').format("DD/MM/YYYY HH:mm") : ''}
                             </span>
                           </div>
                         </div>

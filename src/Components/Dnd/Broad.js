@@ -718,7 +718,7 @@ class Broad extends Component {
     const idCards = _.map(cards, (card) => card.id);
     data.columns[column.id].cardIds.push(...idCards);
     data.columns[column.id].limit = column.limit + 5;
-    if (_.isEmpty(cards)) {
+    if (_.isEmpty(cards)|| cards.length<5) {
       data.columns[column.id].maximum = true;
     }
     for (const card of cards) {

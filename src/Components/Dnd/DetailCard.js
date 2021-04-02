@@ -25,6 +25,7 @@ import Validator from "../../utils/validator";
 import { rulesCreateNewCard } from "../../utils/rule";
 import { Link } from "react-router-dom";
 import { convertDateLocal } from "../../utils/common/convertDate";
+import { DatetimePickerTrigger } from "../libs/rc-datetime-picker";
 
 const api = new Network();
 class DetailCard extends Component {
@@ -51,7 +52,7 @@ class DetailCard extends Component {
       refineCv: "",
       nameJob: "",
       noteApproach: "",
-      noteRecruiter : "",
+      noteRecruiter: "",
       idJob: "",
       laneId: "",
       content: "",
@@ -517,6 +518,12 @@ class DetailCard extends Component {
     }
   };
 
+  handleChangeDatePicker(_moment, fields) {
+    this.setState({
+      [fields]: moment(_moment),
+    });
+  }
+
   render() {
     const errors = this.state.errors;
     const users = [];
@@ -532,16 +539,14 @@ class DetailCard extends Component {
       "YYYY-MM-DD"
     );
 
-    if (data_detail.expectedDate) {
-      data_detail.expectedDate = moment(data_detail.expectedDate).format(
-        "YYYY-MM-DD"
-      );
-    }
     if (data_detail.dueDate) {
       data_detail.dueDate = moment(data_detail.dueDate).format(
         "YYYY-MM-DD"
       );
+
+      console.log(data_detail.expectedDate)
     }
+
     return (
       <Modal size="lg" show={this.props.show} onHide={this.hideModal} centered>
         <Modal.Header closeButton>
@@ -863,7 +868,28 @@ class DetailCard extends Component {
                 </div>
 
                 <div className="form-group row">
-                  <div className="col-lg-6">
+                  <div className="col-md-6">
+                    <label> Expected Date:</label>
+                    <DatetimePickerTrigger
+                      moment={data_detail.expectedDate ? moment(data_detail.expectedDate).add(7,'hours') : null}
+                      onChange={(_moment) =>
+                        this.handleChangeDatePicker(_moment, "expectedDate")
+                      }
+                      showTimePicker={true}
+                      className="custom-date-picker-interview"
+                    >
+                      <div className="custom-date-picker-interview__wrap">
+                        <input readOnly name="expectedDate" value={data_detail.expectedDate ? moment(data_detail.expectedDate).add(7,'hours').format('YYYY-MM-DD HH:mm') : null} className={'form-control'}
+                          placeholder="Enter Time Expected Date" />
+                        <div className="input-group-append">
+                          <span className="input-group-text">
+                            <i className="la la-calendar icon-lg"></i>
+                          </span>
+                        </div>
+                      </div>
+                    </DatetimePickerTrigger>
+                  </div>
+                  {/* <div className="col-lg-6">
                     <label>Expected Date</label>
                     <input
                       disabled={
@@ -876,7 +902,7 @@ class DetailCard extends Component {
                       className="form-control"
                       placeholder="Enter expectedDate"
                     />
-                  </div>
+                  </div> */}
                   {/* <div className="col-lg-6">
                     <label>Due Date</label>
                     <input
