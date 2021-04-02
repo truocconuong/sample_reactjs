@@ -51,6 +51,7 @@ class DetailCard extends Component {
       refineCv: "",
       nameJob: "",
       noteApproach: "",
+      noteRecruiter : "",
       idJob: "",
       laneId: "",
       content: "",
@@ -350,6 +351,7 @@ class DetailCard extends Component {
         cv: content.linkCv,
         refineCv: content.refineCv,
         nameJob: content.nameJob,
+        noteRecruiter: content.noteRecruiter,
         noteApproach: content.noteApproach,
         idJob: content.idJob,
         laneId: content.laneId,
@@ -1001,6 +1003,26 @@ class DetailCard extends Component {
                     rows={3}
                   />
                 </div>
+
+                {
+                  data_detail.referalId ? (
+                    <div className="form-group">
+                      <label htmlFor="exampleTextarea">Not for recruiter</label>
+                      <textarea
+                        disabled={
+                          this.props.role === roleName.DIRECTOR ? true : false
+                        }
+                        value={
+                          data_detail.noteRecruiter ? data_detail.noteRecruiter : ""
+                        }
+                        name="noteRecruiter"
+                        onChange={this.handleInputChange}
+                        className="form-control scroll-approach"
+                        rows={3}
+                      />
+                    </div>
+                  ) : ''
+                }
               </div>
             </form>
           </div>
