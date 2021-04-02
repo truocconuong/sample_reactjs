@@ -24,12 +24,24 @@ import EditBlog from "./Components/blog/Editblog.js";
 import Recruiter from "./Components/Table/Recruiter/Recruiter";
 import RecruiterDetail from "./Components/Table/Recruiter/RecruiterDetail";
 import Notification from "./Components/Notification/Notification";
+import Task from "./Components/Task/Task";
+import EditTask from "./Components/Task/EditTask";
 
 const routes = [
   {
     path: "/",
     exact: true,
     main: (props) => <Dashboard {...props} />,
+  },
+  {
+    path: "/task",
+    exact: true,
+    main: (props) => <Task {...props} />,
+  },
+  {
+    path: "/task/:id",
+    exact: true,
+    main: (props) => <EditTask {...props} />,
   },
   {
     path: "/notification",
