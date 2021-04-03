@@ -100,26 +100,26 @@ class Task extends Component {
     e.preventDefault();
     const { addTask } = this.state;
     const errors = this.validator.validate(this.state.addTask);
-    if (moment(addTask.startDate).localeData - moment().localeData < 0) {
+    if (moment(addTask.startDate).isBefore(moment(), "day")) {
       errors.startDate =
         "Start date needs to be greater than or equal to the current date.";
     }
-    if (moment(addTask.dueDate).localeData - moment().localeData < 0) {
+    if (moment(addTask.dueDate).isBefore(moment(), "day")) {
       errors.dueDate =
         "Due date needs to be greater than or equal to the current date.";
     } else if (
-      moment(addTask.dueDate).localeData -
-      moment(addTask.startDate).localeData <
-      0
+      moment(addTask.dueDate).isBefore(moment(addTask.startDate), "day")
     ) {
       errors.dueDate =
         "Due date needs to be greater than or equal to the Start date.";
     }
     this.setState({
       errors,
-      isLoading: true,
     });
     if (_.isEmpty(errors)) {
+      this.setState({
+        isLoading: true,
+      });
       let submitAddTask = this.state.addTask;
       submitAddTask["status"] = submitAddTask["status"].value;
       if (submitAddTask["tag"] !== null) {
@@ -140,11 +140,13 @@ class Task extends Component {
         });
         this.setState({
           showModal: false,
-          isLoading: false,
         });
       } catch (e) {
         console.log("ERROR ADD TASK =====> ", e.message);
       }
+      this.setState({
+        isLoading: false,
+      });
     }
   };
 
@@ -205,12 +207,14 @@ class Task extends Component {
                     <div className="card-body">
                       <TaskList isLoading={isLoading} />
                     </div>
-
                   </div>
-                      <div className="d-flex w_100 dr_col justify-content-center">
-                        <InterviewList nameColumn="Onboarding" />
-                        <InterviewList nameColumn="Interview F2F" />
-                    </div>
+                  <div
+                    style={{ marginTop: "3vh" }}
+                    className="d-flex w_100 dr_col justify-content-center"
+                  >
+                    <InterviewList nameColumn="Onboarding" />
+                    <InterviewList nameColumn="Interview F2F" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -355,9 +359,7 @@ class Task extends Component {
                       <div></div>
 
                       <div class="form-group">
-                        <label>
-                          Tag <span class="text-danger">*</span>
-                        </label>
+                        <label>Tag</label>
 
                         <Select
                           closeMenuOnSelect={true}

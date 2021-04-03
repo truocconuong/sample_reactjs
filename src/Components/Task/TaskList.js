@@ -7,6 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 import Fbloader from "../libs/PageLoader/fbloader";
 import Pagination from "rc-pagination";
 import "rc-pagination/assets/index.css";
+import { formatDate } from "../../utils/common/convertDate";
 
 const api = new Network();
 
@@ -31,8 +32,7 @@ class TaskList extends Component {
       loading: true,
     });
     this.getInitData();
-  }
-
+  };
 
   getInitData = async () => {
     try {
@@ -47,7 +47,7 @@ class TaskList extends Component {
 
       if (response) {
         setTimeout(() => {
-          console.log(response)
+          console.log(response);
           self.setState({
             // isLoading: false,
             arrayBooleanPopover: new Array(response.data.data.list.length).fill(
@@ -229,13 +229,17 @@ class TaskList extends Component {
                         data-field="StartDate"
                         className="datatable-cell hide_mb"
                       >
-                        <span style={{ width: "130px" }}>{item.startDate}</span>
+                        <span style={{ width: "130px" }}>
+                          {formatDate(item.startDate)}
+                        </span>
                       </td>
                       <td
                         data-field="DueDate"
                         className="datatable-cell hide_mb"
                       >
-                        <span style={{ width: "130px" }}>{item.dueDate}</span>
+                        <span style={{ width: "130px" }}>
+                          {formatDate(item.dueDate)}
+                        </span>
                       </td>
                       <td
                         data-field="Status"
@@ -358,8 +362,6 @@ class TaskList extends Component {
             </tbody>
           </table>
           <div className="datatable-pager datatable-paging-loaded fl_end">
-
-
             <Pagination
               defaultPageSize={this.state.pageSize}
               current={this.state.pageNumber}

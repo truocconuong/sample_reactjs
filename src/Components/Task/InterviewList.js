@@ -41,7 +41,7 @@ class InterviewList extends Component {
           totalRow: response.data.total,
           isLoading: false,
         });
-        console.log(this.state.list)
+        console.log(this.state.list);
       }
     } catch (error) {
       console.log("err while fetch data recruitment progress: ", error);
@@ -52,7 +52,14 @@ class InterviewList extends Component {
   }
   render() {
     return (
-      <div className="col-xl-6 plm_0 prm_0">
+      <div
+        style={
+          this.props.nameColumn === "Onboarding"
+            ? { paddingLeft: 0 }
+            : { paddingRight: 0 }
+        }
+        className="col-xl-6 plm_0 prm_0"
+      >
         <div className="card card-custom card-stretch gutter-b">
           <div className="card-header card-header-mobile border-0 pt-5">
             <h3 className="card-title align-items-start flex-column">
@@ -69,14 +76,11 @@ class InterviewList extends Component {
                 role="tabpanel"
                 aria-labelledby="kt_tab_pane_2_3"
               >
-                
                 <div className="table-responsive table_flex_between">
                   <table className="table table-borderless table-vertical-center">
                     <thead>
                       <tr className="title_recruitment">
-                        <th className="p-0" style={{ minWidth: "150px" }}>
-                         
-                        </th>
+                        <th className="p-0" style={{ minWidth: "150px" }}></th>
                         <th
                           className="p-0 text-left pl-3 title_recruitment"
                           style={{
@@ -84,9 +88,7 @@ class InterviewList extends Component {
                             maxWidth: "200px",
                             overFlow: "hidden",
                           }}
-                        >
-                          
-                        </th>
+                        ></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -115,7 +117,6 @@ class InterviewList extends Component {
                                     readOnly
                                     value={e.Job.title}
                                   />
-                                  
                                 </div>
                               </td>
                               <td
@@ -132,7 +133,6 @@ class InterviewList extends Component {
                                     readOnly
                                     value={e.Lane.nameColumn}
                                   />
-                                  
                                 </div>
                               </td>
                             </tr>
@@ -211,12 +211,9 @@ class InterviewList extends Component {
                     />
                   </div>
                 </div>
-              
               </div>
-            
             </div>
           </div>
-          
         </div>
       </div>
     );

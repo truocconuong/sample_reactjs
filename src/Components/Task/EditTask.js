@@ -1,14 +1,18 @@
 import React, { Component } from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Button, Modal, Overlay } from "react-bootstrap";
+import { Popover as PopoverPop, PopoverHeader, PopoverBody } from "reactstrap";
+import Popover from "react-bootstrap/Popover";
+
 import Select from "react-select";
 import moment from "moment";
-import { formatDateInput } from "../../utils/common/convertDate";
+import { formatDateInput, formatDate } from "../../utils/common/convertDate";
 import Network from "../../Service/Network";
 import { toast, ToastContainer } from "react-toastify";
 import Validator from "../../utils/validator";
 import { rulesAddTask } from "../../utils/rule";
 import _ from "lodash";
 import Fbloader from "../libs/PageLoader/fbloader";
+import { defaultAva, domainServer } from "../../utils/config";
 
 const api = new Network();
 
@@ -28,9 +32,10 @@ class SubTask extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isOpenDeleteUserPop: new Array(10).fill(false),
       classArrModal: new Array(10).fill("fa fa-caret-down"),
       classToggleDetailModal: new Array(10).fill("show_mb"),
-      dataTask: [],
+      dataTask: {},
       dataSubtask: [],
       showAddModal: false,
       showEditModal: false,
@@ -43,23 +48,34 @@ class SubTask extends Component {
         status: "",
         tag: "",
       },
+      errors: {},
+      dataUserAssignJob: [],
+      userAssign: [],
+      // delete user assign
+      isOpen: false,
+      idUserDelete: "",
+      isLoadingAssign: false,
+      showAssignUser: false,
     };
     this.validator = new Validator(rulesAddTask);
+    this.showInfoMember = [];
   }
 
   getInitData = async () => {
     try {
+      let response = await api.get(`/api/assign/list/user`);
+      console.log("userrrrr", response);
+
       const getTask = await api.get(
         `/api/v1/list-task/${this.props.match.params.id}`
       );
 
+      // console.log("task", getTask.data.listTask.Users);
+
       const getSubtask = await api.get(
         `/api/v1/sub-task/${this.props.match.params.id}?pageSize=10&pageNumber=1`
       );
-      console.log("data", getSubtask);
-
       const dataTask = getTask.data.listTask;
-
       dataTask["status"] = {
         label: dataTask["status"],
         value: dataTask["status"],
@@ -77,13 +93,160 @@ class SubTask extends Component {
         };
       }
 
+      console.log("user", getTask.data.listTask.Users);
+
+      const subtask = getSubtask.data.listTask.map(function (item) {
+        item["status"] = {
+          label: item["status"],
+          value: item["status"],
+        };
+
+        if (item["tag"] !== null) {
+          item["tag"] = {
+            label: item["tag"],
+            value: item["tag"],
+          };
+        } else {
+          item["tag"] = {
+            label: "",
+            value: "",
+          };
+        }
+        return item;
+      });
+
+      // console.log("title", subtask);
+
       this.setState({
         dataTask,
-        dataSubtask: getSubtask.data.listTask,
+        dataSubtask: subtask,
         isLoading: false,
+        dataUserAssignJob: dataTask.Users,
       });
     } catch (error) {
       console.log("ERROR get data =====>", error.message);
+    }
+  };
+
+  getUserAssign = async () => {
+    // dung để lấy danh sách các user để assign
+    try {
+      let response = await api.get(`/api/assign/list/user`);
+      if (response.data.success) {
+        this.setState({
+          userAssign: response.data.user,
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  toggleDeleteUserPop(index) {
+    let self = this;
+    const isShow = this.state.isOpenDeleteUserPop[index];
+    let currentIsOpenDeleteUserPop = new Array(10).fill(false);
+    this.setState(
+      {
+        isOpenDeleteUserPop: currentIsOpenDeleteUserPop,
+      },
+      function () {
+        currentIsOpenDeleteUserPop[index] = !isShow;
+        self.setState({
+          isOpenDeleteUserPop: currentIsOpenDeleteUserPop,
+        });
+      }
+    );
+  }
+
+  confirmDelete = (userId, index) => {
+    this.toggleDeleteUserPop(index);
+    this.setState({
+      isOpen: true,
+      idUserDelete: userId,
+    });
+  };
+
+  toggleAssignUser = () => {
+    this.setState({
+      showAssignUser: !this.state.showAssignUser,
+    });
+  };
+
+  handleOnchange = async (event) => {
+    this.setState({
+      isLoadingAssign: true,
+    });
+    const idJob = this.props.match.params.id;
+    const { dataUserAssignJob } = this.state;
+    let check = dataUserAssignJob.find((item) => {
+      return item.TaskUser.userId === event.value;
+    });
+    if (check) {
+      toast.error("User has been assigned", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+      this.setState({
+        isLoadingAssign: false,
+      });
+    } else {
+      try {
+        let response = await api.post(`/api/v1/list-task/${idJob}/user`, {
+          userId: event.value,
+        });
+        toast.success("Add assign user successful!", {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+        this.getInitData();
+      } catch (err) {
+        toast.error("Something went wrong please try again later!", {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        console.log(err);
+      }
+      this.setState({
+        isLoadingAssign: false,
+      });
+    }
+  };
+
+  handleDeleteAssignUser = async (userId, index) => {
+    console.log(userId);
+    const taskId = this.props.match.params.id;
+    try {
+      const response = await api.delete(
+        `/api/v1/task/${taskId}/user/${userId}`
+      );
+      toast.error("Delete user assign successful!", {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      this.getInitData();
+      this.toggleDeleteUserPop(index);
+      this.setState({
+        isOpen: true,
+        idUserDelete: userId,
+      });
+    } catch (e) {
+      console.log("ERROR delete delete user assign====>", e.message);
     }
   };
 
@@ -99,6 +262,7 @@ class SubTask extends Component {
 
     this.setState({
       dataSubtaskModal: empty,
+      errors: {},
     });
   };
 
@@ -135,7 +299,7 @@ class SubTask extends Component {
       });
       const response = await api.delete(`/api/v1/list-task/${id}`);
       toast.error("Delete subtask successful!", {
-        position: "top-right",
+        position: "bottom-right",
         autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -146,6 +310,7 @@ class SubTask extends Component {
       this.setState({
         isLoading: false,
       });
+      this.getInitData();
     } catch (error) {
       console.log("ERROR delete task =====>", error.message);
     }
@@ -153,6 +318,7 @@ class SubTask extends Component {
 
   handleInputChange = (e) => {
     const { name, value } = e.target;
+
     const dataTask = this.state.dataTask;
     dataTask[name] = value;
     this.setState({
@@ -162,10 +328,13 @@ class SubTask extends Component {
 
   handleInputChangeModal = (e) => {
     const { name, value } = e.target;
+    const { errors } = this.state;
+    delete errors[name];
     const dataSubtaskModal = this.state.dataSubtaskModal;
     dataSubtaskModal[name] = value;
     this.setState({
       dataSubtaskModal,
+      errors,
     });
   };
 
@@ -179,15 +348,16 @@ class SubTask extends Component {
   };
 
   handleSelectedModal = (name, value) => {
-    // console.log("value", value);
+    const { errors } = this.state;
     const dataSubtaskModal = this.state.dataSubtaskModal;
     dataSubtaskModal[name] = {
       label: value.value,
       value: value.value,
     };
-    // errors
+    delete errors[name];
     this.setState({
       dataSubtaskModal,
+      errors,
     });
   };
 
@@ -200,28 +370,23 @@ class SubTask extends Component {
     );
   };
 
-  handleSubmitEditModal = (e) => {
-    e.preventDefault();
-    // this.handleSubmitModal('edit', `/api/v1/list-task/${}`, 'Add subtask successful!')
+  handleSubmitEditModal = (id) => {
+    this.handleSubmitModal(
+      "edit",
+      `/api/v1/list-task/${id}`,
+      "Add subtask successful!"
+    );
   };
 
   handleSubmitModal = async (type, url, message) => {
     const { dataSubtaskModal } = this.state;
     const errors = this.validator.validate(this.state.dataSubtaskModal);
+
     if (
-      moment(dataSubtaskModal.startDate).localeData - moment().localeData <
-      0
-    ) {
-      errors.startDate =
-        "Start date needs to be greater than or equal to the current date.";
-    }
-    if (moment(dataSubtaskModal.dueDate).localeData - moment().localeData < 0) {
-      errors.dueDate =
-        "Due date needs to be greater than or equal to the current date.";
-    } else if (
-      moment(dataSubtaskModal.dueDate).localeData -
-        moment(dataSubtaskModal.startDate).localeData <
-      0
+      moment(dataSubtaskModal.dueDate).isBefore(
+        moment(dataSubtaskModal.startDate),
+        "day"
+      )
     ) {
       errors.dueDate =
         "Due date needs to be greater than or equal to the Start date.";
@@ -236,16 +401,25 @@ class SubTask extends Component {
       if (submitAddSubtask["tag"] !== null) {
         submitAddSubtask["tag"] = submitAddSubtask["tag"].value;
       }
+      if (type === "add") {
+        submitAddSubtask["parentId"] = this.props.match.params.id;
+      }
 
-      submitAddSubtask["parentId"] = this.props.match.params.id;
+      const submit = {
+        title: submitAddSubtask.title,
+        content: submitAddSubtask.content,
+        startDate: submitAddSubtask.startDate,
+        dueDate: submitAddSubtask.dueDate,
+        status: submitAddSubtask.status.value,
+        tag: submitAddSubtask.tag,
+      };
 
       try {
         if (type === "add") {
           const response = await api.post(url, submitAddSubtask);
         } else {
-          const response = await api.patch(url, submitAddSubtask);
+          const response = await api.patch(url, submit);
         }
-        // console.log("sent", response);
         toast.success(message, {
           position: "bottom-right",
           autoClose: 2000,
@@ -258,17 +432,61 @@ class SubTask extends Component {
         this.setState({
           showAddModal: false,
           showEditModal: false,
-          isLoading: false,
         });
         this.getInitData();
       } catch (e) {
         console.log("ERROR ADD TASK =====> ", e.message);
       }
     }
+    this.setState({
+      isLoading: false,
+    });
   };
 
-  handleSubmit = () => {
-    // console.log("submit form", this.state.dataTask);
+  handleSubmit = async () => {
+    const { dataTask } = this.state;
+    const errors = this.validator.validate(this.state.dataTask);
+    if (moment(dataTask.dueDate).isBefore(moment(dataTask.startDate), "day")) {
+      errors.dueDate =
+        "Due date needs to be greater than or equal to the Start date.";
+    }
+    this.setState({
+      errors,
+    });
+    if (_.isEmpty(errors)) {
+      let submitUpdateTask = this.state.dataTask;
+      if (submitUpdateTask["tag"] !== null) {
+        submitUpdateTask["tag"] = submitUpdateTask["tag"].value;
+      }
+
+      const submit = {
+        title: submitUpdateTask.title,
+        content: submitUpdateTask.content,
+        startDate: submitUpdateTask.startDate,
+        dueDate: submitUpdateTask.dueDate,
+        status: submitUpdateTask.status.value,
+        tag: submitUpdateTask.tag,
+      };
+
+      try {
+        const response = await api.patch(
+          `/api/v1/list-task/${this.props.match.params.id}`,
+          submit
+        );
+        toast.success("Update task successful!", {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        this.props.history.push("/task");
+      } catch (e) {
+        console.log("ERROR ADD TASK =====> ", e.message);
+      }
+    }
   };
 
   showDetailModal(index) {
@@ -292,8 +510,8 @@ class SubTask extends Component {
   }
 
   componentDidMount() {
-    setTimeout({});
     this.getInitData();
+    this.getUserAssign();
   }
   render() {
     const {
@@ -302,10 +520,16 @@ class SubTask extends Component {
       showEditModal,
       dataSubtask,
       dataSubtaskModal,
+      dataUserAssignJob,
+      userAssign,
       isLoading,
+      errors,
     } = this.state;
 
-    // console.log("datasub", dataSubtaskModal);
+    const optUser = userAssign.map((user) => {
+      return { label: user.name, value: user.id };
+    });
+
     return (
       <>
         <div style={{ width: "100%" }}>
@@ -317,7 +541,202 @@ class SubTask extends Component {
                   <div className="card card-custom">
                     <div className="card-header flex-wrap border-0 pt-6 pb-0">
                       <div className="card-title">
-                        <h3 className="card-label">Edit Task</h3>
+                        <h3 style={{ width: "160px" }} className="card-label">
+                          Edit Task
+                        </h3>
+                        {/* user */}
+                        <div style={{ margin: 0 }} className="assign-user-css">
+                          {dataUserAssignJob.map((user, index) => {
+                            if (!user.isFirst) {
+                              // console.log(user);
+                              return (
+                                <div key={index}>
+                                  <Overlay
+                                    show={this.state.isOpenDeleteUserPop[index]}
+                                    target={this.showInfoMember[index]}
+                                    placement="bottom"
+                                    transition={false}
+                                    rootClose={true}
+                                    onHide={this.toggleDeleteUserPop.bind(
+                                      this,
+                                      index
+                                    )}
+                                  >
+                                    <Popover id="popover-contained">
+                                      <Popover.Content className="custom-popver-kitin">
+                                        <div>
+                                          <p>{user.name}</p>
+                                          <p>{user.email}</p>
+                                          <Button
+                                            onClick={() =>
+                                              this.handleDeleteAssignUser(
+                                                user.TaskUser.UserId,
+                                                index
+                                              )
+                                            }
+                                            style={{ width: "100%" }}
+                                            className="btn btn-primary"
+                                          >
+                                            Delete user
+                                          </Button>
+                                        </div>
+
+                                        {this.props.role === "Leader" ? (
+                                          <span
+                                            className="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon"
+                                            title="Delete"
+                                            onClick={() =>
+                                              this.confirmDelete(
+                                                user.TaskUser.userId,
+                                                index
+                                              )
+                                            }
+                                          >
+                                            <span className="svg-icon svg-icon-md svg-icon-primary">
+                                              <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                xmlnsXlink="http://www.w3.org/1999/xlink"
+                                                width="24px"
+                                                height="24px"
+                                                viewBox="0 0 24 24"
+                                                version="1.1"
+                                              >
+                                                <g
+                                                  stroke="none"
+                                                  strokeWidth={1}
+                                                  fill="none"
+                                                  fillRule="evenodd"
+                                                >
+                                                  <rect
+                                                    x={0}
+                                                    y={0}
+                                                    width={24}
+                                                    height={24}
+                                                  />
+                                                  <path
+                                                    d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z"
+                                                    fill="#000000"
+                                                    fillRule="nonzero"
+                                                  />
+                                                  <path
+                                                    d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                                                    fill="#000000"
+                                                    opacity="0.3"
+                                                  />
+                                                </g>
+                                              </svg>
+                                            </span>
+                                          </span>
+                                        ) : null}
+                                      </Popover.Content>
+                                    </Popover>
+                                  </Overlay>
+                                </div>
+                              );
+                            } else {
+                              return (
+                                <div key={index}>
+                                  <Overlay
+                                    show={this.state.isOpenDeleteUserPop[index]}
+                                    target={this.showInfoMember[index]}
+                                    placement="bottom"
+                                    transition={false}
+                                    rootClose={true}
+                                    onHide={this.toggleDeleteUserPop.bind(
+                                      this,
+                                      index
+                                    )}
+                                  >
+                                    <Popover id="popover-contained">
+                                      <Popover.Content className="custom-popver-kitin">
+                                        <p>{user.name}</p>
+                                      </Popover.Content>
+                                    </Popover>
+                                  </Overlay>
+                                </div>
+                              );
+                            }
+                          })}
+                          {dataUserAssignJob.map((user, index) => {
+                            return (
+                              <div
+                                key={index}
+                                ref={(ref) =>
+                                  (this.showInfoMember[index] = ref)
+                                }
+                                onMouseOver={this.toggleDeleteUserPop.bind(
+                                  this,
+                                  index
+                                )}
+                                className="btn btn-md btn-icon btn-pill mr-2 custom-pointer"
+                              >
+                                {user.linkAvatar ? (
+                                  <img
+                                    src={`${domainServer}/${user.linkAvatar}`}
+                                    className="h-100 align-self-end w-100"
+                                    alt=""
+                                  />
+                                ) : (
+                                  <img
+                                    src={defaultAva}
+                                    className="h-100 align-self-end"
+                                    alt=""
+                                  />
+                                )}
+                              </div>
+                            );
+                          })}
+
+                          {this.state.isLoadingAssign ? (
+                            <div
+                              className="btn btn-md btn-icon btn-pill font-size-sm spinner spinner-primary spinner-left mr-2"
+                              style={{
+                                cursor: "wait",
+                              }}
+                            ></div>
+                          ) : null}
+
+                          <PopoverPop
+                            popperClassName="popover-modal-card"
+                            trigger="legacy"
+                            placement="bottom"
+                            isOpen={this.state.showAssignUser}
+                            target={`Popover-khanhdeptrai`}
+                            toggle={this.toggleAssignUser}
+                          >
+                            <PopoverBody>
+                              {this.state.isLoadingAssign ? (
+                                <Select
+                                  options={optUser}
+                                  onChange={this.handleOnchange}
+                                  isDisabled
+                                />
+                              ) : (
+                                <Select
+                                  options={optUser}
+                                  onChange={this.handleOnchange}
+                                  closeMenuOnSelect={true}
+                                  className="aaaaaaaaaaaaaaaaaaaaaaaaa"
+                                />
+                              )}
+                            </PopoverBody>
+                          </PopoverPop>
+
+                          <div
+                            id={`Popover-khanhdeptrai`}
+                            className={
+                              this.props.role === "Member"
+                                ? "btn btn-md btn-icon btn-light-facebook btn-pill mr-2 off-button-add-user"
+                                : "btn btn-md btn-icon btn-light-facebook btn-pill mr-2"
+                            }
+                            data-toggle="tooltip"
+                            title=""
+                            data-original-title="More users"
+                          >
+                            <i className="fas fa-plus"></i>
+                          </div>
+                        </div>
+                        {/* </div> */}
                       </div>
                       <div className="card-toolbar">
                         <Button
@@ -351,9 +770,18 @@ class SubTask extends Component {
                                   value={dataTask["title"]}
                                   onChange={this.handleInputChange}
                                   type="text"
-                                  class="form-control"
+                                  className={
+                                    errors.title
+                                      ? "form-control is-invalid"
+                                      : "form-control"
+                                  }
                                   placeholder="Enter title"
                                 />
+                                {errors.title && (
+                                  <span class="form-text text-danger">
+                                    {errors.title}
+                                  </span>
+                                )}
                               </div>
                               <div class="form-group">
                                 <label>
@@ -364,9 +792,18 @@ class SubTask extends Component {
                                   value={dataTask["content"]}
                                   onChange={this.handleInputChange}
                                   type="text"
-                                  class="form-control"
+                                  className={
+                                    errors.content
+                                      ? "form-control is-invalid"
+                                      : "form-control"
+                                  }
                                   placeholder="Enter content"
                                 />
+                                {errors.content && (
+                                  <span class="form-text text-danger">
+                                    {errors.content}
+                                  </span>
+                                )}
                               </div>
                               <div
                                 style={{
@@ -393,9 +830,18 @@ class SubTask extends Component {
                                         onChange={this.handleInputChange}
                                         type="date"
                                         name="startDate"
-                                        className="form-control"
+                                        className={
+                                          errors.startDate
+                                            ? "form-control is-invalid"
+                                            : "form-control"
+                                        }
                                         placeholder="Enter your start card"
                                       />
+                                      {errors.startDate && (
+                                        <span class="form-text text-danger">
+                                          {errors.startDate}
+                                        </span>
+                                      )}
                                     </div>
                                   </div>
                                 </div>
@@ -418,9 +864,18 @@ class SubTask extends Component {
                                         onChange={this.handleInputChange}
                                         type="date"
                                         name="dueDate"
-                                        className="form-control"
+                                        className={
+                                          errors.dueDate
+                                            ? "form-control is-invalid"
+                                            : "form-control"
+                                        }
                                         placeholder="Enter your start card"
                                       />
+                                      {errors.dueDate && (
+                                        <span class="form-text text-danger">
+                                          {errors.dueDate}
+                                        </span>
+                                      )}
                                     </div>
                                   </div>
                                 </div>
@@ -438,19 +893,24 @@ class SubTask extends Component {
 
                                   <Select
                                     options={statuses}
-                                    class="form-control"
+                                    className={
+                                      errors.status ? "invalid-select" : ""
+                                    }
                                     value={dataTask["status"]}
                                     onChange={(e) =>
                                       this.handleSelected("status", e)
                                     }
                                   />
+                                  {errors.status && (
+                                    <span class="form-text text-danger">
+                                      {errors.status}
+                                    </span>
+                                  )}
                                 </div>
                                 <div></div>
 
                                 <div class="form-group">
-                                  <label>
-                                    Tag <span class="text-danger">*</span>
-                                  </label>
+                                  <label>Tag</label>
 
                                   <Select
                                     value={dataTask["tag"]}
@@ -643,7 +1103,7 @@ class SubTask extends Component {
                                           className="datatable-cell hide_mb"
                                         >
                                           <span style={{ width: "100px" }}>
-                                            {item.startDate}
+                                            {formatDate(item.startDate)}
                                           </span>
                                         </td>
                                         <td
@@ -651,7 +1111,7 @@ class SubTask extends Component {
                                           className="datatable-cell hide_mb"
                                         >
                                           <span style={{ width: "100px" }}>
-                                            {item.dueDate}
+                                            {formatDate(item.dueDate)}
                                           </span>
                                         </td>
                                         <td
@@ -659,7 +1119,7 @@ class SubTask extends Component {
                                           className="datatable-cell hide_mb"
                                         >
                                           <span style={{ width: "100px" }}>
-                                            {item.status}
+                                            {item.status && item.status.value}
                                           </span>
                                         </td>
                                         <td
@@ -667,7 +1127,7 @@ class SubTask extends Component {
                                           className="datatable-cell hide_mb"
                                         >
                                           <span style={{ width: "100px" }}>
-                                            {item.tag}
+                                            {item.tag && item.tag.value}
                                           </span>
                                         </td>
                                         <td
@@ -770,7 +1230,8 @@ class SubTask extends Component {
                                                   <span
                                                     style={{ width: "110px" }}
                                                   >
-                                                    {item.status}
+                                                    {item.status &&
+                                                      item.status.value}
                                                   </span>
                                                 </td>
                                               </tr>
@@ -786,7 +1247,7 @@ class SubTask extends Component {
                                                   <span
                                                     style={{ width: "110px" }}
                                                   >
-                                                    {item.tag}
+                                                    {item.tag && item.tag.value}
                                                   </span>
                                                 </td>
                                               </tr>
@@ -833,10 +1294,19 @@ class SubTask extends Component {
                         name="title"
                         value={dataSubtaskModal["title"]}
                         type="text"
-                        class="form-control"
+                        className={
+                          errors.title
+                            ? "form-control is-invalid"
+                            : "form-control"
+                        }
                         placeholder="Enter title"
                         onChange={this.handleInputChangeModal}
                       />
+                      {errors.title && (
+                        <span class="form-text text-danger">
+                          {errors.title}
+                        </span>
+                      )}
                     </div>
                     <div class="form-group">
                       <label>
@@ -846,10 +1316,19 @@ class SubTask extends Component {
                         name="content"
                         value={dataSubtaskModal["content"]}
                         type="text"
-                        class="form-control"
+                        className={
+                          errors.content
+                            ? "form-control is-invalid"
+                            : "form-control"
+                        }
                         placeholder="Enter content"
                         onChange={this.handleInputChangeModal}
                       />
+                      {errors.content && (
+                        <span class="form-text text-danger">
+                          {errors.content}
+                        </span>
+                      )}
                     </div>
                     <div
                       style={{
@@ -862,23 +1341,23 @@ class SubTask extends Component {
                           Start Date <span class="text-danger">*</span>
                         </label>
 
-                        <div className="filter-date-row">
-                          <div
-                            className="filter-board-item"
-                            style={{ width: "100%" }}
-                          >
-                            <input
-                              onChange={this.handleInputChangeModal}
-                              type="date"
-                              name="startDate"
-                              value={formatDateInput(
-                                dataSubtaskModal["startDate"]
-                              )}
-                              className="form-control"
-                              placeholder="Enter your start card"
-                            />
-                          </div>
-                        </div>
+                        <input
+                          onChange={this.handleInputChangeModal}
+                          type="date"
+                          name="startDate"
+                          value={formatDateInput(dataSubtaskModal["startDate"])}
+                          className={
+                            errors.startDate
+                              ? "form-control is-invalid"
+                              : "form-control"
+                          }
+                          placeholder="Enter your start card"
+                        />
+                        {errors.startDate && (
+                          <span class="form-text text-danger">
+                            {errors.startDate}
+                          </span>
+                        )}
                       </div>
                       <div></div>
                       <div class="form-group">
@@ -886,23 +1365,23 @@ class SubTask extends Component {
                           Due Date <span class="text-danger">*</span>
                         </label>
 
-                        <div className="filter-date-row">
-                          <div
-                            className="filter-board-item"
-                            style={{ width: "100%" }}
-                          >
-                            <input
-                              onChange={this.handleInputChangeModal}
-                              type="date"
-                              name="dueDate"
-                              value={formatDateInput(
-                                dataSubtaskModal["dueDate"]
-                              )}
-                              className="form-control"
-                              placeholder="Enter your start card"
-                            />
-                          </div>
-                        </div>
+                        <input
+                          onChange={this.handleInputChangeModal}
+                          type="date"
+                          name="dueDate"
+                          value={formatDateInput(dataSubtaskModal["dueDate"])}
+                          className={
+                            errors.dueDate
+                              ? "form-control is-invalid"
+                              : "form-control"
+                          }
+                          placeholder="Enter your start card"
+                        />
+                        {errors.dueDate && (
+                          <span class="form-text text-danger">
+                            {errors.dueDate}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div
@@ -920,24 +1399,26 @@ class SubTask extends Component {
                           value={dataSubtaskModal["status"]}
                           closeMenuOnSelect={true}
                           options={statuses}
-                          class="form-control"
+                          className={errors.status ? "invalid-select" : ""}
                           onChange={(e) =>
                             this.handleSelectedModal("status", e)
                           }
                         />
+                        {errors.status && (
+                          <span class="form-text text-danger">
+                            {errors.status}
+                          </span>
+                        )}
                       </div>
                       <div></div>
 
                       <div class="form-group">
-                        <label>
-                          Tag <span class="text-danger">*</span>
-                        </label>
+                        <label>Tag</label>
 
                         <Select
                           closeMenuOnSelect={true}
                           value={dataSubtaskModal["tag"]}
                           options={tags}
-                          class="form-control"
                           onChange={(e) => this.handleSelectedModal("tag", e)}
                         />
                       </div>
@@ -979,10 +1460,19 @@ class SubTask extends Component {
                         name="title"
                         value={dataSubtaskModal["title"]}
                         type="text"
-                        class="form-control"
+                        class={
+                          errors.title
+                            ? "form-control is-invalid"
+                            : "form-control"
+                        }
                         placeholder="Enter title"
                         onChange={this.handleInputChangeModal}
                       />
+                      {errors.title && (
+                        <span class="form-text text-danger">
+                          {errors.title}
+                        </span>
+                      )}
                     </div>
                     <div class="form-group">
                       <label>
@@ -992,10 +1482,19 @@ class SubTask extends Component {
                         name="content"
                         value={dataSubtaskModal["content"]}
                         type="text"
-                        class="form-control"
+                        class={
+                          errors.content
+                            ? "form-control is-invalid"
+                            : "form-control"
+                        }
                         placeholder="Enter content"
                         onChange={this.handleInputChangeModal}
                       />
+                      {errors.content && (
+                        <span class="form-text text-danger">
+                          {errors.content}
+                        </span>
+                      )}
                     </div>
                     <div
                       style={{
@@ -1020,9 +1519,18 @@ class SubTask extends Component {
                               value={formatDateInput(
                                 dataSubtaskModal["startDate"]
                               )}
-                              className="form-control"
+                              class={
+                                errors.startDate
+                                  ? "form-control is-invalid"
+                                  : "form-control"
+                              }
                               placeholder="Enter your start card"
                             />
+                            {errors.startDate && (
+                              <span class="form-text text-danger">
+                                {errors.startDate}
+                              </span>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -1044,9 +1552,18 @@ class SubTask extends Component {
                               value={formatDateInput(
                                 dataSubtaskModal["dueDate"]
                               )}
-                              className="form-control"
+                              class={
+                                errors.dueDate
+                                  ? "form-control is-invalid"
+                                  : "form-control"
+                              }
                               placeholder="Enter your start card"
                             />
+                            {errors.dueDate && (
+                              <span class="form-text text-danger">
+                                {errors.dueDate}
+                              </span>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -1066,24 +1583,26 @@ class SubTask extends Component {
                           value={dataSubtaskModal["status"]}
                           closeMenuOnSelect={true}
                           options={statuses}
-                          class="form-control"
+                          className={errors.status ? "invalid-select" : ""}
                           onChange={(e) =>
                             this.handleSelectedModal("status", e)
                           }
                         />
+                        {errors.status && (
+                          <span class="form-text text-danger">
+                            {errors.status}
+                          </span>
+                        )}
                       </div>
                       <div></div>
 
                       <div class="form-group">
-                        <label>
-                          Tag <span class="text-danger">*</span>
-                        </label>
+                        <label>Tag</label>
 
                         <Select
                           closeMenuOnSelect={true}
                           value={dataSubtaskModal["tag"]}
                           options={tags}
-                          class="form-control"
                           onChange={(e) => this.handleSelectedModal("tag", e)}
                         />
                       </div>
@@ -1097,7 +1616,10 @@ class SubTask extends Component {
             <Button variant="secondary" onClick={this.handleCloseEditModal}>
               Close
             </Button>
-            <Button onClick={this.handleSubmitEditModal} variant="primary">
+            <Button
+              onClick={() => this.handleSubmitEditModal(dataSubtaskModal.id)}
+              variant="primary"
+            >
               Save Changes
             </Button>
           </Modal.Footer>
