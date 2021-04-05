@@ -503,11 +503,11 @@ class Interview extends Component {
                                     <span
                                       className="btn btn-sm btn-clean btn-icon mr-2"
                                       title="Review Candidate"
+                                      onClick={() =>
+                                        this.showInterviewCandidate(interview)
+                                      }
                                     >
                                       <i
-                                        onClick={() =>
-                                          this.showInterviewCandidate(interview)
-                                        }
                                         className="fas fa-user-edit"
                                       ></i>
                                     </span>
