@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
-import { withRouter } from "react-router";
 import SubTask from "./EditTask";
 import Network from "../../Service/Network";
 import { toast, ToastContainer } from "react-toastify";
@@ -9,6 +8,7 @@ import Pagination from "rc-pagination";
 import "rc-pagination/assets/index.css";
 import { formatDate } from "../../utils/common/convertDate";
 import Select from "react-select";
+import { Link } from "react-router-dom";
 
 const api = new Network();
 
@@ -287,14 +287,13 @@ class TaskList extends Component {
                         className="datatable-cell hide_mb"
                       >
                         <span style={{ width: "160px" }}>
-                          <span
-                            onClick={() =>
-                              this.props.history.push(`/task/${item.id}`)
-                            }
-                            title="Edit Task"
-                          >
-                            <i className="fas fa-edit edit-subtask"></i>
-                          </span>
+                          <Link to={`/task/${item.id}`} className="text-dark">
+                            <span
+                              title="Edit Task"
+                            >
+                              <i className="fas fa-edit edit-subtask"></i>
+                            </span>
+                          </Link>
                           <span
                             onClick={() => this.handleDeleteTask(item.id)}
                             title="Delete Task"
@@ -394,16 +393,15 @@ class TaskList extends Component {
                                 style={{}}
                               >
                                 <span style={{ width: "110px" }}>
-                                  <span
-                                    onClick={() =>
-                                      this.props.history.push(
-                                        `/task/${item.id}`
-                                      )
-                                    }
-                                    title="Edit Task"
-                                  >
-                                    <i className="fas fa-edit edit-subtask"></i>
-                                  </span>
+
+                                  <Link to={`/task/${item.id}`} className="text-dark">
+                                    <span
+
+                                      title="Edit Task"
+                                    >
+                                      <i className="fas fa-edit edit-subtask"></i>
+                                    </span>
+                                  </Link>
                                   <span
                                     onClick={() =>
                                       this.handleDeleteTask(item.id)
@@ -449,4 +447,4 @@ class TaskList extends Component {
   }
 }
 
-export default withRouter(TaskList);
+export default TaskList;
