@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Network from "../../Service/Network";
 import Pagination from "rc-pagination";
 import Skeleton from "react-loading-skeleton";
+import { formatDate } from "../../utils/common/convertDate";
 
 const api = new Network();
 
@@ -94,6 +95,7 @@ class InterviewList extends Component {
                     <tbody>
                       {!this.state.isLoading ? (
                         this.state.list.map((e, index) => {
+                          // console.log("see", e);
                           return (
                             <tr className="row_in_applicant" key={index}>
                               <td className="pl-0 d-flex align-items-center">
@@ -135,12 +137,91 @@ class InterviewList extends Component {
                                   />
                                 </div>
                               </td>
+                              <td style={{ width: "100px" }}>
+                                <span>
+                                  <input
+                                    className=" font-weight-bold d-block form-control form-control-solid input_cs_nameJob input_cx_status"
+                                    readOnly
+                                    value={formatDate(e.approachDate)}
+                                  />
+                                </span>
+                              </td>
                             </tr>
                           );
                         })
                       ) : (
                         <>
                           <tr style={{ height: "70px" }}>
+                            <td className="p-0" style={{ width: "40%" }}>
+                              <Skeleton height={30} />
+                            </td>
+                            <td
+                              style={{ width: "40%" }}
+                              className="text-left pr-0"
+                            >
+                              <Skeleton height={30} />
+                            </td>
+                            <td style={{ width: "20%" }}>
+                              <Skeleton height={30} />
+                            </td>
+                          </tr>
+                          <tr style={{ height: "70px" }}>
+                            <td className="p-0" style={{ width: "40%" }}>
+                              <Skeleton height={30} />
+                            </td>
+                            <td
+                              style={{ width: "40%" }}
+                              className="text-left pr-0"
+                            >
+                              <Skeleton height={30} />
+                            </td>
+                            <td style={{ width: "20%" }}>
+                              <Skeleton height={30} />
+                            </td>
+                          </tr>
+                          <tr style={{ height: "70px" }}>
+                            <td className="p-0" style={{ width: "40%" }}>
+                              <Skeleton height={30} />
+                            </td>
+                            <td
+                              style={{ width: "40%" }}
+                              className="text-left pr-0"
+                            >
+                              <Skeleton height={30} />
+                            </td>
+                            <td style={{ width: "20%" }}>
+                              <Skeleton height={30} />
+                            </td>
+                          </tr>
+                          <tr style={{ height: "70px" }}>
+                            <td className="p-0" style={{ width: "40%" }}>
+                              <Skeleton height={30} />
+                            </td>
+                            <td
+                              style={{ width: "40%" }}
+                              className="text-left pr-0"
+                            >
+                              <Skeleton height={30} />
+                            </td>
+                            <td style={{ width: "20%" }}>
+                              <Skeleton height={30} />
+                            </td>
+                          </tr>
+                          <tr style={{ height: "70px" }}>
+                            <td className="p-0" style={{ width: "40%" }}>
+                              <Skeleton height={30} />
+                            </td>
+                            <td
+                              style={{ width: "40%" }}
+                              className="text-left pr-0"
+                            >
+                              <Skeleton height={30} />
+                            </td>
+                            <td style={{ width: "20%" }}>
+                              <Skeleton height={30} />
+                            </td>
+                          </tr>
+                          {/* <tr style={{ height: "70px" }}>
                             <td className="p-0" style={{ minWidth: "250px" }}>
                               <Skeleton height={30} />
                             </td>
@@ -148,6 +229,9 @@ class InterviewList extends Component {
                               style={{ maxWidth: "446px" }}
                               className="text-left pr-0"
                             >
+                              <Skeleton height={30} />
+                            </td>
+                            <td style={{ maxWidth: "100px" }}>
                               <Skeleton height={30} />
                             </td>
                           </tr>
@@ -161,15 +245,7 @@ class InterviewList extends Component {
                             >
                               <Skeleton height={30} />
                             </td>
-                          </tr>
-                          <tr style={{ height: "70px" }}>
-                            <td className="p-0" style={{ minWidth: "250px" }}>
-                              <Skeleton height={30} />
-                            </td>
-                            <td
-                              style={{ maxWidth: "446px" }}
-                              className="text-left pr-0"
-                            >
+                            <td style={{ maxWidth: "100px" }}>
                               <Skeleton height={30} />
                             </td>
                           </tr>
@@ -183,18 +259,25 @@ class InterviewList extends Component {
                             >
                               <Skeleton height={30} />
                             </td>
+                            <td style={{ maxWidth: "100px" }}>
+                              <Skeleton height={30} />
+                            </td>
                           </tr>
                           <tr style={{ height: "70px" }}>
                             <td className="p-0" style={{ minWidth: "250px" }}>
                               <Skeleton height={30} />
                             </td>
+
                             <td
                               style={{ maxWidth: "446px" }}
                               className="text-left pr-0"
                             >
                               <Skeleton height={30} />
                             </td>
-                          </tr>
+                            <td style={{ maxWidth: "100px" }}>
+                              <Skeleton height={30} />
+                            </td>
+                          </tr> */}
                         </>
                       )}
                     </tbody>

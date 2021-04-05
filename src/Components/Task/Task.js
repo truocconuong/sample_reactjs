@@ -12,6 +12,7 @@ import _ from "lodash";
 import moment from "moment";
 import Fbloader from "../libs/PageLoader/fbloader";
 import InterviewList from "./InterviewList";
+import { connect } from "react-redux";
 
 const api = new Network();
 
@@ -156,7 +157,9 @@ class Task extends Component {
     return (
       <>
         <div style={{ width: "100%" }}>
-          <div className={`d-flex flex-column flex-row-fluid wrapper pl_100`}>
+          <div
+            className={`d-flex flex-column flex-row-fluid wrapper pl_100 ${this.props.className_wrap_broad}`}
+          >
             <div className="content d-flex flex-column flex-column-fluid">
               {isLoading ? <Fbloader /> : null}
 
@@ -388,5 +391,13 @@ class Task extends Component {
     );
   }
 }
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+const mapStateToProps = (state, ownProps) => {
+  return {
+    className_wrap_broad: state.ui.className_wrap_broad,
+  };
+};
 
-export default Task;
+export default connect(mapStateToProps)(Task);

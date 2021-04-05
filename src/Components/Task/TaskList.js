@@ -8,8 +8,14 @@ import Fbloader from "../libs/PageLoader/fbloader";
 import Pagination from "rc-pagination";
 import "rc-pagination/assets/index.css";
 import { formatDate } from "../../utils/common/convertDate";
+import Select from "react-select";
 
 const api = new Network();
+
+const statuses = [
+  { label: "New", value: "New" },
+  { label: "Progress", value: "Progress" },
+];
 
 class TaskList extends Component {
   constructor(props) {
@@ -23,6 +29,7 @@ class TaskList extends Component {
       data: [],
       classArr: new Array(10).fill("fa fa-caret-down"),
       classToggleDetail: new Array(10).fill("show_mb"),
+      filterStatus: null,
     };
   }
 
@@ -40,14 +47,20 @@ class TaskList extends Component {
       this.setState({
         isLoading: true,
       });
+      let url = `/api/v1/list-task?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber}`;
       let start = this.state.pageSize * (this.state.pageNumber - 1) + 1;
+      console.log("status", this.state.filterStatus);
+      if (this.state.filterStatus !== null) {
+        url += `?status=${this.state.filterStatus.value}`;
+      }
       const response = await api.get(
-        `/api/v1/list-task?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber}`
+        // `/api/v1/list-task?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber}`
+        url
       );
 
       if (response) {
         setTimeout(() => {
-          console.log(response);
+          console.log("res", response);
           self.setState({
             // isLoading: false,
             arrayBooleanPopover: new Array(response.data.data.list.length).fill(
@@ -123,6 +136,14 @@ class TaskList extends Component {
     }
   };
 
+  handleFilterStatus = async (selectedStatus) => {
+    // console.log("select", selectedStatus);
+    await this.setState({
+      filterStatus: selectedStatus,
+    });
+    this.getInitData();
+  };
+
   componentDidMount() {
     this.getInitData();
   }
@@ -134,11 +155,23 @@ class TaskList extends Component {
   }
 
   render() {
-    const { data, dataSubtask, showModal, isLoading } = this.state;
+    const { data, dataSubtask, showModal, isLoading, showFilter } = this.state;
     return (
       <div>
         {isLoading ? <Fbloader /> : null}
-
+        <div
+          style={{
+            width: "20%",
+            marginBottom: "2vh",
+          }}
+        >
+          <Select
+            onChange={this.handleFilterStatus}
+            placeholder="Filter status..."
+            options={statuses}
+            isClearable
+          />
+        </div>
         <div
           className="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
           id="kt_datatable"
@@ -349,6 +382,37 @@ class TaskList extends Component {
                               >
                                 <span style={{ width: "110px" }}>
                                   {item.tag}
+                                </span>
+                              </td>
+                            </tr>
+                            <tr className="datatable-row">
+                              <td className="datatable-cell">
+                                <span>Actions</span>
+                              </td>
+                              <td
+                                data-field="Actions"
+                                className="datatable-cell"
+                                style={{}}
+                              >
+                                <span style={{ width: "110px" }}>
+                                  <span
+                                    onClick={() =>
+                                      this.props.history.push(
+                                        `/task/${item.id}`
+                                      )
+                                    }
+                                    title="Edit Task"
+                                  >
+                                    <i className="fas fa-edit edit-subtask"></i>
+                                  </span>
+                                  <span
+                                    onClick={() =>
+                                      this.handleDeleteTask(item.id)
+                                    }
+                                    title="Delete Task"
+                                  >
+                                    <i className="far fa-trash-alt edit-subtask"></i>
+                                  </span>
                                 </span>
                               </td>
                             </tr>

@@ -64,13 +64,12 @@ class SubTask extends Component {
   getInitData = async () => {
     try {
       let response = await api.get(`/api/assign/list/user`);
-      console.log("userrrrr", response);
 
       const getTask = await api.get(
         `/api/v1/list-task/${this.props.match.params.id}`
       );
 
-      // console.log("task", getTask.data.listTask.Users);
+      console.log("task", getTask);
 
       const getSubtask = await api.get(
         `/api/v1/sub-task/${this.props.match.params.id}?pageSize=10&pageNumber=1`
@@ -230,7 +229,7 @@ class SubTask extends Component {
       const response = await api.delete(
         `/api/v1/task/${taskId}/user/${userId}`
       );
-      toast.error("Delete user assign successful!", {
+      toast.success("Delete user assign successful!", {
         position: "bottom-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -298,7 +297,7 @@ class SubTask extends Component {
         isLoading: true,
       });
       const response = await api.delete(`/api/v1/list-task/${id}`);
-      toast.error("Delete subtask successful!", {
+      toast.success("Delete subtask successful!", {
         position: "bottom-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -547,6 +546,7 @@ class SubTask extends Component {
                         {/* user */}
                         <div style={{ margin: 0 }} className="assign-user-css">
                           {dataUserAssignJob.map((user, index) => {
+                            console.log("check", user.isFirst);
                             if (!user.isFirst) {
                               // console.log(user);
                               return (
@@ -625,6 +625,7 @@ class SubTask extends Component {
                                                   />
                                                 </g>
                                               </svg>
+                                              aaaaaaaaaaaaaaaaaaaaaaaaaa
                                             </span>
                                           </span>
                                         ) : null}
@@ -649,7 +650,7 @@ class SubTask extends Component {
                                   >
                                     <Popover id="popover-contained">
                                       <Popover.Content className="custom-popver-kitin">
-                                        <p>{user.name}</p>
+                                        <p>{user.name}bbbbbbbbbbb</p>
                                       </Popover.Content>
                                     </Popover>
                                   </Overlay>

@@ -99,7 +99,6 @@ class EditTask extends Component {
     const errors = this.state.errors;
     const props = this.props;
 
-    console.log("date", this.props.startDate);
     return (
       <ModalTransition>
         {this.props.show && (
