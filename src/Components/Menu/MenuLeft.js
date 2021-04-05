@@ -16,6 +16,8 @@ import DrawerProfile from "./DrawerProfile.js";
 import { ToastContainer, toast, Flip, Zoom } from "react-toastify";
 import moment from "moment";
 import PwaInstall from "./PwaInstall.js";
+import _ from 'lodash';
+import { BLOG, BOARD, CACULATOR, CANDIDATE, CLIENT, DASHBOARD, INTERVIEW, LIST_JOB, LIST_TASK, NOTIFICATION, RECRUITER, SEARCH_CANDIDATE, SETTING, USERS } from "../../utils/common/permission";
 const socket = require("socket.io-client")(domainServer);
 
 const auth = new AuthService();
@@ -183,7 +185,7 @@ class MenuLeft extends Component {
               ? responseProfile.data.user.countNotificationNotSeen
               : 0,
           },
-          function () {}
+          function () { }
         );
         const linkAvatar = responseProfile.data.user.linkAvatar;
         await this.props.setAvatarUser(linkAvatar);
@@ -306,9 +308,8 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/")
                   : () => null
               }
-              className={`row_icon ${
-                this.props.role === "Bloger" ? "hide_bloger" : ""
-              }`}
+              className={`row_icon ${!_.includes(DASHBOARD, this.props.role) ? 'hide_permission' : ''
+                }`}
             >
               <div className="wrap_icon_menu">
                 <svg
@@ -347,9 +348,8 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/notification")
                   : () => null
               }
-              className={`row_icon ${
-                this.props.role === "Bloger" ? "hide_bloger" : ""
-              }`}
+              className={`row_icon ${!_.includes(NOTIFICATION, this.props.role) ? 'hide_permission' : ''
+                }`}
             >
               <div className="wrap_icon_menu">
                 <i className="fas far fa-bell hover_icon"></i>
@@ -366,9 +366,8 @@ class MenuLeft extends Component {
                   : () => null
               }
               // role
-              className={`row_icon ${
-                this.props.role === "Bloger" ? "hide_bloger" : ""
-              }`}
+              className={`row_icon ${!_.includes(LIST_TASK, this.props.role) ? 'hide_permission' : ''
+                }`}
             >
               <div className="wrap_icon_menu">
                 <i className="fas fa-tasks hover_icon"></i>
@@ -384,9 +383,8 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/job")
                   : () => null
               }
-              className={`row_icon ${
-                this.props.role === "Bloger" ? "hide_bloger" : ""
-              }`}
+              className={`row_icon ${!_.includes(LIST_JOB, this.props.role) ? 'hide_permission' : ''
+                }`}
               style={this.props.role == "Member" ? { display: "none" } : null}
             >
               <div className="wrap_icon_menu">
@@ -403,10 +401,8 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/client")
                   : () => null
               }
-              className={`row_icon ${
-                this.props.role === "Bloger" ? "hide_bloger" : ""
-              }`}
-              style={this.props.role == "Member" ? { display: "none" } : null}
+              className={`row_icon ${!_.includes(CLIENT, this.props.role) ? 'hide_permission' : ''
+                }`}
             >
               <div className="wrap_icon_menu">
                 <i className="fa fa-users hover_icon"></i>
@@ -422,10 +418,8 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/candidate")
                   : () => null
               }
-              className={`row_icon ${
-                this.props.role === "Bloger" ? "hide_bloger" : ""
-              }`}
-              style={this.props.role == "Member" ? { display: "none" } : null}
+              className={`row_icon ${!_.includes(CANDIDATE, this.props.role) ? 'hide_permission' : ''
+                }`}
             >
               <div className="wrap_icon_menu">
                 <i className="fa fa-id-card hover_icon"></i>
@@ -442,10 +436,8 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/users")
                   : () => null
               }
-              className={`row_icon ${
-                this.props.role === "Bloger" ? "hide_bloger" : ""
-              }`}
-              style={this.props.role == "Member" ? { display: "none" } : null}
+              className={`row_icon ${!_.includes(USERS, this.props.role) ? 'hide_permission' : ''
+                }`}
             >
               <div className="wrap_icon_menu">
                 <i className="fa fa-user hover_icon"></i>
@@ -461,9 +453,8 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/search")
                   : () => null
               }
-              className={`row_icon ${
-                this.props.role === "Bloger" ? "hide_bloger" : ""
-              }`}
+              className={`row_icon ${!_.includes(SEARCH_CANDIDATE, this.props.role) ? 'hide_permission' : ''
+                }`}
             >
               <div className="wrap_icon_menu">
                 <i className="fa fa-search hover_icon"></i>
@@ -479,9 +470,8 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/interview")
                   : () => null
               }
-              className={`row_icon ${
-                this.props.role === "Bloger" ? "hide_bloger" : ""
-              }`}
+              className={`row_icon ${!_.includes(INTERVIEW, this.props.role) ? 'hide_permission' : ''
+                }`}
             >
               <div className="wrap_icon_menu">
                 <i className="far fa-handshake hover_icon"></i>
@@ -497,9 +487,8 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/board")
                   : () => null
               }
-              className={`row_icon ${
-                this.props.role === "Bloger" ? "hide_bloger" : ""
-              }`}
+              className={`row_icon ${!_.includes(BOARD, this.props.role) ? 'hide_permission' : ''
+                }`}
             >
               <div className="wrap_icon_menu">
                 <i className="fab fa-trello hover_icon"></i>
@@ -515,9 +504,8 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/caculator-salary")
                   : () => null
               }
-              className={`row_icon ${
-                this.props.role === "Bloger" ? "hide_bloger" : ""
-              }`}
+              className={`row_icon ${!_.includes(CACULATOR, this.props.role) ? 'hide_permission' : ''
+                }`}
             >
               <div className="wrap_icon_menu">
                 <i className="far fa-money-bill-alt hover_icon"></i>
@@ -533,9 +521,8 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/recruiter")
                   : () => null
               }
-              className={`row_icon ${
-                this.props.role === "Bloger" ? "hide_bloger" : ""
-              }`}
+              className={`row_icon ${!_.includes(RECRUITER, this.props.role) ? 'hide_permission' : ''
+                }`}
             >
               <div className="wrap_icon_menu">
                 <i className="fas fa-hands-helping hover_icon"></i>
@@ -567,7 +554,8 @@ class MenuLeft extends Component {
                   ? (e) => this.handleOnClick(e, "/list-blog")
                   : () => null
               }
-              className="row_icon"
+              className={`row_icon ${!_.includes(BLOG, this.props.role) ? 'hide_permission' : ''
+            }`}
             >
               <div className="wrap_icon_menu">
                 <i className="fa fa-newspaper hover_icon"></i>
@@ -584,9 +572,8 @@ class MenuLeft extends Component {
                     ? (e) => this.handleOnClick(e, "/setting")
                     : () => null
                 }
-                className={`row_icon ${
-                  this.props.role === "Bloger" ? "hide_bloger" : ""
-                }`}
+                className={`row_icon ${!_.includes(SETTING, this.props.role) ? 'hide_permission' : ''
+                  }`}
               >
                 <div className="wrap_icon_menu">
                   <i className="fa fa-cog hover_icon"></i>
