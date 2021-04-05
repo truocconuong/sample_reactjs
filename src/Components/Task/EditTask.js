@@ -13,6 +13,8 @@ import { rulesAddTask } from "../../utils/rule";
 import _ from "lodash";
 import Fbloader from "../libs/PageLoader/fbloader";
 import { defaultAva, domainServer } from "../../utils/config";
+import { connect } from "react-redux";
+
 
 const api = new Network();
 
@@ -565,18 +567,22 @@ class SubTask extends Component {
                                       <Popover.Content className="custom-popver-kitin">
                                         <div>
                                           <p className="text-center">{user.email}</p>
-                                          <Button
-                                            onClick={() =>
-                                              this.handleDeleteAssignUser(
-                                                user.TaskUser.UserId,
-                                                index
-                                              )
-                                            }
-                                            style={{ width: "100%" }}
-                                            className="btn btn-primary"
-                                          >
-                                            Remove
-                                          </Button>
+                                          {
+                                            this.props.role === 'Admin' ? (
+                                              <Button
+                                                onClick={() =>
+                                                  this.handleDeleteAssignUser(
+                                                    user.TaskUser.UserId,
+                                                    index
+                                                  )
+                                                }
+                                                style={{ width: "100%" }}
+                                                className="btn btn-primary"
+                                              >
+                                                Remove
+                                              </Button>
+                                            ) : ''
+                                          }
                                         </div>
 
                                         {this.props.role === "Leader" ? (
@@ -745,13 +751,17 @@ class SubTask extends Component {
                         >
                           Back
                         </Button>
-                        <Button
-                          style={{ margin: "0 5px" }}
-                          variant="primary"
-                          onClick={this.handleSubmit}
-                        >
-                          Save Changes
-                        </Button>
+                        {
+                          this.props.role === 'Admin' ? (
+                            <Button
+                              style={{ margin: "0 5px" }}
+                              variant="primary"
+                              onClick={this.handleSubmit}
+                            >
+                              Save Changes
+                            </Button>
+                          ) : ''
+                        }
                       </div>
                     </div>
                     <div className="card-body">
@@ -1628,4 +1638,14 @@ class SubTask extends Component {
   }
 }
 
-export default SubTask;
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+const mapStateToProps = (state, ownProps) => {
+  return {
+    className_wrap_broad: state.ui.className_wrap_broad,
+    role: state.auth.role,
+  };
+};
+
+export default connect(mapStateToProps)(SubTask);
