@@ -264,6 +264,7 @@ class DetailCard extends Component {
         formData.append("file", event.target.files[0]);
         formData.append("nameFile", nameFile);
         formData.append("idJob", `${card.idJob}`);
+        formData.append('field', nameLink)
 
         const request_header = api.getHeaderUpload();
         const request_server = api.domain;
