@@ -514,6 +514,13 @@ class Users extends Component {
           </span>
         );
 
+        case "Admin":
+          return (
+            <span className="label font-weight-bold label-lg  label-light-danger label-inline">
+              {role.name}
+            </span>
+          );
+
       case "Leader":
         return (
           <span className="label font-weight-bold label-lg  label-light-success label-inline">

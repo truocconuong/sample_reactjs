@@ -215,13 +215,17 @@ class Task extends Component {
                       <TaskList isLoading={isLoading} />
                     </div>
                   </div>
-                  <div
-                    style={{ marginTop: "3vh" }}
-                    className="d-flex w_100 dr_col justify-content-center"
-                  >
-                    <InterviewList nameColumn="Onboarding" />
-                    <InterviewList nameColumn="Interview F2F" />
-                  </div>
+                  {
+                    this.props.role === 'Admin' ? (
+                      <div
+                        style={{ marginTop: "3vh" }}
+                        className="d-flex w_100 dr_col justify-content-center"
+                      >
+                        <InterviewList nameColumn="Onboarding" />
+                        <InterviewList nameColumn="Interview F2F" />
+                      </div>
+                    ) : ''
+                  }
                 </div>
               </div>
             </div>

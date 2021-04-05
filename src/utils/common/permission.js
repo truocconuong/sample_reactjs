@@ -14,7 +14,7 @@ export const LIST_JOB = [DIRECTOR, LEADER];
 
 export const CLIENT = [DIRECTOR, LEADER];
 
-export const CANDIDATE = [DIRECTOR, LEADER, MEMBER];
+export const CANDIDATE = [DIRECTOR, LEADER];
 
 export const USERS = [DIRECTOR, LEADER];
 
