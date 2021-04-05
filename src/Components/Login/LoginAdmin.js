@@ -52,12 +52,12 @@ export default class Login extends Component {
           pauseOnHover: true,
           transition: Zoom,
         });
-        if(this.state.remember){
+        if (this.state.remember) {
           localStorage.setItem(
             "isRemember",
             true
           );
-        }else{
+        } else {
           localStorage.setItem(
             "isRemember",
             false
@@ -67,9 +67,13 @@ export default class Login extends Component {
           self.setState({
             isLoading: false,
           });
-          if(role==="Bloger"){
+          if (role === "Bloger") {
             window.location.assign('/list-blog')
-          }else{
+          }
+          else if (role === "Admin") {
+            window.location.assign('/task')
+          }
+          else {
             window.location.reload();
           }
         }, 500);
@@ -88,7 +92,7 @@ export default class Login extends Component {
   componentDidMount() {
     const forceLogout = localStorage.getItem("forceLogout");
     if (forceLogout) {
-      toast(<CustomToast title={"Your account is already logged in on another device!"} type={"warning"}/>, {
+      toast(<CustomToast title={"Your account is already logged in on another device!"} type={"warning"} />, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
         className: "toast_login",
@@ -165,7 +169,7 @@ export default class Login extends Component {
                   <div className="form-group d-flex flex-wrap justify-content-between align-items-center">
                     <div className="checkbox-inline">
                       <label className="checkbox m-0 text-muted">
-                        <input type="checkbox" name="remember" onChange={this.isChange} checked={this.state.remember}/>
+                        <input type="checkbox" name="remember" onChange={this.isChange} checked={this.state.remember} />
                         <span />
                         Remember me
                       </label>

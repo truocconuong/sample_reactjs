@@ -223,7 +223,6 @@ class SubTask extends Component {
   };
 
   handleDeleteAssignUser = async (userId, index) => {
-    console.log(userId);
     const taskId = this.props.match.params.id;
     try {
       const response = await api.delete(
