@@ -121,6 +121,15 @@ class InterviewList extends Component {
                                   />
                                 </div>
                               </td>
+                              <td style={{ width: "100px" }}>
+                                <span>
+                                  <input
+                                    className=" font-weight-bold d-block form-control form-control-solid input_cs_nameJob input_cx_status"
+                                    readOnly
+                                    value={formatDate(e.approachDate)}
+                                  />
+                                </span>
+                              </td>
                               <td
                                 className="text-left pr-0"
                                 style={{ maxWidth: "446px" }}
@@ -136,15 +145,6 @@ class InterviewList extends Component {
                                     value={e.Lane.nameColumn}
                                   />
                                 </div>
-                              </td>
-                              <td style={{ width: "100px" }}>
-                                <span>
-                                  <input
-                                    className=" font-weight-bold d-block form-control form-control-solid input_cs_nameJob input_cx_status"
-                                    readOnly
-                                    value={formatDate(e.approachDate)}
-                                  />
-                                </span>
                               </td>
                             </tr>
                           );

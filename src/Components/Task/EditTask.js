@@ -130,7 +130,7 @@ class SubTask extends Component {
   getUserAssign = async () => {
     // dung để lấy danh sách các user để assign
     try {
-      let response = await api.get(`/api/assign/list/user`);
+      let response = await api.get(`/api/v1/all/assign/list/user`);
       if (response.data.success) {
         this.setState({
           userAssign: response.data.user,
@@ -564,8 +564,7 @@ class SubTask extends Component {
                                     <Popover id="popover-contained">
                                       <Popover.Content className="custom-popver-kitin">
                                         <div>
-                                          <p>{user.name}</p>
-                                          <p>{user.email}</p>
+                                          <p className="text-center">{user.email}</p>
                                           <Button
                                             onClick={() =>
                                               this.handleDeleteAssignUser(
@@ -576,7 +575,7 @@ class SubTask extends Component {
                                             style={{ width: "100%" }}
                                             className="btn btn-primary"
                                           >
-                                            Delete user
+                                            Remove
                                           </Button>
                                         </div>
 

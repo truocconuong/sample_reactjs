@@ -49,9 +49,8 @@ class TaskList extends Component {
       });
       let url = `/api/v1/list-task?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber}`;
       let start = this.state.pageSize * (this.state.pageNumber - 1) + 1;
-      console.log("status", this.state.filterStatus);
       if (this.state.filterStatus !== null) {
-        url += `?status=${this.state.filterStatus.value}`;
+        url += `&status=${this.state.filterStatus.value}`;
       }
       const response = await api.get(
         // `/api/v1/list-task?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber}`
