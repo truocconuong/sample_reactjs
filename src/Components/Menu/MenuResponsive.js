@@ -2,6 +2,13 @@ import React, { Component } from "react";
 import Drawer from "@material-ui/core/Drawer";
 import MenuLeft1 from "./MenuLeft.js";
 import { Link } from "react-router-dom";
+import {
+  addPaddingBroad,
+  removePaddingBroad,
+  setAvatarUser,
+  responsivePaddingBroad,
+} from "../../redux/actions";
+import { connect } from "react-redux";
 
 class MenuResponsive extends Component {
   constructor(props) {
@@ -15,6 +22,11 @@ class MenuResponsive extends Component {
     this.setState({
       show: isShow,
     });
+    if (this.props.className_wrap_broad === "pl_0") {
+      this.props.removePadding();
+    } else if (this.props.className_wrap_broad === "pl_100") {
+      this.props.responsivePadding();
+    }
   }
   render() {
     return (
@@ -61,4 +73,21 @@ class MenuResponsive extends Component {
   }
 }
 
-export default MenuResponsive;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    removePadding: () => dispatch(removePaddingBroad()),
+    responsivePadding: () => dispatch(responsivePaddingBroad()),
+  };
+};
+const mapStateToProps = (state, ownProps) => {
+  return {
+    role: state.auth.role,
+    history: ownProps.history,
+    classHide: ownProps.classHide,
+    isMobile: ownProps.isMobile,
+    hideMenuResponsive: ownProps.hideMenuResponsive,
+    className_wrap_broad: state.ui.className_wrap_broad,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MenuResponsive);
