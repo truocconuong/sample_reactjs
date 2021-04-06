@@ -38,6 +38,7 @@ class RecruiterDetail extends Component {
 
     getDataDetailRecruiter = async () => {
         const { id } = this.props;
+        const calcBonus = await api.get(`/api/v1/calc/bonus?recruiterId=${id}`)
         const response = await api.get(`/api/v1/candidate/recruiter/${id}`);
         if (response) {
             const profile = response.data.profile;
