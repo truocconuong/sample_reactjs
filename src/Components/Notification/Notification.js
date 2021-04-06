@@ -395,7 +395,7 @@ class Notification extends Component {
                             data-field="Status"
                             className="datatable-cell datatable-cell-sort hide_mb"
                           >
-                            <span style={{ width: "170px" }}>Message</span>
+                            <span style={{ width: "320px" }}>Message</span>
                           </th>
 
                           <th
@@ -464,7 +464,7 @@ class Notification extends Component {
                                   <span
                                     className="text-hover-primary"
                                     style={{
-                                      width: "170px",
+                                      width: "320px",
                                       cursor: "pointer",
                                     }}
                                     onClick={() =>

@@ -514,6 +514,13 @@ class Users extends Component {
           </span>
         );
 
+        case "Admin":
+          return (
+            <span className="label font-weight-bold label-lg  label-light-danger label-inline">
+              {role.name}
+            </span>
+          );
+
       case "Leader":
         return (
           <span className="label font-weight-bold label-lg  label-light-success label-inline">
@@ -527,6 +534,21 @@ class Users extends Component {
             {role.name}
           </span>
         );
+
+        case "Sales":
+          return (
+            <span className="label font-weight-bold label-lg  label-light-primary label-inline">
+              {role.name}
+            </span>
+          );
+
+          case "Recruiter":
+            return (
+              <span className="label font-weight-bold label-lg  label-light-primary label-inline">
+                {role.name}
+              </span>
+            );
+  
 
       default:
         return null;

@@ -808,6 +808,7 @@ textarea {
 .div-input-caculator {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .salary-chinhthuc {
@@ -816,7 +817,6 @@ textarea {
 
 .custom-input-bhxh {
   margin-left: 10px;
-  width: 33%;
 }
 
 .sub-input-caculator {
@@ -883,6 +883,7 @@ textarea {
 
 .thunhap-caculator {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .caculator-item {
@@ -902,9 +903,9 @@ textarea {
   align-items: center;
 }
 
-.custom-input-usd {
+/* .custom-input-usd {
   margin-left: 15px;
-}
+} */
 
 .title-detail-caculator {
   display: flex;
@@ -1111,9 +1112,13 @@ textarea {
   display: flex;
   align-items: center;
 }
-
+.cirum-people{
+  display: flex;
+  
+}
 .group-row {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .group-row-label {
@@ -1173,4 +1178,9 @@ textarea {
 
 .invalid-selected :focus {
   border: none !important;
+}
+
+.insurance-group{
+  display: flex;
+  align-items: center;
 }

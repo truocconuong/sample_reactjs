@@ -24,6 +24,7 @@ import { Popover as PopoverPop, PopoverHeader, PopoverBody } from "reactstrap";
 import CustomToast from "../common/CustomToast";
 import PreviewPdf from "../Modal/PreviewPdf/PreviewPdf";
 import HistoryJob from "../Modal/JobDetail/HistoryJob";
+import _ from 'lodash';
 
 const api = new Network();
 const ref = React.createRef();
@@ -41,6 +42,8 @@ class JobDetail extends Component {
       arrLoading: [1, 2, 3, 4, 5],
       arrLoadingTwo: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
       userAssign: [],
+      candidateFilter: [],
+      laneSelected: [],
       isLoadingAssign: false,
 
       dataUserAssignJob: [],
@@ -221,6 +224,12 @@ class JobDetail extends Component {
           totalRow: dataCanidate.data.list.length,
           isDisplay: dataCanidate.data.list.length === 0,
           arrayLane: dataLane.data.lane,
+          laneSelected: _.map(dataLane.data.lane, lane => {
+            return {
+              value: lane.id,
+              label: lane.nameColumn
+            }
+          }),
           dataHistory: dataHistory.data.historyJob,
           users: dataUser.data.list.map((user) => {
             return {
@@ -293,8 +302,15 @@ class JobDetail extends Component {
   }
 
   async handlePagination(page) {
-    let { numberInPage, dataCandidate } = this.state;
-    let viewCandidate = dataCandidate.slice(
+    let { numberInPage, dataCandidate, candidateFilter } = this.state;
+    let dataPaginate = dataCandidate
+
+    if (!_.isEmpty(candidateFilter)) {
+      dataPaginate = candidateFilter;
+    }
+
+
+    let viewCandidate = dataPaginate.slice(
       (page - 1) * numberInPage,
       (page - 1) * numberInPage + numberInPage
     );
@@ -650,6 +666,34 @@ class JobDetail extends Component {
     }
   }
 
+  handleOnChangeLane = (e) => {
+    const laneName = e ? e.label : null;
+    const { dataCandidate } = this.state;
+    const candidateFilter = [];
+    if (laneName) {
+      const filterCard = _.filter(dataCandidate, candidate => candidate.nameColumn === laneName);
+      candidateFilter.push(...filterCard)
+      this.setState({
+        candidateFilter: candidateFilter
+      }, () => {
+        this.setState({
+          viewCandidate: candidateFilter.slice(0, 5),
+          totalRow: candidateFilter.length,
+          isDisplay: candidateFilter.length === 0,
+          pageNumber: 1,
+        })
+      })
+    } else {
+      this.setState({
+        viewCandidate: dataCandidate.slice(0, 5),
+        totalRow: dataCandidate.length,
+        isDisplay: dataCandidate.length === 0,
+        pageNumber: 1,
+        candidateFilter: []
+      })
+    }
+  }
+
 
   render() {
     const {
@@ -661,8 +705,8 @@ class JobDetail extends Component {
       dataUserAssignJob,
       isLoadingAssign,
       arrayLane,
+      laneSelected
     } = this.state;
-
     let aboutClient = "";
     let desc = `<div></div>`;
     if (data.client) {
@@ -682,6 +726,7 @@ class JobDetail extends Component {
     const optUser = userAssign.map((user) => {
       return { label: user.name, value: user.id };
     });
+
 
     return (
       <div
@@ -1121,6 +1166,15 @@ class JobDetail extends Component {
                             marginLeft: "12px",
                           }}
                         >
+                          <div className="select-lane">
+                            <Select
+                              name="option"
+                              isClearable
+                              options={laneSelected}
+                              placeholder="Select status ..."
+                              onChange={this.handleOnChangeLane}
+                            />
+                          </div>
                           <table
                             className="datatable-table"
                             style={{ display: "block" }}
@@ -1335,6 +1389,7 @@ class JobDetail extends Component {
                           </div>
                         </div>
                       ) : (
+
                         <div
                           className="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
                           id="kt_datatable"

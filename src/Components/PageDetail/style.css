@@ -4,6 +4,7 @@
   flex-direction: column;
   justify-content: center;
 }
+
 .style-info-job {
   width: 100%;
   padding-top: 20px;
@@ -14,86 +15,105 @@
 .style-job-detail span {
   width: 100%;
 }
+
 .location-job-detail {
   color: #f64e60;
   width: 35%;
 }
+
 .location-job-detail i {
   color: #f64e60;
   padding-right: 2px;
 }
+
 .dorlar-job-detail {
   color: #ffa800;
   width: 29%;
 }
+
 .dorlar-job-detail i {
   padding-right: 2px;
   color: #ffa800;
 }
+
 .calendar-job-detail {
   color: #3699ff;
   width: 33%;
 }
+
 .calendar-job-detail i {
   padding-right: 2px;
   color: #3699ff;
 }
+
 .btn-style-kitin {
   padding: 0.40rem 0.55rem;
   font-size: 0.95rem;
 }
+
 .style-no-result {
   width: 100%;
   margin: auto;
   align-items: center;
 }
+
 .style-no-result img {
   width: 80%;
 }
+
 .style-card-kitin {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
+
 .style-card-job {
   border-top-right-radius: 0;
   border-top-left-radius: 0;
 }
+
 .contain-title-job {
   width: 100%;
   display: flex;
 }
 
 /* ghi đè css job */
+
 .content-job {
   width: 100%;
   padding-bottom: 25px;
   font-family: "Poppins", sans-serif;
 }
+
 .content-job p {
   color: rgb(33, 37, 41) !important;
   font-size: 14px !important;
 }
+
 .content-job ul {
   list-style-position: inside;
   padding: 0;
   color: rgb(33, 37, 41) !important;
   font-size: 14px !important;
 }
+
 .content-job li {
   margin-bottom: 0.5rem;
   color: rgb(33, 37, 41);
   font-size: 14px !important;
 }
+
 .content-job ul li span {
   color: rgb(33, 37, 41) !important;
   font-family: "Poppins" !important;
   font-size: 14px !important;
 }
+
 .content-job p span {
   color: rgb(33, 37, 41) !important;
   font-family: "Poppins" !important;
   font-size: 14px !important;
 }
+
 /* ghi đè css */
 
 .css-1okebmr-indicatorSeparator {
@@ -105,6 +125,7 @@
   background-color: #f3f6f9 !important;
   border-color: #f3f6f9 !important;
 }
+
 .assignment-user {
   width: 100%;
   display: flex;
@@ -112,12 +133,15 @@
   padding-top: 20px;
   padding-bottom: 5px;
 }
+
 .assignment-user .btn.btn-light.btn-shadow {
   box-shadow: none !important;
 }
+
 .disable-kitin {
   cursor: not-allowed !important;
 }
+
 .custom_date_pickeer-kitin {
   height: calc(1.5em + 1.3rem + 2px) !important;
   padding: 0.65rem 1rem !important;
@@ -126,6 +150,7 @@
 .linkbitly-css {
   cursor: pointer;
 }
+
 .assign-user-css {
   width: 100%;
   display: flex;
@@ -133,30 +158,38 @@
   z-index: 9;
   margin-bottom: -40px;
 }
+
 .assign-user-css img {
   border-radius: 100%;
 }
+
 .assign-user-css .btn.btn-light-facebook i {
   color: #b5b5c3;
   font-size: 13px;
 }
+
 .assign-user-css .custom-pointer {
   cursor: pointer;
 }
+
 .assign-user-css .custom-pointer:hover:focus {
   background-color: white !important;
 }
+
 .custom-popver-kitin {
   display: flex;
 }
+
 .custom-popver-kitin p {
   padding-top: 4px;
 }
+
 .custom-popver-kitin span {
   width: 23px !important;
   height: 23px !important;
   margin-left: 8px;
 }
+
 .custom-popver-kitin span .svg-icon.svg-icon-md svg {
   width: 17px !important;
   height: 17px !important;
@@ -169,71 +202,86 @@
   color: white;
   /* padding-right: 1px; */
 }
+
 .kitin-card-trello-job:hover {
   color: white;
 }
+
 .search-kitin-candidate {
   width: 100%;
   font-weight: bold;
   color: white;
 }
+
 .search-kitin-candidate:hover {
   color: white;
 }
+
 .convert-pdf {
   /* display: none; */
   width: 100%;
 }
+
 /* only responsive mobile style */
+
 .hide_desktop {
   display: none;
 }
-.datatable.datatable-default
-  > .datatable-table
-  > .datatable-body
-  .datatable-row-detail.hide_desktop {
+
+.datatable.datatable-default>.datatable-table>.datatable-body .datatable-row-detail.hide_desktop {
   display: none;
 }
+
 .title_job_detail {
   width: 40%;
 }
+
 .wrap_edit_job {
   width: 75%;
   display: flex;
   justify-content: flex-end;
   align-items: center;
 }
+
 .hiden-kitin-column {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
 .pop_cs_nam {
   z-index: 1051;
 }
+
 .card.card-custom.card_add_mem {
   width: 300px;
   border: 1px #b9b1b170 solid;
 }
-.card.card-custom.card_add_mem > .card-header {
+
+.card.card-custom.card_add_mem>.card-header {
   min-height: 45px;
   display: flex;
   justify-content: center;
 }
+
 .row_add_mem_card {
   display: flex;
   align-items: center;
   margin-bottom: 8px;
 }
+
 .row_add_mem_card:hover {
   cursor: pointer;
 }
+
 .row_add_mem_card:hover .name_member_add {
   color: #3699ff;
 }
+
 .name_member_add {
   font-size: 12px;
 }
+
 .wrap_icon_x {
   position: absolute;
   border-radius: 50%;
@@ -245,22 +293,25 @@
   background: #fff;
   border: 1px solid transparent;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12);
-  
   justify-content: center;
   width: 13px;
   z-index: 99;
   height: 13px;
 }
-.cs_btn_fb:hover{
+
+.cs_btn_fb:hover {
   color: #3e4044 !important;
 }
-.wrap_icon_x .ki.ki-close{
+
+.wrap_icon_x .ki.ki-close {
   font-size: 6px;
   color: #3e4044 !important;
 }
-.card.card-custom.card_add_mem > .card-body {
+
+.card.card-custom.card_add_mem>.card-body {
   padding: 8px 15px;
 }
+
 .ava_add_mem_card {
   width: 36px;
   height: 36px;
@@ -268,14 +319,17 @@
   overflow: hidden;
   margin-right: 8px;
 }
+
 .wrap_member_add_card {
   max-height: 400px;
   overflow-y: auto;
 }
-.client_name{
+
+.client_name {
   font-size: 16px;
   color: #64646dfa !important;
 }
+
 @media screen and (max-width: 766px) {
   .assign-user-css {
     display: block;
@@ -287,8 +341,7 @@
   .wrap_all {
     flex-direction: column;
   }
-  .pl_100,
-  .pl_232 {
+  .pl_100, .pl_232 {
     padding: 0;
   }
   .wrap_menu_left {
@@ -310,8 +363,7 @@
   .w_50 {
     width: 50%;
   }
-  .ListActiveJob-textField-2,
-  .WeeklyTask-textField-6 {
+  .ListActiveJob-textField-2, .WeeklyTask-textField-6 {
     width: 100% !important;
   }
   .sp_bw {
@@ -323,16 +375,10 @@
   .show_mb {
     display: block;
   }
-  .datatable.datatable-default
-    > .datatable-table
-    > .datatable-body
-    .datatable-row-detail.hide_mb {
+  .datatable.datatable-default>.datatable-table>.datatable-body .datatable-row-detail.hide_mb {
     display: none;
   }
-  .datatable.datatable-default
-    > .datatable-table
-    > .datatable-body
-    .datatable-row-detail.show_mb {
+  .datatable.datatable-default>.datatable-table>.datatable-body .datatable-row-detail.show_mb {
     display: block;
   }
   .wrap_input_modal {
@@ -369,12 +415,10 @@
   .custom_date_pickeer_job.right.datetime-trigger .datetime-picker {
     left: -104px !important;
   }
-  .custom_date_pickeer_job.right .datetime-picker-popup:before,
-  .home-trigger-datetime.right .datetime-range-picker-popup:before {
+  .custom_date_pickeer_job.right .datetime-picker-popup:before, .home-trigger-datetime.right .datetime-range-picker-popup:before {
     left: 108px !important;
   }
-  .custom_date_pickeer.right .datetime-picker-popup:before,
-  .home-trigger-datetime.right .datetime-range-picker-popup:before {
+  .custom_date_pickeer.right .datetime-picker-popup:before, .home-trigger-datetime.right .datetime-range-picker-popup:before {
     left: 108px !important;
   }
   .custom_date_pickeer.right.datetime-trigger .datetime-picker {
@@ -449,12 +493,22 @@
 /* end responsive mobile */
 
 /* manhdavaoday */
+
 .song-song {
   display: flex;
 }
+
 .preview-cv {
   padding-right: 5px;
 }
-.hide_delete_member{
+
+.hide_delete_member {
   display: none;
+}
+
+.select-lane {
+  width: 100%;
+  float: right;
+  padding-bottom: 9px;
+  padding-right: 32px;
 }

@@ -1,0 +1,38 @@
+/* table */
+
+.hide_desktop {
+  display: none !important;
+}
+
+.datatable-cell:first-child {
+  padding: 0.75rem 1rem !important;
+}
+
+.edit-subtask {
+  padding-right: 10px;
+}
+
+.edit-subtask:hover {
+  color: #1bc5bd;
+}
+
+.limit-1-line-content {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
+.invalid-select .css-yk16xz-control {
+  border-color: red !important;
+}
+
+@media (max-width: 767px) {
+  /* table */
+  .hide_mb {
+    display: none;
+  }
+
+  .show_mb {
+    display: block !important;
+  }
+}

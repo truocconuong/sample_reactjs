@@ -20,6 +20,7 @@ import reactCSS from "reactcss";
 import { SketchPicker, ChromePicker } from "react-color";
 import { ToastContainer, toast, Zoom } from "react-toastify";
 import CustomToast from "../common/CustomToast";
+import { convertDateLocal } from "../../utils/common/convertDate";
 
 const Container = styled.div`
   margin-bottom: 8px;
@@ -548,30 +549,30 @@ class Card extends Component {
 
                     {this.state.showAction === ""
                       ? this.state.actions.map((action, key) =>
-                          _.includes(action.roles, this.props.role) ? (
-                            <li
-                              key={key}
-                              onClick={() => {
-                                const stateUpdate = {
-                                  showAction: action.slug,
-                                };
-                                if (action.slug === "move") {
-                                  if (this.props.card.content) {
-                                    const laneSelected = this.props.card.content
-                                      .laneSelected;
-                                    stateUpdate.laneSelected = laneSelected;
-                                  }
+                        _.includes(action.roles, this.props.role) ? (
+                          <li
+                            key={key}
+                            onClick={() => {
+                              const stateUpdate = {
+                                showAction: action.slug,
+                              };
+                              if (action.slug === "move") {
+                                if (this.props.card.content) {
+                                  const laneSelected = this.props.card.content
+                                    .laneSelected;
+                                  stateUpdate.laneSelected = laneSelected;
                                 }
-                                this.setState(stateUpdate);
-                              }}
-                              className="action quareo-ok"
-                            >
-                              {action.title}
-                            </li>
-                          ) : (
-                            ""
-                          )
+                              }
+                              this.setState(stateUpdate);
+                            }}
+                            className="action quareo-ok"
+                          >
+                            {action.title}
+                          </li>
+                        ) : (
+                          ""
                         )
+                      )
                       : formAction()}
                   </ul>
                 </PopoverBody>
@@ -630,7 +631,7 @@ class Card extends Component {
                                           className="card-label card-label-item"
                                         >
                                           {this.props.role !==
-                                          roleName.DIRECTOR ? (
+                                            roleName.DIRECTOR ? (
                                             <span
                                               onClick={(e) => {
                                                 this.props.removeLabel(label);
@@ -684,7 +685,7 @@ class Card extends Component {
                               </div>
                             </div>
                             <span className="text-muted font-weight-bold">
-                              {card.dueDate ? moment(card.dueDate).format("DD/MM/YYYY") : ''}
+                              {card.expectedDate ? convertDateLocal(card.expectedDate) : ''}
                             </span>
                           </div>
                         </div>
@@ -748,11 +749,10 @@ class Card extends Component {
                                             width="50px"
                                             src={
                                               user.linkAvatar
-                                                ? `${
-                                                    domainServer +
-                                                    "/" +
-                                                    user.linkAvatar
-                                                  }`
+                                                ? `${domainServer +
+                                                "/" +
+                                                user.linkAvatar
+                                                }`
                                                 : `${defaultAva}`
                                             }
                                             alt=""
