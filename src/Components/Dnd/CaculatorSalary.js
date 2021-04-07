@@ -121,7 +121,6 @@ class CaculatorSalary extends Component {
   caculator = async (e, type) => {
     e.preventDefault();
     const data = this.state;
-    console.log(data);
     const errors = this.validator.validate(data);
     if (data.isSocialInsurance) {
       delete errors["insuraneMoney"];
@@ -154,7 +153,6 @@ class CaculatorSalary extends Component {
 
   generateTextClipboard = (table) => {
     const { data } = this.state;
-    console.log(data);
     let text = "";
     if (table === "table-description") {
       text = `
