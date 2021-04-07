@@ -28,6 +28,22 @@ class MenuResponsive extends Component {
       this.props.responsivePadding();
     }
   }
+
+  componentDidMount() {
+    window.addEventListener("resize", (size) => {
+      if (size.target.innerWidth < 768) {
+        this.props.responsivePadding();
+        // console.log("mobile", size.target.innerWidth);
+      } else {
+        this.props.removePadding();
+        // console.log("web", size.target.innerWidth);
+        console.log("isShow", this.state.show);
+        this.setState({
+          show: false,
+        });
+      }
+    });
+  }
   render() {
     return (
       <div id="kt_header_mobile" className="header-mobile">
