@@ -2,11 +2,11 @@ let initState = {
   className_wrap_broad: "pl_0",
 };
 
-// if (window.innerWidth >= 768) {
-//   initState = {
-//     className_wrap_broad: "pl_100",
-//   };
-// }
+if (window.innerWidth >= 768) {
+  initState = {
+    className_wrap_broad: "pl_100",
+  };
+}
 
 const uiReducer = (state = initState, action) => {
   switch (action.type) {
