@@ -51,8 +51,8 @@ class Notification extends Component {
       classArr: new Array(10).fill("fa fa-caret-down"),
       selectUser: "",
       selectType: "",
-      timeStart: '',
-      timeEnd: ''
+      timeStart: "",
+      timeEnd: "",
     };
     this.handlePagination = this.handlePagination.bind(this);
     this.getDataClient = this.getDataClient.bind(this);
@@ -62,12 +62,11 @@ class Notification extends Component {
     this.showDetail = this.showDetail.bind(this);
   }
 
-  showDetailNotification = (id, type,) => {
-    let url = '';
+  showDetailNotification = (id, type) => {
+    let url = "";
     if (type === "jobOverTime" || type === "assignJob") {
       url += `/job-detail/${id}`;
     } else if (type === "assignCard") {
-
       url += `/board?cardId=${id}`;
     }
     window.open(url, "_blank");
@@ -264,17 +263,23 @@ class Notification extends Component {
   handleChangeInput = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    this.setState({
-      [name]: value,
-    }, () => {
-      if (this.state.timeStart !== '' && this.state.timeEnd !== '') {
-        this.setState({
-          pageNumber: 1
-        }, () => {
-          this.getDataClient();
-        })
+    this.setState(
+      {
+        [name]: value,
+      },
+      () => {
+        if (this.state.timeStart !== "" && this.state.timeEnd !== "") {
+          this.setState(
+            {
+              pageNumber: 1,
+            },
+            () => {
+              this.getDataClient();
+            }
+          );
+        }
       }
-    })
+    );
   };
   render() {
     const data = this.state.data;
@@ -341,7 +346,7 @@ class Notification extends Component {
                   <div className="card-title">
                     <h3 className="card-label">List notification</h3>
                   </div>
-                  <div className="card-toolbar">
+                  <div className="card-toolbar response-filter">
                     <div className="select-notification">
                       <div className="choose-name">
                         <Select
@@ -360,12 +365,27 @@ class Notification extends Component {
                         />
                       </div>
                     </div>
-                    <div className="filter-date-row">
-                      <div className="filter-board-item">
-                        <input onChange={this.handleChangeInput} type="date" name="timeStart" className="form-control" placeholder="Enter your start card" />
+                    <div
+                      className="filter-date-row row"
+                      style={{ justifyContent: "space-evenly" }}
+                    >
+                      <div className="filter-board-item col-md-5 padding-responsive">
+                        <input
+                          onChange={this.handleChangeInput}
+                          type="date"
+                          name="timeStart"
+                          className="form-control"
+                          placeholder="Enter your start card"
+                        />
                       </div>
-                      <div className="filter-board-item">
-                        <input type="date" onChange={this.handleChangeInput} name="timeEnd" className="form-control" placeholder="Enter your end card" />
+                      <div className="filter-board-item col-md-5 padding-responsive">
+                        <input
+                          type="date"
+                          onChange={this.handleChangeInput}
+                          name="timeEnd"
+                          className="form-control"
+                          placeholder="Enter your end card"
+                        />
                       </div>
                     </div>
                   </div>
@@ -416,6 +436,7 @@ class Notification extends Component {
                       </thead>
                       <tbody className="datatable-body" style={{}}>
                         {data.map((client, index) => {
+                          console.log("client", client);
                           return (
                             <React.Fragment key={index}>
                               <tr
@@ -442,7 +463,7 @@ class Notification extends Component {
                                     onClick={() =>
                                       this.showDetailNotification(
                                         client.content.id,
-                                        client.type,
+                                        client.type
                                       )
                                     }
                                     className="text-hover-primary"
@@ -474,7 +495,8 @@ class Notification extends Component {
                                       )
                                     }
                                   >
-                                    {client.content.message} <strong>{client.content.title}</strong>
+                                    {client.content.message}{" "}
+                                    <strong>{client.content.title}</strong>
                                   </span>
                                 </td>
 
@@ -504,7 +526,6 @@ class Notification extends Component {
                                     }}
                                   >
                                     <div
-                                      //   href="#"
                                       className="btn btn-sm btn-clean btn-icon mr-2"
                                       onClick={() =>
                                         this.showDetailNotification(
@@ -530,120 +551,73 @@ class Notification extends Component {
                                     <tbody>
                                       <tr className="datatable-row">
                                         <td className="datatable-cell">
-                                          <span>Website</span>
+                                          <span>Message</span>
                                         </td>
                                         <td
-                                          data-field="OrderID"
+                                          data-field="Message"
                                           aria-label="63868-257"
-                                          className="datatable-cell"
+                                          className="datatable-cell responsive-td"
                                           style={{}}
                                         >
-                                          <span style={{ width: 110 }}>
-                                            {client.website ? (
-                                              <span
-                                                style={{
-                                                  width: "130px",
-                                                  whiteSpace: "nowrap",
-                                                  textOverflow: "ellipsis",
-                                                  overflow: "hidden",
-                                                }}
-                                                className="label font-weight-bold label-lg  label-light-success label-inline"
-                                              >
-                                                <a
-                                                  style={{
-                                                    width: "130px",
-                                                    whiteSpace: "nowrap",
-                                                    textOverflow: "ellipsis",
-                                                    overflow: "hidden",
-                                                  }}
-                                                  title={client.website}
-                                                  href={client.website}
-                                                >
-                                                  {client.website}
-                                                </a>
-                                              </span>
-                                            ) : null}
+                                          <span
+                                            className="text-hover-primary"
+                                            onClick={() =>
+                                              this.showDetailNotification(
+                                                client.content.id,
+                                                client.type
+                                              )
+                                            }
+                                            style={{
+                                              width: "110px",
+                                              cursor: "pointer",
+                                            }}
+                                          >
+                                            {client.content.message}{" "}
+                                            <strong>
+                                              {client.content.title}
+                                            </strong>
                                           </span>
                                         </td>
                                       </tr>
-
                                       <tr className="datatable-row">
                                         <td className="datatable-cell">
-                                          <span>Actions</span>
+                                          <span>Time</span>
                                         </td>
                                         <td
-                                          className="datatable-cell-sorted datatable-cell"
-                                          data-field="Status"
-                                          aria-label={1}
+                                          data-field="Time"
+                                          aria-label="63868-257"
+                                          className="datatable-cell responsive-td"
                                           style={{}}
                                         >
-                                          <span style={{ width: 110 }}>
+                                          <span style={{ width: "110px" }}>
+                                            {moment(client.createdAt).format(
+                                              "DD/MM/YYYY"
+                                            )}
+                                          </span>
+                                        </td>
+                                      </tr>
+                                      <tr className="datatable-row">
+                                        <td className="datatable-cell">
+                                          <span>View Detail</span>
+                                        </td>
+                                        <td
+                                          data-field="ViewDetail"
+                                          aria-label="63868-257"
+                                          className="datatable-cell responsive-td"
+                                          style={{}}
+                                        >
+                                          <span style={{ width: "110px" }}>
                                             <div
-                                              //   href="#"
                                               className="btn btn-sm btn-clean btn-icon mr-2"
-                                              onClick={this.getClientDetail.bind(
-                                                this,
-                                                client.id
-                                              )}
+                                              onClick={() =>
+                                                this.showDetailNotification(
+                                                  client.content.id,
+                                                  client.type
+                                                )
+                                              }
                                             >
-                                              <span className="svg-icon svg-icon-md">
-                                                <svg
-                                                  xmlns="http://www.w3.org/2000/svg"
-                                                  xmlnsXlink="http://www.w3.org/1999/xlink"
-                                                  width="24px"
-                                                  height="24px"
-                                                  viewBox="0 0 24 24"
-                                                  version="1.1"
-                                                >
-                                                  <g
-                                                    stroke="none"
-                                                    strokeWidth={1}
-                                                    fill="none"
-                                                    fillRule="evenodd"
-                                                  >
-                                                    <rect
-                                                      x={0}
-                                                      y={0}
-                                                      width={24}
-                                                      height={24}
-                                                    />
-                                                    <path
-                                                      d="M10.9,2 C11.4522847,2 11.9,2.44771525 11.9,3 C11.9,3.55228475 11.4522847,4 10.9,4 L6,4 C4.8954305,4 4,4.8954305 4,6 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,16 C20,15.4477153 20.4477153,15 21,15 C21.5522847,15 22,15.4477153 22,16 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,6 C2,3.790861 3.790861,2 6,2 L10.9,2 Z"
-                                                      fill="#000000"
-                                                      fillRule="nonzero"
-                                                      opacity="0.3"
-                                                    />
-                                                    <path
-                                                      d="M24.0690576,13.8973499 C24.0690576,13.1346331 24.2324969,10.1246259 21.8580869,7.73659596 C20.2600137,6.12944276 17.8683518,5.85068794 15.0081639,5.72356847 L15.0081639,1.83791555 C15.0081639,1.42370199 14.6723775,1.08791555 14.2581639,1.08791555 C14.0718537,1.08791555 13.892213,1.15726043 13.7542266,1.28244533 L7.24606818,7.18681951 C6.93929045,7.46513642 6.9162184,7.93944934 7.1945353,8.24622707 C7.20914339,8.26232899 7.22444472,8.27778811 7.24039592,8.29256062 L13.7485543,14.3198102 C14.0524605,14.6012598 14.5269852,14.5830551 14.8084348,14.2791489 C14.9368329,14.140506 15.0081639,13.9585047 15.0081639,13.7695393 L15.0081639,9.90761477 C16.8241562,9.95755456 18.1177196,10.0730665 19.2929978,10.4469645 C20.9778605,10.9829796 22.2816185,12.4994368 23.2042718,14.996336 L23.2043032,14.9963244 C23.313119,15.2908036 23.5938372,15.4863432 23.9077781,15.4863432 L24.0735976,15.4863432 C24.0735976,15.0278051 24.0690576,14.3014082 24.0690576,13.8973499 Z"
-                                                      fill="#000000"
-                                                      fillRule="nonzero"
-                                                      transform="translate(15.536799, 8.287129) scale(-1, 1) translate(-15.536799, -8.287129) "
-                                                    />
-                                                  </g>
-                                                </svg>
-                                              </span>
+                                              <i class="fa far fa-eye"></i>
                                             </div>
-
-                                            <Link
-                                              to={`/edit-client/${client.id}`}
-                                              className="btn btn-sm btn-clean btn-icon mr-2"
-                                              title="Edit details"
-                                            >
-                                              <span className="svg-icon svg-icon-md">
-                                                <i className="la la-edit" />
-                                              </span>
-                                            </Link>
-                                            <span
-                                              onClick={() => {
-                                                this.confirmDelete(client.id);
-                                              }}
-                                              className="btn btn-sm btn-clean btn-icon"
-                                              title="Delete"
-                                            >
-                                              <span className="svg-icon svg-icon-md">
-                                                <i className="la la-trash" />
-                                              </span>
-                                            </span>
                                           </span>
                                         </td>
                                       </tr>
@@ -656,7 +630,7 @@ class Notification extends Component {
                         })}
                       </tbody>
                     </table>
-                    <div className="datatable-pager datatable-paging-loaded fl_end">
+                    <div className="datatable-pager datatable-paging-loaded fl_end responsive-pagination">
                       <Pagination
                         defaultPageSize={this.state.pageSize}
                         current={this.state.pageNumber}

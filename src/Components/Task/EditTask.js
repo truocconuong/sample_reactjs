@@ -15,7 +15,6 @@ import Fbloader from "../libs/PageLoader/fbloader";
 import { defaultAva, domainServer } from "../../utils/config";
 import { connect } from "react-redux";
 
-
 const api = new Network();
 
 const tags = [
@@ -70,9 +69,6 @@ class SubTask extends Component {
       const getTask = await api.get(
         `/api/v1/list-task/${this.props.match.params.id}`
       );
-
-      console.log("task", getTask);
-
       const getSubtask = await api.get(
         `/api/v1/sub-task/${this.props.match.params.id}?pageSize=10&pageNumber=1`
       );
@@ -93,8 +89,6 @@ class SubTask extends Component {
           value: "",
         };
       }
-
-      console.log("user", getTask.data.listTask.Users);
 
       const subtask = getSubtask.data.listTask.map(function (item) {
         item["status"] = {
@@ -540,16 +534,17 @@ class SubTask extends Component {
                 <div className="container">
                   <div className="card card-custom">
                     <div className="card-header flex-wrap border-0 pt-6 pb-0">
-                      <div className="card-title">
+                      <div className="card-title responsive-title-page">
                         <h3 style={{ width: "160px" }} className="card-label">
                           Edit Task
                         </h3>
                         {/* user */}
-                        <div style={{ margin: 0 }} className="assign-user-css">
+                        <div
+                          style={{ margin: 0 }}
+                          className="assign-user-css responsive-user"
+                        >
                           {dataUserAssignJob.map((user, index) => {
-                            console.log("check", user.isFirst);
                             if (!user.isFirst) {
-                              // console.log(user);
                               return (
                                 <div key={index}>
                                   <Overlay
@@ -566,23 +561,25 @@ class SubTask extends Component {
                                     <Popover id="popover-contained">
                                       <Popover.Content className="custom-popver-kitin">
                                         <div>
-                                          <p className="text-center">{user.email}</p>
-                                          {
-                                            this.props.role === 'Admin' ? (
-                                              <Button
-                                                onClick={() =>
-                                                  this.handleDeleteAssignUser(
-                                                    user.TaskUser.UserId,
-                                                    index
-                                                  )
-                                                }
-                                                style={{ width: "100%" }}
-                                                className="btn btn-primary"
-                                              >
-                                                Remove
-                                              </Button>
-                                            ) : ''
-                                          }
+                                          <p className="text-center">
+                                            {user.email}
+                                          </p>
+                                          {this.props.role === "Admin" ? (
+                                            <Button
+                                              onClick={() =>
+                                                this.handleDeleteAssignUser(
+                                                  user.TaskUser.UserId,
+                                                  index
+                                                )
+                                              }
+                                              style={{ width: "100%" }}
+                                              className="btn btn-primary"
+                                            >
+                                              Remove
+                                            </Button>
+                                          ) : (
+                                            ""
+                                          )}
                                         </div>
 
                                         {this.props.role === "Leader" ? (
@@ -629,7 +626,6 @@ class SubTask extends Component {
                                                   />
                                                 </g>
                                               </svg>
-                                              aaaaaaaaaaaaaaaaaaaaaaaaaa
                                             </span>
                                           </span>
                                         ) : null}
@@ -721,7 +717,6 @@ class SubTask extends Component {
                                   options={optUser}
                                   onChange={this.handleOnchange}
                                   closeMenuOnSelect={true}
-                                  className="aaaaaaaaaaaaaaaaaaaaaaaaa"
                                 />
                               )}
                             </PopoverBody>
@@ -751,24 +746,24 @@ class SubTask extends Component {
                         >
                           Back
                         </Button>
-                        {
-                          this.props.role === 'Admin' ? (
-                            <Button
-                              style={{ margin: "0 5px" }}
-                              variant="primary"
-                              onClick={this.handleSubmit}
-                            >
-                              Save Changes
-                            </Button>
-                          ) : ''
-                        }
+                        {this.props.role === "Admin" ? (
+                          <Button
+                            style={{ margin: "0 5px" }}
+                            variant="primary"
+                            onClick={this.handleSubmit}
+                          >
+                            Save Changes
+                          </Button>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </div>
                     <div className="card-body">
                       {/* edit task */}
                       <div className="card card-custom">
                         <form>
-                          <div className="card-body">
+                          <div className="card-body responsive-task">
                             <div className="form-group mb-8">
                               <div class="form-group">
                                 <label>
@@ -814,12 +809,7 @@ class SubTask extends Component {
                                   </span>
                                 )}
                               </div>
-                              <div
-                                style={{
-                                  display: "grid",
-                                  gridTemplateColumns: "48% 4% 48%",
-                                }}
-                              >
+                              <div className="responsive-task__date">
                                 <div class="form-group">
                                   <label>
                                     Start Date{" "}
@@ -854,7 +844,6 @@ class SubTask extends Component {
                                     </div>
                                   </div>
                                 </div>
-                                <div></div>
                                 <div class="form-group">
                                   <label>
                                     Due Date <span class="text-danger">*</span>
@@ -889,12 +878,7 @@ class SubTask extends Component {
                                   </div>
                                 </div>
                               </div>
-                              <div
-                                style={{
-                                  display: "grid",
-                                  gridTemplateColumns: "48% 4% 48%",
-                                }}
-                              >
+                              <div className="responsive-task__date">
                                 <div class="form-group">
                                   <label>
                                     Status <span class="text-danger">*</span>
@@ -938,7 +922,7 @@ class SubTask extends Component {
                       {/* subtask */}
                       <div className="card card-custom">
                         <div className="card-header flex-wrap border-0 pt-6 pb-0">
-                          <div className="card-title">
+                          <div className="card-title ">
                             <h3 className="card-label">List Subtask</h3>
                           </div>
                           <div className="card-toolbar">
@@ -946,7 +930,6 @@ class SubTask extends Component {
 
                             <a
                               onClick={this.handleAddSubtask}
-                              // href="#"
                               className="btn btn-primary font-weight-bolder"
                             >
                               <span className="svg-icon svg-icon-md">
@@ -983,7 +966,7 @@ class SubTask extends Component {
                             </a>
                           </div>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body responsive-subtask">
                           <div
                             className="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
                             id="kt_datatable"
@@ -1207,7 +1190,7 @@ class SubTask extends Component {
                                                   <span
                                                     style={{ width: "110px" }}
                                                   >
-                                                    {item.startDate}
+                                                    {formatDate(item.startDate)}
                                                   </span>
                                                 </td>
                                               </tr>
@@ -1223,7 +1206,7 @@ class SubTask extends Component {
                                                   <span
                                                     style={{ width: "110px" }}
                                                   >
-                                                    {item.dueDate}
+                                                    {formatDate(item.dueDate)}
                                                   </span>
                                                 </td>
                                               </tr>
@@ -1257,6 +1240,41 @@ class SubTask extends Component {
                                                     style={{ width: "110px" }}
                                                   >
                                                     {item.tag && item.tag.value}
+                                                  </span>
+                                                </td>
+                                              </tr>
+                                              <tr className="datatable-row">
+                                                <td className="datatable-cell">
+                                                  <span>Actions</span>
+                                                </td>
+                                                <td
+                                                  data-field="Tag"
+                                                  className="datatable-cell"
+                                                  style={{}}
+                                                >
+                                                  <span
+                                                    style={{ width: "110px" }}
+                                                  >
+                                                    <span
+                                                      title="Edit Subtask"
+                                                      onClick={() =>
+                                                        this.handleEditSubtask(
+                                                          item
+                                                        )
+                                                      }
+                                                    >
+                                                      <i className="fas fa-edit edit-subtask"></i>
+                                                    </span>
+                                                    <span
+                                                      onClick={() =>
+                                                        this.handleDeleteSubtask(
+                                                          item.id
+                                                        )
+                                                      }
+                                                      title="Delete Subtask"
+                                                    >
+                                                      <i className="far fa-trash-alt edit-subtask"></i>
+                                                    </span>
                                                   </span>
                                                 </td>
                                               </tr>
@@ -1339,12 +1357,7 @@ class SubTask extends Component {
                         </span>
                       )}
                     </div>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "48% 4% 48%",
-                      }}
-                    >
+                    <div className="responsive-task__date">
                       <div class="form-group">
                         <label>
                           Start Date <span class="text-danger">*</span>
@@ -1393,12 +1406,7 @@ class SubTask extends Component {
                         )}
                       </div>
                     </div>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "48% 4% 48%",
-                      }}
-                    >
+                    <div className="responsive-task__date">
                       <div class="form-group">
                         <label>
                           Status <span class="text-danger">*</span>
@@ -1505,12 +1513,7 @@ class SubTask extends Component {
                         </span>
                       )}
                     </div>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "48% 4% 48%",
-                      }}
-                    >
+                    <div className="responsive-task__date">
                       <div class="form-group">
                         <label>
                           Start Date <span class="text-danger">*</span>
@@ -1577,12 +1580,7 @@ class SubTask extends Component {
                         </div>
                       </div>
                     </div>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "48% 4% 48%",
-                      }}
-                    >
+                    <div className="responsive-task__date">
                       <div class="form-group">
                         <label>
                           Status <span class="text-danger">*</span>
