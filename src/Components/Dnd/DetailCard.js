@@ -545,7 +545,6 @@ class DetailCard extends Component {
         "YYYY-MM-DD"
       );
 
-      console.log(data_detail.expectedDate)
     }
 
     return (
