@@ -530,4 +530,30 @@ table td.pd_cs {
   .select-notification {
     display: block;
   }
+
+  .choose-name,
+  .choose-type {
+    margin: unset;
+    margin-bottom: 10px;
+  }
+
+  .response-filter {
+    width: 100%;
+  }
+
+  .padding-responsive {
+    padding-left: 12px;
+    margin-bottom: 7px;
+  }
+
+  .responsive-pagination {
+    width: 200px;
+  }
+
+  .responsive-td {
+    padding-left: 0.5rem !important;
+  }
+}
+
+@media (max-width: 1023px) {
 }

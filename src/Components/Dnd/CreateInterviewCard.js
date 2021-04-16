@@ -117,6 +117,7 @@ class CreateInterviewCard extends Component {
       const content = this.props.data.content
       const data = {
         cardId: this.props.data.id,
+        jobId : content.idJob,
         jobName: content.nameJob,
         location: content.location,
         timeInterview: dynamicDateServer(this.state.timeInterview).format('MM/DD/YYYY HH:mm'),

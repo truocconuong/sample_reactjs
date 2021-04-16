@@ -40,7 +40,14 @@ class Interview extends Component {
       classArr: new Array(10).fill("fa fa-caret-right"),
       showReview: false,
       dataCandidate: {},
+      search: {
+        name: '',
+        timeStart: '',
+        timeEnd: ''
+      },
+
     };
+
     this.handlePagination = this.handlePagination.bind(this);
     this.getDataInterview = this.getDataInterview.bind(this);
     this.toggleFormCreateInterview = this.toggleFormCreateInterview.bind(this);
@@ -51,6 +58,7 @@ class Interview extends Component {
     this.createInterview = this.createInterview.bind(this);
     this.togglePopover = this.togglePopover.bind(this);
     this.offPopoverDelete = this.offPopoverDelete.bind(this);
+    this.timeOut = '';
   }
 
   showDetail(index) {
@@ -136,20 +144,30 @@ class Interview extends Component {
           }),
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async getDataInterview() {
     try {
       let self = this;
+      const { search } = this.state;
       this.setState({
         isLoading: true,
       });
       let start = this.state.pageSize * (this.state.pageNumber - 1) + 1;
-      const response = await api.get(
-        `/api/admin/interview?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber}`
-      );
+      let url = `/api/admin/interview?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber}`
 
+      for (const key in search) {
+        if (!_.isNil(search[key]) && search[key] !== "") {
+          const character = url.indexOf("?") === -1 ? "?" : "&";
+          url += `${character}${[key]}=${search[key]}`;
+          //
+        }
+      }
+
+      const response = await api.get(
+        url
+      );
       if (response) {
         setTimeout(() => {
           self.setState({
@@ -211,8 +229,9 @@ class Interview extends Component {
         this.getDataInterview();
       }
     } catch (error) {
+      console.log(error.error.error)
       toast(
-        <CustomToast title={"Interview time is overlapped !"} type={"error"} />,
+        <CustomToast title={error.error.error} type={"error"} />,
         {
           position: toast.POSITION.TOP_CENTER,
           autoClose: 3000,
@@ -244,10 +263,10 @@ class Interview extends Component {
   }
 
   showInterviewCandidate = (candidate) => {
-      this.setState({
-        showReview: true,
-        dataCandidate: candidate,
-      });
+    this.setState({
+      showReview: true,
+      dataCandidate: candidate,
+    });
   };
 
   hideInterviewCandidate = () => {
@@ -260,6 +279,25 @@ class Interview extends Component {
   submitInterviewCandidate = async () => {
     this.fetchData();
   };
+
+  handleChangeInputSearch = (e) => {
+    const { search } = this.state;
+    const { name, value } = e.target;
+    search[name] = value;
+    this.setState({
+      search: search,
+      pageNumber: 1,
+    }, () => {
+      this.debount();
+    })
+  }
+
+  debount = () => {
+    clearTimeout(this.timeOut);
+    this.timeOut = setTimeout(() => {
+      this.getDataInterview()
+    }, 2000)
+  }
 
   render() {
     const data = this.state.data;
@@ -320,6 +358,40 @@ class Interview extends Component {
                     <h3 className="card-label">List interview</h3>
                   </div>
                   <div className="card-toolbar">
+                    <div
+                      className="search-interview"
+                    >
+                      <div style={{ width: '500px' }} className="filter-board-item col-md-5 padding-responsive">
+                        <input
+                          onChange={this.handleChangeInputSearch}
+                          type="text"
+                          name="name"
+                          className="form-control"
+                          placeholder="Enter your email search"
+                        />
+                      </div>
+                      <div className="search-interview-date">
+                        <div className="filter-board-item col-md-5 padding-responsive">
+                          <input
+                            onChange={this.handleChangeInputSearch}
+                            type="date"
+                            name="timeStart"
+                            className="form-control"
+                            placeholder="Enter your start card"
+                          />
+                        </div>
+                        <div className="filter-board-item col-md-5 padding-responsive">
+                          <input
+                            type="date"
+                            onChange={this.handleChangeInputSearch}
+                            name="timeEnd"
+                            className="form-control"
+                            placeholder="Enter your end card"
+                          />
+                        </div>
+                      </div>
+
+                    </div>
                     <div className="dropdown dropdown-inline mr-2"></div>
 
                     <a

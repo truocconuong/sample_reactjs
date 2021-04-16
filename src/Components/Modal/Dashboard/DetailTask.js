@@ -24,7 +24,6 @@ class DetailTask extends Component {
       });
       const response = await this.props.submitTask();
       if (response) {
-        console.log(response);
         setTimeout(() => {
           self.setState({
             isLoading: false,

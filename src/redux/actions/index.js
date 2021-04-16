@@ -4,25 +4,28 @@ export function addPaddingBroad() {
 export function removePaddingBroad() {
   return { type: "REMOVE_PADDING_BOARD" };
 }
+export function responsivePaddingBroad() {
+  return { type: "RESPONSIVE_PADDING_BOARD" };
+}
 
 //auth action
-export function setRole(role){
+export function setRole(role) {
   return {
     type: "SET_ROLE",
-    payload: role
-  }
+    payload: role,
+  };
 }
 
-export function setUserId(userId){
+export function setUserId(userId) {
   return {
     type: "SET_USER_ID",
-    payload: userId
-  }
+    payload: userId,
+  };
 }
 
-export function setAvatarUser(linkAvatar){
+export function setAvatarUser(linkAvatar) {
   return {
     type: "SET_AVATAR_USER",
-    payload: linkAvatar
-  }
+    payload: linkAvatar,
+  };
 }

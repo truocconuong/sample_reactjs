@@ -26,6 +26,17 @@
   border-color: red !important;
 }
 
+.responsive-filter {
+  width: 20%;
+  margin-bottom: 2vh;
+}
+
+/* edit task */
+.responsive-task__date {
+  display: grid;
+  grid-template-columns: 48% 4% 48%;
+}
+
 @media (max-width: 767px) {
   /* table */
   .hide_mb {
@@ -34,5 +45,27 @@
 
   .show_mb {
     display: block !important;
+  }
+
+  .responsive-filter {
+    width: 100%;
+  }
+
+  /* edit task */
+  .responsive-title-page {
+    display: block !important;
+  }
+
+  .responsive-user {
+    padding-top: 10px;
+  }
+
+  .responsive-task,
+  .responsive-subtask {
+    padding: 0 !important;
+  }
+
+  .responsive-task__date {
+    display: block;
   }
 }

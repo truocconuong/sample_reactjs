@@ -156,14 +156,9 @@ class TaskList extends Component {
   render() {
     const { data, dataSubtask, showModal, isLoading, showFilter } = this.state;
     return (
-      <div>
+      <>
         {isLoading ? <Fbloader /> : null}
-        <div
-          style={{
-            width: "20%",
-            marginBottom: "2vh",
-          }}
-        >
+        <div className="responsive-filter">
           <Select
             onChange={this.handleFilterStatus}
             placeholder="Filter status..."
@@ -288,9 +283,7 @@ class TaskList extends Component {
                       >
                         <span style={{ width: "160px" }}>
                           <Link to={`/task/${item.id}`} className="text-dark">
-                            <span
-                              title="Edit Task"
-                            >
+                            <span title="Edit Task">
                               <i className="fas fa-edit edit-subtask"></i>
                             </span>
                           </Link>
@@ -393,12 +386,11 @@ class TaskList extends Component {
                                 style={{}}
                               >
                                 <span style={{ width: "110px" }}>
-
-                                  <Link to={`/task/${item.id}`} className="text-dark">
-                                    <span
-
-                                      title="Edit Task"
-                                    >
+                                  <Link
+                                    to={`/task/${item.id}`}
+                                    className="text-dark"
+                                  >
+                                    <span title="Edit Task">
                                       <i className="fas fa-edit edit-subtask"></i>
                                     </span>
                                   </Link>
@@ -442,7 +434,7 @@ class TaskList extends Component {
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }

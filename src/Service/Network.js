@@ -145,8 +145,11 @@ export default class Networking {
       } else if (error.response.status === 404) {
         // window.location.href = '/error';
       } else if (error.response.status === 403) {
-        rejected({error : error.response.data})
-      } else {
+        rejected({ error: error.response.data })
+      } else if (error.response.status === 500) {
+        rejected({ error: error.response.data })
+      }
+      else {
         rejected(error);
       }
     } else {

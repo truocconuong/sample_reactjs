@@ -434,6 +434,14 @@ class Card extends Component {
     this.setState(updateState);
   };
 
+  checkDueDate = (dueDate) => {
+    const now = moment();
+    if (now.diff(dueDate) >0) {
+      return false
+    }
+    return true
+  }
+
   render() {
     const users = this.props.card.content.user;
     const card = this.props.card.content;
@@ -685,7 +693,21 @@ class Card extends Component {
                               </div>
                             </div>
                             <span className="text-muted font-weight-bold">
-                              {card.expectedDate ? convertDateLocal(card.expectedDate) : ''}
+                              {
+                                card.expectedDate ? (
+                                  <div className="time-interview">
+                                    <a
+                                      href="#"
+                                      className={
+                                        this.checkDueDate(card.expectedDate) ? "btn btn-sm btn-primary font-weight-bold" : "btn btn-sm btn-danger font-weight-bold"
+                                      }
+                                    >
+                                      <i className="fas fa-clock"></i>{" "}
+                                      {convertDateLocal(card.expectedDate)}
+                                    </a>
+                                  </div>
+                                ) : ''
+                              }
                             </span>
                           </div>
                         </div>

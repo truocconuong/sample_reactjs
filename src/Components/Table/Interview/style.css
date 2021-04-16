@@ -24,3 +24,12 @@
 .information-title {
   background: #b7b7b7;
 }
+
+.search-interview {
+  display: flex;
+}
+
+.search-interview-date {
+  width: 100%;
+  display: flex;
+}

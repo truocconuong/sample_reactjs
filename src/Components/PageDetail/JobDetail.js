@@ -251,14 +251,12 @@ class JobDetail extends Component {
   }
 
   shortAndCopyLink = async (string) => {
-    console.log(string)
     try {
       const dataSend = {
         link: string
       }
       const linkShort = await api.post(`/api/v1/short-link`, dataSend);
       if (linkShort) {
-        console.log(linkShort)
         this.setState({
           linkShort: linkShort.data.url
         })
@@ -453,7 +451,6 @@ class JobDetail extends Component {
     try {
       let self = this;
       const response = await api.get(`/api/cards/${id}`);
-      console.log(response.data);
       if (response) {
         this.setState(
           {
@@ -568,7 +565,6 @@ class JobDetail extends Component {
         });
       }
     } catch (error) {
-      console.log('hi')
       this.setState({
         base64: "",
         isLoadingPdf: false,
@@ -918,7 +914,6 @@ class JobDetail extends Component {
                         <div className="card-header flex-wrap border-0 pt-5 pb-0">
                           <div className="assign-user-css">
                             {dataUserAssignJob.map((user, index) => {
-                              if (!user.isFirst) {
                                 return (
                                   <div key={index}>
                                     <Overlay
@@ -989,7 +984,6 @@ class JobDetail extends Component {
                                     </Overlay>
                                   </div>
                                 );
-                              } else {
                                 return (
                                   <div key={index}>
                                     <Overlay
@@ -1013,7 +1007,6 @@ class JobDetail extends Component {
                                     </Overlay>
                                   </div>
                                 );
-                              }
                             })}
                             {dataUserAssignJob.map((user, index) => {
                               return (
@@ -1804,6 +1797,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     className_wrap_broad: state.ui.className_wrap_broad,
     role: state.auth.role,
+    userId: state.auth.userId,
   };
 };
 

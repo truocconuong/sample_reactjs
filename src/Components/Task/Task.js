@@ -158,7 +158,7 @@ class Task extends Component {
       <>
         <div style={{ width: "100%" }}>
           <div
-            className={`d-flex flex-column flex-row-fluid wrapper pl_100 ${this.props.className_wrap_broad}`}
+            className={`d-flex flex-column flex-row-fluid wrapper ${this.props.className_wrap_broad}`}
           >
             <div className="content d-flex flex-column flex-column-fluid">
               {isLoading ? <Fbloader /> : null}
@@ -172,60 +172,59 @@ class Task extends Component {
                       </div>
                       <div className="card-toolbar">
                         <div className="dropdown dropdown-inline mr-2"></div>
-                        {
-                          this.props.role === 'Admin' ? (
-                            <a
-                              onClick={this.handleShowModal}
-                              //   href="#"
-                              className="btn btn-primary font-weight-bolder"
-                            >
-                              <span className="svg-icon svg-icon-md">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  xmlnsXlink="http://www.w3.org/1999/xlink"
-                                  width="24px"
-                                  height="24px"
-                                  viewBox="0 0 24 24"
-                                  version="1.1"
+                        {this.props.role === "Admin" ? (
+                          <a
+                            onClick={this.handleShowModal}
+                            //   href="#"
+                            className="btn btn-primary font-weight-bolder"
+                          >
+                            <span className="svg-icon svg-icon-md">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlnsXlink="http://www.w3.org/1999/xlink"
+                                width="24px"
+                                height="24px"
+                                viewBox="0 0 24 24"
+                                version="1.1"
+                              >
+                                <g
+                                  stroke="none"
+                                  strokeWidth={1}
+                                  fill="none"
+                                  fillRule="evenodd"
                                 >
-                                  <g
-                                    stroke="none"
-                                    strokeWidth={1}
-                                    fill="none"
-                                    fillRule="evenodd"
-                                  >
-                                    <rect x={0} y={0} width={24} height={24} />
-                                    <circle fill="#000000" cx={9} cy={15} r={6} />
-                                    <path
-                                      d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z"
-                                      fill="#000000"
-                                      opacity="0.3"
-                                    />
-                                  </g>
-                                </svg>
-                              </span>
-                          New Task
-                            </a>
-                          ) : ''
-                        }
-
+                                  <rect x={0} y={0} width={24} height={24} />
+                                  <circle fill="#000000" cx={9} cy={15} r={6} />
+                                  <path
+                                    d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z"
+                                    fill="#000000"
+                                    opacity="0.3"
+                                  />
+                                </g>
+                              </svg>
+                            </span>
+                            New Task
+                          </a>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </div>
                     <div className="card-body">
                       <TaskList isLoading={isLoading} />
                     </div>
                   </div>
-                  {
-                    this.props.role === 'Admin' ? (
-                      <div
-                        style={{ marginTop: "3vh" }}
-                        className="d-flex w_100 dr_col justify-content-center"
-                      >
-                        <InterviewList nameColumn="Onboarding" />
-                        <InterviewList nameColumn="Interview F2F" />
-                      </div>
-                    ) : ''
-                  }
+                  {this.props.role === "Admin" ? (
+                    <div
+                      style={{ marginTop: "3vh" }}
+                      className="d-flex w_100 dr_col justify-content-center"
+                    >
+                      <InterviewList nameColumn="Onboarding" />
+                      <InterviewList nameColumn="Interview F2F" />
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             </div>
